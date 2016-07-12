@@ -405,6 +405,11 @@ nnoremap <leader>af :set foldenable!<cr>
 
 " >>> Editing {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 设置换行符
+augroup ff
+	autocmd!
+	autocmd FileType * setlocal ff=unix
+augroup END
 " [find] 快速关闭搜索高亮
 noremap <silent> <leader><cr> :nohlsearch<cr>
 noremap <silent> <space><cr> :nohlsearch<cr>
