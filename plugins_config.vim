@@ -7,75 +7,71 @@
 
 " >>> Plugins {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if !exists("g:pluginListLoded")
-	call plug#begin('~/.vim/plugged')
-	" Make sure you use single quotes
-	""""""""""""""""""""""""""""""""""""""""[edit]	
-	" 自动补全
-	Plug 'Shougo/neocomplete.vim'
-	" snippet
-	Plug 'SirVer/ultisnips'
-	Plug 'honza/vim-snippets'
-	" vim粘贴栈
-	Plug 'maxbrunsfeld/vim-yankstack'
-	" 多光标
-	Plug 'terryma/vim-multiple-cursors'
-	" 用来做包围的插件
-	Plug 'tpope/vim-surround'
-	" 让surround可以用.重复
-	Plug 'tpope/vim-repeat'
-	" 排版工具
-	Plug 'godlygeek/tabular'
-	" auto-pairs
-	Plug 'jiangmiao/auto-pairs'
-	""""""""""""""""""""""""""""""""""""""""[find]
-	Plug 'vim-scripts/EasyGrep'
-	" ctrlP插件
-	Plug 'ctrlpvim/ctrlp.vim'
-	""""""""""""""""""""""""""""""""""""""""[move and select]
-	Plug 'terryma/vim-expand-region'
-	" easymotion
-	Plug 'easymotion/vim-easymotion'
-	""""""""""""""""""""""""""""""""""""""""[git]
-	Plug 'tpope/vim-fugitive'
-	""""""""""""""""""""""""""""""""""""""""[language]
-	Plug 'derekwyatt/vim-scala'
-	Plug 'artur-shaik/vim-javacomplete2'
-	Plug 'klen/python-mode'
-	Plug 'plasticboy/vim-markdown'
-	""""""""""""""""""""""""""""""""""""""""[ui]
-	Plug 'itchyny/lightline.vim'
-	" 几个配色
-	Plug 'altercation/vim-colors-solarized'
-	Plug 'tomasr/molokai'
-	""""""""""""""""""""""""""""""""""""""""[extesion]
-	" 缩进可视化
-	Plug 'Yggdroot/indentLine'
-	" Nerdtree 和 它的增强
-	Plug 'jistr/vim-nerdtree-tabs' | Plug 'scrooloose/nerdtree'
-	" Nerdtree 的 git插件
-	Plug 'Xuyuanp/nerdtree-git-plugin'
-	" Nerd 注释插件
-	Plug 'scrooloose/nerdcommenter'
-	" tagbar
-	Plug 'majutsushi/tagbar'
-	" 书签强化
-	Plug 'kshenoy/vim-signature'
-	" 更好的折叠体验
-	Plug 'Konfekt/FastFold'
-	" vim异步执行库，安装后需要到安装目录执行`make`
-	Plug 'Shougo/vimproc.vim'
-	" 基于vim异步执行库vimshell
-	Plug 'Shougo/vimshell.vim'
-	" 图形化的多分支的undo
-	Plug 'mbbill/undotree'
-	""""""""""""""""""""""""""""""""""""""""[help]
-	Plug 'strom3xFeI/vimdoc-cn'
-	" Add plugins to &runtimepath
-	call plug#end()
-	let g:pluginLstLoded = 1
-	finish
-endif
+call plug#begin('~/.vim/plugged')
+" Make sure you use single quotes
+""""""""""""""""""""""""""""""""""""""""[edit]	
+" 自动补全
+Plug 'Shougo/neocomplete.vim'
+" snippet
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" vim粘贴栈
+Plug 'maxbrunsfeld/vim-yankstack'
+" 多光标
+Plug 'terryma/vim-multiple-cursors'
+" 用来做包围的插件
+Plug 'tpope/vim-surround'
+" 让surround可以用.重复
+Plug 'tpope/vim-repeat'
+" 排版工具
+Plug 'godlygeek/tabular'
+" auto-pairs
+Plug 'jiangmiao/auto-pairs'
+""""""""""""""""""""""""""""""""""""""""[find]
+Plug 'vim-scripts/EasyGrep'
+" ctrlP插件
+Plug 'ctrlpvim/ctrlp.vim'
+""""""""""""""""""""""""""""""""""""""""[move and select]
+Plug 'terryma/vim-expand-region'
+" easymotion
+Plug 'easymotion/vim-easymotion'
+""""""""""""""""""""""""""""""""""""""""[git]
+Plug 'tpope/vim-fugitive'
+""""""""""""""""""""""""""""""""""""""""[language]
+Plug 'derekwyatt/vim-scala'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'klen/python-mode'
+Plug 'plasticboy/vim-markdown'
+""""""""""""""""""""""""""""""""""""""""[ui]
+Plug 'itchyny/lightline.vim'
+" 几个配色
+Plug 'altercation/vim-colors-solarized'
+Plug 'tomasr/molokai'
+""""""""""""""""""""""""""""""""""""""""[extesion]
+" 缩进可视化
+Plug 'Yggdroot/indentLine'
+" Nerdtree 和 它的增强
+Plug 'jistr/vim-nerdtree-tabs' | Plug 'scrooloose/nerdtree'
+" Nerdtree 的 git插件
+Plug 'Xuyuanp/nerdtree-git-plugin'
+" Nerd 注释插件
+Plug 'scrooloose/nerdcommenter'
+" tagbar
+Plug 'majutsushi/tagbar'
+" 书签强化
+Plug 'kshenoy/vim-signature'
+" 更好的折叠体验
+Plug 'Konfekt/FastFold'
+" vim异步执行库，安装后需要到安装目录执行`make`
+Plug 'Shougo/vimproc.vim'
+" 基于vim异步执行库vimshell
+Plug 'Shougo/vimshell.vim'
+" 图形化的多分支的undo
+Plug 'mbbill/undotree'
+""""""""""""""""""""""""""""""""""""""""[help]
+Plug 'strom3xFeI/vimdoc-cn'
+" Add plugins to &runtimepath
+call plug#end()
 " }}}1
 
 
@@ -624,8 +620,5 @@ endif
 "TODO: easymotion
 "TODO: vim-surround
 "TODO: Fugitive
-<<<<<<< Updated upstream
 "TODO: pymode
-=======
-"TODO: pymode
->>>>>>> Stashed changes
+
