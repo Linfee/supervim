@@ -1,0 +1,9 @@
+" 这里直接使用 ~/.vimrc 了
+
+let g:ideavim=1
+
+source ~/.vim/supervim/basic.vim
+
+inoremap j j
+inoremap k k
+set surround

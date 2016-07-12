@@ -1,1 +1,1 @@
-# supervim
+# A cool vim configuration
