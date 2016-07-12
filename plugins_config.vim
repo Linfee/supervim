@@ -624,4 +624,8 @@ endif
 "TODO: easymotion
 "TODO: vim-surround
 "TODO: Fugitive
+<<<<<<< Updated upstream
 "TODO: pymode
+=======
+"TODO: pymode
+>>>>>>> Stashed changes
