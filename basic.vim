@@ -214,12 +214,8 @@ syntax enable
 syntax on
 
 " [view] 高亮主题
-if IsGui()
-	colorscheme solarized
-else
-    colorscheme molokai
-	" colorscheme zenburn
-endif
+colorscheme molokai
+" colorscheme zenburn
 
 " [color] 设置背景色
 set background=dark
@@ -284,7 +280,7 @@ if !IsWin()
 endif
 
 " [file] 保存与退出
-nnoremap <space>q :q<cr>
+nnoremap <space>q :Bclose<cr>:tabclose<cr>gT
 nnoremap <space>w :w<cr>
 
 " [file] 文件类型(使用的结尾符号)

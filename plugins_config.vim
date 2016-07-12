@@ -24,7 +24,7 @@ if !exists("g:pluginListLoded")
 	Plug 'tpope/vim-surround'
 	" 让surround可以用.重复
 	Plug 'tpope/vim-repeat'
-	" 被vim-markdown所依赖
+	" 排版工具
 	Plug 'godlygeek/tabular'
 	" auto-pairs
 	Plug 'jiangmiao/auto-pairs'
@@ -40,8 +40,9 @@ if !exists("g:pluginListLoded")
 	Plug 'tpope/vim-fugitive'
 	""""""""""""""""""""""""""""""""""""""""[language]
 	Plug 'derekwyatt/vim-scala'
-	Plug 'plasticboy/vim-markdown'
 	Plug 'artur-shaik/vim-javacomplete2'
+	Plug 'klen/python-mode'
+	Plug 'plasticboy/vim-markdown'
 	""""""""""""""""""""""""""""""""""""""""[ui]
 	Plug 'itchyny/lightline.vim'
 	" 几个配色
@@ -72,7 +73,7 @@ if !exists("g:pluginListLoded")
 	Plug 'strom3xFeI/vimdoc-cn'
 	" Add plugins to &runtimepath
 	call plug#end()
-	let g:pluginListLoded = 1
+	let g:pluginLstLoded = 1
 	finish
 endif
 " }}}1
@@ -208,6 +209,28 @@ call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
 call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
 call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+" }}}
+
+
+" >>>>> nerdcommenter {{{
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+" 添加自定义注释或者覆盖已有注释
+let g:NERDCustomDelimiters={
+    \ 'markdown': { 'left': '<!-- ', 'right': ' -->' },
+	\ 'html': { 'left': '<!---', 'right': '--->' }
+	\ }
+" 可以注释和反注释空行
+let g:NERDCommentEmptyLines = 1
+" 取消注释的时候去掉两端空格
+let g:NERDTrimTrailingWhitespace=1
+let g:NERDSpaceDelims=1
+let g:NERDRemoveExtraSpaces=1
+
 " }}}
 
 
@@ -426,10 +449,17 @@ let g:UltiSnipsEditSplit="vertical"
 
 "  >>>>> vim-markdown {{{
 """"""""""""""""""""""""""""""""""""""""
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_folding_level = 1
+" 类似python-mode的折叠
+" 关掉它自带的折叠
+let g:vim_markdown_folding_disabled = 1
+"let g:vim_markdown_folding_style_pythonic = 1
+"let g:vim_markdown_folding_level = 2
 let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'j=java']
+let g:vim_markdown_emphasis_multiline = 0
+" 关闭语法隐藏，显示markdown源码而不要隐藏一些东西
+let g:vim_markdown_conceal = 0
+" 代码块语法
+let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
 " }}}
 
 
@@ -595,5 +625,3 @@ endif
 "TODO: vim-surround
 "TODO: Fugitive
 "TODO: pymode
-
-

@@ -78,9 +78,6 @@ function! RemoveRL()
 	endif
 	let &cc = 0
 endfunction
-" 超过80列就标红
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929 
-match OverLength /\%81v.\+/
 " 自动添加80列参考线
 augroup RL
 	autocmd!
@@ -127,3 +124,4 @@ func! MybatisGenerate()
 endfunc
 
 " }}}1
+
