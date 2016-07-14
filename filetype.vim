@@ -38,13 +38,18 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 endfunction
 
+function! MarkdownFt()
+	call SetTab(4)
+	inoremap · `
+endfunction
+
 " >>>>> autocmd >>>>>
 augroup fileTypes
 	autocmd!
 	autocmd BufNew,BufRead xml,html,c,scala call SetTab(2)
 	autocmd BufNew,BufRead scala call ScalaFt()
 	autocmd BufNew,BufRead java call SetTab(4)
-	autocmd BufNew,BufRead markdown inoremap · `
+	autocmd BufNew,BufRead markdown call MarkdownFt()
 	autocmd BufNew,BufRead python call PythonFt()
 augroup END
 

@@ -405,11 +405,6 @@ nnoremap <leader>af :set foldenable!<cr>
 
 " >>> Editing {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 设置换行符
-augroup ff
-	autocmd!
-	autocmd FileType * setlocal ff=unix
-augroup END
 " [find] 快速关闭搜索高亮
 noremap <silent> <leader><cr> :nohlsearch<cr>
 noremap <silent> <space><cr> :nohlsearch<cr>
@@ -485,7 +480,6 @@ nnoremap - za
 nnoremap _ zf
 
 " 让Y表示复制到行尾巴
-call yankstack#setup()
 nmap Y y$
 
 " [move] 更便捷的移动指令

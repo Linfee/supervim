@@ -25,8 +25,6 @@ Plug 'tpope/vim-repeat'
 Plug 'godlygeek/tabular'
 " auto-pairs
 Plug 'jiangmiao/auto-pairs'
-" vim粘贴栈
-Plug 'maxbrunsfeld/vim-yankstack'
 """"""""""""""""""""""""""""""""""""""""[find]
 Plug 'vim-scripts/EasyGrep'
 " ctrlP插件
@@ -428,6 +426,14 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+nnoremap <leader>a :UltiSnipsAddFiletypes<space> 
+nnoremap <space>a :UltiSnipsAddFiletypes<space> 
+
+" execute是一个命令，没有对应的方法，定义一个，在snippets中用
+function! EXE(e)
+	execute(a:e)
+endfunctio
+
 " }}}
 
 
@@ -602,17 +608,6 @@ else
 	let g:AutoPairsShortcutFastWrap = '<a-a>'
 endif
 "  }}}
-
-
-"  >>>>> vim-yankstack {{{
-""""""""""""""""""""""""""""""""""""""""
-nnoremap <a-p> <Plug>yankstack_substitute_older_paste
-nnoremap <a-P> <Plug>yankstack_substitute_newer_paste
-nnoremap p <Plug>yankstack_substitute_older_paste
-nnoremap p <Plug>yankstack_substitute_newer_paste
-nnoremap π <Plug>yankstack_substitute_older_paste
-nnoremap ∏ <Plug>yankstack_substitute_newer_paste
-" }}}
 
 
 "TODO: vim-multiple-cursors
