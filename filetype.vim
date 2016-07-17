@@ -51,6 +51,7 @@ augroup fileTypes
 	autocmd BufNew,BufRead java call SetTab(4)
 	autocmd BufNew,BufRead markdown call MarkdownFt()
 	autocmd BufNew,BufRead python call PythonFt()
+	autocmd FileType python setlocal ff=unix
 augroup END
 
 

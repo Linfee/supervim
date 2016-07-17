@@ -45,6 +45,7 @@ Plug 'itchyny/lightline.vim'
 " 几个配色
 Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
+Plug 'jnurmine/Zenburn'
 """"""""""""""""""""""""""""""""""""""""[extension]
 " 缩进可视化
 Plug 'Yggdroot/indentLine'

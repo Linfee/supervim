@@ -214,8 +214,8 @@ syntax enable
 syntax on
 
 " [view] 高亮主题
-colorscheme molokai
-" colorscheme zenburn
+" colorscheme molokai
+colorscheme zenburn
 
 " [color] 设置背景色
 set background=dark
@@ -793,11 +793,13 @@ if !exists("g:ideavim")
 			:!./%
 		elseif &filetype == 'groovy'
 			exec "!groovy %"
-		elseif &filetype == 'markdown' || &filetype == 'html'
+		elseif &filetype == 'markdown' || &filetype == 'html' || &filetype == 'ftl'
 			exec "silent !exec google-chrome % &"
 			exec "redraw!"
 		elseif &filetype == 'scala'
 			exec "!scala -deprecation %" 
+		elseif &filetype == 'python3'
+			exec "!python %"
 		endif
 	endfunc
 	"C,C++的调试

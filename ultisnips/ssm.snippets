@@ -1,1 +1,227 @@
-# Snippets file for ssm(spring + spring-vmc + mybatis) developsnippet ssm-mvc-upload-config "spring-mvc 上传解析器配置" b<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">	<property name="maxUploadSize"><!--设置最大允许上传文件大小-->		<value>${1:5242880}</value>	</property></bean>$0endsnippet
+# Snippets file for ssm(spring + spring-vmc + mybatis) develop
+snippet ssm-mvc-upload-config "xml:spring-mvc上传解析器配置" b
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<property name="maxUploadSize"><!--设置最大允许上传文件大小-->
+		<value>${1:5242880}</value>
+	</property>
+</bean>
+$0
+endsnippet
+
+snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+<!--<settings>-->
+<!--</settings>-->
+
+<typeAliases>
+<package name="${1}" />
+</typeAliases>
+
+</configuration>
+endsnippet
+
+snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="db.properties"/>
+
+	<typeAliases>
+	$1
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}"/>
+				<property name="url" value="${jdbc.url}"/>
+				<property name="username" value="${jdbc.username}"/>
+				<property name="password" value="${jdbc.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+
+	<mappers>
+	$0
+	</mappers>
+
+</configuration>
+endsnippet
+
+snippet ssm-mybatis-generator "xml:mybatis-generator用来生成java代码的xml配置模板" b
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<!--设置classpath，应该在这里添加数据库驱动-->
+	<!--<classPathEntry location="${1}"/>-->
+
+	context id="testTables" targetRuntime="MyBatis3">
+
+	<!--是否删除自动生成的注释-->
+	<commentGenerator>
+		<property name="suppressAllComments" value="true"/>
+	</commentGenerator>
+
+	<!--数据库连接信息-->
+	<jdbcConnection driverClass="${2:com.mysql.jdbc.Driver}"
+					connectionURL="${3:jdbc:mysql://localhost:3306/test}"
+					userId="${4:root}"
+					password="${5:root}"/>
+
+	<!--
+	<jdbcConnection driverClass="oracle.jdbc.OraclerDriver"
+					connectionURL="jdbc:oracle:thin@localhost:user"
+					userId="uer"
+					password="password"/>
+	-->
+
+
+	<!--默认false, 把 JDBC DECIMAL 和 NUMERIC 类极细微 Integer, 为true就解析为BigDecimal-->
+	<javaTypeResolver>
+		<property name="forceBigDecimals" value="false"/>
+	</javaTypeResolver>
+
+	<!--生成po类的位置-->
+	<javaModelGenerator targetPackage="${6:com.linfee.project.po}" targetProject="${8:../java}">
+		<!--是否让schema作为包的后缀-->
+		<property name="enableSubPackages" value="false"/>
+		<!--从数据库返回的值是否被trim-->
+		<property name="trimStrings" value="true"/>
+		</javaModelGenerator>
+
+		<!--生成mapper映射文件的位置-->
+		<sqlMapGenerator targetPackage="${7:com.linfee.project.mapper}" targetProject="${8}">
+		<!--是否让schema作为包的后缀-->
+		<property name="enableSubPackages" value="false"/>
+		</sqlMapGenerator>
+
+		<!--生成mapper接口的位置-->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="${6:com.linfee.project.mapper}" targetProject="${8}">
+		<!--是否让schema作为包的后缀-->
+		<property name="enableSubPackages" value="false"/>
+		</javaClientGenerator>
+
+		<!--指定使用哪些数据库表-->
+		<table tableName="${9:tableName}" domainObjectName=${10:className}/>$0
+
+	</context>
+
+</generatorConfiguration>
+endsnippet
+
+snippet ssm-custom-converter "xml:自定义类型转换器配置" b
+<!--使用注入了自定义类型转换器的转换服务-->
+<mvc:annotation-driven conversion-service="conversionService"/>
+<!--转换服务bean-->
+<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	<property name="converters"><!--修改它的转换器参数-->
+		<list>
+			<!--此处注入自定义的转换器-->
+			<bean class="com.example.ssm.controller.converter.XxxConverter"/>$0
+		</list>
+	</property>
+</bean>
+endsnippet
+
+snippet ssm-springmvc-mini "xml:springmvc配置模板" b
+<!--开启组件扫描-->
+<context:component-scan base-package="com.linfee.st.mr.controller"/>
+
+<!--使用注解驱动的处理器适配器和映射器-->
+<mvc:annotation-driven/>
+
+<!--配置视图解析器，这里使用jsp-->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/WEB-INF/jsp/"/>
+	<property name="suffix" value=".jsp"/>
+</bean>
+endsnippet
+
+snippet ssm-spring-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的Datasource" b
+<!--加载数据库配置文件-->
+<context:property-placeholder location="classpath:db.properties"/>
+
+<!--配置数据源-->
+<bean id="c3p0DS" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<property name="driverClass" value="${jdbc.driver}"/>
+	<property name="jdbcUrl" value="${jdbc.url}"/>
+	<property name="user" value="${jdbc.username}"/>
+	<property name="password" value="${jdbc.password}"/>
+</bean>
+
+<!--配置sqlSessionFactory -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="c3p0DS"/>
+	<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+</bean>
+
+<!--自动扫描mapper-->
+<mybatis:scan base-package="com.linfee.st.mr.mapper" factory-ref="sqlSessionFactory"/>
+endsnippet
+
+snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
+<!--自动加载spring配置文件-->
+<context-param>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>classpath:spring/applicationContext-*.xml</param-value>
+</context-param>
+<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+
+<!-- spring-mvc前端控制器 -->
+<servlet>
+	<servlet-name>spring-mvc</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<!-- contextConfigLocation配置spring-mvc加载的配置文件(配置处理器映射器, 适配器等) -->
+	<!-- 如果不配置, 它默认加载的是 /WEB-INF/servlet名称-servlet.xml 这个文件(springmvc-servlet.xml)j -->
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/springmvc.xml</param-value>
+	</init-param>
+</servlet>
+<servlet-mapping>
+	<!--
+	1. *.action  处理以 .action 结尾的请求
+	2. /  处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
+	3. /*  这样配置不对, 会导致 jsp 也有 DispatcherServlet 解析, 会报错
+	-->
+	<servlet-name>spring-mvc</servlet-name>
+	<url-pattern>*.do</url-pattern>
+</servlet-mapping>
+
+
+<welcome-file-list>
+	<welcome-file>index.html</welcome-file>
+	<welcome-file>index.jsp</welcome-file>
+	<welcome-file>index.ftl</welcome-file>
+</welcome-file-list>
+endsnippet
+
+snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
+<filter>
+	<filter-name>ChatacterEncodingFilter</filter-name>
+	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	<init-param>
+		<param-name>encoding</param-name>
+		<param-value>utf-8</param-value>
+	</init-param>
+</filter>
+<filter-mapping>
+	<filter-name>ChatacterEncodingFilter</filter-name>
+	<servlet-name>spring-mvc</servlet-name>
+</filter-mapping>
+endsnippet
