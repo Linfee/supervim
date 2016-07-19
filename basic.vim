@@ -66,6 +66,14 @@ if !exists("g:ideavim")
 	Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 	Plug 'Valloric/MatchTagAlways'
 
+	Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+	Plug 'jistr/vim-nerdtree-tabs'
+	Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'scrooloose/nerdcommenter'
+	Plug 'majutsushi/tagbar'
+	Plug 'kshenoy/vim-signature'
+	Plug 'mbbill/undotree'
+
 	Plug 'Shougo/neocomplete.vim'
 	Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 	Plug 'ujihisa/neco-look'
@@ -76,14 +84,6 @@ if !exists("g:ideavim")
 	Plug 'Shougo/unite-outline'
 	Plug 'Shougo/vimfiler.vim'
 	Plug 'ujihisa/unite-colorscheme'
-
-	Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-	Plug 'jistr/vim-nerdtree-tabs'
-	Plug 'Xuyuanp/nerdtree-git-plugin'
-	Plug 'scrooloose/nerdcommenter'
-	Plug 'majutsushi/tagbar'
-	Plug 'kshenoy/vim-signature'
-	Plug 'mbbill/undotree'
 
 	Plug 'mhinz/vim-startify' " 启动画面
 	Plug 'itchyny/lightline.vim'
@@ -100,29 +100,21 @@ if !exists("g:ideavim")
 	Plug 'terryma/vim-expand-region'
 	Plug 'easymotion/vim-easymotion'
 	Plug 'ctrlpvim/ctrlp.vim'
+    Plug 'tacahiroy/ctrlp-funky' "A simple function navigator for ctrlp
 	Plug 'tpope/vim-fugitive'
 	Plug 'vim-scripts/EasyGrep'
 	Plug 'Konfekt/FastFold'
+    Plug 'vim-scripts/sessionman.vim'
 
 	Plug 'ryanoasis/vim-devicons'
 	Plug 'strom3xFeI/vimdoc-cn'
 
 	call plug#end()
 endif
-" ---------------------------------}}}2
 
 " 开启文件类型检测
 filetype plugin indent on
-" [general] 设置光标能到达的虚拟位置
-set virtualedit=
-" 让vim和系统共享剪切板
-if has('clipboard')
-    if has('unnamedplus')  " When possible use + register for copy-paste
-        set clipboard=unnamed,unnamedplus
-    else         " On mac and Windows, use * register for copy-paste
-        set clipboard=unnamed
-    endif
-endif
+" ---------------------------------}}}2
 
 " 自定义一个leader键(不同于vim内置，是额外的一个)，使用提供的方法映射 {{{2
 let g:leadercustom = "<space>"
@@ -201,6 +193,17 @@ function! DoAltMap(prefix, key1, operation, ...)
 endfunction
 " }}}2
 
+" 设置光标能到达的虚拟位置
+set virtualedit=
+" 让vim和系统共享剪切板
+if has('clipboard')
+    if has('unnamedplus')  " When possible use + register for copy-paste
+        set clipboard=unnamed,unnamedplus
+    else         " On mac and Windows, use * register for copy-paste
+        set clipboard=unnamed
+    endif
+endif
+
 " 允许终端使用鼠标，打字时隐藏鼠标
 set mouse=a
 set mousehide
@@ -215,7 +218,7 @@ set relativenumber number
 " 隐藏缓冲区而不是卸载缓冲区
 set hidden
 " 删除在插入模式可以删除的特殊内容
-" set backspace=eol,start,indent
+set backspace=indent,eol,start
 set magic
 " 最后一个窗口总之有状态行
 set laststatus=2
@@ -230,7 +233,7 @@ set tm=500
 " 在左端添加额外折叠列
 set foldcolumn=2
 " 窗口的最小高度
-set winminheight=1
+set winminheight=0
 " 光标离开屏幕时(比如j)，最小滚动的行数，这样看起来舒服
 set scrolljump=0
 " 执行完宏之后不要立刻重绘
@@ -242,7 +245,7 @@ set linespace=0
 " 最多打开的标签数目
 " set tabpagemax=10
 " 可以移动到的额外虚拟位置
-set whichwrap+=<,>,h,l
+set whichwrap=b,s,h,l,<,>,[,]
 " 开启语法高亮
 syntax on
 " 当文件被改变时自动载入
@@ -258,6 +261,13 @@ set cmdheight=2
 set wildmode=list:longest,full
 " 设置忽略补全的文件名
 set wildignore=*.o,*~,*.pyc,*.class
+set list
+set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
+" 使用连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
+set nojoinspaces
+" 新的分割窗口总是在右边和下边打开
+set splitright
+set splitbelow
 if IsWin()
 	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 else
@@ -325,19 +335,16 @@ set pastetoggle=<leader>pp
 " look and feel ------------------------------------------------------------{{{1
 " 搜索时候忽略大小写
 set ignorecase
-
 " 只能匹配大小写
 set smartcase
-
+" 最多15个标签
+set tabpagemax=15
 " 高亮显示搜索结果
 set hlsearch
-
 " 使用增量查找
 set incsearch 
-
 " 使用j/k的时候，光标到窗口的最小行数
 set scrolloff=11
-
 "  设置状态行的样式
 if has('cmdline_info')
     " 显示光标当前位置
@@ -350,23 +357,18 @@ if has('statusline')
     set laststatus=2
     set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 endif
-
 " 高亮主题
 colorscheme molokai
 " colorscheme zenburn
-
 " 设置背景色
 set background=dark
-
 " 设置 gui 与 cli
 if IsGui()
     " 设置窗口位置和大小
     winpos 85 100
     set lines=45 columns=120
-
     " 设置gui下标签内容
     set guitablabel=%M\ %t
-
     " 隐藏不需要的gui组件
 	set guioptions-=m   " remove menu
 	set guioptions-=T   " remove toolbar
@@ -374,7 +376,6 @@ if IsGui()
 	set guioptions-=r
 	set guioptions-=b
 	set guioptions-=e
-
 	" 设置字体
 	if IsLinux()
 		set guifont=SauceCodePro\ Nerd\ Font\ 12, Monaco\ 11
@@ -397,6 +398,20 @@ endif
 highlight clear SignColumn
 " 移除当前行号处的高亮色
 highlight clear LineNr
+" 提亮一下光标行
+hi CursorLine ctermbg=235   cterm=none
+" 定制补全菜单颜色
+" 补全菜单的前景和背景
+hi pmenu  guifg=#b6b6a6 guibg=#1B1D1E ctermfg=144 ctermbg=233
+" 滚动条guibg
+hi pmenusbar  guifg=#ff0000 guibg=#ffff00 gui=none ctermfg=darkcyan ctermbg=233 cterm=none
+" 滑块guibg
+hi pmenuthumb  guifg=#ffff00 guibg=#ff0000 gui=none ctermfg=lightgray ctermbg=144 cterm=none
+" hi pmenu  guifg=#000000 guibg=#f8f8f8 ctermfg=black ctermbg=lightgray
+" hi pmenusbar  guifg=#8a95a7 guibg=#f8f8f8 gui=none ctermfg=darkcyan ctermbg=lightgray cterm=none
+" hi pmenuthumb  guifg=#f8f8f8 guibg=#8a95a7 gui=none ctermfg=lightgray ctermbg=darkcyan cterm=none
+" }}}3
+
 " }}}
 
 " editing ------------------------------------------------------------------{{{1
@@ -408,6 +423,9 @@ call DoMap('vnore', 'r', ":call VisualSelection('replace', '')<CR>", '', ['<sile
 vnoremap <silent> <leader>fr :call VisualSelection('replace', '')<CR>
 " 查找并合并冲突
 nnoremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+" 横向滚动
+map zl zL
+map zh zH
 " 快速查找当前单词
 nnoremap <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 " 快速切换拼写检查
@@ -489,6 +507,17 @@ vnoremap . :normal .<cr>
 call DoMap("nnore", '<space>', 'V')
 call DoMap("vnore", '<space>', 'V')
 
+" 快速设置foldlevel
+nnoremap <leader>f0 :set foldlevel=0<cr>
+nnoremap <leader>f1 :set foldlevel=1<cr>
+nnoremap <leader>f2 :set foldlevel=2<cr>
+nnoremap <leader>f3 :set foldlevel=3<cr>
+nnoremap <leader>f4 :set foldlevel=4<cr>
+nnoremap <leader>f5 :set foldlevel=5<cr>
+nnoremap <leader>f6 :set foldlevel=6<cr>
+nnoremap <leader>f7 :set foldlevel=7<cr>
+nnoremap <leader>f8 :set foldlevel=8<cr>
+nnoremap <leader>f9 :set foldlevel=9<cr>
 " }}}1
 
 " file buffer tab and window -----------------------------------------------{{{1
@@ -538,6 +567,16 @@ try
     set stal=2
 catch
 endtry
+
+" 快速编辑
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :vsp %%
+map <leader>et :tabe %%
+" 切换工作目录到当前文件目录
+cmap cwd lcd %:p:h
+cmap cd. lcd %:p:h
 
 " 保存与退出
 call DoMap('nnore', 'q', ':close<cr>')
@@ -611,19 +650,28 @@ call BackupUndo()
 " }}}1
 
 " misc ---------------------------------------------------------------------{{{1
+" ctags setting
+set tags=./tags;/,~/.vimtags
+
+" Make tags placed in .git/tags file available in all levels of a repository
+let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+if gitroot != ''
+    let &tags = &tags . ',' . gitroot . '/.git/tags'
+endif
+
 " [iabbrev]
 iabbrev xdate <c-r>=strftime("%Y/%d/%m %H:%M:%S")<cr>
 " 去除Windows的 ^M 在编码混乱的时候
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" 一些有用的方法，该配置文件中使用过的
+" 一些有用的方法，该配置文件中使用过的 {{{2
 function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
     unmenu Foo
-endfunction 
+endfunction  " }}}2
 
-function! VisualSelection(direction, extra_filter) range
+function! VisualSelection(direction, extra_filter) range " {{{2
     let l:saved_reg = @"
     execute "normal! vgvy"
 
@@ -638,17 +686,16 @@ function! VisualSelection(direction, extra_filter) range
 
     let @/ = l:pattern
     let @" = l:saved_reg
-endfunction
+endfunction "}}}2
 
-" 如果paste模式打开的化返回true
-function! HasPaste()
+function! HasPaste() " 如果paste模式打开的化返回true {{{2
     if &paste
         return 'PASTE MODE  '
     endif
     return ''
-endfunction
+endfunction " }}}2
 
-func! DeleteTillSlash()
+func! DeleteTillSlash() " {{{2
 	let g:cmd = getcmdline()
 
 	if has("win16") || has("win32")
@@ -666,20 +713,28 @@ func! DeleteTillSlash()
 	endif   
 
 	return g:cmd_edited
-endfunc
+endfunc " }}}2
 
-func! CurrentFileDir(cmd)
-	return a:cmd . " " . expand("%:p:h") . "/"
-endfunc
+func! DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python使用 {{{2
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc " }}}2
 
-" 删除每行末尾的空白，对python使用
-" func! DeleteTrailingWhiteSpace()
-"     exe "normal mz"
-"     %s/\s\+$//ge
-"     exe "normal `z"
-" endfunc
+function! StripTrailingWhitespace() " Strip whitespace {{{2
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " do the business:
+    %s/\s\+$//e
+    " clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction " }}}2
 
-if !exists("g:ideavim")
+" 编译和运行 {{{
+if !exists("g:ideavim") 
 	" 按F5编译运行
 	map <F5> :call Run()<CR>
 	func! Run()
@@ -713,7 +768,42 @@ if !exists("g:ideavim")
 		exec "!g++ % -g -o %<"
 		exec "!gdb ./%<"
 	endfunc
-endif
+endif " }}}2
+
+function! s:RunShellCommand(cmdline) " Run Shell command {{{2
+    botright new
+
+    setlocal buftype=nofile
+    setlocal bufhidden=delete
+    setlocal nobuflisted
+    setlocal noswapfile
+    setlocal nowrap
+    setlocal filetype=shell
+    setlocal syntax=shell
+
+    call setline(1, a:cmdline)
+    call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+    execute 'silent $read !' . escape(a:cmdline, '%#')
+    setlocal nomodifiable
+    1
+endfunction
+
+command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+" e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+" }}}2
+
+function! ToggleBG() " 切换背景色 {{{2
+    let s:tbg = &background
+    " Inversion
+    if s:tbg == "dark"
+        set background=light
+    else
+        set background=dark
+    endif
+endfunction
+noremap <leader>bg :call ToggleBG()<CR>
+" }}}2
+
 " }}}1
 
 " plugin config ------------------------------------------------------------{{{1
@@ -730,88 +820,134 @@ let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
 let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#manual_completion_start_length = 3
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+let g:neocomplete#enable_auto_delimiter = 1
+let g:neocomplete#max_list = 15
+let g:neocomplete#force_overwrite_completefunc = 1
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
 			\ 'default' : '',
 			\ 'vimshell' : $HOME.'/.vimshell_hist',
 			\ 'scheme' : $HOME.'/.gosh_completions'
 			\ }
+
 " Define keyword.
 if !exists('g:neocomplete#keyword_patterns')
 	let g:neocomplete#keyword_patterns = {}
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-	" return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-	" For no inserting <CR> key.
-	return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
+" omni 补全配置 {{{3
 augroup omnif
 	autocmd!
+    autocmd Filetype *
+                    \if &omnifunc == "" |
+                    \setlocal omnifunc=syntaxcomplete#Complete |
+                    \endif
 	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 	autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 	" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup END
-
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
 	let g:neocomplete#sources#omni#input_patterns = {}
 endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-let g:neocomplete#use_vimproc = 1
+let g:neocomplete#use_vimproc = 1 " }}}3
 
-" For smart TAB completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-"        \ <SID>check_back_space() ? "\<TAB>" :
-"        \ neocomplete#start_manual_complete()
-"  function! s:check_back_space() "{{{
-"    let col = col('.') - 1
-"    return !col || getline('.')[col - 1]  =~ '\s'
-"  endfunction"}}}
+" 自动打开关闭弹出式的预览窗口 {{{3
+augroup AutoPopMenu
+    autocmd!
+    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+augroup END
+set completeopt=menu,preview,longest "}}}3
 
-" inoremap <expr><Tab>  neocomplete#start_manual_complete()
+" 回车键插入当前的补全项
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+	" return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+	" For no inserting <CR> key.
+	return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
 
-inoremap <expr><Tab>
-  \ neocomplete#complete_common_string() != '' ?
-  \   neocomplete#complete_common_string() :
-  \ pumvisible() ? "\<C-n>" : "\<Tab>"
+" <C-k> 补全snippet
+" <C-k> 下一个输入点
+imap <silent><expr><C-k> neosnippet#expandable() ?
+            \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
+            \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
 
+inoremap <expr><C-g> neocomplete#undo_completion()
+inoremap <expr><C-l> neocomplete#complete_common_string()
+"inoremap <expr><CR> neocomplete#complete_common_string()
+
+" 使用回车确认补全
+" shift加回车确认补全保存缩进
+inoremap <expr><s-CR> pumvisible() ? neocomplete#smart_close_popup()."\<CR>" : "\<CR>"
+
+function! CleverCr()
+    if pumvisible()
+        " if neosnippet#expandable()
+        "     let exp = "\<Plug>(neosnippet_expand)"
+        "     return exp . neocomplete#smart_close_popup()
+        " else
+        return neocomplete#smart_close_popup()
+        " endif
+    else
+        return "\<CR>"
+    endif
+endfunction
+
+imap <expr> <Tab> CleverTab()
+
+" 回车插入补全并保存缩进，或者展开snippet
+" imap <expr> <CR> CleverCr()
+" <C-h>,<BS> 关闭预览窗口并删除补全预览
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y> neocomplete#smart_close_popup()
+" 使用tab补全
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+" 额外的快捷键
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+
+" 使用unite菜单的补全
 imap <C-;> <Plug>(neocomplete_start_unite_complete)
 imap <C-l> <Plug>(neocomplete_start_unite_quick_match)
+" }}}2
+
+" ultisnips {{{2
+" 定义snippet文件存放的位置
+let g:UltiSnipsSnippetsDir=expand("$VIMFILES/supervim/ultisnips")
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "supervim/ultisnips"]
+
+" Trigger configuration.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+nnoremap <leader>a :UltiSnipsAddFiletypes<space> 
+nnoremap <space>a :UltiSnipsAddFiletypes<space> 
+
+" execute是一个命令，没有对应的方法，定义一个，在snippets中用
+function! EXE(e)
+	execute(a:e)
+endfunctio
 " }}}2
 
 " unite {{{2
@@ -851,6 +987,14 @@ let g:unite_source_menu_menus.git.command_candidates = [
         \'Gcd'],
     \]
 nnoremap <silent>[menu]g :Unite -silent -start-insert menu:git<CR>
+
+" ultisnips source
+function! UltiSnipsCallUnite()
+    Unite -start-insert -winheight=10 -immediately -no-empty ultisnips
+    return ''
+endfunction
+inoremap <silent> <leader>wu <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+nnoremap <silent> <leader>wu a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
 " }}}2
 
 " nerdtree {{{2
@@ -859,16 +1003,18 @@ let g:NERDTreeDirArrowExpandable = '▶'
 let g:NERDTreeDirArrowCollapsible = '▼'
 let g:NERDTreeWinPos = "left"
 let g:NERDTreeWinSize = "35"
-let g:NERDTreeShowHidden=0
-let NERDTreeIgnore = ['\.pyc$', '\~$', '__pycache__', '\.swp']
+let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+let NERDTreeShowBookmarks=1
+let NERDTreeChDirMode=0
+let NERDTreeQuitOnOpen=1
+let NERDTreeMouseMode=2
+let NERDTreeShowHidden=1
+let NERDTreeKeepTreeInNewTab=1
 
 " Automatically find and select currently opened file in NERDTree
 let g:nerdtree_tabs_open_on_console_startup=0
 let g:nerdtree_tabs_open_on_gui_startup=0
 let g:nerdtree_tabs_open_on_new_tab=1
-
-nnoremap <Leader>n :NERDTreeTabsToggle<CR>
-nnoremap <space>n :NERDTreeTabsToggle<CR>
 
 let g:NERDTreeIndicatorMapCustom = {
 			\ "Modified"  : "✹",
@@ -901,6 +1047,10 @@ call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
 call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
 call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('python', 'Magenta', 'none', '#ff00ff', '#151515')
+
+nnoremap <leader>e :NERDTreeFind<CR>
+nnoremap <Leader>n :NERDTreeToggle<CR>
+call DoMap('nnore', 'n', ':NERDTreeToggle<CR>')
 " }}}2
 
 " nerdcommenter {{{2
@@ -940,28 +1090,48 @@ let g:ctrlp_working_path_mode = 'ra'
 " 自定义的默认查找起始目录
 let g:ctrlp_root_markers = ['.p, .vim, home']
 " 忽略这些文件
-let g:ctrlp_custom_ignore = 'node_modules\|^\.DS_Store\|^\.git\|^\.coffee'
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
+" 额外的搜索工具
+if executable('ag')
+    let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+elseif executable('ack-grep')
+    let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
+elseif executable('ack')
+    let s:ctrlp_fallback = 'ack %s --nocolor -f'
+" On Windows use "dir" as fallback command.
+elseif IsWin()
+    let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
+else
+    let s:ctrlp_fallback = 'find %s -type f'
+endif
 " 设置一下ctrlp的窗口高度
 let g:ctrlp_max_height = 10
 " 跟随链接但是忽略内部循环的链接，避免重复。
 let g:ctrlp_follow_symlinks = 0
 let g:ctrlp_prompt_mappings = { 'ToggleMRURelative()': ['<F2>'] }
-" Exclude files and directories using Vim's wildignore and CtrlP's own g:ctrlp_custom_ignore
-" Use a custom file listing command
-if IsWin()
-	set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
-else
-	set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-	let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
-endif
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ }
+let g:ctrlp_user_command = {
+    \ 'types': {
+        \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+        \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    \ },
+    \ }
+    " \ 'fallback': s:ctrlp_fallback
 call DoMap('nnore', 'o', ':CtrlP<CR>')
 call DoMap('nnore', 'O', ':CtrlPBuffer<cr>')
 call DoMap('nnore', 'p', ':CtrlPMRU<cr>')
+" }}}2
+
+" ctrlp-funky {{{2
+" CtrlP extensions
+let g:ctrlp_extensions = ['funky']
+"funky
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fe :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+let g:ctrlp_funky_matchtype = 'path'
+let g:ctrlp_funky_syntax_highlight = 1
 " }}}2
 
 " vim-expand-region {{{2
@@ -1104,28 +1274,6 @@ function! s:syntastic()
 endfunction
 " }}}2
 
-" ultisnips {{{2
-" 定义snippet文件存放的位置
-let g:UltiSnipsSnippetsDir=expand("$VIMFILES/supervim/ultisnips")
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "supervim/ultisnips"]
-
-" Trigger configuration.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-nnoremap <leader>a :UltiSnipsAddFiletypes<space> 
-nnoremap <space>a :UltiSnipsAddFiletypes<space> 
-
-" execute是一个命令，没有对应的方法，定义一个，在snippets中用
-function! EXE(e)
-	execute(a:e)
-endfunctio
-" }}}2
-
 " vim-markdown {{{2
 " 关掉它自带的折叠
 let g:vim_markdown_folding_disabled = 1
@@ -1215,6 +1363,7 @@ let g:pymode_lint_info_symbol = 'II'
 let g:pymode_lint_pyflakes_symbol = 'FF'
 " 开启补全
 let g:pymode_rope_completion = 1
+let g:pymode_lint_checkers = ['pyflakes']
 
 " let g:pymode_rope_completion_bind = '∏'
 " }}}2
@@ -1347,6 +1496,28 @@ augroup nerdColor
 augroup END
 " }}}2
 
+" Fugitive {{{2
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gb :Gblame<CR>
+nnoremap <silent> <leader>gl :Glog<CR>
+nnoremap <silent> <leader>gp :Git push<CR>
+nnoremap <silent> <leader>gr :Gread<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR>
+nnoremap <silent> <leader>ge :Gedit<CR>
+" Mnemonic _i_nteractive
+nnoremap <silent> <leader>gi :Git add -p %<CR>
+nnoremap <silent> <leader>gg :SignifyToggle<CR>
+" }}}2
+
+" sessionman {{{2
+set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+nnoremap <leader>sl :SessionList<CR>
+nnoremap <leader>ss :SessionSave<CR>
+nnoremap <leader>sc :SessionClose<CR>
+" }}}2
+
 " }}}1
 
 " extesion -----------------------------------------------------------------{{{1
@@ -1452,5 +1623,13 @@ augroup FTConfig
     autocmd!
     autocmd FileType * call LoadFTConfig()
 augroup END
+
+augroup miscs
+    autocmd!
+    " Remove trailing whitespaces and ^M chars
+    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    " Always switch to the current file directory
+    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+augroup ENDJ
 " }}}
 
