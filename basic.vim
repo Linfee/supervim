@@ -210,7 +210,7 @@ set mousehide
 " 命令行不全
 set wildmenu
 " 不显示模式，让lightline显示
-set showmode
+set noshowmode
 " 不要使用swp文件做备份
 set noswapfile
 " 显示绝对行号和相对行号
@@ -357,6 +357,8 @@ if has('statusline')
     set laststatus=2
     set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 endif
+" 让gui光标不要闪
+set gcr=a:block-blinkon0
 " 高亮主题
 colorscheme molokai
 " colorscheme zenburn
@@ -587,7 +589,7 @@ if !IsWin()
 	call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
 endif
 " 文件类型(使用的结尾符号)
-set fileformats=unix,mac,dos
+set fileformats=unix
 " 设置脚本的编码
 scriptencoding utf8
 " 退出需要确认
@@ -941,8 +943,8 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-nnoremap <leader>a :UltiSnipsAddFiletypes<space> 
-nnoremap <space>a :UltiSnipsAddFiletypes<space> 
+nnoremap <leader>au :UltiSnipsAddFiletypes<space> 
+nnoremap <space>au :UltiSnipsAddFiletypes<space> 
 
 " execute是一个命令，没有对应的方法，定义一个，在snippets中用
 function! EXE(e)
@@ -1034,19 +1036,19 @@ function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
 	exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 
-call NERDTreeHighlightFile('java', 'green', 'none', 'green', '#151515')
-call NERDTreeHighlightFile('vim', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
-call NERDTreeHighlightFile('xml', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
-call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
-call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
-call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
-call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
-call NERDTreeHighlightFile('python', 'Magenta', 'none', '#ff00ff', '#151515')
+call NERDTreeHighlightFile('java'   , 'green'   , 'none' , 'green'   , '#151515')
+call NERDTreeHighlightFile('vim'    , 'yellow'  , 'none' , 'yellow'  , '#151515')
+call NERDTreeHighlightFile('md'     , 'blue'    , 'none' , '#3366FF' , '#151515')
+call NERDTreeHighlightFile('xml'    , 'yellow'  , 'none' , 'yellow'  , '#151515')
+call NERDTreeHighlightFile('config' , 'yellow'  , 'none' , 'yellow'  , '#151515')
+call NERDTreeHighlightFile('conf'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
+call NERDTreeHighlightFile('json'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
+call NERDTreeHighlightFile('html'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
+call NERDTreeHighlightFile('styl'   , 'cyan'    , 'none' , 'cyan'    , '#151515')
+call NERDTreeHighlightFile('css'    , 'cyan'    , 'none' , 'cyan'    , '#151515')
+call NERDTreeHighlightFile('coffee' , 'Red'     , 'none' , 'red'     , '#151515')
+call NERDTreeHighlightFile('js'     , 'Red'     , 'none' , '#ffa500' , '#151515')
+call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515')
 
 nnoremap <leader>e :NERDTreeFind<CR>
 nnoremap <Leader>n :NERDTreeToggle<CR>
@@ -1399,6 +1401,18 @@ nnoremap <Leader>a,, :Tabularize /,\zs<CR>
 vnoremap <Leader>a,, :Tabularize /,\zs<CR>
 nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
 vnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
 " }}}2
 
 " vim-surround {{{2
@@ -1494,6 +1508,7 @@ augroup nerdColor
 	autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
 	autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
 augroup END
+
 " }}}2
 
 " Fugitive {{{2

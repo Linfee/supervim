@@ -9,3 +9,10 @@ let &tabstop=4
 let &softtabstop=4
 
 inoremap · `
+
+func! RunMd()
+    exe 'silent !open % &'
+    exe 'redraw!'
+endf
+
+call DoMap('nnore', 'r', ':call RunMd()<cr>')
