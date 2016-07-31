@@ -66,7 +66,7 @@ if !exists("g:ideavim")
 	Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 	Plug 'Valloric/MatchTagAlways'
 
-	Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+	Plug 'scrooloose/nerdtree'
 	Plug 'jistr/vim-nerdtree-tabs'
 	Plug 'Xuyuanp/nerdtree-git-plugin'
 	Plug 'scrooloose/nerdcommenter'
@@ -738,7 +738,7 @@ endfunction " }}}2
 " 编译和运行 {{{
 if !exists("g:ideavim") 
 	" 按F5编译运行
-	map <F5> :call Run()<CR>
+	" nnoremap <F5> :call Run()<CR>
 	func! Run()
 		exec "w"
 		if &filetype == 'c'
@@ -938,13 +938,15 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "supervim/ultisnips"]
 " Trigger configuration.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="∆"
+let g:UltiSnipsJumpBackwardTrigger="˚"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-nnoremap <leader>au :UltiSnipsAddFiletypes<space> 
-nnoremap <space>au :UltiSnipsAddFiletypes<space> 
+nnoremap <leader>au :UltiSnipsAddFiletypes<space>
+nnoremap <space>au :UltiSnipsAddFiletypes<space>
 
 " execute是一个命令，没有对应的方法，定义一个，在snippets中用
 function! EXE(e)
@@ -1008,10 +1010,11 @@ let g:NERDTreeWinSize = "35"
 let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
 let NERDTreeShowBookmarks=1
 let NERDTreeChDirMode=0
-let NERDTreeQuitOnOpen=1
 let NERDTreeMouseMode=2
 let NERDTreeShowHidden=1
 let NERDTreeKeepTreeInNewTab=1
+" 多个tab的nerdtree同步
+let g:nerdtree_tabs_synchronize_view = 1
 
 " Automatically find and select currently opened file in NERDTree
 let g:nerdtree_tabs_open_on_console_startup=0
@@ -1051,8 +1054,9 @@ call NERDTreeHighlightFile('js'     , 'Red'     , 'none' , '#ffa500' , '#151515'
 call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515')
 
 nnoremap <leader>e :NERDTreeFind<CR>
-nnoremap <Leader>n :NERDTreeToggle<CR>
-call DoMap('nnore', 'n', ':NERDTreeToggle<CR>')
+" nnoremap <Leader>n <plug>NERDTreeTabsToggle<CR>
+nnoremap <Leader>n :NERDTreeTabsToggle<CR>
+call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
 " }}}2
 
 " nerdcommenter {{{2
@@ -1350,6 +1354,10 @@ let g:pymode_motion = 1
 let g:pymode_doc = 1
 " Bind keys to show documentation for current word (selection)
 let g:pymode_doc_bind = 'K'
+" 转到定义处
+let g:pymode_rope_goto_definition_bind = '<leader>d'
+" e new vnew，转到定义用哪个命令打开
+let g:pymode_rope_goto_definition_cmd = 'vnew'
 " Turn on code checking
 let g:pymode_lint = 1
 " Check code on every save (every)
@@ -1444,7 +1452,7 @@ nnoremap <space>u :UndotreeToggle<cr>
 
 " autopair {{{2
 "  什么时候想自己写插件应该看看这个插件的源码
-let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
+let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
 let g:AutoPairsShortcutToggle = '<leader>ac'
 if IsOSX()
 	let g:AutoPairsShortcutFastWrap = 'å'

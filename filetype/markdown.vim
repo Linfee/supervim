@@ -16,3 +16,5 @@ func! RunMd()
 endf
 
 call DoMap('nnore', 'r', ':call RunMd()<cr>')
+
+set nowrap

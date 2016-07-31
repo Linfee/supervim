@@ -1,0 +1,4 @@
+source ~/.vimrc
+set surround
+nnoremap <space><space> 'V'
+vnoremap <space><space> 'V'

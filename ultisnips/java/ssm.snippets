@@ -1,1 +1,13 @@
-# Snippets file for ssm(spring + spring-vmc + mybatis) develop# It contains xml, java and so on# To add these snippets use :UltiSnipsAddFiletypes ssmsnippet ssm-mvc-upload-config "spring-mvc 上传解析器配置" b<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">	<property name="maxUploadSize"><!--设置最大允许上传文件大小-->		<value>${1:5242880}</value>	</property></bean>$0endsnippet
+# Snippets file for ssm(spring + spring-vmc + mybatis) develop
+# It contains xml, java and so on
+# To add these snippets use :UltiSnipsAddFiletypes ssm
+snippet ssm-mvc-upload-config "spring-mvc 上传解析器配置" b
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+<property name="maxUploadSize"><!--设置最大允许上传文件大小-->
+<value>${1:5242880}</value>
+</property>
+</bean>
+$0
+endsnippet
+
+

@@ -1,1 +1,21 @@
-snippet mysql "mysql数据库配置properties模板" bjdbc.driver=com.mysql.jdbc.Driverjdbc.url=jdbc:mysql://${5:localhost}:${6:3306}/${1:test}?characterEncoding=${4:utf8}jdbc.username=${2:root}jdbc.password=${3:root}$0endsnippetsnippet db "数据库驱动properties模板" bjdbc.driver=${1:com.mysql.jdbc.Driver}jdbc.url=${2:jdbc:mysql://localhost:3306/test?characterEncoding=utf8}jdbc.username=${3:root}jdbc.password=${4:root}$0endsnippetsnippet log4j "log4j的properties配置模板" b# Global logging configuration# 开发环境下使用DEBUGlog4j.rootLogger=${1:DEBUG}, stdout# Console output...log4j.appender.stdout=org.apache.log4j.ConsoleAppenderlog4j.appender.stdout.layout=org.apache.log4j.PatternLayoutlog4j.appender.stdout.layout.ConversionPattern=${2:%5p [%t] -%m%n}$0endsnippet
+snippet mysql "mysql数据库配置properties模板" b
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://${5:localhost}:${6:3306}/${1:test}?characterEncoding=${4:utf8}
+jdbc.username=${2:root}
+jdbc.password=${3:root}$0
+endsnippet
+
+snippet db "数据库驱动properties模板" b
+jdbc.driver=${1:com.mysql.jdbc.Driver}
+jdbc.url=${2:jdbc:mysql://localhost:3306/test?characterEncoding=utf8}
+jdbc.username=${3:root}
+jdbc.password=${4:root}$0
+endsnippet
+
+snippet log4j "log4j的properties配置模板" b
+# Global logging configuration# 开发环境下使用DEBUG
+log4j.rootLogger=${1:DEBUG}, stdout# Console output...
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=${2:%5p [%t] -%m%n}$0
+endsnippet
