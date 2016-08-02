@@ -380,10 +380,10 @@ if IsGui()
 	set guioptions-=e
 	" 设置字体
 	if IsLinux()
-		set guifont=SauceCodePro\ Nerd\ Font\ 12, Monaco\ 11
+		set guifont=SauceCodePro\ Nerd\ Font\ 12
 	else
-		set guifont=SauceCodePro\ Nerd\ Font:h12, Monaco:h11
-		set guifont=SauceCodePro\ Nerd\ Font:h12, Monaco:h11
+		set guifont=SauceCodePro\ Nerd\ Font:h12
+		set guifont=SauceCodePro\ Nerd\ Font:h12
 	endif
 else
     " 让箭头键和其它键能使用
@@ -736,7 +736,7 @@ function! StripTrailingWhitespace() " Strip whitespace {{{2
 endfunction " }}}2
 
 " 编译和运行 {{{
-if !exists("g:ideavim") 
+if !exists("g:ideavim")
 	" 按F5编译运行
 	" nnoremap <F5> :call Run()<CR>
 	func! Run()

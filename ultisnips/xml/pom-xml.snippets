@@ -16,13 +16,13 @@ snippet pom "pom.xml template" b
 </project>
 endsnippet
 
-snippet dependencies "The dependencies tag" b
+snippet pom_dependencies "The dependencies tag" b
 <dependencies>
   ${0:<!-- dependency -->}
 </dependencies>
 endsnippet
 
-snippet djunit "The junit4 dependency" b
+snippet dep_junit "The junit4 dependency" b
 <dependency>
   <groupId>junit</groupId>
   <artifactId>junit</artifactId>
@@ -32,7 +32,7 @@ snippet djunit "The junit4 dependency" b
 $0
 endsnippet
 
-snippet dservlet "The servlet dependency" b
+snippet dep_servlet "The servlet dependency" b
 <dependency>
   <groupId>javax.servlet</groupId>
   <artifactId>javax.servlet-api</artifactId>
@@ -42,7 +42,7 @@ snippet dservlet "The servlet dependency" b
 $0
 endsnippet
 
-snippet djstl "The jstl dependency" b
+snippet dep_jstl "The jstl dependency" b
 <dependency>
   <groupId>javax.servlet</groupId>
   <artifactId>jstl</artifactId>
@@ -51,7 +51,7 @@ snippet djstl "The jstl dependency" b
 $0
 endsnippet
 
-snippet dmysql "The mysql dependency" b
+snippet dep_mysql "The mysql dependency" b
 <dependency>
   <groupId>mysql</groupId>
   <artifactId>mysql-connector-java</artifactId>
@@ -59,9 +59,9 @@ snippet dmysql "The mysql dependency" b
 </dependency>
 $0
 
-ndsnippet
+endsnippet
 
-snippet dmybatis "The mybatis dependency" b
+snippet dep_mybatis "The mybatis dependency" b
 <dependency>
   <groupId>org.mybatis</groupId>
   <artifactId>mybatis</artifactId>
@@ -70,7 +70,7 @@ snippet dmybatis "The mybatis dependency" b
 $0
 endsnippet
 
-snippet dlog4j "The log4j dependency" b
+snippet dep_log4j "The log4j dependency" b
 <dependency>
   <groupId>log4j</groupId>
   <artifactId>log4j</artifactId>
@@ -79,21 +79,21 @@ snippet dlog4j "The log4j dependency" b
 $0
 endsnippet
 
-snippet pbuild "The build tag" b
+snippet pom_build "The build tag" b
 <build>
   <finalName>${1:finalName}</finalName>
   $0
 </build>
 endsnippet
 
-snippet plug "The plugin tag" b
+snippet pom_plug "The plugin tag" b
 <build>
   <finalName>${1:finalName}</finalName>
   $0
 </build>
 endsnippet
 
-snippet pcompiler "maven compiler plugn" b
+snippet pom_plugin_compiler "maven compiler plugn" b
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-compiler-plugin</artifactId>
@@ -106,7 +106,7 @@ snippet pcompiler "maven compiler plugn" b
 $0
 endsnippet
 
-snippet pbuild "The build tag with plugin" b
+snippet pom_builds "The build tag with plugin" b
 <build>
   <finalName>${1:finalName}</finalName>
   <plugins>
