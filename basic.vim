@@ -212,7 +212,7 @@ set wildmenu
 " 不显示模式，让lightline显示
 set noshowmode
 " 不要使用swp文件做备份
-set noswapfile
+" set noswapfile
 " 显示绝对行号和相对行号
 set relativenumber number
 " 隐藏缓冲区而不是卸载缓冲区
