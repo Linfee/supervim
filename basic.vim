@@ -368,7 +368,7 @@ set background=dark
 if IsGui()
     " 设置窗口位置和大小
     winpos 85 100
-    set lines=45 columns=120
+    set lines=45 columns=90
     " 设置gui下标签内容
     set guitablabel=%M\ %t
     " 隐藏不需要的gui组件
