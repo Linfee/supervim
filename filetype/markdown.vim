@@ -11,10 +11,13 @@ let &softtabstop=4
 inoremap · `
 
 func! RunMd()
-    exe 'silent !open % &'
-    exe 'redraw!'
+    if IsOSX()
+        exe 'silent !open % &'
+        exe 'redraw!'
+    endif
 endf
 
+nnoremap <leader>r :call RunMd()<cr>
 call DoMap('nnore', 'r', ':call RunMd()<cr>')
 
 set nowrap
