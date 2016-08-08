@@ -1,12 +1,12 @@
 " filetype config for .html file
 let g:ftconfigloaded = 1
 
-set smarttab
-set expandtab
-set autoindent
-let &shiftwidth=2
-let &tabstop=2
-let &softtabstop=2
+setl smarttab
+setl expandtab
+setl autoindent
+setl shiftwidth=2
+setl tabstop=2
+setl softtabstop=2
 
 func! RunHtml()
     if IsOSX()

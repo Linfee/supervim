@@ -48,12 +48,17 @@ nmap H ^
 nmap L $
 vmap H ^
 vmap L $
+omap H ^
+omap L $
 " vmode下能连续使用 < >
 vnoremap < <gv
 vnoremap > >gv
 " 允许使用 . 对选中的行执行上一个命令
 vnoremap . :normal .<cr>
 " 切换行可视模式
+
+nnoremap <space>j 10j
+nnoremap <space>k 10k
 
 nnoremap <space><space> V
 vnoremap <space><space> V

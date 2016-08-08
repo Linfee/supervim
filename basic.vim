@@ -74,10 +74,10 @@ if !exists("g:ideavim")
 	Plug 'kshenoy/vim-signature'
 	Plug 'mbbill/undotree'
 
-	Plug 'Shougo/neocomplete.vim'
+    Plug 'Shougo/neocomplete.vim'
 	Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 	Plug 'ujihisa/neco-look'
-	
+
 	Plug 'Shougo/vimproc.vim'
 	Plug 'Shougo/vimshell.vim'
 	Plug 'Shougo/unite.vim'
@@ -91,7 +91,7 @@ if !exists("g:ideavim")
 	Plug 'altercation/vim-colors-solarized'
 	Plug 'tomasr/molokai'
 	Plug 'jnurmine/Zenburn'
-
+    Plug 'maxbrunsfeld/vim-yankstack'
 	Plug 'terryma/vim-multiple-cursors'
 	Plug 'tpope/vim-surround'
 	Plug 'tpope/vim-repeat'
@@ -460,6 +460,7 @@ nnoremap <silent> <leader>q gwip
 nnoremap - za
 nnoremap _ zf
 " 让Y表示复制到行尾巴
+call yankstack#setup()
 nmap Y y$
 " [move] j/k可以移动到软换行上
 nnoremap j gj
@@ -469,6 +470,8 @@ nmap H ^
 nmap L $
 vmap H ^
 vmap L $
+omap L $
+omap H ^
 
 call DoAltMap('inore', 'j', '<down>')
 call DoAltMap('inore', 'k', '<up>')
@@ -811,7 +814,7 @@ noremap <leader>bg :call ToggleBG()<CR>
 " plugin config ------------------------------------------------------------{{{1
 " 如果是ideavim就不要加载下面的东西了
 if exists("g:ideavim")
-	finish
+    finish
 endif
 
 " Neocomplete {{{2
@@ -828,33 +831,33 @@ let g:neocomplete#max_list = 15
 let g:neocomplete#force_overwrite_completefunc = 1
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
-			\ 'default' : '',
-			\ 'vimshell' : $HOME.'/.vimshell_hist',
-			\ 'scheme' : $HOME.'/.gosh_completions'
-			\ }
+            \ 'default' : '',
+            \ 'vimshell' : $HOME.'/.vimshell_hist',
+            \ 'scheme' : $HOME.'/.gosh_completions'
+            \ }
 
 " Define keyword.
 if !exists('g:neocomplete#keyword_patterns')
-	let g:neocomplete#keyword_patterns = {}
+    let g:neocomplete#keyword_patterns = {}
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 " omni 补全配置 {{{3
 augroup omnif
-	autocmd!
+    autocmd!
     autocmd Filetype *
-                    \if &omnifunc == "" |
-                    \setlocal omnifunc=syntaxcomplete#Complete |
-                    \endif
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+                \if &omnifunc == "" |
+                \setlocal omnifunc=syntaxcomplete#Complete |
+                \endif
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    " autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup END
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
-	let g:neocomplete#sources#omni#input_patterns = {}
+    let g:neocomplete#sources#omni#input_patterns = {}
 endif
 let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
@@ -875,9 +878,9 @@ set completeopt=menu,preview,longest "}}}3
 " 回车键插入当前的补全项
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-	" return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-	" For no inserting <CR> key.
-	return pumvisible() ? "\<C-y>" : "\<CR>"
+    " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+    " For no inserting <CR> key.
+    return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 
 " <C-k> 补全snippet
@@ -950,46 +953,46 @@ nnoremap <space>au :UltiSnipsAddFiletypes<space>
 
 " execute是一个命令，没有对应的方法，定义一个，在snippets中用
 function! EXE(e)
-	execute(a:e)
+    execute(a:e)
 endfunctio
 " }}}2
 
 " unite {{{2
 let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
 let g:unite_source_menu_menus.git = {
-    \ 'description' : '            gestionar repositorios git
-        \                            ⌘ [espacio]g',
-    \}
+            \ 'description' : '            gestionar repositorios git
+            \                            ⌘ [espacio]g',
+            \}
 let g:unite_source_menu_menus.git.command_candidates = [
-    \['▷ tig                                                        ⌘ ,gt',
-        \'normal ,gt'],
-    \['▷ git status       (Fugitive)                                ⌘ ,gs',
-        \'Gstatus'],
-    \['▷ git diff         (Fugitive)                                ⌘ ,gd',
-        \'Gdiff'],
-    \['▷ git commit       (Fugitive)                                ⌘ ,gc',
-        \'Gcommit'],
-    \['▷ git log          (Fugitive)                                ⌘ ,gl',
-        \'exe "silent Glog | Unite quickfix"'],
-    \['▷ git blame        (Fugitive)                                ⌘ ,gb',
-        \'Gblame'],
-    \['▷ git stage        (Fugitive)                                ⌘ ,gw',
-        \'Gwrite'],
-    \['▷ git checkout     (Fugitive)                                ⌘ ,go',
-        \'Gread'],
-    \['▷ git rm           (Fugitive)                                ⌘ ,gr',
-        \'Gremove'],
-    \['▷ git mv           (Fugitive)                                ⌘ ,gm',
-        \'exe "Gmove " input("destino: ")'],
-    \['▷ git push         (Fugitive, salida por buffer)             ⌘ ,gp',
-        \'Git! push'],
-    \['▷ git pull         (Fugitive, salida por buffer)             ⌘ ,gP',
-        \'Git! pull'],
-    \['▷ git prompt       (Fugitive, salida por buffer)             ⌘ ,gi',
-        \'exe "Git! " input("comando git: ")'],
-    \['▷ git cd           (Fugitive)',
-        \'Gcd'],
-    \]
+            \['▷ tig                                                        ⌘ ,gt',
+            \'normal ,gt'],
+            \['▷ git status       (Fugitive)                                ⌘ ,gs',
+            \'Gstatus'],
+            \['▷ git diff         (Fugitive)                                ⌘ ,gd',
+            \'Gdiff'],
+            \['▷ git commit       (Fugitive)                                ⌘ ,gc',
+            \'Gcommit'],
+            \['▷ git log          (Fugitive)                                ⌘ ,gl',
+            \'exe "silent Glog | Unite quickfix"'],
+            \['▷ git blame        (Fugitive)                                ⌘ ,gb',
+            \'Gblame'],
+            \['▷ git stage        (Fugitive)                                ⌘ ,gw',
+            \'Gwrite'],
+            \['▷ git checkout     (Fugitive)                                ⌘ ,go',
+            \'Gread'],
+            \['▷ git rm           (Fugitive)                                ⌘ ,gr',
+            \'Gremove'],
+            \['▷ git mv           (Fugitive)                                ⌘ ,gm',
+            \'exe "Gmove " input("destino: ")'],
+            \['▷ git push         (Fugitive, salida por buffer)             ⌘ ,gp',
+            \'Git! push'],
+            \['▷ git pull         (Fugitive, salida por buffer)             ⌘ ,gP',
+            \'Git! pull'],
+            \['▷ git prompt       (Fugitive, salida por buffer)             ⌘ ,gi',
+            \'exe "Git! " input("comando git: ")'],
+            \['▷ git cd           (Fugitive)',
+            \'Gcd'],
+            \]
 nnoremap <silent>[menu]g :Unite -silent -start-insert menu:git<CR>
 
 " ultisnips source
@@ -1022,21 +1025,21 @@ let g:nerdtree_tabs_open_on_gui_startup=0
 let g:nerdtree_tabs_open_on_new_tab=1
 
 let g:NERDTreeIndicatorMapCustom = {
-			\ "Modified"  : "✹",
-			\ "Staged"    : "✚",
-			\ "Untracked" : "✭",
-			\ "Renamed"   : "➜",
-			\ "Unmerged"  : "═",
-			\ "Deleted"   : "✖",
-			\ "Dirty"     : "✗",
-			\ "Clean"     : "✔︎",
-			\ "Unknown"   : "?"
-			\ }
+            \ "Modified"  : "✹",
+            \ "Staged"    : "✚",
+            \ "Untracked" : "✭",
+            \ "Renamed"   : "➜",
+            \ "Unmerged"  : "═",
+            \ "Deleted"   : "✖",
+            \ "Dirty"     : "✗",
+            \ "Clean"     : "✔︎",
+            \ "Unknown"   : "?"
+            \ }
 
 " NERDTress File highlighting
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
-	exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
-	exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+    exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+    exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 
 call NERDTreeHighlightFile('java'   , 'green'   , 'none' , 'green'   , '#151515')
@@ -1097,8 +1100,8 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_root_markers = ['.p, .vim, home']
 " 忽略这些文件
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-    \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
+            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
 " 额外的搜索工具
 if executable('ag')
     let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
@@ -1106,7 +1109,7 @@ elseif executable('ack-grep')
     let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
 elseif executable('ack')
     let s:ctrlp_fallback = 'ack %s --nocolor -f'
-" On Windows use "dir" as fallback command.
+    " On Windows use "dir" as fallback command.
 elseif IsWin()
     let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
 else
@@ -1118,12 +1121,12 @@ let g:ctrlp_max_height = 10
 let g:ctrlp_follow_symlinks = 0
 let g:ctrlp_prompt_mappings = { 'ToggleMRURelative()': ['<F2>'] }
 let g:ctrlp_user_command = {
-    \ 'types': {
-        \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-        \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-    \ },
-    \ }
-    " \ 'fallback': s:ctrlp_fallback
+            \ 'types': {
+            \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+            \ },
+            \ }
+" \ 'fallback': s:ctrlp_fallback
 call DoMap('nnore', 'o', ':CtrlP<CR>')
 call DoMap('nnore', 'O', ':CtrlPBuffer<cr>')
 call DoMap('nnore', 'p', ':CtrlPMRU<cr>')
@@ -1155,128 +1158,128 @@ let g:multi_cursor_next_key="\<c-s>"
 
 " lightline {{{2
 let g:lightline = {
-	  \ 'colorscheme': 'wombat',
-	  \ 'active': {
-	  \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
-	  \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-	  \ },
-	  \ 'component_function': {
-	  \   'fugitive': 'LightLineFugitive',
-	  \   'filename': 'LightLineFilename',
-	  \   'fileformat': 'LightLineFileformat',
-	  \   'filetype': 'LightLineFiletype',
-	  \   'fileencoding': 'LightLineFileencoding',
-	  \   'mode': 'LightLineMode',
-	  \   'ctrlpmark': 'CtrlPMark',
-	  \ },
-	  \ 'component_expand': {
-	  \   'syntastic': 'SyntasticStatuslineFlag',
-	  \ },
-	  \ 'component_type': {
-	  \   'syntastic': 'error',
-	  \ },
-	  \ 'subseparator': { 'left': '|', 'right': '|' }
-	  \ }
+            \ 'colorscheme': 'wombat',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+            \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+            \ },
+            \ 'component_function': {
+            \   'fugitive': 'LightLineFugitive',
+            \   'filename': 'LightLineFilename',
+            \   'fileformat': 'LightLineFileformat',
+            \   'filetype': 'LightLineFiletype',
+            \   'fileencoding': 'LightLineFileencoding',
+            \   'mode': 'LightLineMode',
+            \   'ctrlpmark': 'CtrlPMark',
+            \ },
+            \ 'component_expand': {
+            \   'syntastic': 'SyntasticStatuslineFlag',
+            \ },
+            \ 'component_type': {
+            \   'syntastic': 'error',
+            \ },
+            \ 'subseparator': { 'left': '|', 'right': '|' }
+            \ }
 
 function! LightLineModified()
-  return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+    return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! LightLineReadonly()
-  return &ft !~? 'help' && &readonly ? 'RO' : ''
+    return &ft !~? 'help' && &readonly ? 'RO' : ''
 endfunction
 
 function! LightLineFilename()
-  let fname = expand('%:t')
-  return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
-		\ fname == '__Tagbar__' ? g:lightline.fname :
-		\ fname =~ '__Gundo\|NERD_tree' ? '' :
-		\ &ft == 'vimfiler' ? vimfiler#get_status_string() :
-		\ &ft == 'unite' ? unite#get_status_string() :
-		\ &ft == 'vimshell' ? vimshell#get_status_string() :
-		\ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-		\ ('' != fname ? fname : '[No Name]') .
-		\ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+    let fname = expand('%:t')
+    return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
+                \ fname == '__Tagbar__' ? g:lightline.fname :
+                \ fname =~ '__Gundo\|NERD_tree' ? '' :
+                \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
+                \ &ft == 'unite' ? unite#get_status_string() :
+                \ &ft == 'vimshell' ? vimshell#get_status_string() :
+                \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+                \ ('' != fname ? fname : '[No Name]') .
+                \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
 endfunction
 
 function! LightLineFugitive()
-  try
-	if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
-	  let mark = ''  " edit here for cool mark
-	  let branch = fugitive#head()
-	  return branch !=# '' ? mark.branch : ''
-	endif
-  catch
-  endtry
-  return ''
+    try
+        if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
+            let mark = ''  " edit here for cool mark
+            let branch = fugitive#head()
+            return branch !=# '' ? mark.branch : ''
+        endif
+    catch
+    endtry
+    return ''
 endfunction
 
 function! LightLineFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
+    return winwidth(0) > 70 ? &fileformat : ''
 endfunction
 
 function! LightLineFiletype()
-  return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+    return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
 endfunction
 
 function! LightLineFileencoding()
-  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+    return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
 endfunction
 
 function! LightLineMode()
-  let fname = expand('%:t')
-  return fname == '__Tagbar__' ? 'Tagbar' :
-		\ fname == 'ControlP' ? 'CtrlP' :
-		\ fname == '__Gundo__' ? 'Gundo' :
-		\ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
-		\ fname =~ 'NERD_tree' ? 'NERDTree' :
-		\ &ft == 'unite' ? 'Unite' :
-		\ &ft == 'vimfiler' ? 'VimFiler' :
-		\ &ft == 'vimshell' ? 'VimShell' :
-		\ winwidth(0) > 60 ? lightline#mode() : ''
+    let fname = expand('%:t')
+    return fname == '__Tagbar__' ? 'Tagbar' :
+                \ fname == 'ControlP' ? 'CtrlP' :
+                \ fname == '__Gundo__' ? 'Gundo' :
+                \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
+                \ fname =~ 'NERD_tree' ? 'NERDTree' :
+                \ &ft == 'unite' ? 'Unite' :
+                \ &ft == 'vimfiler' ? 'VimFiler' :
+                \ &ft == 'vimshell' ? 'VimShell' :
+                \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
 
 function! CtrlPMark()
-  if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
-	call lightline#link('iR'[g:lightline.ctrlp_regex])
-	return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-		  \ , g:lightline.ctrlp_next], 0)
-  else
-	return ''
-  endif
+    if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
+        call lightline#link('iR'[g:lightline.ctrlp_regex])
+        return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
+                    \ , g:lightline.ctrlp_next], 0)
+    else
+        return ''
+    endif
 endfunction
 
 let g:ctrlp_status_func = {
-  \ 'main': 'CtrlPStatusFunc_1',
-  \ 'prog': 'CtrlPStatusFunc_2',
-  \ }
+            \ 'main': 'CtrlPStatusFunc_1',
+            \ 'prog': 'CtrlPStatusFunc_2',
+            \ }
 
 function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-  let g:lightline.ctrlp_regex = a:regex
-  let g:lightline.ctrlp_prev = a:prev
-  let g:lightline.ctrlp_item = a:item
-  let g:lightline.ctrlp_next = a:next
-  return lightline#statusline(0)
+    let g:lightline.ctrlp_regex = a:regex
+    let g:lightline.ctrlp_prev = a:prev
+    let g:lightline.ctrlp_item = a:item
+    let g:lightline.ctrlp_next = a:next
+    return lightline#statusline(0)
 endfunction
 
 function! CtrlPStatusFunc_2(str)
-  return lightline#statusline(0)
+    return lightline#statusline(0)
 endfunction
 
 let g:tagbar_status_func = 'TagbarStatusFunc'
 
 function! TagbarStatusFunc(current, sort, fname, ...) abort
-	let g:lightline.fname = a:fname
-  return lightline#statusline(0)
+    let g:lightline.fname = a:fname
+    return lightline#statusline(0)
 endfunction
 
 augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost *.c,*.cpp call s:syntastic()
+    autocmd!
+    autocmd BufWritePost *.c,*.cpp call s:syntastic()
 augroup END
 function! s:syntastic()
-  SyntasticCheck
-  call lightline#update()
+    SyntasticCheck
+    call lightline#update()
 endfunction
 " }}}2
 
@@ -1295,30 +1298,30 @@ let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=java
 
 " javacomplete2 {{{2
 augroup javacomplete2
-	autocmd!
-	autocmd FileType java setlocal omnifunc=javacomplete#Complete
-	autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
-	"autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
-	autocmd FileType java inoremap  . .
-	autocmd FileType java call JavaComplete2Config()
+    autocmd!
+    autocmd FileType java setlocal omnifunc=javacomplete#Complete
+    autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
+    "autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
+    autocmd FileType java inoremap  . .
+    autocmd FileType java call JavaComplete2Config()
 augroup END
 function! JavaComplete2Config()
-	" 自动闭合方法的反括号
-	let g:JavaComplete_ClosingBrace = 1 
-	" 不要自动导入第一个
-	let g:JavaComplete_ImportDefault = -1
-	"Enable smart (trying to guess import option) inserting class imports
-	nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-	imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-	"Enable usual (will ask for import option) inserting class imports
-	nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-	imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-	"Add all missing imports
-	nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-	imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-	"Remove all missing imports
-	nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-	imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+    " 自动闭合方法的反括号
+    let g:JavaComplete_ClosingBrace = 1 
+    " 不要自动导入第一个
+    let g:JavaComplete_ImportDefault = -1
+    "Enable smart (trying to guess import option) inserting class imports
+    nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
+    imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
+    "Enable usual (will ask for import option) inserting class imports
+    nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
+    imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
+    "Add all missing imports
+    nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
+    imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
+    "Remove all missing imports
+    nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+    imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
 endfunction
 " }}}2
 
@@ -1330,8 +1333,8 @@ let g:vimshell_force_overwrite_statusline=0
 inoremap <c-j> <c-r>=UltiSnips#ExpandSnippet()<cr>
 inoremap <c-k> <c-r>=UltiSnips#JumpForwards()<cr>
 augroup vim_shell
-	autocmd!
-	autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
+    autocmd!
+    autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
 augroup END
 "TODO: vimshell
 " }}}2
@@ -1343,7 +1346,7 @@ let g:pymode_warnings = 1
 let g:pymode_quickfix_minheight = 3
 let g:pymode_quickfix_maxheight = 6
 " 设置python版本
-let g:pymode_python = 'python3'
+" let g:pymode_python = 'python3'
 " Enable pymode indentation
 let g:pymode_indent = 1
 " 开启python折叠
@@ -1409,17 +1412,19 @@ nnoremap <Leader>a,, :Tabularize /,\zs<CR>
 vnoremap <Leader>a,, :Tabularize /,\zs<CR>
 nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
 vnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
+nnoremap <Leader>a<space> :Tabularize /<space><CR>
+vnoremap <Leader>a<space> :Tabularize /<space><CR>
 
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+        Tabularize/|/l1
+        normal! 0
+        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
 endfunction
 " }}}2
 
@@ -1433,11 +1438,11 @@ endfunction
 "    yss - add a surrounding to the whole line
 "    ySs - add a surrounding to the whole line, place it on a new line + indent it
 "    ySS - same as ySs
-   
+
 " Visual mode
 "    s   - in visual mode, add a surrounding
 "    S   - in visual mode, add a surrounding but place text on new line + indent it
-    
+
 " Insert mode
 "    <CTRL-s> - in insert mode, add a surrounding
 "    <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
@@ -1455,21 +1460,21 @@ nnoremap <space>u :UndotreeToggle<cr>
 let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
 let g:AutoPairsShortcutToggle = '<leader>ac'
 if IsOSX()
-	let g:AutoPairsShortcutFastWrap = 'å'
+    let g:AutoPairsShortcutFastWrap = 'å'
 elseif IsLinux() && !IsGui()
-	let g:AutoPairsShortcutFastWrap = 'a'
+    let g:AutoPairsShortcutFastWrap = 'a'
 else
-	let g:AutoPairsShortcutFastWrap = '<a-a>'
+    let g:AutoPairsShortcutFastWrap = '<a-a>'
 endif
 " }}}2
 
 " MatchTagAlways {{{2
 let g:mta_use_matchparen_group = 1
 let g:mta_filetypes = {
-    \ 'html' : 1,
-    \ 'xhtml' : 1,
-    \ 'xml' : 1,
-    \}
+            \ 'html' : 1,
+            \ 'xhtml' : 1,
+            \ 'xml' : 1,
+            \}
 " }}}2
 
 " vim-devicons {{{2
@@ -1484,37 +1489,37 @@ let g:WebDevIconsOS = 'Darwin'
 
 " patch font for lightline
 let g:lightline = {
-      \ 'component_function': {
-      \   'filetype': 'MyFiletype',
-      \   'fileformat': 'MyFileformat',
-      \ }
-      \ }
+            \ 'component_function': {
+            \   'filetype': 'MyFiletype',
+            \   'fileformat': 'MyFileformat',
+            \ }
+            \ }
 
 function! MyFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 endfunction
 
 function! MyFileformat()
-  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
 " path font for nerd git
 let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
 
 " nerd icon
 augroup nerdColor
-	autocmd!
-	" NERDTress File highlighting only the glyph/icon
-	" test highlight just the glyph (icons) in nerdtree:
-	autocmd filetype nerdtree highlight haskell_icon ctermbg=none ctermfg=Red guifg=#ffa500
-	autocmd filetype nerdtree highlight html_icon ctermbg=none ctermfg=Red guifg=#ffa500
-	autocmd filetype nerdtree highlight go_icon ctermbg=none ctermfg=Red guifg=#ffa500
+    autocmd!
+    " NERDTress File highlighting only the glyph/icon
+    " test highlight just the glyph (icons) in nerdtree:
+    autocmd filetype nerdtree highlight haskell_icon ctermbg=none ctermfg=Red guifg=#ffa500
+    autocmd filetype nerdtree highlight html_icon ctermbg=none ctermfg=Red guifg=#ffa500
+    autocmd filetype nerdtree highlight go_icon ctermbg=none ctermfg=Red guifg=#ffa500
 
-	autocmd filetype nerdtree syn match haskell_icon ## containedin=NERDTreeFile
-	" if you are using another syn highlight for a given line (e.g.
-	" NERDTreeHighlightFile) need to give that name in the 'containedin' for this
-	" other highlight to work with it
-	autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
-	autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
+    autocmd filetype nerdtree syn match haskell_icon ## containedin=NERDTreeFile
+    " if you are using another syn highlight for a given line (e.g.
+    " NERDTreeHighlightFile) need to give that name in the 'containedin' for this
+    " other highlight to work with it
+    autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
+    autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
 augroup END
 
 " }}}2
@@ -1539,6 +1544,11 @@ set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
 nnoremap <leader>sl :SessionList<CR>
 nnoremap <leader>ss :SessionSave<CR>
 nnoremap <leader>sc :SessionClose<CR>
+" }}}2
+
+" vim-yankstack {{{2
+call DoAltMap('n', 'P', '<Plug>yankstack_substitute_older_paste')
+call DoAltMap('n', 'p', '<Plug>yankstack_substitute_newer_paste')
 " }}}2
 
 " }}}1

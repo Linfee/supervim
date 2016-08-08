@@ -1,20 +1,20 @@
 " filetype config for .py file
 let g:ftconfigloaded = 1
 
-set smarttab
-set expandtab
-set autoindent
-let &shiftwidth=4
-let &tabstop=4
-let &softtabstop=4
+setl smarttab
+setl expandtab
+setl autoindent
+setl shiftwidth=4
+setl tabstop=4
+setl softtabstop=4
 
 setlocal ff=unix
 
 function! PythonFt()
 	call SetTab(4)
-	set ff=unix
-	set foldmethod=indent
-	set foldlevel=99
+	setl ff=unix
+	setl foldmethod=indent
+	setl foldlevel=99
 	match BadWhitespace /\s\+$/
 	py << EOF
 import os
