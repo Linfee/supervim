@@ -59,6 +59,8 @@ vnoremap . :normal .<cr>
 
 nnoremap <space>j 10j
 nnoremap <space>k 10k
+vnoremap <space>j 10j
+vnoremap <space>k 10k
 
 nnoremap <space><space> V
 vnoremap <space><space> V

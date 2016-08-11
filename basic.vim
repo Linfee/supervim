@@ -360,6 +360,8 @@ endif
 " 让gui光标不要闪
 set gcr=a:block-blinkon0
 " 高亮主题
+let g:molokai_original = 1
+let g:rehash256 = 1
 colorscheme molokai
 " colorscheme zenburn
 " 设置背景色
@@ -1631,12 +1633,13 @@ augroup END
 
 " mybatis逆向工程 {{{2
 let g:mybatis_gnenerate_core="none"
+let g:driverPath="none"
 func! MybatisGenerate()
-	if g:mybatis_gnenerate_core == "none"
-		echo "你必须设置 g:mysql_connector 和 g:mybatis_gnenerate_core 才能运行该方法"
+	if g:mybatis_gnenerate_core == "none" || g:driverPath == "none"
+		echo "你必须设置 g:driverPath 和 g:mybatis_gnenerate_core 才能运行该方法"
 		return
 	endif
-	exec("!java -jar " . g:mybatis_gnenerate_core . expand(" -configfile %") . " -overwrite")
+	exe("!java -Xbootclasspath/a:" . g:driverPath . " -jar " . g:mybatis_gnenerate_core . expand(" -configfile %") . " -overwrite")
 endfunc
 " }}}2
 " }}}
