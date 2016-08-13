@@ -20,9 +20,9 @@ snippet spring-template "spring配置文件模板，包括所有命名空间" b
 endsnippet
 
 snippet spring-tx "applicationContext-tx的配置模板，配置事务的" b
-<!--配置spring事务-->
+<!--事务管理器-->
 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	<property name="dataSource" ref="c3p0DS"/>
+	<property name="dataSource" ref="dataSource"/>
 </bean>
 
 <!--声明式事务，二选一-->
@@ -31,9 +31,12 @@ snippet spring-tx "applicationContext-tx的配置模板，配置事务的" b
 <!--基于xml配置的事务，二选一-->
 <tx:advice id="txAdvice" transaction-manager="txManager">
 	<tx:attributes>
+		<!--传播行为-->
 		<tx:method name="save*" propagation="REQUIRED"/>
 		<tx:method name="insert*" propagation="REQUIRED"/>
-		<tx:method name="upload*" propagation="REQUIRED"/>
+		<tx:method name="add*" propagation="REQUIRED"/>
+		<tx:method name="create*" propagation="REQUIRED"/>
+		<tx:method name="update*" propagation="REQUIRED"/>
 		<tx:method name="delete*" propagation="REQUIRED"/>
 		<tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
 		<tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
@@ -41,8 +44,9 @@ snippet spring-tx "applicationContext-tx的配置模板，配置事务的" b
 	</tx:attributes>
 </tx:advice>
 
+<!--切面-->
 <aop:config>
-	<aop:advisor advice-ref="txAdvice" pointcut="execution(* ${1:包}.${2:类}.${3:方法}(${4:参数}))"/>
+	<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.taotao.service.*.*(..))"/>
 </aop:config>
 endsnippet
 

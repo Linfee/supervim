@@ -57,16 +57,13 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 </configuration>
 endsnippet
 
-snippet ssm-mybatis-generator "xml:mybatis-generator用来生成java代码的xml配置模板" b
+snippet ssm-mybatis-generator-config "xml:mybatis-generator用来生成java代码的xml配置模板" b
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
 	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-
-	<!--设置classpath，应该在这里添加数据库驱动-->
-	<!--<classPathEntry location="${1}"/>-->
 
 	context id="testTables" targetRuntime="MyBatis3">
 
@@ -148,23 +145,29 @@ snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 	<property name="prefix" value="/WEB-INF/jsp/"/>
 	<property name="suffix" value=".jsp"/>
 </bean>
+
+<!--配置资源映射, 仅在DispatcherServlet的url-pattern配置为/时需要-->
+<mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
+<mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
 endsnippet
 
-snippet ssm-spring-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的Datasource" b
+snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的Datasource" b
 <!--加载数据库配置文件-->
 <context:property-placeholder location="classpath:db.properties"/>
 
 <!--配置数据源-->
-<bean id="c3p0DS" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-	<property name="driverClass" value="${jdbc.driver}"/>
-	<property name="jdbcUrl" value="${jdbc.url}"/>
-	<property name="user" value="${jdbc.username}"/>
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+	<property name="driverClassName" value="${jdbc.driver}"/>
+	<property name="url" value="${jdbc.url}"/>
+	<property name="username" value="${jdbc.username}"/>
 	<property name="password" value="${jdbc.password}"/>
+	<property name="maxActive" value="10"/>
+	<property name="minIdle" value="5"/>
 </bean>
 
 <!--配置sqlSessionFactory -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-	<property name="dataSource" ref="c3p0DS"/>
+	<property name="dataSource" ref="dataSource"/>
 	<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
 </bean>
 
@@ -192,6 +195,7 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/springmvc.xml</param-value>
 	</init-param>
+    <load-on-startup>1</load-on-startup>
 </servlet>
 <servlet-mapping>
 	<!--
@@ -212,6 +216,7 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 endsnippet
 
 snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
+<!--解决post乱码-->
 <filter>
 	<filter-name>ChatacterEncodingFilter</filter-name>
 	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -224,4 +229,13 @@ snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
 	<filter-name>ChatacterEncodingFilter</filter-name>
 	<servlet-name>spring-mvc</servlet-name>
 </filter-mapping>
+endsnippet
+
+snippet ssm-page-helper "mybatis pageHelper插件配置模板" b
+<!--配置pageHelper插件-->
+<plugins>
+	<plugin interceptor="com.github.pagehelper.PageHelper">
+		<property name="dialect" value="mysql"/>
+	</plugin>
+</plugins>
 endsnippet
