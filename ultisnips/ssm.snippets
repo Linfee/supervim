@@ -1,5 +1,5 @@
 # Snippets file for ssm(spring + spring-vmc + mybatis) develop
-snippet ssm-mvc-upload-config "xml:spring-mvc上传解析器配置" b
+snippet ssm-file-upload-config "xml:spring-mvc上传解析器配置" b
 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	<property name="maxUploadSize"><!--设置最大允许上传文件大小-->
 		<value>${1:5242880}</value>

@@ -214,7 +214,8 @@ set noshowmode
 " 不要使用swp文件做备份
 " set noswapfile
 " 显示绝对行号和相对行号
-set relativenumber number
+" set relativenumber
+set number
 " 隐藏缓冲区而不是卸载缓冲区
 set hidden
 " 删除在插入模式可以删除的特殊内容

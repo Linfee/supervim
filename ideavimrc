@@ -1,5 +1,5 @@
 set clipboard=unnamed
-set relativenumber
+" set relativenumber
 set smartcase
 set ignorecase
 set incsearch
@@ -61,6 +61,7 @@ nnoremap <space>j 10j
 nnoremap <space>k 10k
 vnoremap <space>j 10j
 vnoremap <space>k 10k
+vnoremap jk <esc>
 
 nnoremap <space><space> V
 vnoremap <space><space> V
