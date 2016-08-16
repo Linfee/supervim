@@ -177,7 +177,7 @@ function! DoAltMap(prefix, key1, operation, ...)
 	else
 		if IsOSX() 
 			let s:c = s:c . ' ' . get(d, a:key1)
-		elseif IsLinux() && IsGui()
+		elseif IsLinux() && !IsGui()
 			let s:c = s:c . ' ' . a:key1
 		else
 			let s:c = s:c . ' <a-'
