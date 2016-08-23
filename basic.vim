@@ -465,7 +465,9 @@ nnoremap <silent> <leader>q gwip
 nnoremap - za
 nnoremap _ zf
 " 让Y表示复制到行尾巴
-call yankstack#setup()
+if exists('g:yankstack_size')
+    call yankstack#setup()
+endif
 nmap Y y$
 " [move] j/k可以移动到软换行上
 nnoremap j gj
