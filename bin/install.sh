@@ -1,4 +1,10 @@
 #!/bin/sh
+
+curl -fLo ~/.vim/supervim/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+cd ~/.vim
+git clone https://github.com/Linfee/supervim.git
+
 echo 'set runtimepath+=~/.vim
 
 source ~/.vim/supervim/basic.vim
@@ -8,4 +14,6 @@ try
 catch
 endtry' > ~/.vimrc
 
-echo "OK!"
+echo "Done"
+
+vim -c PlugInstall

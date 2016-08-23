@@ -23,6 +23,7 @@ map zh zH
 noremap <c-f11> :setlocal spell!<cr>
 " 使用jk退出插入模式
 inoremap jk <esc>
+inoremap jj <esc>
 " 将光标所在单词切换成大写/小写
 nnoremap <c-u> g~iw
 inoremap <c-u> <esc>g~iwea
