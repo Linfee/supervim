@@ -363,11 +363,6 @@ set gcr=a:block-blinkon0
 " 高亮主题
 let g:molokai_original = 1
 let g:rehash256 = 1
-" if exists('g:yankstack_size')
-try
-    colorscheme molokai
-endt
-" endif
 " colorscheme zenburn
 " 设置背景色
 set background=dark
