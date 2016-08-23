@@ -361,7 +361,9 @@ endif
 " 让gui光标不要闪
 set gcr=a:block-blinkon0
 " 高亮主题
-let g:molokai_original = 1
+if exists('g:colors_name')
+    let g:molokai_original = 1
+endif
 let g:rehash256 = 1
 colorscheme molokai
 " colorscheme zenburn

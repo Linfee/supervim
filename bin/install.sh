@@ -2,10 +2,11 @@
 
 rm -rf ~/.vim ~/.vimrc
 
-curl -fLo ~/.vim/supervim/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+mkdir ~/.vim
 
-cd ~/.vim
-git clone https://github.com/Linfee/supervim.git
+git clone https://github.com/Linfee/supervim.git ~/.vim/supervim
+
+curl -fLo ~/.vim/supervim/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 echo 'set runtimepath+=~/.vim
 
@@ -18,4 +19,11 @@ endtry' > ~/.vimrc
 
 echo "Done"
 
-vim -c PlugInstall
+mkdir ~/.vim/temp
+
+vim -c source ~/.vim/supervim/bin/after.vim
+
+cd cd ~/.vim/plugged/vimproc.vim
+
+make
+
