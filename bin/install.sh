@@ -21,7 +21,7 @@ echo "Done"
 
 mkdir ~/.vim/temp
 
-vim -c 'call Init()'
+vim -u ~/.vim/supervim/basic.vim -c 'call Init()'
 
 cd ~/.vim/plugged/vimproc.vim
 

@@ -363,9 +363,11 @@ set gcr=a:block-blinkon0
 " 高亮主题
 let g:molokai_original = 1
 let g:rehash256 = 1
-if exists('g:colors_name')
+" if exists('g:yankstack_size')
+try
     colorscheme molokai
-endif
+endt
+" endif
 " colorscheme zenburn
 " 设置背景色
 set background=dark
@@ -465,9 +467,9 @@ nnoremap <silent> <leader>q gwip
 nnoremap - za
 nnoremap _ zf
 " 让Y表示复制到行尾巴
-if exists('g:yankstack_size')
+try
     call yankstack#setup()
-endif
+endt
 nmap Y y$
 " [move] j/k可以移动到软换行上
 nnoremap j gj
