@@ -1,5 +1,7 @@
 #!/bin/sh
 
+rm -rf ~/.vim ~/.vimrc
+
 curl -fLo ~/.vim/supervim/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 cd ~/.vim
