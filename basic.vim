@@ -683,6 +683,13 @@ function! CmdLine(str)
     unmenu Foo
 endfunction  " }}}2
 
+function! Init()
+    exe "PlugInstall"
+    exe "quit"
+    exe "quit"
+endfunction
+
+
 function! VisualSelection(direction, extra_filter) range " {{{2
     let l:saved_reg = @"
     execute "normal! vgvy"
