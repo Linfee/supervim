@@ -27,3 +27,6 @@ cd ~/.vim/plugged/vimproc.vim
 
 make
 
+echo '
+colorscheme molokai
+' >> ~/.vim/custom.vim
