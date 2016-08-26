@@ -1,1 +1,1 @@
-# A cool vim configuration
+# A cool vim configuration

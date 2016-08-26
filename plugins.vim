@@ -20,7 +20,7 @@ if !exists("g:ideavim")
 	Plug 'klen/python-mode', { 'for': 'python' }
 	Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
     Plug 'spf13/vim-preview' " markdown等语言的快速预览
-	Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
+	" Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
     Plug 'amirh/HTML-AutoCloseTag' " 自动关闭html标签
     Plug 'mattn/emmet-vim'
     Plug 'tomtom/tlib_vim' " Some utility functions for VIM
@@ -29,7 +29,7 @@ if !exists("g:ideavim")
 
 	Plug 'scrooloose/nerdtree'
 	Plug 'jistr/vim-nerdtree-tabs'
-	Plug 'Xuyuanp/nerdtree-git-plugin'
+	" Plug 'Xuyuanp/nerdtree-git-plugin'
 	Plug 'scrooloose/nerdcommenter' " 快捷注释
     if executable('ctags')
         Plug 'majutsushi/tagbar'
@@ -48,7 +48,7 @@ if !exists("g:ideavim")
     Plug 'whatyouhide/vim-textobj-xmlattr' " xml属性文本对象x
 
     Plug 'Shougo/neocomplete.vim'
-	Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+	" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 	Plug 'ujihisa/neco-look'
     Plug 'luochen1990/rainbow' " 彩虹括号增强版
 
