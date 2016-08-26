@@ -8,7 +8,7 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" 判断环境 {
+" 判断环境 {{
 silent fun IsOSX()
     return has('macunix')
 endf
@@ -20,9 +20,9 @@ silent fun IsWin()
 endf
 silent function! IsGui()
 	return has('gui_running')
-endf " }
+endf " }}
 
-" 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 {
+" 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 {{
 silent fun EncodingForCn()
     set fileencoding=utf8
     set fileencodings=utf8,chinese,latin1,gbk,big5,ucs-bom
@@ -43,9 +43,9 @@ silent fun EncodingForCn()
             language messages zh_CN.utf8
         endif
     endif
-endf " }
+endf " }}
 
-" 自定义一个leader键(不同于vim内置，是额外的一个)，使用提供的方法映射 {
+" 自定义一个leader键(不同于vim内置，是额外的一个)，使用提供的方法映射 {{
 " 仅用于supervim
 let g:leadercustom = "<space>"
 " 该函数用来快捷定义使用 g:leadercustom 的映射，参照下面的调用使用
@@ -68,9 +68,9 @@ function! DoMap(prefix, key, operation, ...)
 	let s:c = s:c . ' ' . key_prefix . a:key . ' ' . a:operation
 	" echo s:c
     exe s:c
-endfunction " }
+endfunction " }}
 
-" 该函数用来映射所有的a-*映射以及a-s-*映射 {
+" 该函数用来映射所有的a-*映射以及a-s-*映射 {{
 " 支持的映射如下表，key1指定*，operation指定要映射的操作，
 " 另外还可以提供第key2，alt组合键之后的按键，以及可选的选项
 " key1只能指定下面dict的key，而且value为' '的指定了也无效，最好不用，
@@ -79,21 +79,22 @@ endfunction " }
 " 如果指定key2应该指定为原有的样子，而不是表中的简写形式
 " call DoAltMap('<prefix>', '<key1>', '<operaiton>', '<key2>', ['<silent>等'])
 silent fun DoAltMap(prefix, key1, operation, ...)
-	let d = {
-        \ 'a': 'å', 'A': 'Å', 'b': '∫', 'B': 'ı', 'c': ' ', 'C': 'Ç',
-        \ 'd': '∂', 'D': 'Î', 'e': ' ', 'E': '´', 'f': 'ƒ', 'F': 'Ï',
-        \ 'g': '©', 'G': '˝', 'h': '˙', 'H': 'Ó', 'i': ' ', 'I': 'ˆ',
-        \ 'j': '∆', 'J': 'Ô', 'k': '˚', 'K': '', 'l': '¬', 'L': 'Ò',
-        \ 'm': 'µ', 'M': 'Â', 'n': ' ', 'N': '˜', 'o': 'ø', 'O': 'Ø',
-        \ 'p': 'π', 'P': '∏', 'q': 'œ', 'Q': 'Œ', 'r': '®', 'R': '‰',
-        \ 's': 'ß', 'S': 'Í', 't': '†', 'T': 'ˇ', 'u': ' ', 'U': '¨',
-        \ 'v': '√', 'V': '◊', 'w': '∑', 'W': '„', 'x': '≈', 'X': '˛',
-        \ 'y': '¥', 'Y': 'Á', 'z': 'Ω', 'Z': '¸', '-': '–', '_': '—',
-        \ '=': '≠', '+': '±', '[': '“', '{': '”', ']': '‘', '}': '’',
-        \ ';': '…', ':': 'æ', "'": 'æ', '"': 'Æ', ',': '≤', "<": '¯',
-        \ '.': '≥', ">": '˘', '/': '÷', "?": '¿'
-        \ }
-	
+
+	let d = { 'a': 'å', 'A': 'Å', 'b': '∫', 'B': 'ı', 'c': ' ',
+            \ 'C': 'Ç', 'd': '∂', 'D': 'Î', 'e': ' ', 'E': '´',
+            \ 'f': 'ƒ', 'F': 'Ï', 'g': '©', 'G': '˝', 'h': '˙',
+            \ 'H': 'Ó', 'i': ' ', 'I': 'ˆ', 'j': '∆', 'J': 'Ô',
+            \ 'k': '˚', 'K': '', 'l': '¬', 'L': 'Ò', 'm': 'µ',
+            \ 'M': 'Â', 'n': ' ', 'N': '˜', 'o': 'ø', 'O': 'Ø',
+            \ 'p': 'π', 'P': '∏', 'q': 'œ', 'Q': 'Œ', 'r': '®',
+            \ 'R': '‰', 's': 'ß', 'S': 'Í', 't': '†', 'T': 'ˇ',
+            \ 'u': ' ', 'U': '¨', 'v': '√', 'V': '◊', 'w': '∑',
+            \ 'W': '„', 'x': '≈', 'X': '˛', 'y': '¥', 'Y': 'Á',
+            \ 'z': 'Ω', 'Z': '¸', '-': '–', '_': '—', '=': '≠',
+            \ '+': '±', '[': '“', '{': '”', ']': '‘', '}': '’',
+            \ ';': '…', ':': 'æ', "'": 'æ', '"': 'Æ', ',': '≤',
+            \ '<': '¯', '.': '≥', ">": '˘', '/': '÷', "?": '¿' }
+
 	let s:c = a:prefix
 	if s:c !~ "map"
 		let s:c = s:c . 'map'
@@ -121,9 +122,9 @@ silent fun DoAltMap(prefix, key1, operation, ...)
 	endif
 	let s:c = s:c . ' ' . a:operation
 	exe s:c
-endf " }
+endf " }}
 
-" 尝试加载文件 {
+" 尝试加载文件 {{
 silent fun TryLoad(file, ...)
     if filereadable(expand(a:file))
         exe('source '. expand(a:file))
@@ -140,9 +141,9 @@ silent fun TryLoad(file, ...)
         endif
         return 0
     endif
-endf "}
+endf "}}
 
-" 快速切换背景色 {
+" 快速切换背景色 {{
 silent fun ToggleBG()
     let s:tbg = &background
     if s:tbg == "dark"
@@ -150,9 +151,9 @@ silent fun ToggleBG()
     else
         set background=dark
     endif
-endf "}
+endf "}}
 
-" 让vim和系统共享默认剪切板 {
+" 让vim和系统共享默认剪切板 {{
 silent fun ShareClipboard()
     if has('clipboard')
         if has('unnamedplus')  " When possible use + register for copy-paste
@@ -161,16 +162,16 @@ silent fun ShareClipboard()
             set clipboard=unnamed
         endif
     endif
-endf " }
+endf " }}
 
-" 创建文件夹，如果文件夹不存在的化 {
+" 创建文件夹，如果文件夹不存在的化 {{
 silent fun MkdirIfNotExists(dir)
     if !isdirectory(expand(a:dir))
         call mkdir(expand(a:dir))
     endif
-endf " }
+endf " }}
 
-" Initialize NERDTree as needed {
+" Initialize NERDTree as needed {{
 fun NERDTreeInitAsNeeded()
     redir => bufoutput
     buffers!
@@ -181,9 +182,9 @@ fun NERDTreeInitAsNeeded()
         NERDTreeFind
         wincmd l
     endif
-endf " }
+endf " }}
 
-" Strip whitespace {
+" Strip whitespace {{
 fun StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.
     let _s=@/
@@ -194,9 +195,9 @@ fun StripTrailingWhitespace()
     " clean up: restore previous search history, and cursor position
     let @/=_s
     call cursor(l, c)
-endf " }
+endf " }}
 
-" Run shell command {
+" Run shell command {{
 fun s:RunShellCommand(cmdline)
     botright new
 
@@ -216,6 +217,6 @@ fun s:RunShellCommand(cmdline)
 endf
 command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
 " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
-" }
+" }}
 
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
