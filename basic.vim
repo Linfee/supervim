@@ -160,11 +160,11 @@ endfunction
 function! BackupView()
     set viewoptions=folds,options,cursor,unix,slash
     set viewdir=~/.vim/temp/view
-	augroup backupView
-		autocmd!
-		autocmd BufWinLeave * if expand('%') != '' && &buftype == '' | mkview | endif
-		autocmd BufRead     * if expand('%') != '' && &buftype == '' | silent loadview | syntax on | endif
-	augroup END
+    augroup backupView
+        autocmd!
+        autocmd BufWinLeave * if expand('%') != '' && &buftype == '' | mkview | endif
+        autocmd BufRead     * if expand('%') != '' && &buftype == '' | silent loadview | syntax on | endif
+    augroup END
     nnoremap <c-s-f12> :!find ~/.vim/temp/view -mtime +30 -exec rm -a{} \;<cr>
     " TODO: let vim delete too old file auto
 endfunction
@@ -260,20 +260,20 @@ if IsGui()
     " 设置gui下标签内容
     set guitablabel=%M\ %t
     " 隐藏不需要的gui组件
-	set guioptions-=m   " remove menu
-	set guioptions-=T   " remove toolbar
-	set guioptions-=L
-	set guioptions-=r
-	set guioptions-=b
-	set guioptions-=e
-	" 设置字体
-	if IsLinux()
-		set guifont=SauceCodePro\ Nerd\ Font\ 11
+    set guioptions-=m   " remove menu
+    set guioptions-=T   " remove toolbar
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=b
+    set guioptions-=e
+    " 设置字体
+    if IsLinux()
+        set guifont=SauceCodePro\ Nerd\ Font\ 11
     elseif IsWin()
-		set guifont=SauceCodePro\ Nerd\ Font:h10
+        set guifont=SauceCodePro\ Nerd\ Font:h10
     else
-		set guifont=SauceCodePro\ Nerd\ Font:h12
-	endif
+        set guifont=SauceCodePro\ Nerd\ Font:h12
+    endif
 else
     " 让箭头键和其它键能使用
     if !IsWin()
@@ -506,7 +506,7 @@ call DoMap('nnore', 'w', ':w<cr>')
 " 以sudo权限保存
 if !IsWin()
     cnoremap W! !sudo tee % > /dev/null<cr>
-	call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
+    call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
 endif
 
 " ----------------------------------}}}2
@@ -575,23 +575,23 @@ function! HasPaste() " 如果paste模式打开的化返回true {{{2
 endfunction " }}}2
 
 func! DeleteTillSlash() " {{{2
-	let g:cmd = getcmdline()
+    let g:cmd = getcmdline()
 
-	if has("win16") || has("win32")
-		let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
-	else
-		let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
-	endif
+    if has("win16") || has("win32")
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
+    else
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
+    endif
 
-	if g:cmd == g:cmd_edited
-		if has("win16") || has("win32")
-			let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
-		else
-			let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
-		endif
-	endif   
+    if g:cmd == g:cmd_edited
+        if has("win16") || has("win32")
+            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
+        else
+            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
+        endif
+    endif   
 
-	return g:cmd_edited
+    return g:cmd_edited
 endfunc " }}}2
 
 func! DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python使用 {{{2
@@ -614,39 +614,39 @@ endfunction " }}}2
 
 " 编译和运行 {{{
 if !exists("g:ideavim")
-	" 按F5编译运行
-	" nnoremap <F5> :call Run()<CR>
-	func! Run()
-		exec "w"
-		if &filetype == 'c'
-			exec "!g++ % -o %<"
-			exec "! ./%<"
-		elseif &filetype == 'cpp'
-			exec "!g++ % -o %<"
-			exec "! ./%<"
-		elseif &filetype == 'java' 
-			exec "!javac %" 
-			exec "!java %<"
-		elseif &filetype == 'sh'
-			:!./%
-		elseif &filetype == 'groovy'
-			exec "!groovy %"
-		elseif &filetype == 'markdown' || &filetype == 'html' || &filetype == 'ftl'
-			exec "silent !exec google-chrome % &"
-			exec "redraw!"
-		elseif &filetype == 'scala'
-			exec "!scala -deprecation %" 
-		elseif &filetype == 'python3'
-			exec "!python %"
-		endif
-	endfunc
-	"C,C++的调试
-	map <F8> :call Rungdb()<CR>
-	func! Rungdb()
-		exec "w"
-		exec "!g++ % -g -o %<"
-		exec "!gdb ./%<"
-	endfunc
+    " 按F5编译运行
+    " nnoremap <F5> :call Run()<CR>
+    func! Run()
+        exec "w"
+        if &filetype == 'c'
+            exec "!g++ % -o %<"
+            exec "! ./%<"
+        elseif &filetype == 'cpp'
+            exec "!g++ % -o %<"
+            exec "! ./%<"
+        elseif &filetype == 'java' 
+            exec "!javac %" 
+            exec "!java %<"
+        elseif &filetype == 'sh'
+            :!./%
+        elseif &filetype == 'groovy'
+            exec "!groovy %"
+        elseif &filetype == 'markdown' || &filetype == 'html' || &filetype == 'ftl'
+            exec "silent !exec google-chrome % &"
+            exec "redraw!"
+        elseif &filetype == 'scala'
+            exec "!scala -deprecation %" 
+        elseif &filetype == 'python3'
+            exec "!python %"
+        endif
+    endfunc
+    "C,C++的调试
+    map <F8> :call Rungdb()<CR>
+    func! Rungdb()
+        exec "w"
+        exec "!g++ % -g -o %<"
+        exec "!gdb ./%<"
+    endfunc
 endif " }}}2
 
 function! s:RunShellCommand(cmdline) " Run Shell command {{{2
@@ -1512,7 +1512,6 @@ nnoremap <leader>rb :RainbowToggle<cr>
 
 " vim-javascript {{{2
 
-" }}}2
 " 语法高亮插件
 let g:javascript_plugin_jsdoc = 1
 " 为jsDoc开启语法高亮
@@ -1532,6 +1531,8 @@ let g:javascript_conceal_prototype      = "¶"
 let g:javascript_conceal_static         = "•"
 let g:javascript_conceal_super          = "Ω"
 let g:javascript_conceal_arrow_function = "⇒"
+
+" }}}2
 
 " }}}1
 

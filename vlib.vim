@@ -52,21 +52,21 @@ let g:leadercustom = "<space>"
 " 第四个参数是使用临时定义的 leadercustom 代替 g:leadercustom
 " call DoMap('nnore', '<cr>', ':nohlsearch<cr>', '', ['<silent>'])
 function! DoMap(prefix, key, operation, ...)
-	let s:c = a:prefix
-	let key_prefix = exists('g:leadercustom') ? g:leadercustom : '<space>'
-	if a:0 > 0
-		let	key_prefix = a:1
-	endif
-	if s:c !~ "map"
-		let s:c = s:c . 'map'
-	endif
-	if a:0 > 1
-		for n in a:2
-			let s:c = s:c . ' ' . n
-		endfor
-	endif
-	let s:c = s:c . ' ' . key_prefix . a:key . ' ' . a:operation
-	" echo s:c
+    let s:c = a:prefix
+    let key_prefix = exists('g:leadercustom') ? g:leadercustom : '<space>'
+    if a:0 > 0
+        let	key_prefix = a:1
+    endif
+    if s:c !~ "map"
+        let s:c = s:c . 'map'
+    endif
+    if a:0 > 1
+        for n in a:2
+            let s:c = s:c . ' ' . n
+        endfor
+    endif
+    let s:c = s:c . ' ' . key_prefix . a:key . ' ' . a:operation
+    " echo s:c
     exe s:c
 endfunction " }}
 
@@ -80,32 +80,31 @@ endfunction " }}
 " call DoAltMap('<prefix>', '<key1>', '<operaiton>', '<key2>', ['<silent>等'])
 silent fun DoAltMap(prefix, key1, operation, ...)
 
-
-	let s:c = a:prefix
-	if s:c !~ "map"
-		let s:c = s:c . 'map'
-	endif
-	if a:0 > 1 " 添加<silent>等选项
-		for n in a:2
-			let s:c = s:c . ' ' . n
-		endfor
-	endif
+    let s:c = a:prefix
+    if s:c !~ "map"
+        let s:c = s:c . 'map'
+    endif
+    if a:0 > 1 " 添加<silent>等选项
+        for n in a:2
+            let s:c = s:c . ' ' . n
+        endfor
+    endif
     if IsOSX()
         let s:d = { 'a': 'å', 'A': 'Å', 'b': '∫', 'B': 'ı', 'c': ' ',
-                \ 'C': 'Ç', 'd': '∂', 'D': 'Î', 'e': ' ', 'E': '´',
-                \ 'f': 'ƒ', 'F': 'Ï', 'g': '©', 'G': '˝', 'h': '˙',
-                \ 'H': 'Ó', 'i': ' ', 'I': 'ˆ', 'j': '∆', 'J': 'Ô',
-                \ 'k': '˚', 'K': '', 'l': '¬', 'L': 'Ò', 'm': 'µ',
-                \ 'M': 'Â', 'n': ' ', 'N': '˜', 'o': 'ø', 'O': 'Ø',
-                \ 'p': 'π', 'P': '∏', 'q': 'œ', 'Q': 'Œ', 'r': '®',
-                \ 'R': '‰', 's': 'ß', 'S': 'Í', 't': '†', 'T': 'ˇ',
-                \ 'u': ' ', 'U': '¨', 'v': '√', 'V': '◊', 'w': '∑',
-                \ 'W': '„', 'x': '≈', 'X': '˛', 'y': '¥', 'Y': 'Á',
-                \ 'z': 'Ω', 'Z': '¸', '-': '–', '_': '—', '=': '≠',
-                \ '+': '±', '[': '“', '{': '”', ']': '‘', '}': '’',
-                \ ';': '…', ':': 'æ', "'": 'æ', '"': 'Æ', ',': '≤',
-                \ '<': '¯', '.': '≥', ">": '˘', '/': '÷', "?": '¿' }
-        if has_key(s:d, akey1)
+                  \ 'C': 'Ç', 'd': '∂', 'D': 'Î', 'e': ' ', 'E': '´',
+                  \ 'f': 'ƒ', 'F': 'Ï', 'g': '©', 'G': '˝', 'h': '˙',
+                  \ 'H': 'Ó', 'i': ' ', 'I': 'ˆ', 'j': '∆', 'J': 'Ô',
+                  \ 'k': '˚', 'K': '', 'l': '¬', 'L': 'Ò', 'm': 'µ',
+                  \ 'M': 'Â', 'n': ' ', 'N': '˜', 'o': 'ø', 'O': 'Ø',
+                  \ 'p': 'π', 'P': '∏', 'q': 'œ', 'Q': 'Œ', 'r': '®',
+                  \ 'R': '‰', 's': 'ß', 'S': 'Í', 't': '†', 'T': 'ˇ',
+                  \ 'u': ' ', 'U': '¨', 'v': '√', 'V': '◊', 'w': '∑',
+                  \ 'W': '„', 'x': '≈', 'X': '˛', 'y': '¥', 'Y': 'Á',
+                  \ 'z': 'Ω', 'Z': '¸', '-': '–', '_': '—', '=': '≠',
+                  \ '+': '±', '[': '“', '{': '”', ']': '‘', '}': '’',
+                  \ ';': '…', ':': 'æ', "'": 'æ', '"': 'Æ', ',': '≤',
+                  \ '<': '¯', '.': '≥', ">": '˘', '/': '÷', "?": '¿' }
+        if has_key(s:d, a:key1)
             let s:c = s:c . ' ' . get(s:d, a:key1)
         else
             return
@@ -118,11 +117,11 @@ silent fun DoAltMap(prefix, key1, operation, ...)
         let s:c = s:c . '>'
     endif
 
-	if a:0 > 0 " 如果有别的键也加上
-		let s:c = s:c . a:1
-	endif
-	let s:c = s:c . ' ' . a:operation
-	exe s:c
+    if a:0 > 0 " 如果有别的键也加上
+        let s:c = s:c . a:1
+    endif
+    let s:c = s:c . ' ' . a:operation
+    exe s:c
 endf " }}
 
 " 尝试加载文件 {{
