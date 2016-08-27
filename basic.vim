@@ -268,9 +268,10 @@ if IsGui()
 	set guioptions-=e
 	" 设置字体
 	if IsLinux()
-		set guifont=SauceCodePro\ Nerd\ Font\ 12
-	else
-		set guifont=SauceCodePro\ Nerd\ Font:h12
+		set guifont=SauceCodePro\ Nerd\ Font\ 11
+    elseif IsWin()
+		set guifont=SauceCodePro\ Nerd\ Font:h11
+    else
 		set guifont=SauceCodePro\ Nerd\ Font:h12
 	endif
 else
@@ -1020,8 +1021,8 @@ let g:ctrlp_user_command = {
             \ }
 " \ 'fallback': s:ctrlp_fallback
 call DoMap('nnore', 'o', ':CtrlP<CR>')
-call DoMap('nnore', 'O', ':CtrlPBuffer<cr>')
-call DoMap('nnore', 'p', ':CtrlPMRU<cr>')
+call DoMap('nnore', 'l', ':CtrlPBuffer<cr>')
+call DoMap('nnore', 'm', ':CtrlPMRU<cr>')
 " }}}2
 
 " ctrlp-funky {{{2
