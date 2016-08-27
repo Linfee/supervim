@@ -12,7 +12,7 @@ echo 'set runtimepath+=~/.vim
 
 source ~/.vim/supervim/basic.vim
 
-endtry' > ~/.vimrc
+' > ~/.vimrc
 
 echo "Done"
 

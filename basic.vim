@@ -542,10 +542,10 @@ endfunction  " }}}2
 function! Init()
     exe "PlugInstall"
     exe "quit"
-    call MkdirIfNotExists("~/.temp")
-    call MkdirIfNotExists("~/.temp/view")
-    call MkdirIfNotExists("~/.temp/undo")
-    call MkdirIfNotExists("~/.temp/backup")
+    call MkdirIfNotExists("~.vim/temp")
+    call MkdirIfNotExists("~.vim/temp/view")
+    call MkdirIfNotExists("~.vim/temp/undo")
+    call MkdirIfNotExists("~.vim/temp/backup")
     exe "quit"
 endfunction
 

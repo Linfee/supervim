@@ -11,7 +11,7 @@ curl -fLo ~/.vim/supervim/plug.vim --create-dirs https://raw.githubusercontent.c
 echo 'set runtimepath+=~/.vim
 
 source ~/.vim/supervim/basic.vim
-endtry' > ~/.vimrc
+' > ~/.vimrc
 
 echo "Done"
 
