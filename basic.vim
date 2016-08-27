@@ -270,7 +270,7 @@ if IsGui()
 	if IsLinux()
 		set guifont=SauceCodePro\ Nerd\ Font\ 11
     elseif IsWin()
-		set guifont=SauceCodePro\ Nerd\ Font:h11
+		set guifont=SauceCodePro\ Nerd\ Font:h10
     else
 		set guifont=SauceCodePro\ Nerd\ Font:h12
 	endif
