@@ -528,16 +528,9 @@ endif
 
 " [iabbrev]
 iabbrev xdate <c-r>=strftime("%Y/%d/%m %H:%M:%S")<cr>
-iabbrev viminfo vim: set sw=4 ts=4 sts=4 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker nospell:
+iabbrev viminfo vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} foldlevel=0 fdm=marker nospell:
 "  去除Windows的 ^M 在编码混乱的时候
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-" 一些有用的方法，该配置文件中使用过的 {{{2
-function! CmdLine(str)
-    exe "menu Foo.Bar :" . a:str
-    emenu Foo.Bar
-    unmenu Foo
-endfunction  " }}}2
 
 function! Init()
     exe "PlugInstall"
@@ -548,7 +541,6 @@ function! Init()
     call MkdirIfNotExists("~.vim/temp/backup")
     exe "quit"
 endfunction
-
 
 function! VisualSelection(direction, extra_filter) range " {{{2
     let l:saved_reg = @"
@@ -566,51 +558,6 @@ function! VisualSelection(direction, extra_filter) range " {{{2
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction "}}}2
-
-function! HasPaste() " 如果paste模式打开的化返回true {{{2
-    if &paste
-        return 'PASTE MODE  '
-    endif
-    return ''
-endfunction " }}}2
-
-func! DeleteTillSlash() " {{{2
-    let g:cmd = getcmdline()
-
-    if has("win16") || has("win32")
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
-    else
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
-    endif
-
-    if g:cmd == g:cmd_edited
-        if has("win16") || has("win32")
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
-        else
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
-        endif
-    endif   
-
-    return g:cmd_edited
-endfunc " }}}2
-
-func! DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python使用 {{{2
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-endfunc " }}}2
-
-function! StripTrailingWhitespace() " Strip whitespace {{{2
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " do the business:
-    %s/\s\+$//e
-    " clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction " }}}2
 
 " 编译和运行 {{{
 if !exists("g:ideavim")
@@ -649,25 +596,6 @@ if !exists("g:ideavim")
     endfunc
 endif " }}}2
 
-function! s:RunShellCommand(cmdline) " Run Shell command {{{2
-    botright new
-
-    setlocal buftype=nofile
-    setlocal bufhidden=delete
-    setlocal nobuflisted
-    setlocal noswapfile
-    setlocal nowrap
-    setlocal filetype=shell
-    setlocal syntax=shell
-
-    call setline(1, a:cmdline)
-    call setline(2, substitute(a:cmdline, '.', '=', 'g'))
-    execute 'silent $read !' . escape(a:cmdline, '%#')
-    setlocal nomodifiable
-    1
-endfunction
-
-command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
 " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
 " }}}2
 
@@ -1468,10 +1396,6 @@ augroup textobj_quote
 augroup END
 " }}}2
 
-" vim-preview {{{2
-nnoremap <Leader>p :Preview<CR>
-" }}}2
-
 " rainbow {{{2
 let g:rainbow_conf = {
     \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
@@ -1519,7 +1443,7 @@ let g:javascript_plugin_ngdoc = 1
 " Enables some additional syntax highlighting for NGDocs
 let g:javascript_plugin_flow = 1
 " 按照语法折叠
-set foldmethod=syntax
+" set foldmethod=syntax
 
 let g:javascript_conceal_function       = "ƒ"
 let g:javascript_conceal_null           = "ø"
@@ -1532,6 +1456,34 @@ let g:javascript_conceal_static         = "•"
 let g:javascript_conceal_super          = "Ω"
 let g:javascript_conceal_arrow_function = "⇒"
 
+" }}}2
+
+"    let g:mkdp_path_to_chrome = "google-chrome"
+" path to the chrome or the command to open chrome(or other modern browsers)
+
+let g:mkdp_auto_start = 0
+" set to 1, the vim will open the preview window once enter the markdown
+" buffer
+
+let g:mkdp_auto_open = 0
+" set to 1, the vim will auto open preview window when you edit the
+" markdown file
+
+let g:mkdp_auto_close = 1
+" set to 1, the vim will auto close current preview window when change
+" from markdown buffer to another buffer
+
+let g:mkdp_refresh_slow = 0
+" set to 1, the vim will just refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+
+let g:mkdp_command_for_global = 0
+" set to 1, the MarkdownPreview command can be use for all files,
+" by default it just can be use in markdown file vim-instant-markdown {{{2
+if IsOSX()
+    let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
+endif
 " }}}2
 
 " }}}1
@@ -1547,5 +1499,4 @@ let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
 let g:s_loaded_gvimrc = TryLoad('~/.vim/gvimrc.vim')
 " }}}1
 
-
-" vim: set sw=4 ts=4 sts=4 et tw=80 foldmarker={{{,}}} foldlevel=0 foldmethod=marker nospell:
+" vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} foldlevel=0 fdm=marker nospell:

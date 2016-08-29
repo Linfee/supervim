@@ -22,6 +22,8 @@ cd ~/.vim/plugged/vimproc.vim
 
 make
 
+npm -g install instant-markdown-d
+
 echo '
 colorscheme molokai
 ' >> ~/.vim/custom.vim

@@ -19,7 +19,6 @@ if !exists("g:ideavim")
     Plug 'artur-shaik/vim-javacomplete2', { 'for': 'java' }
     Plug 'klen/python-mode', { 'for': 'python' }
     Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-    Plug 'spf13/vim-preview' " markdown等语言的快速预览
     Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
     Plug 'amirh/HTML-AutoCloseTag' " 自动关闭html标签
     Plug 'mattn/emmet-vim'
@@ -46,6 +45,7 @@ if !exists("g:ideavim")
     Plug 'coderifous/textobj-word-column.vim' " 列文本对象 c
     Plug 'glts/vim-textobj-comment' " 注释文本对象 c
     Plug 'whatyouhide/vim-textobj-xmlattr' " xml属性文本对象x
+    Plug 'iamcco/markdown-preview.vim' " markdown实时预览
 
     Plug 'Shougo/neocomplete.vim'
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'

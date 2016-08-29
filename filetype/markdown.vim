@@ -13,10 +13,7 @@ setl nowrap
 inoremap · `
 
 func! RunMd()
-    if IsOSX()
-        exe 'silent !open % &'
-        exe 'redraw!'
-    endif
+    exe 'MarkdownPreview'
 endf
 
 nnoremap <leader>r :call RunMd()<cr>

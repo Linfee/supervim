@@ -220,3 +220,43 @@ command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
 " }}
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
+
+function! CmdLine(str) " {{{
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction  " }}}
+
+function! HasPaste() " 如果paste模式打开的化返回true {{{2
+    if &paste
+        return 'PASTE MODE  '
+    endif
+    return ''
+endfunction " }}}2
+
+func! DeleteTillSlash() " {{{2
+    let g:cmd = getcmdline()
+
+    if has("win16") || has("win32")
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
+    else
+        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
+    endif
+
+    if g:cmd == g:cmd_edited
+        if has("win16") || has("win32")
+            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
+        else
+            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
+        endif
+    endif   
+
+    return g:cmd_edited
+endfunc " }}}2
+
+func! DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python使用 {{{2
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc " }}}2
+
