@@ -18,74 +18,87 @@ if !exists("g:ideavim")
     Plug 'derekwyatt/vim-sbt', { 'for': 'scala' }
     Plug 'artur-shaik/vim-javacomplete2', { 'for': 'java' }
     Plug 'klen/python-mode', { 'for': 'python' }
-    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
     Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
-    Plug 'amirh/HTML-AutoCloseTag' " 自动关闭html标签
-    Plug 'mattn/emmet-vim'
-    Plug 'tomtom/tlib_vim' " Some utility functions for VIM
+    Plug 'amirh/HTML-AutoCloseTag', {'for': ['html', 'xml']} " 自动关闭html标签
+    Plug 'mattn/emmet-vim', {'for': 'html'}
     Plug 'pangloss/vim-javascript', {'for': 'javascript'}
     Plug 'elzr/vim-json', {'for': 'json'}
+    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+    Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
+    Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
-    Plug 'scrooloose/nerdtree'
-    Plug 'jistr/vim-nerdtree-tabs'
-    Plug 'Xuyuanp/nerdtree-git-plugin'
+    Plug 'tomtom/tlib_vim' " Some utility functions for VIM
+    Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
+    Plug 'jistr/vim-nerdtree-tabs', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
+    Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
     Plug 'scrooloose/nerdcommenter' " 快捷注释
-    if executable('ctags')
-        Plug 'majutsushi/tagbar'
+    if executable('ctags') " 需要ctags支持
+        Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
+        let g:s_has_ctags = 1
     endif
-    Plug 'kshenoy/vim-signature'
-    Plug 'mbbill/undotree'
+    Plug 'kshenoy/vim-signature' " 显示书签
+    Plug 'mbbill/undotree' " 撤销树
     Plug 'mhinz/vim-signify' " 快捷diff列
     Plug 'osyo-manga/vim-over' " 替换时候可以预览
+
+    " 各种文本对象
     Plug 'kana/vim-textobj-user'
     Plug 'kana/vim-textobj-indent'
     Plug 'reedes/vim-textobj-quote'
     Plug 'reedes/vim-textobj-sentence'
     Plug 'bps/vim-textobj-python', { 'for': 'python' } " python文本对象
+    Plug 'whatyouhide/vim-textobj-xmlattr', {'for': ['xml', 'html']} " xml属性文本对象x
     Plug 'coderifous/textobj-word-column.vim' " 列文本对象 c
     Plug 'glts/vim-textobj-comment' " 注释文本对象 c
-    Plug 'whatyouhide/vim-textobj-xmlattr' " xml属性文本对象x
-    Plug 'iamcco/markdown-preview.vim' " markdown实时预览
 
-    Plug 'Shougo/neocomplete.vim'
+    Plug 'Shougo/neocomplete.vim' " 补全插件
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'ujihisa/neco-look'
     Plug 'luochen1990/rainbow' " 彩虹括号增强版
 
-    Plug 'Shougo/vimproc.vim'
-    Plug 'Shougo/vimshell.vim'
+    Plug 'Shougo/vimproc.vim', {'do': 'make'}
+    Plug 'Shougo/vimshell.vim', {'on': 'VimShell'}
     Plug 'Shougo/unite.vim'
     Plug 'Shougo/unite-outline'
     Plug 'Shougo/vimfiler.vim'
     Plug 'ujihisa/unite-colorscheme'
-    Plug 'mattn/webapi-vim' " vim interface to Web API
+    " Plug 'mattn/webapi-vim' " vim interface to Web API
 
     Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
     Plug 'Yggdroot/indentLine' " 缩进可视化
-    Plug 'altercation/vim-colors-solarized'
+    " Plug 'altercation/vim-colors-solarized'
+    " Plug 'flazz/vim-colorschemes' " 主题包
     Plug 'tomasr/molokai'
-    Plug 'flazz/vim-colorschemes' " 主题包
     Plug 'maxbrunsfeld/vim-yankstack' " 粘帖栈
     Plug 'terryma/vim-multiple-cursors' " 多光标
     Plug 'tpope/vim-surround' " 包围插件
     Plug 'tpope/vim-repeat' " 使用.重复第三方插件的功能
     Plug 'junegunn/vim-easy-align' " 排版插件
-    Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
-    Plug 'hail2u/vim-css3-syntax'
-    Plug 'gorodinskiy/vim-coloresque' " css等语言中高亮显示颜色
-    Plug 'terryma/vim-expand-region' " 扩展选择
     Plug 'easymotion/vim-easymotion'
-    Plug 'ctrlpvim/ctrlp.vim'
-    Plug 'tacahiroy/ctrlp-funky' "A simple function navigator for ctrlp
+    " css等语言中高亮显示颜色
+    Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']}
+    Plug 'terryma/vim-expand-region' " 扩展选择
+    Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
+    Plug 'vim-scripts/EasyGrep'
+    if executable('fzf') " 强大的模糊搜索，必备神器，需要命令行工具fzf支持
+        " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
+        if executable('brew')
+            Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+        else
+            Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+            Plug 'junegunn/fzf.vim'
+        endif
+        let g:s_has_fzf = 1
+    endif
     Plug 'tpope/vim-fugitive' " git集成
     Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
-    Plug 'vim-scripts/EasyGrep'
     Plug 'Konfekt/FastFold' " 快速折叠，处理某些折叠延迟
     Plug 'vim-scripts/sessionman.vim' " 管理session
     Plug 'reedes/vim-litecorrect' " 轻量级的拼写纠正
 
-    Plug 'ryanoasis/vim-devicons'
+    Plug 'junegunn/goyo.vim'
+    Plug 'ryanoasis/vim-devicons' " 各种小图标
     Plug 'strom3xFeI/vimdoc-cn'
 
     call plug#end()

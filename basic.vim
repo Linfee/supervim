@@ -276,7 +276,7 @@ if IsGui()
     endif
 else
     " 让箭头键和其它键能使用
-    if !IsWin()
+    if !IsWin() && !has('nvim')
         set term=$TERM
         if &term == 'xterm' || &term == 'screen'
             " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
@@ -307,7 +307,7 @@ nnoremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 map zl zL
 map zh zH
 " 快速查找当前单词
-nnoremap <leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+nnoremap <leader>fw [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 " 快速切换拼写检查
 noremap <c-f11> :setlocal spell!<cr>
 " 拼写检查功能
@@ -338,8 +338,8 @@ nnoremap - za
 nnoremap _ zf
 " 让Y表示复制到行尾巴
 if exists('g:yankstack_size')
-    call yankstack#setup()
 endif
+call yankstack#setup()
 nmap Y y$
 " [move] j/k可以移动到软换行上
 if !exists('g:ideavim')
@@ -907,63 +907,6 @@ nnoremap <leader>tt :TagbarToggle<cr>
 call DoMap('nnore', 't', ':TagbarToggle<cr>')
 " }}}2
 
-" ctrlp {{{2
-" Default mapping and default command
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-" 设置ctrlp窗口的样式，从上边打开
-let g:ctrlp_match_window = 'top'
-" 打开已经打开的文件就尝试调到那个窗口而不是打开新的
-let g:ctrlp_switch_buffer = 'Et'
-" 设置默认的查找起始目录
-let g:ctrlp_working_path_mode = 'ra'
-" 自定义的默认查找起始目录
-let g:ctrlp_root_markers = ['.p, .vim, home']
-" 忽略这些文件
-let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
-" 额外的搜索工具
-if executable('ag')
-    let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-elseif executable('ack-grep')
-    let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
-elseif executable('ack')
-    let s:ctrlp_fallback = 'ack %s --nocolor -f'
-    " On Windows use "dir" as fallback command.
-elseif IsWin()
-    let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
-else
-    let s:ctrlp_fallback = 'find %s -type f'
-endif
-" 设置一下ctrlp的窗口高度
-let g:ctrlp_max_height = 10
-" 跟随链接但是忽略内部循环的链接，避免重复。
-let g:ctrlp_follow_symlinks = 0
-let g:ctrlp_prompt_mappings = { 'ToggleMRURelative()': ['<F2>'] }
-let g:ctrlp_user_command = {
-            \ 'types': {
-            \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-            \ },
-            \ }
-" \ 'fallback': s:ctrlp_fallback
-call DoMap('nnore', 'o', ':CtrlP<CR>')
-call DoMap('nnore', 'l', ':CtrlPBuffer<cr>')
-call DoMap('nnore', 'm', ':CtrlPMRU<cr>')
-" }}}2
-
-" ctrlp-funky {{{2
-" CtrlP extensions
-let g:ctrlp_extensions = ['funky']
-"funky
-nnoremap <Leader>fu :CtrlPFunky<Cr>
-" narrow the list down with a word under cursor
-nnoremap <Leader>fe :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
-let g:ctrlp_funky_matchtype = 'path'
-let g:ctrlp_funky_syntax_highlight = 1
-" }}}2
-
 " vim-expand-region {{{2
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
@@ -1363,11 +1306,13 @@ let g:molokai_original = 1
 " }}}2
 
 " ctags {{{2
-set tags=./tags;/,~/.vimtags
-" Make tags placed in .git/tags file available in all levels of a repository
-let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-if gitroot != ''
-    let &tags = &tags . ',' . gitroot . '/.git/tags'
+if exists('g:has_ctags')
+    set tags=./tags;/,~/.vimtags
+    " Make tags placed in .git/tags file available in all levels of a repository
+    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+    if gitroot != ''
+        let &tags = &tags . ',' . gitroot . '/.git/tags'
+    endif
 endif
 " }}}2
 
@@ -1458,7 +1403,8 @@ let g:javascript_conceal_arrow_function = "⇒"
 
 " }}}2
 
-"    let g:mkdp_path_to_chrome = "google-chrome"
+" MarkdownPreview {{{2
+let g:mkdp_path_to_chrome = "google-chrome"
 " path to the chrome or the command to open chrome(or other modern browsers)
 
 let g:mkdp_auto_start = 0
@@ -1480,10 +1426,169 @@ let g:mkdp_refresh_slow = 0
 
 let g:mkdp_command_for_global = 0
 " set to 1, the MarkdownPreview command can be use for all files,
-" by default it just can be use in markdown file vim-instant-markdown {{{2
+" by default it just can be use in markdown file vim-instant-markdown
 if IsOSX()
     let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
 endif
+" }}}2
+
+" Goyo {{{2
+function! s:goyo_enter()
+    if has('gui_running')
+        set fullscreen
+        " set background=light
+        set linespace=7
+    elseif exists('$TMUX')
+        silent !tmux set status off
+    endif
+endfunction
+
+function! s:goyo_leave()
+    if has('gui_running')
+        set nofullscreen
+        " set background=dark
+        set linespace=0
+    elseif exists('$TMUX')
+        silent !tmux set status on
+    endif
+endfunction
+
+" autocmd! User GoyoEnter nested call <SID>goyo_enter()
+" autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+let g:s_goyo_on = 0
+func GoyoToggle()
+    if g:s_goyo_on
+        call <SID>goyo_leave()
+        exe 'Goyo'
+        let g:s_goyo_on = 0
+    else
+        call <SID>goyo_enter()
+        exe 'Goyo'
+        let g:s_goyo_on = 1
+    endif
+endf
+" 使用<space>来切换goyo
+call DoMap('nnore', 'g', ':call GoyoToggle()<cr>')
+" }}}2
+
+" FZF {{{2
+if exists('g:s_has_fzf')
+    " 这三个快捷键指定用什么方式打开选中的内容
+    let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-v': 'vsplit' }
+
+    " Default fzf layout
+    " - down / up / left / right
+    let g:fzf_layout = { 'down': '~40%' }
+
+    " In Neovim, you can set up fzf window using a Vim command
+    let g:fzf_layout = { 'window': 'enew' }
+    let g:fzf_layout = { 'window': '-tabnew' }
+
+    " 自定义fzf的配色
+    let g:fzf_colors =
+    \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
+    " Enable per-command history.
+    " CTRL-N and CTRL-P will be automatically bound to next-history and
+    " previous-history instead of down and up. If you don't like the change,
+    " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+    let g:fzf_history_dir = '~/.fzf-history'
+
+    " 自定义命令选项
+    " [Files] 使用Files命令时使用coderay来预览文件内容(http://coderay.rubychan.de/)
+    let g:fzf_files_options =
+      \ '--preview "(coderay {} || cat {}) 2> /dev/null | head -'.&lines.'"'
+    " [Buffers] 使用Buffers命令时如果可能的话自动跳到目标窗口，而不是新打开一个
+    let g:fzf_buffers_jump = 1
+    " [[B]Commits] 使用[B]Commit时自定义git log输出形式
+    let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+    " [Tags] 生成tags文件的命令
+    let g:fzf_tags_command = 'ctags -R'
+    " [Commands] 使用Commands时候直接执行选中命令的快捷键
+    let g:fzf_commands_expect = 'alt-enter, ctrl-x'
+
+    " maps
+    nmap <leader><tab> <plug>(fzf-maps-n)
+    xmap <leader><tab> <plug>(fzf-maps-x)
+    omap <leader><tab> <plug>(fzf-maps-o)
+    " Insert mode completion
+    imap <c-x><c-k> <plug>(fzf-complete-word)
+    imap <c-x><c-f> <plug>(fzf-complete-path)
+    imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+    imap <c-x><c-l> <plug>(fzf-complete-line)
+    " Advanced customization using autoload functions
+    " inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+    " inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+
+    " status line
+    if has('nvim')
+        function! s:fzf_statusline()
+          " Override statusline as you like
+          highlight fzf1 ctermfg=161 ctermbg=251
+          highlight fzf2 ctermfg=23 ctermbg=251
+          highlight fzf3 ctermfg=237 ctermbg=251
+          setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+        endfunction
+
+        autocmd! User FzfStatusLine call <SID>fzf_statusline()
+    endif
+endif
+
+cnoremap <leader>h :Helptags<cr>
+nnoremap <leader>gf :GFiles?<cr>
+nnoremap <leader>gl :GFiles<cr>
+nnoremap <leader>gc :Commits<cr>
+nnoremap <leader>gb :VCommits<cr>
+nnoremap <leader>gg :BLines<cr>
+nnoremap <leader>fs :Snippets<cr>
+nnoremap <leader>fm :Maps<cr>
+nnoremap <leader>fh :History<cr>
+nnoremap <leader>f: :History:<cr>
+nnoremap <leader>f/ :History/<cr>
+nnoremap <leader>ff :Ag<cr>
+call DoMap('nnore', 'o', ':Files<cr>')
+call DoMap('nnore', 'b', ':Buffers<cr>')
+call DoMap('nnore', 'a', ':Ag<cr>')
+call DoMap('nnore', 'l', ':Lines<cr>')
+" Files [PATH]    |  Files (similar to :FZF)
+" GFiles [OPTS]   |  Git files (git ls-files)
+" GFiles?         |  Git files (git status)
+" Buffers         |  Open buffers
+" Colors          |  Color schemes
+" Ag [PATTERN]    |  ag search result (ALT-A to select all, ALT-D to deselect all)
+" Lines [QUERY]   |  Lines in loaded buffers
+" BLines [QUERY]  |  Lines in the current buffer
+" Tags [QUERY]    |  Tags in the project (ctags -R)
+" BTags [QUERY]   |  Tags in the current buffer
+" Marks           |  Marks
+" Windows         |  Windows
+" Locate PATTERN  |  locate command output
+" History         |  v:oldfiles and open buffers
+" History:        |  Command history
+" History/        |  Search history
+" Snippets        |  Snippets (UltiSnips)
+" Commits         |  Git commits (requires fugitive.vim)
+" BCommits        |  Git commits for the current buffer
+" Commands        |  Commands
+" Maps            |  Normal mode mappings
+" Helptags        |  Help tags 1
+" Filetypes       |  File types
+
 " }}}2
 
 " }}}1
