@@ -17,7 +17,7 @@ if !exists("g:ideavim")
     Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
     Plug 'derekwyatt/vim-sbt', { 'for': 'scala' }
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
-    " Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
+    Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
     Plug 'amirh/HTML-AutoCloseTag', {'for': ['html', 'xml']} " 自动关闭html标签
     Plug 'mattn/emmet-vim', {'for': 'html'}
     Plug 'pangloss/vim-javascript', {'for': 'javascript'}
