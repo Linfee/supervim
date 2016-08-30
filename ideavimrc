@@ -1,5 +1,5 @@
 set clipboard=unnamed
-set relativenumber
+" set relativenumber
 set smartcase
 set ignorecase
 set incsearch
@@ -23,6 +23,7 @@ map zh zH
 noremap <c-f11> :setlocal spell!<cr>
 " 使用jk退出插入模式
 inoremap jk <esc>
+inoremap jj <esc>
 " 将光标所在单词切换成大写/小写
 nnoremap <c-u> g~iw
 inoremap <c-u> <esc>g~iwea
@@ -61,6 +62,7 @@ nnoremap <space>j 10j
 nnoremap <space>k 10k
 vnoremap <space>j 10j
 vnoremap <space>k 10k
+vnoremap jk <esc>
 
 nnoremap <space><space> V
 vnoremap <space><space> V

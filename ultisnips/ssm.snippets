@@ -1,5 +1,5 @@
 # Snippets file for ssm(spring + spring-vmc + mybatis) develop
-snippet ssm-mvc-upload-config "xml:spring-mvc上传解析器配置" b
+snippet ssm-file-upload-config "xml:spring-mvc上传解析器配置" b
 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	<property name="maxUploadSize"><!--设置最大允许上传文件大小-->
 		<value>${1:5242880}</value>
@@ -176,6 +176,10 @@ snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的
 endsnippet
 
 snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
+<context-param>
+	<param-name>spring.profiles.active</param-name>
+	<param-value>dev</param-value>
+</context-param>
 <!--自动加载spring配置文件-->
 <context-param>
 	<param-name>contextConfigLocation</param-name>
@@ -195,7 +199,11 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/springmvc.xml</param-value>
 	</init-param>
-    <load-on-startup>1</load-on-startup>
+	<init-param>
+		<param-name>spring.profiles.defalut</param-name>
+		<param-value>dev</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
 </servlet>
 <servlet-mapping>
 	<!--
@@ -238,4 +246,108 @@ snippet ssm-page-helper "mybatis pageHelper插件配置模板" b
 		<property name="dialect" value="mysql"/>
 	</plugin>
 </plugins>
+endsnippet
+
+snippet ssm-jedis-config-full "带有jedisPoolConfig的jedis单机配置" b
+<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	<!-- 最大连接数 -->
+	<property name="maxTotal" value="30" />
+	<!-- 最大空闲连接数 -->
+	<property name="maxIdle" value="10" />
+	<!-- 每次释放连接的最大数目 -->
+	<property name="numTestsPerEvictionRun" value="1024" />
+	<!-- 释放连接的扫描间隔（毫秒） -->
+	<property name="timeBetweenEvictionRunsMillis" value="30000" />
+	<!-- 连接最小空闲时间 -->
+	<property name="minEvictableIdleTimeMillis" value="1800000" />
+	<!-- 连接空闲多久后释放, 当空闲时间>该值 且 空闲连接>最大空闲连接数 时直接释放 -->
+	<property name="softMinEvictableIdleTimeMillis" value="10000" />
+	<!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 -->
+	<property name="maxWaitMillis" value="1500" />
+	<!-- 在获取连接的时候检查有效性, 默认false -->
+	<property name="testOnBorrow" value="true" />
+	<!-- 在空闲时检查有效性, 默认false -->
+	<property name="testWhileIdle" value="true" />
+	<!-- 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true -->
+	<property name="blockWhenExhausted" value="false" />
+</bean>
+
+<bean id="redisClient" class="redis.clients.jedis.JedisPool">
+	<constructor-arg name="host" value="your host"/>
+	<constructor-arg name="port" value="your port"/>
+	<!-- 如果配置的JedisPoolConfig，需要将其加入 -->
+	<constructor-arg name="poolConfig" ref="jedisPoolConfig"/>
+</bean>
+endsnippet
+
+snippet ssm-jedis-config-min "推荐的，最简单的jedis单机配置" b
+<bean id="redisClient" class="redis.clients.jedis.JedisPool">
+	<constructor-arg name="host" value="your host"/>
+	<constructor-arg name="port" value="your port"/>
+</bean>
+endsnippet
+
+snippet ssm-jedisCluster-config-ful "带有JedisPoolConfig的jedis集群配置" b
+<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	<!-- 最大连接数 -->
+	<property name="maxTotal" value="30" />
+	<!-- 最大空闲连接数 -->
+	<property name="maxIdle" value="10" />
+	<!-- 每次释放连接的最大数目 -->
+	<property name="numTestsPerEvictionRun" value="1024" />
+	<!-- 释放连接的扫描间隔（毫秒） -->
+	<property name="timeBetweenEvictionRunsMillis" value="30000" />
+	<!-- 连接最小空闲时间 -->
+	<property name="minEvictableIdleTimeMillis" value="1800000" />
+	<!-- 连接空闲多久后释放, 当空闲时间>该值 且 空闲连接>最大空闲连接数 时直接释放 -->
+	<property name="softMinEvictableIdleTimeMillis" value="10000" />
+	<!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 -->
+	<property name="maxWaitMillis" value="1500" />
+	<!-- 在获取连接的时候检查有效性, 默认false -->
+	<property name="testOnBorrow" value="true" />
+	<!-- 在空闲时检查有效性, 默认false -->
+	<property name="testWhileIdle" value="true" />
+	<!-- 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true -->
+	<property name="blockWhenExhausted" value="false" />
+</bean>
+<bean id="resisClient" class="redis.clients.jedis.JedisCluster">
+	<constructor-arg name="nodes">
+		<set>
+			<bean class="redis.clients.jedis.HostAndPort">
+				<constructor-arg name="host" value="127.0.0.1"/>
+				<constructor-arg name="port" value="7001"/>
+			</bean>
+			<bean class="redis.clients.jedis.HostAndPort">
+				<constructor-arg name="host" value="127.0.0.1"/>
+				<constructor-arg name="port" value="7002"/>
+			</bean>
+			<bean class="redis.clients.jedis.HostAndPort">
+				<constructor-arg name="host" value="127.0.0.1"/>
+				<constructor-arg name="port" value="7003"/>
+			</bean>
+	</set>
+	</constructor-arg>
+</bean>
+endsnippet
+
+snippet ssm-jedisCluster-config-mini "推荐的，最简单的jedis集群配置" b
+<bean id="resisClient" class="redis.clients.jedis.JedisCluster">
+	<constructor-arg name="nodes">
+		<set>
+			<bean class="redis.clients.jedis.HostAndPort">
+				<constructor-arg name="host" value="127.0.0.1"/>
+				<constructor-arg name="port" value="7001"/>
+			</bean>
+			<bean class="redis.clients.jedis.HostAndPort">
+				<constructor-arg name="host" value="127.0.0.1"/>
+				<constructor-arg name="port" value="7002"/>
+			</bean>
+			<bean class="redis.clients.jedis.HostAndPort">
+				<constructor-arg name="host" value="127.0.0.1"/>
+				<constructor-arg name="port" value="7003"/>
+			</bean>
+	</set>
+	</constructor-arg>
+	<constructor-arg name="poolConfig" value="jedisPoolConfig"/>
+</bean>
 endsnippet
