@@ -63,8 +63,8 @@ set wildmenu                     " 命令行补全
 set foldcolumn=2                 " 在左端添加额外折叠列
 set winminheight=0               " 窗口的最小高度
 set tabpagemax=15                " 最多打开的标签数目
-set scrolljump=0                 " 光标离开屏幕时(比如j)，最小滚动的行数，这样看起来舒服
-set scrolloff=11                 " 使用j/k的时候，光标到窗口的最小行数
+set scrolljump=1                 " 光标离开屏幕时(比如j)，最小滚动的行数，这样看起来舒服
+set scrolloff=15                 " 使用j/k的时候，光标到窗口的最小行数
 set lazyredraw                   " 执行完宏之后不要立刻重绘
 set linespace=0                  " 设置行间距
 set whichwrap=b,s,h,l,<,>,[,]    " 可以移动到的额外虚拟位置
@@ -1151,7 +1151,7 @@ let g:indentLine_color_dark = 1 " (default: 2)
 " 设置表示缩进的字符
 " let g:indentLine_char = 'c'
 " 默认关闭
-let g:indentLine_enabled = 1
+let g:indentLine_enabled = 0
 nnoremap <space>i :IndentLinesToggle<cr>
 nnoremap <leader>ai :IndentLinesToggle<cr>
 " }}}2

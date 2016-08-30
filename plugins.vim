@@ -70,7 +70,7 @@ if !exists("g:ideavim")
     Plug 'itchyny/lightline.vim'
     Plug 'Yggdroot/indentLine' " 缩进可视化
     " Plug 'altercation/vim-colors-solarized'
-    " Plug 'flazz/vim-colorschemes' " 主题包
+    Plug 'flazz/vim-colorschemes' " 主题包
     Plug 'tomasr/molokai'
     Plug 'maxbrunsfeld/vim-yankstack' " 粘帖栈
     Plug 'terryma/vim-multiple-cursors' " 多光标
