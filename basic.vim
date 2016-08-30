@@ -336,11 +336,6 @@ nnoremap <silent> <leader>q gwip
 " 开关折叠
 nnoremap - za
 nnoremap _ zf
-" 让Y表示复制到行尾巴
-if exists('g:yankstack_size')
-endif
-call yankstack#setup()
-nmap Y y$
 " [move] j/k可以移动到软换行上
 if !exists('g:ideavim')
     nnoremap j gj

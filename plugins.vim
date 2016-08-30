@@ -16,7 +16,6 @@ if !exists("g:ideavim")
     " language support
     Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
     Plug 'derekwyatt/vim-sbt', { 'for': 'scala' }
-    Plug 'artur-shaik/vim-javacomplete2', { 'for': 'java' }
     Plug 'klen/python-mode', { 'for': 'python' }
     Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
     Plug 'amirh/HTML-AutoCloseTag', {'for': ['html', 'xml']} " 自动关闭html标签
@@ -26,6 +25,9 @@ if !exists("g:ideavim")
     Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
     Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
+    if executable('javac') " 需要javac支持
+        Plug 'artur-shaik/vim-javacomplete2', { 'for': 'java' }
+    endif
 
     Plug 'tomtom/tlib_vim' " Some utility functions for VIM
     Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
@@ -57,11 +59,11 @@ if !exists("g:ideavim")
     Plug 'luochen1990/rainbow' " 彩虹括号增强版
 
     Plug 'Shougo/vimproc.vim', {'do': 'make'}
-    Plug 'Shougo/vimshell.vim', {'on': 'VimShell'}
+    Plug 'Shougo/vimshell.vim', {'on': ['VimShell', 'VimShellTab']}
     Plug 'Shougo/unite.vim'
-    Plug 'Shougo/unite-outline'
-    Plug 'Shougo/vimfiler.vim'
-    Plug 'ujihisa/unite-colorscheme'
+    Plug 'Shougo/unite-outline', {'on': 'Unite'}
+    Plug 'Shougo/vimfiler.vim', {'on': 'Unite'}
+    Plug 'ujihisa/unite-colorscheme', {'on': 'Unite'}
     " Plug 'mattn/webapi-vim' " vim interface to Web API
 
     Plug 'mhinz/vim-startify' " 启动画面
