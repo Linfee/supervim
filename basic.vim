@@ -773,6 +773,47 @@ function! EXE(e)
 endfunctio
 " }}}2
 
+" jedi-vim {{{2
+" jedi 补全快捷键, 有补全插件就不需要了
+" let g:jedi#completions_command = "<c-n>"
+" 跳转到定义(源码)
+let g:jedi#goto_command = "<leader>d"
+" 跳转到引入(import, 定义)
+let g:jedi#goto_assignments_command = "<leader>g"
+" 显示文档
+let g:jedi#documentation_command = "K"
+" 文档高度
+let g:jedi#max_doc_height = 15
+" 重命名
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#usages_command = "<leader>n"
+" 在vim中打开模块(源码) :Pyimport
+" 自动初始化
+let g:jedi#auto_initialization = 1
+" 关掉jedi的补全样式，使用自定义的
+let g:jedi#auto_vim_configuration = 0
+" 输入点的时候自动补全
+let g:jedi#popup_on_dot = 1
+" 自动选中第一个
+" let g:jedi#popup_select_first = 0
+" 补全结束后自动关闭文档窗口
+let g:jedi#auto_close_doc = 1
+" 显示参数列表
+let g:jedi#show_call_signatures = 1
+" 延迟多久显示参数列表
+let g:jedi#show_call_signatures_delay = 300
+" 使用go to的时候使用tab而不是buffer
+let g:jedi#use_tabs_not_buffers = 1
+" 开启jedi补全
+let g:jedi#completions_enabled = 1
+" 指定使用go to使用split的方式，并指定split位置
+let g:jedi#use_splits_not_buffers = 'bottom'
+" 强制使用python3运行jedi
+" let g:jedi#force_py_version = 3
+" 自动完成from .. import ..
+let g:jedi#smart_auto_mappings = 1
+" }}}2
+
 " unite {{{2
 let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
 let g:unite_source_menu_menus.git = {
@@ -874,7 +915,7 @@ call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515'
 
 nnoremap <leader>e :NERDTreeFind<CR>
 " nnoremap <Leader>n <plug>NERDTreeTabsToggle<CR>
-nnoremap <Leader>n :NERDTreeTabsToggle<CR>
+" nnoremap <Leader>n :NERDTreeTabsToggle<CR>
 call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
 " }}}2
 
@@ -1096,48 +1137,6 @@ augroup vim_shell
     autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
 augroup END
 "TODO: vimshell
-" }}}2
-
-" python-mode {{{2
-" Turn off plugin's warnings
-let g:pymode_warnings = 1
-" Setup pymode quickfix window
-let g:pymode_quickfix_minheight = 3
-let g:pymode_quickfix_maxheight = 6
-" 设置python版本
-" let g:pymode_python = 'python3'
-" Enable pymode indentation
-let g:pymode_indent = 1
-" 开启python折叠
-let g:pymode_folding = 1
-" Enable pymode-motion
-let g:pymode_motion = 1
-" Turns on the documentation script
-let g:pymode_doc = 1
-" Bind keys to show documentation for current word (selection)
-let g:pymode_doc_bind = 'K'
-" 转到定义处
-let g:pymode_rope_goto_definition_bind = '<leader>d'
-" e new vnew，转到定义用哪个命令打开
-let g:pymode_rope_goto_definition_cmd = 'vnew'
-" Turn on code checking
-let g:pymode_lint = 1
-" Check code on every save (every)
-let g:pymode_lint_unmodified = 0
-" 如果光标在有错误的行上显示错误信息
-let g:pymode_lint_message = 1
-" pymode的错误标识
-let g:pymode_lint_todo_symbol = 'DO'
-let g:pymode_lint_comment_symbol = 'CC'
-let g:pymode_lint_visual_symbol = 'RR'
-let g:pymode_lint_error_symbol = 'EE'
-let g:pymode_lint_info_symbol = 'II'
-let g:pymode_lint_pyflakes_symbol = 'FF'
-" 开启补全
-let g:pymode_rope_completion = 1
-let g:pymode_lint_checkers = ['pyflakes']
-
-" let g:pymode_rope_completion_bind = '∏'
 " }}}2
 
 " indentLine {{{2
@@ -1370,8 +1369,8 @@ nnoremap <leader>rb :RainbowToggle<cr>
 " }}}2
 
 " vim-json {{{2
-    nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
-    let g:vim_json_syntax_conceal = 0
+nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+let g:vim_json_syntax_conceal = 0
 " }}}2
 
 " vim-javascript {{{2

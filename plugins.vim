@@ -16,8 +16,8 @@ if !exists("g:ideavim")
     " language support
     Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
     Plug 'derekwyatt/vim-sbt', { 'for': 'scala' }
-    Plug 'klen/python-mode', { 'for': 'python' }
-    Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
+    Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+    " Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
     Plug 'amirh/HTML-AutoCloseTag', {'for': ['html', 'xml']} " 自动关闭html标签
     Plug 'mattn/emmet-vim', {'for': 'html'}
     Plug 'pangloss/vim-javascript', {'for': 'javascript'}
@@ -48,7 +48,6 @@ if !exists("g:ideavim")
     Plug 'kana/vim-textobj-indent'
     Plug 'reedes/vim-textobj-quote'
     Plug 'reedes/vim-textobj-sentence'
-    Plug 'bps/vim-textobj-python', { 'for': 'python' } " python文本对象
     Plug 'whatyouhide/vim-textobj-xmlattr', {'for': ['xml', 'html']} " xml属性文本对象x
     Plug 'coderifous/textobj-word-column.vim' " 列文本对象 c
     Plug 'glts/vim-textobj-comment' " 注释文本对象 c
@@ -63,7 +62,7 @@ if !exists("g:ideavim")
     Plug 'Shougo/unite.vim'
     Plug 'Shougo/unite-outline', {'on': 'Unite'}
     Plug 'Shougo/vimfiler.vim', {'on': 'Unite'}
-    Plug 'ujihisa/unite-colorscheme', {'on': 'Unite'}
+    " Plug 'ujihisa/unite-colorscheme', {'on': 'Unite'}
     " Plug 'mattn/webapi-vim' " vim interface to Web API
 
     Plug 'mhinz/vim-startify' " 启动画面
