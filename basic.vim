@@ -550,12 +550,12 @@ iabbrev viminfo vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} foldlevel=0 fdm=ma
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 function! Init()
+    call MkdirIfNotExists("~/.vim/temp")
+    call MkdirIfNotExists("~/.vim/temp/view")
+    call MkdirIfNotExists("~/.vim/temp/undo")
+    call MkdirIfNotExists("~/.vim/temp/backup")
     exe "PlugInstall"
     exe "quit"
-    call MkdirIfNotExists("~.vim/temp")
-    call MkdirIfNotExists("~.vim/temp/view")
-    call MkdirIfNotExists("~.vim/temp/undo")
-    call MkdirIfNotExists("~.vim/temp/backup")
     exe "quit"
 endfunction
 
