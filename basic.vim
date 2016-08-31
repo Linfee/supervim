@@ -1490,18 +1490,20 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim'))
         endif
     endif
 
-    cnoremap <leader>h :Helptags<cr>
+    nnoremap <leader>h  :Helptags<cr>
     nnoremap <leader>gf :GFiles?<cr>
     nnoremap <leader>gl :GFiles<cr>
     nnoremap <leader>gc :Commits<cr>
     nnoremap <leader>gb :VCommits<cr>
-    nnoremap <leader>gg :BLines<cr>
+    nnoremap <leader>gg :Lines<cr>
+    nnoremap <leader>G  :BLines<cr>
     nnoremap <leader>fs :Snippets<cr>
     nnoremap <leader>fm :Maps<cr>
     nnoremap <leader>fh :History<cr>
     nnoremap <leader>f: :History:<cr>
     nnoremap <leader>f/ :History/<cr>
     nnoremap <leader>ff :Ag<cr>
+    nnoremap <leader>fb :Buffers<cr>
     call DoMap('nnore', 'o', ':Files<cr>')
     call DoMap('nnore', 'b', ':Buffers<cr>')
     call DoMap('nnore', 'a', ':Ag<cr>')

@@ -23,10 +23,3 @@ cd ~/.vim/plugged/vimproc.vim
 make
 
 npm -g install instant-markdown-d
-
-echo '
-colorscheme molokai
-
-call yankstack#setup()
-nmap Y y$
-' >> ~/.vim/custom.vim
