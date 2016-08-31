@@ -461,13 +461,13 @@ nnoremap <tab><left> <C-w><
 nnoremap <tab><right> <C-w>>
 nnoremap <tab>i :tabprevious<cr>
 nnoremap <tab>o :tabnext<cr>
-nnoremap <tab>[ :tabfirst<cr>
-nnoremap <tab>] :tablast<cr>
+nnoremap <tab>{ :tabfirst<cr>
+nnoremap <tab>} :tablast<cr>
 nnoremap <tab>n :tabnew<cr>
 nnoremap <tab>q :close<cr>
 
-nnoremap <tab>{ :bprevious<cr>
-nnoremap <tab>} :bnext<cr>
+nnoremap <tab>[ :bprevious<cr>
+nnoremap <tab>] :bnext<cr>
 nnoremap <tab>b :execute "ls"<cr>
 nnoremap <tab>- :split<cr>
 nnoremap <tab>\ :vsplit<cr>
