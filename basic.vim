@@ -561,7 +561,7 @@ endfunction
 
 " 编译和运行 {{{2
 " 按F5编译运行
-" nnoremap <F5> :call Run()<CR>
+nnoremap <F5> :call Run()<CR>
 function! Run()
     exec "w"
     if &filetype == 'c'
@@ -577,13 +577,10 @@ function! Run()
         :!./%
     elseif &filetype == 'groovy'
         exec "!groovy %"
-    elseif &filetype == 'markdown' || &filetype == 'html' || &filetype == 'ftl'
-        exec "silent !exec google-chrome % &"
-        exec "redraw!"
     elseif &filetype == 'scala'
         exec "!scala -deprecation %" 
-    elseif &filetype == 'python3'
-        exec "!python %"
+    elseif &filetype == 'python'
+        exec "!python3 %"
     endif
 endfunction
 "C,C++的调试
@@ -1076,15 +1073,41 @@ endif
 if isdirectory(expand('~/.vim/plugged/vimshell.vim'))
     nnoremap <space>s :VimShellTab<cr> 
     nnoremap <space>d :VimShellPop<cr>
+
+    if has('win32') || has('win64')
+      " Display user name on Windows.
+      let g:vimshell_prompt = $USERNAME."% "
+    else
+      " Display user name on Linux.
+      let g:vimshell_prompt = $USER."% "
+    endif
+
+    " Initialize execute file list.
+    let g:vimshell_execute_file_list = {}
+    call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
+    let g:vimshell_execute_file_list['rb'] = 'ruby'
+    let g:vimshell_execute_file_list['pl'] = 'perl'
+    let g:vimshell_execute_file_list['py'] = 'python3'
+    call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
+
+    autocmd FileType vimshell
+    \ call vimshell#altercmd#define('g', 'git')
+    \| call vimshell#altercmd#define('i', 'iexe')
+    \| call vimshell#altercmd#define('l', 'll')
+    \| call vimshell#altercmd#define('ll', 'ls -l')
+    \| call vimshell#altercmd#define('la', 'ls -lahk')
+    \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
+
+    function! MyChpwd(args, context)
+      call vimshell#execute('ls')
+    endfunction
+
     " 覆盖statusline
     let g:vimshell_force_overwrite_statusline=0
-    inoremap <c-j> <c-r>=UltiSnips#ExpandSnippet()<cr>
-    inoremap <c-k> <c-r>=UltiSnips#JumpForwards()<cr>
     augroup vim_shell
         autocmd!
         autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
     augroup END
-    "TODO: vimshell
 endif
 " }}}2
 

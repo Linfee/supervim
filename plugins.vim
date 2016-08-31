@@ -54,7 +54,7 @@ if !exists("g:ideavim")
     Plug 'luochen1990/rainbow' " 彩虹括号增强版
 
     Plug 'Shougo/vimproc.vim', {'do': 'make'}
-    Plug 'Shougo/vimshell.vim', {'on': ['VimShell', 'VimShellTab', 'VimShellPop']}
+    Plug 'Shougo/vimshell.vim'
 
     Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'

@@ -2,13 +2,13 @@
 let g:ftconfigloaded = 1
 
 setl smarttab
-setl expandtab
-setl autoindent
-setl shiftwidth=4
 setl tabstop=4
 setl softtabstop=4
-
-setlocal ff=unix
+setl shiftwidth=4
+setl textwidth=79
+setl expandtab
+setl autoindent
+setl fileformat=unix
 
 function! PythonFt()
 	call SetTab(4)
