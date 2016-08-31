@@ -219,22 +219,20 @@ command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
 " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
 " }}
 
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
-
-function! CmdLine(str) " {{{
+function! CmdLine(str) " {{
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
     unmenu Foo
-endfunction  " }}}
+endfunction  " }}
 
-function! HasPaste() " 如果paste模式打开的化返回true {{{2
+function! HasPaste() " 如果paste模式打开的化返回true {{
     if &paste
         return 'PASTE MODE  '
     endif
     return ''
-endfunction " }}}2
+endfunction " }}
 
-func! DeleteTillSlash() " {{{2
+func! DeleteTillSlash() " {{{
     let g:cmd = getcmdline()
 
     if has("win16") || has("win32")
@@ -249,14 +247,32 @@ func! DeleteTillSlash() " {{{2
         else
             let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
         endif
-    endif   
+    endif
 
     return g:cmd_edited
-endfunc " }}}2
+endfunc " }}}
 
-func! DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python使用 {{{2
+func! DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python使用 {{
     exe "normal mz"
     %s/\s\+$//ge
     exe "normal `z"
-endfunc " }}}2
+endfunc " }}
 
+function! VisualSelection(direction, extra_filter) range " {{
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'gv'
+        call CmdLine("Ag \"" . l:pattern . "\" " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction "}}
+
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:

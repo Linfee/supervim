@@ -15,9 +15,8 @@ if !exists("g:ideavim")
     call plug#begin('~/.vim/plugged')
     " language support
     Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
-    Plug 'derekwyatt/vim-sbt', { 'for': 'scala' }
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
-    Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签
+    Plug 'Valloric/MatchTagAlways' " 高亮显示匹配html标签 尝试重新实现
     Plug 'amirh/HTML-AutoCloseTag', {'for': ['html', 'xml']} " 自动关闭html标签
     Plug 'mattn/emmet-vim', {'for': 'html'}
     Plug 'pangloss/vim-javascript', {'for': 'javascript'}
@@ -33,7 +32,7 @@ if !exists("g:ideavim")
     Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
     Plug 'jistr/vim-nerdtree-tabs', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
     Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
-    Plug 'scrooloose/nerdcommenter' " 快捷注释
+    Plug 'scrooloose/nerdcommenter' " 快捷注释 尝试重新实现
     if executable('ctags') " 需要ctags支持
         Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
         let g:s_has_ctags = 1
@@ -45,12 +44,9 @@ if !exists("g:ideavim")
 
     " 各种文本对象
     Plug 'kana/vim-textobj-user'
-    Plug 'kana/vim-textobj-indent'
-    Plug 'reedes/vim-textobj-quote'
     Plug 'reedes/vim-textobj-sentence'
     Plug 'whatyouhide/vim-textobj-xmlattr', {'for': ['xml', 'html']} " xml属性文本对象x
     Plug 'coderifous/textobj-word-column.vim' " 列文本对象 c
-    Plug 'glts/vim-textobj-comment' " 注释文本对象 c
 
     Plug 'Shougo/neocomplete.vim' " 补全插件
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -59,16 +55,11 @@ if !exists("g:ideavim")
 
     Plug 'Shougo/vimproc.vim', {'do': 'make'}
     Plug 'Shougo/vimshell.vim', {'on': ['VimShell', 'VimShellTab', 'VimShellPop']}
-    Plug 'Shougo/unite.vim'
-    Plug 'Shougo/unite-outline', {'on': 'Unite'}
-    Plug 'Shougo/vimfiler.vim', {'on': 'Unite'}
-    " Plug 'ujihisa/unite-colorscheme', {'on': 'Unite'}
-    " Plug 'mattn/webapi-vim' " vim interface to Web API
 
     Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
     Plug 'Yggdroot/indentLine' " 缩进可视化
-    " Plug 'altercation/vim-colors-solarized'
+    Plug 'altercation/vim-colors-solarized'
     Plug 'flazz/vim-colorschemes' " 主题包
     Plug 'tomasr/molokai'
     Plug 'maxbrunsfeld/vim-yankstack' " 粘帖栈
@@ -76,12 +67,12 @@ if !exists("g:ideavim")
     Plug 'tpope/vim-surround' " 包围插件
     Plug 'tpope/vim-repeat' " 使用.重复第三方插件的功能
     Plug 'junegunn/vim-easy-align' " 排版插件
-    Plug 'easymotion/vim-easymotion'
+    Plug 'easymotion/vim-easymotion' " 尝试重新实现
     " css等语言中高亮显示颜色
-    Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']}
+    " Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']} " 太费时间了, 尝试重新实现
     Plug 'terryma/vim-expand-region' " 扩展选择
     Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
-    Plug 'vim-scripts/EasyGrep'
+    Plug 'vim-scripts/EasyGrep', {'on': ['Grep', 'GrepAdd', 'Replace', 'ReplaceUndo', 'GrepOptions', 'ResultListFilter', 'ResultListOpen']}
     if executable('fzf') " 强大的模糊搜索，必备神器，需要命令行工具fzf支持
         " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
         if executable('brew')
@@ -92,7 +83,7 @@ if !exists("g:ideavim")
         endif
         let g:s_has_fzf = 1
     endif
-    Plug 'tpope/vim-fugitive' " git集成
+    Plug 'tpope/vim-fugitive' " git集成 比较费时间
     Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
     Plug 'Konfekt/FastFold' " 快速折叠，处理某些折叠延迟
     Plug 'vim-scripts/sessionman.vim' " 管理session

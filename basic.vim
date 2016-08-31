@@ -37,11 +37,17 @@ call EncodingForCn()
 let g:s_loaded_before = TryLoad('~/.vim/before.vim')
 
 " 尝试加载插件配置文件
-if !exists("g:no_plugins")
+if !exists("g:noplugin")
     let g:s_loaded_plugins = TryLoad('~/.vim/supervim/plugins.vim', 1)
 else
     let g:s_loaded_plugins = 0
 endif
+
+" 无插件检测
+function! NoPlugin()
+    return !exists('g:s_loaded_plugins') || exists('g:noplugin')
+endfunction
+
 " 开启文件类型检测
 filetype plugin indent on
 " ---------------------------------}}}2
@@ -213,12 +219,15 @@ highlight clear SignColumn       " 高亮列要匹配背景色
 highlight clear LineNr           " 移除当前行号处的高亮色
 highlight clear CursorLineNr     " 删掉当前行号上的高亮
 
+if NoPlugin()
+    colorscheme desert
+endif
+
 " 高亮某些特殊位置的特殊字符
 set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
 
 " 提亮一下光标行
 hi CursorLine ctermbg=235   cterm=none
-
 
 " 定制补全菜单颜色
 " 补全菜单的前景和背景
@@ -244,7 +253,7 @@ if has('statusline')
     " Broken down into easily includeable segments
     set statusline=%<%f\                     " Filename
     set statusline+=%w%h%m%r                 " Options
-    if !exists('g:override_spf13_bundles')
+    if !NoPlugin()
         set statusline+=%{fugitive#statusline()} " Git Hotness
     endif
     set statusline+=\ [%{&ff}/%Y]            " Filetype
@@ -285,6 +294,9 @@ else
     endif
 endif
 
+" 切换背景色
+noremap <leader>bg :call ToggleBG()<CR>
+
 " }}}3
 
 " }}}
@@ -320,6 +332,8 @@ inoremap jk <esc>
 " 将光标所在单词切换成大写/小写
 nnoremap <c-u> g~iw
 inoremap <c-u> <esc>g~iwea
+" 使用Y复制到行尾
+nnoremap Y y$
 " i_alt-x删除当前行
 call DoAltMap('inore', 'x', '<c-o>dd')
 " 使用<M-p>代替<C-n>进行补全
@@ -337,13 +351,11 @@ nnoremap <silent> <leader>q gwip
 nnoremap - za
 nnoremap _ zf
 " [move] j/k可以移动到软换行上
-if !exists('g:ideavim')
-    nnoremap j gj
-    nnoremap k gk
-endif
+nnoremap j gj
+nnoremap k gk
 
 " 一些跟行有关的一定命令对软换行的表现
-if !exists('g:s_wrapRelMotion' && 'g:ideavim')
+if !exists('g:s_wrapRelMotion')
     function! WrapRelativeMotion(key, ...)
         let vis_sel=""
         if a:0
@@ -515,6 +527,16 @@ call DoAltMap('nnore', '.', '@@')
 
 " misc ---------------------------------------------------------------------{{{1
 
+" ctags
+if exists('g:has_ctags')
+    set tags=./tags;/,~/.vimtags
+    " Make tags placed in .git/tags file available in all levels of a repository
+    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+    if gitroot != ''
+        let &tags = &tags . ',' . gitroot . '/.git/tags'
+    endif
+endif
+
 " Make tags placed in .git/tags file available in all levels of a repository
 let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
 if gitroot != ''
@@ -537,73 +559,40 @@ function! Init()
     exe "quit"
 endfunction
 
-function! VisualSelection(direction, extra_filter) range " {{{2
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'gv'
-        call CmdLine("Ag \"" . l:pattern . "\" " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction "}}}2
-
-" 编译和运行 {{{
-if !exists("g:ideavim")
-    " 按F5编译运行
-    " nnoremap <F5> :call Run()<CR>
-    func! Run()
-        exec "w"
-        if &filetype == 'c'
-            exec "!g++ % -o %<"
-            exec "! ./%<"
-        elseif &filetype == 'cpp'
-            exec "!g++ % -o %<"
-            exec "! ./%<"
-        elseif &filetype == 'java' 
-            exec "!javac %" 
-            exec "!java %<"
-        elseif &filetype == 'sh'
-            :!./%
-        elseif &filetype == 'groovy'
-            exec "!groovy %"
-        elseif &filetype == 'markdown' || &filetype == 'html' || &filetype == 'ftl'
-            exec "silent !exec google-chrome % &"
-            exec "redraw!"
-        elseif &filetype == 'scala'
-            exec "!scala -deprecation %" 
-        elseif &filetype == 'python3'
-            exec "!python %"
-        endif
-    endfunc
-    "C,C++的调试
-    map <F8> :call Rungdb()<CR>
-    func! Rungdb()
-        exec "w"
-        exec "!g++ % -g -o %<"
-        exec "!gdb ./%<"
-    endfunc
-endif " }}}2
-
-" e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
-" }}}2
-
-function! ToggleBG() " 切换背景色 {{{2
-    let s:tbg = &background
-    " Inversion
-    if s:tbg == "dark"
-        set background=light
-    else
-        set background=dark
+" 编译和运行 {{{2
+" 按F5编译运行
+" nnoremap <F5> :call Run()<CR>
+function! Run()
+    exec "w"
+    if &filetype == 'c'
+        exec "!g++ % -o %<"
+        exec "! ./%<"
+    elseif &filetype == 'cpp'
+        exec "!g++ % -o %<"
+        exec "! ./%<"
+    elseif &filetype == 'java' 
+        exec "!javac %" 
+        exec "!java %<"
+    elseif &filetype == 'sh'
+        :!./%
+    elseif &filetype == 'groovy'
+        exec "!groovy %"
+    elseif &filetype == 'markdown' || &filetype == 'html' || &filetype == 'ftl'
+        exec "silent !exec google-chrome % &"
+        exec "redraw!"
+    elseif &filetype == 'scala'
+        exec "!scala -deprecation %" 
+    elseif &filetype == 'python3'
+        exec "!python %"
     endif
 endfunction
-noremap <leader>bg :call ToggleBG()<CR>
+"C,C++的调试
+map <F8> :call Rungdb()<CR>
+function! Rungdb()
+    exec "w"
+    exec "!g++ % -g -o %<"
+    exec "!gdb ./%<"
+endfunction
 " }}}2
 
 " }}}1
@@ -611,20 +600,10 @@ noremap <leader>bg :call ToggleBG()<CR>
 " plugin config ------------------------------------------------------------{{{1
 
 " ------------------------exception {{{2
-" for ideavimrc
-if exists("g:ideavim")
-    " 尝试加载fork的vimrc
-    let g:s_loaded_fork = TryLoad('~/.vim/fork.vim')
-    " 尝试加载自定义vimrc
-    let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
-    finish
-endif
 " for supervim with out plugin
-if !exists('g:s_loaded_plugins')
+if NoPlugin()
     " 尝试加载extesion
     let g:s_loaded_extesion = TryLoad('~/.vim/supervim/extesion.vim')
-    " 尝试加载fork的vimrc
-    let g:s_loaded_fork = TryLoad('~/.vim/fork.vim')
     " 尝试加载自定义vimrc
     let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
     " 尝试加载自定义的gvimrc
@@ -634,537 +613,511 @@ endif
 " ----------------------------------}}}2
 
 " Neocomplete {{{2
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplete#enable_auto_delimiter = 1
-let g:neocomplete#max_list = 15
-let g:neocomplete#force_overwrite_completefunc = 1
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-            \ 'default' : '',
-            \ 'vimshell' : $HOME.'/.vimshell_hist',
-            \ 'scheme' : $HOME.'/.gosh_completions'
-            \ }
+if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
+    " Disable AutoComplPop.
+    let g:acp_enableAtStartup = 0
+    " Use neocomplete.
+    let g:neocomplete#enable_at_startup = 1
+    " Use smartcase.
+    let g:neocomplete#enable_smart_case = 1
+    " Set minimum syntax keyword length.
+    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+    let g:neocomplete#enable_auto_delimiter = 1
+    let g:neocomplete#max_list = 15
+    let g:neocomplete#force_overwrite_completefunc = 1
+    " Define dictionary.
+    let g:neocomplete#sources#dictionary#dictionaries = {
+                \ 'default' : '',
+                \ 'vimshell' : $HOME.'/.vimshell_hist',
+                \ 'scheme' : $HOME.'/.gosh_completions'
+                \ }
 
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" omni 补全配置 {{{3
-augroup omnif
-    autocmd!
-    autocmd Filetype *
-                \if &omnifunc == "" |
-                \setlocal omnifunc=syntaxcomplete#Complete |
-                \endif
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    " python使用jedi
-    autocmd FileType python setlocal omnifunc=jedi#completions
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-augroup END
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-endif
-let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-let g:neocomplete#use_vimproc = 1 " }}}3
-
-" 自动打开关闭弹出式的预览窗口 {{{3
-augroup AutoPopMenu
-    autocmd!
-    autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-augroup END
-set completeopt=menu,preview,longest "}}}3
-
-" 回车键插入当前的补全项
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-    " For no inserting <CR> key.
-    return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-
-" <C-k> 补全snippet
-" <C-k> 下一个输入点
-imap <silent><expr><C-k> neosnippet#expandable() ?
-            \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
-            \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
-smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
-
-inoremap <expr><C-g> neocomplete#undo_completion()
-inoremap <expr><C-l> neocomplete#complete_common_string()
-"inoremap <expr><CR> neocomplete#complete_common_string()
-
-" 使用回车确认补全
-" shift加回车确认补全保存缩进
-inoremap <expr><s-CR> pumvisible() ? neocomplete#smart_close_popup()."\<CR>" : "\<CR>"
-
-function! CleverCr()
-    if pumvisible()
-        " if neosnippet#expandable()
-        "     let exp = "\<Plug>(neosnippet_expand)"
-        "     return exp . neocomplete#smart_close_popup()
-        " else
-        return neocomplete#smart_close_popup()
-        " endif
-    else
-        return "\<CR>"
+    " Define keyword.
+    if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
     endif
-endfunction
+    let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-imap <expr> <Tab> CleverTab()
+    " omni 补全配置 {{{3
+    augroup omnif
+        autocmd!
+        autocmd Filetype *
+                    \if &omnifunc == "" |
+                    \setlocal omnifunc=syntaxcomplete#Complete |
+                    \endif
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        " python使用jedi
+        autocmd FileType python setlocal omnifunc=jedi#completions
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    augroup END
+    " Enable heavy omni completion.
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+        let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+    let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+    let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 
-" 回车插入补全并保存缩进，或者展开snippet
-" imap <expr> <CR> CleverCr()
-" <C-h>,<BS> 关闭预览窗口并删除补全预览
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y> neocomplete#smart_close_popup()
-" 使用tab补全
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
-" 额外的快捷键
-inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-" inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+    let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+    let g:neocomplete#use_vimproc = 1 " }}}3
 
+    " 自动打开关闭弹出式的预览窗口 {{{3
+    augroup AutoPopMenu
+        autocmd!
+        autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+    augroup END
+    set completeopt=menu,preview,longest "}}}3
 
-" 使用unite菜单的补全
-imap <C-;> <Plug>(neocomplete_start_unite_complete)
-imap <C-l> <Plug>(neocomplete_start_unite_quick_match)
+    " 回车键插入当前的补全项
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function()
+        " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+        " For no inserting <CR> key.
+        return pumvisible() ? "\<C-y>" : "\<CR>"
+    endfunction
+
+    " <C-k> 补全snippet
+    " <C-k> 下一个输入点
+    imap <silent><expr><C-k> neosnippet#expandable() ?
+                \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
+                \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+    smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
+
+    inoremap <expr><C-g> neocomplete#undo_completion()
+    inoremap <expr><C-l> neocomplete#complete_common_string()
+    "inoremap <expr><CR> neocomplete#complete_common_string()
+
+    " 使用回车确认补全
+    " shift加回车确认补全保存缩进
+    inoremap <expr><s-CR> pumvisible() ? neocomplete#smart_close_popup()."\<CR>" : "\<CR>"
+
+    function! CleverCr()
+        if pumvisible()
+            " if neosnippet#expandable()
+            "     let exp = "\<Plug>(neosnippet_expand)"
+            "     return exp . neocomplete#smart_close_popup()
+            " else
+            return neocomplete#smart_close_popup()
+            " endif
+        else
+            return "\<CR>"
+        endif
+    endfunction
+
+    imap <expr> <Tab> CleverTab()
+
+    " 回车插入补全并保存缩进，或者展开snippet
+    " imap <expr> <CR> CleverCr()
+    " <C-h>,<BS> 关闭预览窗口并删除补全预览
+    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-y> neocomplete#smart_close_popup()
+    " 使用tab补全
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+    " 额外的快捷键
+    inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+    inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+    inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    " inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+endif
 " }}}2
 
 " ultisnips {{{2
-" 定义snippet文件存放的位置
-let g:UltiSnipsSnippetsDir=expand("~/.vim/supervim/ultisnips")
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "supervim/ultisnips"]
+if isdirectory(expand('~/.vim/plugged/ultisnips'))
+    " 定义snippet文件存放的位置
+    let g:UltiSnipsSnippetsDir=expand("~/.vim/supervim/ultisnips")
+    let g:UltiSnipsSnippetDirectories=["UltiSnips", "supervim/ultisnips"]
 
-" Trigger configuration.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-tab>"
-" let g:UltiSnipsJumpForwardTrigger="<c-j>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-let g:UltiSnipsJumpForwardTrigger="∆"
-let g:UltiSnipsJumpBackwardTrigger="˚"
+    " Trigger configuration.
+    let g:UltiSnipsExpandTrigger="<tab>"
+    let g:UltiSnipsListSnippets="<c-tab>"
+    " let g:UltiSnipsJumpForwardTrigger="<c-j>"
+    " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+    let g:UltiSnipsJumpForwardTrigger="∆"
+    let g:UltiSnipsJumpBackwardTrigger="˚"
 
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-nnoremap <leader>au :UltiSnipsAddFiletypes<space>
-nnoremap <space>au :UltiSnipsAddFiletypes<space>
+    " If you want :UltiSnipsEdit to split your window.
+    let g:UltiSnipsEditSplit="vertical"
+    nnoremap <leader>au :UltiSnipsAddFiletypes<space>
+    nnoremap <space>au :UltiSnipsAddFiletypes<space>
 
-" execute是一个命令，没有对应的方法，定义一个，在snippets中用
-function! EXE(e)
-    execute(a:e)
-endfunctio
+    " execute是一个命令，没有对应的方法，定义一个，在snippets中用
+    function! EXE(e)
+        execute(a:e)
+    endfunctio
+endif
 " }}}2
 
 " jedi-vim {{{2
-" jedi 补全快捷键, 有补全插件就不需要了
-" let g:jedi#completions_command = "<c-n>"
-" 跳转到定义(源码)
-let g:jedi#goto_command = "<leader>d"
-" 跳转到引入(import, 定义)
-let g:jedi#goto_assignments_command = "<leader>g"
-" 显示文档
-let g:jedi#documentation_command = "K"
-" 文档高度
-let g:jedi#max_doc_height = 15
-" 重命名
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#usages_command = "<leader>n"
-" 在vim中打开模块(源码) :Pyimport
-" 自动初始化
-let g:jedi#auto_initialization = 1
-" 关掉jedi的补全样式，使用自定义的
-let g:jedi#auto_vim_configuration = 0
-" 输入点的时候自动补全
-let g:jedi#popup_on_dot = 1
-" 自动选中第一个
-" let g:jedi#popup_select_first = 0
-" 补全结束后自动关闭文档窗口
-let g:jedi#auto_close_doc = 1
-" 显示参数列表
-let g:jedi#show_call_signatures = 1
-" 延迟多久显示参数列表
-let g:jedi#show_call_signatures_delay = 300
-" 使用go to的时候使用tab而不是buffer
-let g:jedi#use_tabs_not_buffers = 1
-" 开启jedi补全
-let g:jedi#completions_enabled = 1
-" 指定使用go to使用split的方式，并指定split位置
-let g:jedi#use_splits_not_buffers = 'bottom'
-" 强制使用python3运行jedi
-" let g:jedi#force_py_version = 3
-" 自动完成from .. import ..
-let g:jedi#smart_auto_mappings = 1
-" }}}2
-
-" unite {{{2
-let g:unite_source_menu_menus = get(g:,'unite_source_menu_menus',{})
-let g:unite_source_menu_menus.git = {
-            \ 'description' : '            gestionar repositorios git
-            \                            ⌘ [espacio]g',
-            \}
-let g:unite_source_menu_menus.git.command_candidates = [
-            \['▷ tig                                                        ⌘ ,gt',
-            \'normal ,gt'],
-            \['▷ git status       (Fugitive)                                ⌘ ,gs',
-            \'Gstatus'],
-            \['▷ git diff         (Fugitive)                                ⌘ ,gd',
-            \'Gdiff'],
-            \['▷ git commit       (Fugitive)                                ⌘ ,gc',
-            \'Gcommit'],
-            \['▷ git log          (Fugitive)                                ⌘ ,gl',
-            \'exe "silent Glog | Unite quickfix"'],
-            \['▷ git blame        (Fugitive)                                ⌘ ,gb',
-            \'Gblame'],
-            \['▷ git stage        (Fugitive)                                ⌘ ,gw',
-            \'Gwrite'],
-            \['▷ git checkout     (Fugitive)                                ⌘ ,go',
-            \'Gread'],
-            \['▷ git rm           (Fugitive)                                ⌘ ,gr',
-            \'Gremove'],
-            \['▷ git mv           (Fugitive)                                ⌘ ,gm',
-            \'exe "Gmove " input("destino: ")'],
-            \['▷ git push         (Fugitive, salida por buffer)             ⌘ ,gp',
-            \'Git! push'],
-            \['▷ git pull         (Fugitive, salida por buffer)             ⌘ ,gP',
-            \'Git! pull'],
-            \['▷ git prompt       (Fugitive, salida por buffer)             ⌘ ,gi',
-            \'exe "Git! " input("comando git: ")'],
-            \['▷ git cd           (Fugitive)',
-            \'Gcd'],
-            \]
-nnoremap <silent>[menu]g :Unite -silent -start-insert menu:git<CR>
-
-" ultisnips source
-function! UltiSnipsCallUnite()
-    Unite -start-insert -winheight=10 -immediately -no-empty ultisnips
-    return ''
-endfunction
-inoremap <silent> <leader>wu <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-nnoremap <silent> <leader>wu a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+if isdirectory(expand('~/.vim/plugged/jedi-vim'))
+    " jedi 补全快捷键, 有补全插件就不需要了
+    " let g:jedi#completions_command = "<c-n>"
+    " 跳转到定义(源码)
+    let g:jedi#goto_command = "<leader>d"
+    " 跳转到引入(import, 定义)
+    let g:jedi#goto_assignments_command = "<leader>g"
+    " 显示文档
+    let g:jedi#documentation_command = "K"
+    " 文档高度
+    let g:jedi#max_doc_height = 15
+    " 重命名
+    let g:jedi#rename_command = "<leader>r"
+    let g:jedi#usages_command = "<leader>n"
+    " 在vim中打开模块(源码) :Pyimport
+    " 自动初始化
+    let g:jedi#auto_initialization = 1
+    " 关掉jedi的补全样式，使用自定义的
+    let g:jedi#auto_vim_configuration = 0
+    " 输入点的时候自动补全
+    let g:jedi#popup_on_dot = 1
+    " 自动选中第一个
+    " let g:jedi#popup_select_first = 0
+    " 补全结束后自动关闭文档窗口
+    let g:jedi#auto_close_doc = 1
+    " 显示参数列表
+    let g:jedi#show_call_signatures = 1
+    " 延迟多久显示参数列表
+    let g:jedi#show_call_signatures_delay = 300
+    " 使用go to的时候使用tab而不是buffer
+    let g:jedi#use_tabs_not_buffers = 1
+    " 开启jedi补全
+    let g:jedi#completions_enabled = 1
+    " 指定使用go to使用split的方式，并指定split位置
+    let g:jedi#use_splits_not_buffers = 'bottom'
+    " 强制使用python3运行jedi
+    " let g:jedi#force_py_version = 3
+    " 自动完成from .. import ..
+    let g:jedi#smart_auto_mappings = 1
+endif
 " }}}2
 
 " nerdtree {{{2
-" 使用箭头表示文件夹折叠
-let g:NERDTreeDirArrowExpandable = '▶'
-let g:NERDTreeDirArrowCollapsible = '▼'
-let g:NERDTreeWinPos = "left"
-let g:NERDTreeWinSize = "35"
-let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-let NERDTreeShowBookmarks=1
-let NERDTreeChDirMode=0
-let NERDTreeMouseMode=2
-let NERDTreeShowHidden=1
-let NERDTreeKeepTreeInNewTab=1
-" 多个tab的nerdtree同步
-let g:nerdtree_tabs_synchronize_view = 1
+if isdirectory(expand('~/.vim/plugged/nerdtree'))
+    " 使用箭头表示文件夹折叠
+    let g:NERDTreeDirArrowExpandable = '▶'
+    let g:NERDTreeDirArrowCollapsible = '▼'
+    let g:NERDTreeWinPos = "left"
+    let g:NERDTreeWinSize = "35"
+    let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+    let NERDTreeShowBookmarks=1
+    let NERDTreeChDirMode=0
+    let NERDTreeMouseMode=2
+    let NERDTreeShowHidden=1
+    let NERDTreeKeepTreeInNewTab=1
+    " 多个tab的nerdtree同步
+    let g:nerdtree_tabs_synchronize_view = 1
 
-" Automatically find and select currently opened file in NERDTree
-let g:nerdtree_tabs_open_on_console_startup=0
-let g:nerdtree_tabs_open_on_gui_startup=0
-let g:nerdtree_tabs_open_on_new_tab=1
+    " Automatically find and select currently opened file in NERDTree
+    let g:nerdtree_tabs_open_on_console_startup=0
+    let g:nerdtree_tabs_open_on_gui_startup=0
+    let g:nerdtree_tabs_open_on_new_tab=1
 
-let g:NERDTreeIndicatorMapCustom = {
-            \ "Modified"  : "✹",
-            \ "Staged"    : "✚",
-            \ "Untracked" : "✭",
-            \ "Renamed"   : "➜",
-            \ "Unmerged"  : "═",
-            \ "Deleted"   : "✖",
-            \ "Dirty"     : "✗",
-            \ "Clean"     : "✔︎",
-            \ "Unknown"   : "?"
-            \ }
+    let g:NERDTreeIndicatorMapCustom = {
+                \ "Modified"  : "✹",
+                \ "Staged"    : "✚",
+                \ "Untracked" : "✭",
+                \ "Renamed"   : "➜",
+                \ "Unmerged"  : "═",
+                \ "Deleted"   : "✖",
+                \ "Dirty"     : "✗",
+                \ "Clean"     : "✔︎",
+                \ "Unknown"   : "?"
+                \ }
 
-" NERDTress File highlighting
-function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
-    exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
-    exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
-endfunction
+    " NERDTress File highlighting
+    function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+        exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+        exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+    endfunction
 
-call NERDTreeHighlightFile('java'   , 'green'   , 'none' , 'green'   , '#151515')
-call NERDTreeHighlightFile('vim'    , 'yellow'  , 'none' , 'yellow'  , '#151515')
-call NERDTreeHighlightFile('md'     , 'blue'    , 'none' , '#3366FF' , '#151515')
-call NERDTreeHighlightFile('xml'    , 'yellow'  , 'none' , 'yellow'  , '#151515')
-call NERDTreeHighlightFile('config' , 'yellow'  , 'none' , 'yellow'  , '#151515')
-call NERDTreeHighlightFile('conf'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
-call NERDTreeHighlightFile('json'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
-call NERDTreeHighlightFile('html'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
-call NERDTreeHighlightFile('styl'   , 'cyan'    , 'none' , 'cyan'    , '#151515')
-call NERDTreeHighlightFile('css'    , 'cyan'    , 'none' , 'cyan'    , '#151515')
-call NERDTreeHighlightFile('coffee' , 'Red'     , 'none' , 'red'     , '#151515')
-call NERDTreeHighlightFile('js'     , 'Red'     , 'none' , '#ffa500' , '#151515')
-call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515')
+    call NERDTreeHighlightFile('java'   , 'green'   , 'none' , 'green'   , '#151515')
+    call NERDTreeHighlightFile('vim'    , 'yellow'  , 'none' , 'yellow'  , '#151515')
+    call NERDTreeHighlightFile('md'     , 'blue'    , 'none' , '#3366FF' , '#151515')
+    call NERDTreeHighlightFile('xml'    , 'yellow'  , 'none' , 'yellow'  , '#151515')
+    call NERDTreeHighlightFile('config' , 'yellow'  , 'none' , 'yellow'  , '#151515')
+    call NERDTreeHighlightFile('conf'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
+    call NERDTreeHighlightFile('json'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
+    call NERDTreeHighlightFile('html'   , 'yellow'  , 'none' , 'yellow'  , '#151515')
+    call NERDTreeHighlightFile('styl'   , 'cyan'    , 'none' , 'cyan'    , '#151515')
+    call NERDTreeHighlightFile('css'    , 'cyan'    , 'none' , 'cyan'    , '#151515')
+    call NERDTreeHighlightFile('coffee' , 'Red'     , 'none' , 'red'     , '#151515')
+    call NERDTreeHighlightFile('js'     , 'Red'     , 'none' , '#ffa500' , '#151515')
+    call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515')
 
-nnoremap <leader>e :NERDTreeFind<CR>
-" nnoremap <Leader>n <plug>NERDTreeTabsToggle<CR>
-" nnoremap <Leader>n :NERDTreeTabsToggle<CR>
-call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
+    nnoremap <leader>e :NERDTreeFind<CR>
+    " nnoremap <Leader>n <plug>NERDTreeTabsToggle<CR>
+    " nnoremap <Leader>n :NERDTreeTabsToggle<CR>
+    call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
+endif
 " }}}2
 
 " nerdcommenter {{{2
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-" Align line-wise comment delimiters flush left instead of following code indentation
-let g:NERDDefaultAlign = 'left'
-" Set a language to use its alternate delimiters by default
-let g:NERDAltDelims_java = 1
-" 添加自定义注释或者覆盖已有注释
-" let g:NERDCustomDelimiters={
-"     \ 'markdown': { 'left': '<!--', 'right': '-->' },
-"     \ }
-" 可以注释和反注释空行
-let g:NERDCommentEmptyLines = 1
-" 取消注释的时候去掉两端空格
-let g:NERDTrimTrailingWhitespace=1
-let g:NERDSpaceDelims=1
-let g:NERDRemoveExtraSpaces=1
+if isdirectory(expand('~/.vim/plugged/nerdcommenter'))
+    " Use compact syntax for prettified multi-line comments
+    let g:NERDCompactSexyComs = 1
+    " Align line-wise comment delimiters flush left instead of following code indentation
+    let g:NERDDefaultAlign = 'left'
+    " Set a language to use its alternate delimiters by default
+    let g:NERDAltDelims_java = 1
+    " 添加自定义注释或者覆盖已有注释
+    " let g:NERDCustomDelimiters={
+    "     \ 'markdown': { 'left': '<!--', 'right': '-->' },
+    "     \ }
+    " 可以注释和反注释空行
+    let g:NERDCommentEmptyLines = 1
+    " 取消注释的时候去掉两端空格
+    let g:NERDTrimTrailingWhitespace=1
+    let g:NERDSpaceDelims=1
+    let g:NERDRemoveExtraSpaces=1
+endif
 " }}}2
 
 " tagbar {{{2
-nnoremap <leader>tt :TagbarToggle<cr>
-call DoMap('nnore', 't', ':TagbarToggle<cr>')
+if isdirectory(expand('~/.vim/plugged/tagbar'))
+    nnoremap <leader>tt :TagbarToggle<cr>
+    call DoMap('nnore', 't', ':TagbarToggle<cr>')
+endif
 " }}}2
 
 " vim-expand-region {{{2
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
-" }}}2
-
-" vim-surround {{{2
-vmap Si S(i_<esc>f)
+if isdirectory(expand('~/.vim/plugged/vim-expand-region'))
+    vmap v <Plug>(expand_region_expand)
+    vmap <C-v> <Plug>(expand_region_shrink)
+endif
 " }}}2
 
 " vim-multiple-cursors {{{2
-let g:multi_cursor_next_key="\<c-s>"
+if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
+    let g:multi_cursor_next_key="\<c-s>"
+endif
 " }}}2
 
 " lightline {{{2
-let g:lightline = {
-            \ 'colorscheme': 'wombat',
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
-            \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-            \ },
-            \ 'component_function': {
-            \   'fugitive': 'LightLineFugitive',
-            \   'filename': 'LightLineFilename',
-            \   'fileformat': 'LightLineFileformat',
-            \   'filetype': 'LightLineFiletype',
-            \   'fileencoding': 'LightLineFileencoding',
-            \   'mode': 'LightLineMode',
-            \   'ctrlpmark': 'CtrlPMark',
-            \ },
-            \ 'component_expand': {
-            \   'syntastic': 'SyntasticStatuslineFlag',
-            \ },
-            \ 'component_type': {
-            \   'syntastic': 'error',
-            \ },
-            \ 'subseparator': { 'left': '›', 'right': '‹' }
-            \ }
+if isdirectory(expand('~/.vim/plugged/lightline.vim'))
+    let g:lightline = {
+                \ 'colorscheme': 'wombat',
+                \ 'active': {
+                \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+                \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+                \ },
+                \ 'component_function': {
+                \   'fugitive': 'LightLineFugitive',
+                \   'filename': 'LightLineFilename',
+                \   'fileformat': 'LightLineFileformat',
+                \   'filetype': 'LightLineFiletype',
+                \   'fileencoding': 'LightLineFileencoding',
+                \   'mode': 'LightLineMode',
+                \   'ctrlpmark': 'CtrlPMark',
+                \ },
+                \ 'component_expand': {
+                \   'syntastic': 'SyntasticStatuslineFlag',
+                \ },
+                \ 'component_type': {
+                \   'syntastic': 'error',
+                \ },
+                \ 'subseparator': { 'left': '›', 'right': '‹' }
+                \ }
 
-function! LightLineModified()
-    return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
+    function! LightLineModified()
+        return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+    endfunction
 
-function! LightLineReadonly()
-    return &ft !~? 'help' && &readonly ? 'RO' : ''
-endfunction
+    function! LightLineReadonly()
+        return &ft !~? 'help' && &readonly ? 'RO' : ''
+    endfunction
 
-function! LightLineFilename()
-    let fname = expand('%:t')
-    return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
-                \ fname == '__Tagbar__' ? g:lightline.fname :
-                \ fname =~ '__Gundo\|NERD_tree' ? '' :
-                \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
-                \ &ft == 'unite' ? unite#get_status_string() :
-                \ &ft == 'vimshell' ? vimshell#get_status_string() :
-                \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-                \ ('' != fname ? fname : '[No Name]') .
-                \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-endfunction
+    function! LightLineFilename()
+        let fname = expand('%:t')
+        return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
+                    \ fname == '__Tagbar__' ? g:lightline.fname :
+                    \ fname =~ '__Gundo\|NERD_tree' ? '' :
+                    \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
+                    " \ &ft == 'unite' ? unite#get_status_string() :
+                    \ &ft == 'vimshell' ? vimshell#get_status_string() :
+                    \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+                    \ ('' != fname ? fname : '[No Name]') .
+                    \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+    endfunction
 
-function! LightLineFugitive()
-    try
-        if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
-            let mark = ''  " edit here for cool mark
-            let branch = fugitive#head()
-            return branch !=# '' ? mark.branch : ''
-        endif
-    catch
-    endtry
-    return ''
-endfunction
-
-function! LightLineFileformat()
-    return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightLineFiletype()
-    return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunction
-
-function! LightLineFileencoding()
-    return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
-endfunction
-
-function! LightLineMode()
-    let fname = expand('%:t')
-    return fname == '__Tagbar__' ? 'Tagbar' :
-                \ fname == 'ControlP' ? 'CtrlP' :
-                \ fname == '__Gundo__' ? 'Gundo' :
-                \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
-                \ fname =~ 'NERD_tree' ? 'NERDTree' :
-                \ &ft == 'unite' ? 'Unite' :
-                \ &ft == 'vimfiler' ? 'VimFiler' :
-                \ &ft == 'vimshell' ? 'VimShell' :
-                \ winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-function! CtrlPMark()
-    if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
-        call lightline#link('iR'[g:lightline.ctrlp_regex])
-        return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-                    \ , g:lightline.ctrlp_next], 0)
-    else
+    function! LightLineFugitive()
+        try
+            if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
+                let mark = ''  " edit here for cool mark
+                let branch = fugitive#head()
+                return branch !=# '' ? mark.branch : ''
+            endif
+        catch
+        endtry
         return ''
-    endif
-endfunction
+    endfunction
 
-let g:ctrlp_status_func = {
-            \ 'main': 'CtrlPStatusFunc_1',
-            \ 'prog': 'CtrlPStatusFunc_2',
-            \ }
+    function! LightLineFileformat()
+        return winwidth(0) > 70 ? &fileformat : ''
+    endfunction
 
-function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-    let g:lightline.ctrlp_regex = a:regex
-    let g:lightline.ctrlp_prev = a:prev
-    let g:lightline.ctrlp_item = a:item
-    let g:lightline.ctrlp_next = a:next
-    return lightline#statusline(0)
-endfunction
+    function! LightLineFiletype()
+        return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+    endfunction
 
-function! CtrlPStatusFunc_2(str)
-    return lightline#statusline(0)
-endfunction
+    function! LightLineFileencoding()
+        return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+    endfunction
 
-let g:tagbar_status_func = 'TagbarStatusFunc'
+    function! LightLineMode()
+        let fname = expand('%:t')
+        return fname == '__Tagbar__' ? 'Tagbar' :
+                    \ fname == 'ControlP' ? 'CtrlP' :
+                    \ fname == '__Gundo__' ? 'Gundo' :
+                    \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
+                    \ fname =~ 'NERD_tree' ? 'NERDTree' :
+                    " \ &ft == 'unite' ? 'Unite' :
+                    \ &ft == 'vimfiler' ? 'VimFiler' :
+                    \ &ft == 'vimshell' ? 'VimShell' :
+                    \ winwidth(0) > 60 ? lightline#mode() : ''
+    endfunction
 
-function! TagbarStatusFunc(current, sort, fname, ...) abort
-    let g:lightline.fname = a:fname
-    return lightline#statusline(0)
-endfunction
+    function! CtrlPMark()
+        if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
+            call lightline#link('iR'[g:lightline.ctrlp_regex])
+            return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
+                        \ , g:lightline.ctrlp_next], 0)
+        else
+            return ''
+        endif
+    endfunction
 
-augroup AutoSyntastic
-    autocmd!
-    autocmd BufWritePost *.c,*.cpp call s:syntastic()
-augroup END
-function! s:syntastic()
-    SyntasticCheck
-    call lightline#update()
-endfunction
+    let g:ctrlp_status_func = {
+                \ 'main': 'CtrlPStatusFunc_1',
+                \ 'prog': 'CtrlPStatusFunc_2',
+                \ }
+
+    function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
+        let g:lightline.ctrlp_regex = a:regex
+        let g:lightline.ctrlp_prev = a:prev
+        let g:lightline.ctrlp_item = a:item
+        let g:lightline.ctrlp_next = a:next
+        return lightline#statusline(0)
+    endfunction
+
+    function! CtrlPStatusFunc_2(str)
+        return lightline#statusline(0)
+    endfunction
+
+    let g:tagbar_status_func = 'TagbarStatusFunc'
+
+    function! TagbarStatusFunc(current, sort, fname, ...) abort
+        let g:lightline.fname = a:fname
+        return lightline#statusline(0)
+    endfunction
+
+    augroup AutoSyntastic
+        autocmd!
+        autocmd BufWritePost *.c,*.cpp call s:syntastic()
+    augroup END
+    function! s:syntastic()
+        SyntasticCheck
+        call lightline#update()
+    endfunction
+endif
 " }}}2
 
 " vim-markdown {{{2
-" 关掉它自带的折叠
-let g:vim_markdown_folding_disabled = 1
-"let g:vim_markdown_folding_style_pythonic = 1
-"let g:vim_markdown_folding_level = 2
-let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_emphasis_multiline = 0
-" 关闭语法隐藏，显示markdown源码而不要隐藏一些东西
-let g:vim_markdown_conceal = 0
-" 代码块语法
-let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
+if isdirectory(expand('~/.vim/plugged/vim-markdown'))
+    " 关掉它自带的折叠
+    let g:vim_markdown_folding_disabled = 1
+    "let g:vim_markdown_folding_style_pythonic = 1
+    "let g:vim_markdown_folding_level = 2
+    let g:vim_markdown_toc_autofit = 1
+    let g:vim_markdown_emphasis_multiline = 0
+    " 关闭语法隐藏，显示markdown源码而不要隐藏一些东西
+    let g:vim_markdown_conceal = 0
+    " 代码块语法
+    let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
+endif
 " }}}2
 
 " javacomplete2 {{{2
-augroup javacomplete2
-    autocmd!
-    autocmd FileType java setlocal omnifunc=javacomplete#Complete
-    autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
-    "autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
-    autocmd FileType java inoremap  . .
-    autocmd FileType java call JavaComplete2Config()
-augroup END
-function! JavaComplete2Config()
-    " 自动闭合方法的反括号
-    let g:JavaComplete_ClosingBrace = 1 
-    " 不要自动导入第一个
-    let g:JavaComplete_ImportDefault = -1
-    "Enable smart (trying to guess import option) inserting class imports
-    nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-    imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-    "Enable usual (will ask for import option) inserting class imports
-    nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-    imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-    "Add all missing imports
-    nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-    imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-    "Remove all missing imports
-    nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-    imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-endfunction
+if isdirectory(expand('~/.vim/plugged/vim-javacomplete2'))
+    augroup javacomplete2
+        autocmd!
+        autocmd FileType java setlocal omnifunc=javacomplete#Complete
+        autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
+        "autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
+        autocmd FileType java inoremap  . .
+        autocmd FileType java call JavaComplete2Config()
+    augroup END
+    function! JavaComplete2Config()
+        " 自动闭合方法的反括号
+        let g:JavaComplete_ClosingBrace = 1 
+        " 不要自动导入第一个
+        let g:JavaComplete_ImportDefault = -1
+        "Enable smart (trying to guess import option) inserting class imports
+        nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
+        imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
+        "Enable usual (will ask for import option) inserting class imports
+        nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
+        imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
+        "Add all missing imports
+        nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
+        imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
+        "Remove all missing imports
+        nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+        imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+    endfunction
+endif
 " }}}2
 
 " vim-shell {{{2
-nnoremap <space>s :VimShellTab<cr> 
-nnoremap <space>d :VimShellPop<cr>
-" 覆盖statusline
-let g:vimshell_force_overwrite_statusline=0
-inoremap <c-j> <c-r>=UltiSnips#ExpandSnippet()<cr>
-inoremap <c-k> <c-r>=UltiSnips#JumpForwards()<cr>
-augroup vim_shell
-    autocmd!
-    autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
-augroup END
-"TODO: vimshell
+if isdirectory(expand('~/.vim/plugged/vimshell.vim'))
+    nnoremap <space>s :VimShellTab<cr> 
+    nnoremap <space>d :VimShellPop<cr>
+    " 覆盖statusline
+    let g:vimshell_force_overwrite_statusline=0
+    inoremap <c-j> <c-r>=UltiSnips#ExpandSnippet()<cr>
+    inoremap <c-k> <c-r>=UltiSnips#JumpForwards()<cr>
+    augroup vim_shell
+        autocmd!
+        autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
+    augroup END
+    "TODO: vimshell
+endif
 " }}}2
 
 " indentLine {{{2
-" Vim
-let g:indentLine_color_term = 239
-"GVim
-let g:indentLine_color_gui = '#A4E57E'
-" none X terminal
-let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_color_dark = 1 " (default: 2)
-" 设置表示缩进的字符
-" let g:indentLine_char = 'c'
-" 默认关闭
-let g:indentLine_enabled = 0
-nnoremap <space>i :IndentLinesToggle<cr>
-nnoremap <leader>ai :IndentLinesToggle<cr>
+if isdirectory(expand('~/.vim/plugged/indentLine'))
+    " Vim
+    let g:indentLine_color_term = 239
+    "GVim
+    let g:indentLine_color_gui = '#A4E57E'
+    " none X terminal
+    let g:indentLine_color_tty_light = 7 " (default: 4)
+    let g:indentLine_color_dark = 1 " (default: 2)
+    " 设置表示缩进的字符
+    " let g:indentLine_char = 'c'
+    " 默认关闭
+    let g:indentLine_enabled = 0
+    nnoremap <space>i :IndentLinesToggle<cr>
+    nnoremap <leader>ai :IndentLinesToggle<cr>
+endif
 " }}}2
 
 " vim-easy-align {{{2
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
+if isdirectory(expand('~/.vim/plugged/vim-easy-align'))
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
+endif
 " }}}2
 
 " vim-surround {{{2
+if isdirectory(expand('~/.vim/plugged/vim-surround'))
+    vmap Si S(i_<esc>f)
 " vim-surround常用快捷键
 "Normal mode
 "    ds  - delete a surrounding
@@ -1184,406 +1137,416 @@ nmap ga <Plug>(EasyAlign)
 "    <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
 "    <CTRL-g>s - same as <CTRL-s>
 "    <CTRL-g>S - same as <CTRL-s><CTRL-s>
+endif
 " }}}2
 
 " undotree {{{2
-nnoremap <leader>u :UndotreeToggle<cr>
-nnoremap <space>u :UndotreeToggle<cr>
-let g:undotree_SetFocusWhenToggle=1
+if isdirectory(expand('~/.vim/plugged/undotree'))
+    nnoremap <leader>u :UndotreeToggle<cr>
+    nnoremap <space>u :UndotreeToggle<cr>
+    let g:undotree_SetFocusWhenToggle=1
+endif
 " }}}2
 
 " autopair {{{2
-"  什么时候想自己写插件应该看看这个插件的源码
-let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
-let g:AutoPairsShortcutToggle = '<leader>ac'
-if IsOSX()
-    let g:AutoPairsShortcutFastWrap = 'å'
-elseif IsLinux() && !IsGui()
-    let g:AutoPairsShortcutFastWrap = 'a'
-else
-    let g:AutoPairsShortcutFastWrap = '<a-a>'
+if isdirectory(expand('~/.vim/plugged/auto-pairs'))
+    "  什么时候想自己写插件应该看看这个插件的源码
+    let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
+    let g:AutoPairsShortcutToggle = '<leader>ac'
+    if IsOSX()
+        let g:AutoPairsShortcutFastWrap = 'å'
+    elseif IsLinux() && !IsGui()
+        let g:AutoPairsShortcutFastWrap = 'a'
+    else
+        let g:AutoPairsShortcutFastWrap = '<a-a>'
+    endif
 endif
 " }}}2
 
 " MatchTagAlways {{{2
-let g:mta_use_matchparen_group = 1
-let g:mta_filetypes = {
-            \ 'html' : 1,
-            \ 'xhtml' : 1,
-            \ 'xml' : 1,
-            \}
+if isdirectory(expand('~/.vim/plugged/MatchTagAlways'))
+    let g:mta_use_matchparen_group = 1
+    let g:mta_filetypes = {
+                \ 'html' : 1,
+                \ 'xhtml' : 1,
+                \ 'xml' : 1,
+                \}
+endif
 " }}}2
 
 " vim-devicons {{{2
-let g:airline_powerline_fonts = 1
-let g:vimfiler_as_default_explorer = 1
-" font use double width glyphs
-let g:WebDevIconsUnicodeGlyphDoubleWidth = 1
-" enable open and close folder/directory glyph flags
-let g:DevIconsEnableFoldersOpenClose = 1
-" specify OS to decide an icon for unix fileformat
-let g:WebDevIconsOS = 'Darwin'
+if isdirectory(expand('~/.vim/plugged/vim-devicons'))
+    let g:airline_powerline_fonts = 1
+    let g:vimfiler_as_default_explorer = 1
+    " font use double width glyphs
+    let g:WebDevIconsUnicodeGlyphDoubleWidth = 1
+    " enable open and close folder/directory glyph flags
+    let g:DevIconsEnableFoldersOpenClose = 1
+    " specify OS to decide an icon for unix fileformat
+    let g:WebDevIconsOS = 'Darwin'
 
-" patch font for lightline
-let g:lightline = {
-            \ 'component_function': {
-            \   'filetype': 'MyFiletype',
-            \   'fileformat': 'MyFileformat',
-            \ }
-            \ }
+    " patch font for lightline
+    let g:lightline = {
+                \ 'component_function': {
+                \   'filetype': 'MyFiletype',
+                \   'fileformat': 'MyFileformat',
+                \ }
+                \ }
 
-function! MyFiletype()
-    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-endfunction
+    function! MyFiletype()
+        return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+    endfunction
 
-function! MyFileformat()
-    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-endfunction
-" path font for nerd git
-let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
+    function! MyFileformat()
+        return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+    endfunction
+    " path font for nerd git
+    let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
 
-" nerd icon
-augroup nerdColor
-    autocmd!
-    " NERDTress File highlighting only the glyph/icon
-    " test highlight just the glyph (icons) in nerdtree:
-    autocmd filetype nerdtree highlight haskell_icon ctermbg=none ctermfg=Red guifg=#ffa500
-    autocmd filetype nerdtree highlight html_icon ctermbg=none ctermfg=Red guifg=#ffa500
-    autocmd filetype nerdtree highlight go_icon ctermbg=none ctermfg=Red guifg=#ffa500
+    " nerd icon
+    augroup nerdColor
+        autocmd!
+        " NERDTress File highlighting only the glyph/icon
+        " test highlight just the glyph (icons) in nerdtree:
+        autocmd filetype nerdtree highlight haskell_icon ctermbg=none ctermfg=Red guifg=#ffa500
+        autocmd filetype nerdtree highlight html_icon ctermbg=none ctermfg=Red guifg=#ffa500
+        autocmd filetype nerdtree highlight go_icon ctermbg=none ctermfg=Red guifg=#ffa500
 
-    autocmd filetype nerdtree syn match haskell_icon ## containedin=NERDTreeFile
-    " if you are using another syn highlight for a given line (e.g.
-    " NERDTreeHighlightFile) need to give that name in the 'containedin' for this
-    " other highlight to work with it
-    autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
-    autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
-augroup END
-
+        autocmd filetype nerdtree syn match haskell_icon ## containedin=NERDTreeFile
+        " if you are using another syn highlight for a given line (e.g.
+        " NERDTreeHighlightFile) need to give that name in the 'containedin' for this
+        " other highlight to work with it
+        autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
+        autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
+    augroup END
+endif
 " }}}2
 
 " Fugitive {{{2
-nnoremap <silent> <leader>gs :Gstatus<CR>
-nnoremap <silent> <leader>gd :Gdiff<CR>
-nnoremap <silent> <leader>gc :Gcommit<CR>
-nnoremap <silent> <leader>gb :Gblame<CR>
-nnoremap <silent> <leader>gl :Glog<CR>
-nnoremap <silent> <leader>gp :Git push<CR>
-nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gw :Gwrite<CR>
-nnoremap <silent> <leader>ge :Gedit<CR>
-" Mnemonic _i_nteractive
-nnoremap <silent> <leader>gi :Git add -p %<CR>
-nnoremap <silent> <leader>gg :SignifyToggle<CR>
+if isdirectory(expand('~/.vim/plugged/vim-fugitive'))
+    nnoremap <silent> <leader>gs :Gstatus<CR>
+    nnoremap <silent> <leader>gd :Gdiff<CR>
+    nnoremap <silent> <leader>gc :Gcommit<CR>
+    nnoremap <silent> <leader>gb :Gblame<CR>
+    nnoremap <silent> <leader>gl :Glog<CR>
+    nnoremap <silent> <leader>gp :Git push<CR>
+    nnoremap <silent> <leader>gr :Gread<CR>
+    nnoremap <silent> <leader>gw :Gwrite<CR>
+    nnoremap <silent> <leader>ge :Gedit<CR>
+    " Mnemonic _i_nteractive
+    nnoremap <silent> <leader>gi :Git add -p %<CR>
+    nnoremap <silent> <leader>gg :SignifyToggle<CR>
+endif
 " }}}2
 
 " sessionman {{{2
-set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
-nnoremap <leader>sl :SessionList<CR>
-nnoremap <leader>ss :SessionSave<CR>
-nnoremap <leader>sc :SessionClose<CR>
+if isdirectory(expand('~/.vim/plugged/sessionman.vim'))
+    set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+    nnoremap <leader>sl :SessionList<CR>
+    nnoremap <leader>ss :SessionSave<CR>
+    nnoremap <leader>sc :SessionClose<CR>
+endif
 " }}}2
 
 " vim-yankstack {{{2
-call DoAltMap('n', 'P', '<Plug>yankstack_substitute_older_paste')
-call DoAltMap('n', 'p', '<Plug>yankstack_substitute_newer_paste')
-" }}}2
-
-" solarized {{{2
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-let g:solarized_contrast="normal"
-let g:solarized_visibility="normal"
-" }}}2
-
-" molokai {{{2
-let g:rehash256 = 1
-let g:molokai_original = 1
-" }}}2
-
-" ctags {{{2
-if exists('g:has_ctags')
-    set tags=./tags;/,~/.vimtags
-    " Make tags placed in .git/tags file available in all levels of a repository
-    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-    if gitroot != ''
-        let &tags = &tags . ',' . gitroot . '/.git/tags'
-    endif
+if isdirectory(expand('~/.vim/plugged/vim-yankstack'))
+    call DoAltMap('n', 'P', '<Plug>yankstack_substitute_older_paste')
+    call DoAltMap('n', 'p', '<Plug>yankstack_substitute_newer_paste')
+    " 让Y表示复制到行尾
+    call yankstack#setup()
+    nmap Y y$
 endif
 " }}}2
 
 " TextObj Sentence {{{2
-augroup textobj_sentence
-    autocmd!
-    autocmd filetype markdown call textobj#sentence#init()
-    autocmd filetype textile call textobj#sentence#init()
-    autocmd filetype text call textobj#sentence#init()
-augroup end
-let g:textobj#quote#doubleMotion = 'q'
-let g:textobj#quote#singleMotion = 'Q'
-let g:textobj#quote#educate = 1       " 0=disable, 1=enable (def)
-map <silent> <leader>qc <Plug>ReplaceWithCurly
-map <silent> <leader>qs <Plug>ReplaceWithStraight
-let g:textobj#quote#doubleDefault = '„“'     " „doppel“
-let g:textobj#quote#singleDefault = '‚‘'     " ‚einzel‘
-" }}}2
-
-" TextObj Quote {{{2
-augroup textobj_quote
-    autocmd!
-    autocmd FileType markdown call textobj#quote#init()
-    autocmd FileType textile call textobj#quote#init()
-    autocmd FileType text call textobj#quote#init({'educate': 0})
-augroup END
+if isdirectory(expand('~/.vim/plugged/vim-textobj-sentence'))
+    augroup textobj_sentence
+        autocmd!
+        autocmd filetype markdown call textobj#sentence#init()
+        autocmd filetype textile call textobj#sentence#init()
+        autocmd filetype text call textobj#sentence#init()
+    augroup end
+    map <silent> <leader>qc <Plug>ReplaceWithCurly
+    map <silent> <leader>qs <Plug>ReplaceWithStraight
+endif
 " }}}2
 
 " rainbow {{{2
-let g:rainbow_conf = {
-    \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-    \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-    \   'operators': '_,_',
-    \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-    \   'separately': {
-    \       '*': {},
-    \       'tex': {
-    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-    \       },
-    \       'lisp': {
-    \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-    \       },
-    \       'vim': {
-    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-    \       },
-    \       'html': {
-    \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-    \       },
-    \       'css': 0,
-    \   }
-    \}
-let g:rainbow_active = 1
-nnoremap <leader>rb :RainbowToggle<cr>
+if isdirectory(expand('~/.vim/plugged/rainbow'))
+    let g:rainbow_conf = {
+        \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+        \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+        \   'operators': '_,_',
+        \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+        \   'separately': {
+        \       '*': {},
+        \       'tex': {
+        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+        \       },
+        \       'lisp': {
+        \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+        \       },
+        \       'vim': {
+        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+        \       },
+        \       'html': {
+        \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+        \       },
+        \       'css': 0,
+        \   }
+        \}
+    let g:rainbow_active = 1
+    nnoremap <leader>rb :RainbowToggle<cr>
+endif
 " }}}2
 
 " AutoCloseTag {{{2
+if isdirectory(expand('~/.vim/plugged/HTML-AutoCloseTag'))
     " Make it so AutoCloseTag works for xml and xhtml files as well
     au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
-    nmap <Leader>at <Plug>ToggleAutoCloseMappings
+    nnoremap <Leader>at <Plug>ToggleAutoCloseMappings
+endif
 " }}}2
 
 " vim-json {{{2
-nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
-let g:vim_json_syntax_conceal = 0
+if isdirectory(expand('~/.vim/plugged/vim-json'))
+    nnoremap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+    let g:vim_json_syntax_conceal = 0
+endif
 " }}}2
 
 " vim-javascript {{{2
+if isdirectory(expand('~/.vim/plugged/vim-javascript'))
+    " 语法高亮插件
+    let g:javascript_plugin_jsdoc = 1
+    " 为jsDoc开启语法高亮
+    let g:javascript_plugin_ngdoc = 1
+    " Enables some additional syntax highlighting for NGDocs
+    let g:javascript_plugin_flow = 1
+    " 按照语法折叠
+    " set foldmethod=syntax
 
-" 语法高亮插件
-let g:javascript_plugin_jsdoc = 1
-" 为jsDoc开启语法高亮
-let g:javascript_plugin_ngdoc = 1
-" Enables some additional syntax highlighting for NGDocs
-let g:javascript_plugin_flow = 1
-" 按照语法折叠
-" set foldmethod=syntax
-
-let g:javascript_conceal_function       = "ƒ"
-let g:javascript_conceal_null           = "ø"
-let g:javascript_conceal_this           = "@"
-let g:javascript_conceal_return         = "⇚"
-let g:javascript_conceal_undefined      = "¿"
-let g:javascript_conceal_NaN            = "ℕ"
-let g:javascript_conceal_prototype      = "¶"
-let g:javascript_conceal_static         = "•"
-let g:javascript_conceal_super          = "Ω"
-let g:javascript_conceal_arrow_function = "⇒"
-
+    let g:javascript_conceal_function       = "ƒ"
+    let g:javascript_conceal_null           = "ø"
+    let g:javascript_conceal_this           = "@"
+    let g:javascript_conceal_return         = "⇚"
+    let g:javascript_conceal_undefined      = "¿"
+    let g:javascript_conceal_NaN            = "ℕ"
+    let g:javascript_conceal_prototype      = "¶"
+    let g:javascript_conceal_static         = "•"
+    let g:javascript_conceal_super          = "Ω"
+    let g:javascript_conceal_arrow_function = "⇒"
+endif
 " }}}2
 
 " MarkdownPreview {{{2
-let g:mkdp_path_to_chrome = "google-chrome"
-" path to the chrome or the command to open chrome(or other modern browsers)
+if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
+    let g:mkdp_path_to_chrome = "google-chrome"
+    " path to the chrome or the command to open chrome(or other modern browsers)
 
-let g:mkdp_auto_start = 0
-" set to 1, the vim will open the preview window once enter the markdown
-" buffer
+    let g:mkdp_auto_start = 0
+    " set to 1, the vim will open the preview window once enter the markdown
+    " buffer
 
-let g:mkdp_auto_open = 0
-" set to 1, the vim will auto open preview window when you edit the
-" markdown file
+    let g:mkdp_auto_open = 0
+    " set to 1, the vim will auto open preview window when you edit the
+    " markdown file
 
-let g:mkdp_auto_close = 1
-" set to 1, the vim will auto close current preview window when change
-" from markdown buffer to another buffer
+    let g:mkdp_auto_close = 1
+    " set to 1, the vim will auto close current preview window when change
+    " from markdown buffer to another buffer
 
-let g:mkdp_refresh_slow = 0
-" set to 1, the vim will just refresh markdown when save the buffer or
-" leave from insert mode, default 0 is auto refresh markdown as you edit or
-" move the cursor
+    let g:mkdp_refresh_slow = 0
+    " set to 1, the vim will just refresh markdown when save the buffer or
+    " leave from insert mode, default 0 is auto refresh markdown as you edit or
+    " move the cursor
 
-let g:mkdp_command_for_global = 0
-" set to 1, the MarkdownPreview command can be use for all files,
-" by default it just can be use in markdown file vim-instant-markdown
-if IsOSX()
-    let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
+    let g:mkdp_command_for_global = 0
+    " set to 1, the MarkdownPreview command can be use for all files,
+    " by default it just can be use in markdown file vim-instant-markdown
+    if IsOSX()
+        let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
+    endif
 endif
 " }}}2
 
 " Goyo {{{2
-function! s:goyo_enter()
-    if has('gui_running')
-        set fullscreen
-        " set background=light
-        set linespace=7
-    elseif exists('$TMUX')
-        silent !tmux set status off
-    endif
-endfunction
+if isdirectory(expand('~/.vim/plugged/goyo.vim'))
+    function! s:goyo_enter()
+        if has('gui_running')
+            set fullscreen
+            " set background=light
+            set linespace=7
+        elseif exists('$TMUX')
+            silent !tmux set status off
+        endif
+    endfunction
 
-function! s:goyo_leave()
-    if has('gui_running')
-        set nofullscreen
-        " set background=dark
-        set linespace=0
-    elseif exists('$TMUX')
-        silent !tmux set status on
-    endif
-endfunction
+    function! s:goyo_leave()
+        if has('gui_running')
+            set nofullscreen
+            " set background=dark
+            set linespace=0
+        elseif exists('$TMUX')
+            silent !tmux set status on
+        endif
+    endfunction
 
-" autocmd! User GoyoEnter nested call <SID>goyo_enter()
-" autocmd! User GoyoLeave nested call <SID>goyo_leave()
+    " autocmd! User GoyoEnter nested call <SID>goyo_enter()
+    " autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-let g:s_goyo_on = 0
-func GoyoToggle()
-    if g:s_goyo_on
-        call <SID>goyo_leave()
-        exe 'Goyo'
-        let g:s_goyo_on = 0
-    else
-        call <SID>goyo_enter()
-        exe 'Goyo'
-        let g:s_goyo_on = 1
-    endif
-endf
-" 使用<space>来切换goyo
-call DoMap('nnore', 'g', ':call GoyoToggle()<cr>')
+    let g:s_goyo_on = 0
+    func GoyoToggle()
+        if g:s_goyo_on
+            call <SID>goyo_leave()
+            exe 'Goyo'
+            let g:s_goyo_on = 0
+        else
+            call <SID>goyo_enter()
+            exe 'Goyo'
+            let g:s_goyo_on = 1
+        endif
+    endf
+    " 使用<space>来切换goyo
+    call DoMap('nnore', 'g', ':call GoyoToggle()<cr>')
+endif
 " }}}2
 
 " FZF {{{2
-if exists('g:s_has_fzf')
-    " 这三个快捷键指定用什么方式打开选中的内容
-    let g:fzf_action = {
-      \ 'ctrl-t': 'tab split',
-      \ 'ctrl-x': 'split',
-      \ 'ctrl-v': 'vsplit' }
+if isdirectory(expand('~/.vim/plugged/fzf.vim'))
+    if exists('g:s_has_fzf')
+        " 这三个快捷键指定用什么方式打开选中的内容
+        let g:fzf_action = {
+          \ 'ctrl-t': 'tab split',
+          \ 'ctrl-x': 'split',
+          \ 'ctrl-v': 'vsplit' }
 
-    " Default fzf layout
-    " - down / up / left / right
-    let g:fzf_layout = { 'down': '~40%' }
+        " Default fzf layout
+        " - down / up / left / right
+        let g:fzf_layout = { 'down': '~40%' }
 
-    " In Neovim, you can set up fzf window using a Vim command
-    let g:fzf_layout = { 'window': 'enew' }
-    let g:fzf_layout = { 'window': '-tabnew' }
+        " In Neovim, you can set up fzf window using a Vim command
+        let g:fzf_layout = { 'window': 'enew' }
+        let g:fzf_layout = { 'window': '-tabnew' }
 
-    " 自定义fzf的配色
-    let g:fzf_colors =
-    \ { 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment'] }
+        " 自定义fzf的配色
+        let g:fzf_colors =
+        \ { 'fg':      ['fg', 'Normal'],
+          \ 'bg':      ['bg', 'Normal'],
+          \ 'hl':      ['fg', 'Comment'],
+          \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+          \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+          \ 'hl+':     ['fg', 'Statement'],
+          \ 'info':    ['fg', 'PreProc'],
+          \ 'prompt':  ['fg', 'Conditional'],
+          \ 'pointer': ['fg', 'Exception'],
+          \ 'marker':  ['fg', 'Keyword'],
+          \ 'spinner': ['fg', 'Label'],
+          \ 'header':  ['fg', 'Comment'] }
 
-    " Enable per-command history.
-    " CTRL-N and CTRL-P will be automatically bound to next-history and
-    " previous-history instead of down and up. If you don't like the change,
-    " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
-    let g:fzf_history_dir = '~/.fzf-history'
+        " Enable per-command history.
+        " CTRL-N and CTRL-P will be automatically bound to next-history and
+        " previous-history instead of down and up. If you don't like the change,
+        " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+        let g:fzf_history_dir = '~/.fzf-history'
 
-    " 自定义命令选项
-    " [Files] 使用Files命令时使用coderay来预览文件内容(http://coderay.rubychan.de/)
-    let g:fzf_files_options =
-      \ '--preview "(coderay {} || cat {}) 2> /dev/null | head -'.&lines.'"'
-    " [Buffers] 使用Buffers命令时如果可能的话自动跳到目标窗口，而不是新打开一个
-    let g:fzf_buffers_jump = 1
-    " [[B]Commits] 使用[B]Commit时自定义git log输出形式
-    let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-    " [Tags] 生成tags文件的命令
-    let g:fzf_tags_command = 'ctags -R'
-    " [Commands] 使用Commands时候直接执行选中命令的快捷键
-    let g:fzf_commands_expect = 'alt-enter, ctrl-x'
+        " 自定义命令选项
+        " [Files] 使用Files命令时使用coderay来预览文件内容(http://coderay.rubychan.de/)
+        let g:fzf_files_options =
+          \ '--preview "(coderay {} || cat {}) 2> /dev/null | head -'.&lines.'"'
+        " [Buffers] 使用Buffers命令时如果可能的话自动跳到目标窗口，而不是新打开一个
+        let g:fzf_buffers_jump = 1
+        " [[B]Commits] 使用[B]Commit时自定义git log输出形式
+        let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+        " [Tags] 生成tags文件的命令
+        let g:fzf_tags_command = 'ctags -R'
+        " [Commands] 使用Commands时候直接执行选中命令的快捷键
+        let g:fzf_commands_expect = 'alt-enter, ctrl-x'
 
-    " maps
-    nmap <leader><tab> <plug>(fzf-maps-n)
-    xmap <leader><tab> <plug>(fzf-maps-x)
-    omap <leader><tab> <plug>(fzf-maps-o)
-    " Insert mode completion
-    imap <c-x><c-k> <plug>(fzf-complete-word)
-    imap <c-x><c-f> <plug>(fzf-complete-path)
-    imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-    imap <c-x><c-l> <plug>(fzf-complete-line)
-    " Advanced customization using autoload functions
-    " inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
-    " inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+        " maps
+        nmap <leader><tab> <plug>(fzf-maps-n)
+        xmap <leader><tab> <plug>(fzf-maps-x)
+        omap <leader><tab> <plug>(fzf-maps-o)
+        " Insert mode completion
+        imap <c-x><c-k> <plug>(fzf-complete-word)
+        imap <c-x><c-f> <plug>(fzf-complete-path)
+        imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+        imap <c-x><c-l> <plug>(fzf-complete-line)
+        " Advanced customization using autoload functions
+        " inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+        " inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
 
-    " status line
-    if has('nvim')
-        function! s:fzf_statusline()
-          " Override statusline as you like
-          highlight fzf1 ctermfg=161 ctermbg=251
-          highlight fzf2 ctermfg=23 ctermbg=251
-          highlight fzf3 ctermfg=237 ctermbg=251
-          setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-        endfunction
+        " status line
+        if has('nvim')
+            function! s:fzf_statusline()
+              " Override statusline as you like
+              highlight fzf1 ctermfg=161 ctermbg=251
+              highlight fzf2 ctermfg=23 ctermbg=251
+              highlight fzf3 ctermfg=237 ctermbg=251
+              setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+            endfunction
 
-        autocmd! User FzfStatusLine call <SID>fzf_statusline()
+            autocmd! User FzfStatusLine call <SID>fzf_statusline()
+        endif
     endif
+
+    cnoremap <leader>h :Helptags<cr>
+    nnoremap <leader>gf :GFiles?<cr>
+    nnoremap <leader>gl :GFiles<cr>
+    nnoremap <leader>gc :Commits<cr>
+    nnoremap <leader>gb :VCommits<cr>
+    nnoremap <leader>gg :BLines<cr>
+    nnoremap <leader>fs :Snippets<cr>
+    nnoremap <leader>fm :Maps<cr>
+    nnoremap <leader>fh :History<cr>
+    nnoremap <leader>f: :History:<cr>
+    nnoremap <leader>f/ :History/<cr>
+    nnoremap <leader>ff :Ag<cr>
+    call DoMap('nnore', 'o', ':Files<cr>')
+    call DoMap('nnore', 'b', ':Buffers<cr>')
+    call DoMap('nnore', 'a', ':Ag<cr>')
+    call DoMap('nnore', 'l', ':Lines<cr>')
+    " Files [PATH]    |  Files (similar to :FZF)
+    " GFiles [OPTS]   |  Git files (git ls-files)
+    " GFiles?         |  Git files (git status)
+    " Buffers         |  Open buffers
+    " Colors          |  Color schemes
+    " Ag [PATTERN]    |  ag search result (ALT-A to select all, ALT-D to deselect all)
+    " Lines [QUERY]   |  Lines in loaded buffers
+    " BLines [QUERY]  |  Lines in the current buffer
+    " Tags [QUERY]    |  Tags in the project (ctags -R)
+    " BTags [QUERY]   |  Tags in the current buffer
+    " Marks           |  Marks
+    " Windows         |  Windows
+    " Locate PATTERN  |  locate command output
+    " History         |  v:oldfiles and open buffers
+    " History:        |  Command history
+    " History/        |  Search history
+    " Snippets        |  Snippets (UltiSnips)
+    " Commits         |  Git commits (requires fugitive.vim)
+    " BCommits        |  Git commits for the current buffer
+    " Commands        |  Commands
+    " Maps            |  Normal mode mappings
+    " Helptags        |  Help tags 1
+    " Filetypes       |  File types
 endif
+" }}}2
 
-cnoremap <leader>h :Helptags<cr>
-nnoremap <leader>gf :GFiles?<cr>
-nnoremap <leader>gl :GFiles<cr>
-nnoremap <leader>gc :Commits<cr>
-nnoremap <leader>gb :VCommits<cr>
-nnoremap <leader>gg :BLines<cr>
-nnoremap <leader>fs :Snippets<cr>
-nnoremap <leader>fm :Maps<cr>
-nnoremap <leader>fh :History<cr>
-nnoremap <leader>f: :History:<cr>
-nnoremap <leader>f/ :History/<cr>
-nnoremap <leader>ff :Ag<cr>
-call DoMap('nnore', 'o', ':Files<cr>')
-call DoMap('nnore', 'b', ':Buffers<cr>')
-call DoMap('nnore', 'a', ':Ag<cr>')
-call DoMap('nnore', 'l', ':Lines<cr>')
-" Files [PATH]    |  Files (similar to :FZF)
-" GFiles [OPTS]   |  Git files (git ls-files)
-" GFiles?         |  Git files (git status)
-" Buffers         |  Open buffers
-" Colors          |  Color schemes
-" Ag [PATTERN]    |  ag search result (ALT-A to select all, ALT-D to deselect all)
-" Lines [QUERY]   |  Lines in loaded buffers
-" BLines [QUERY]  |  Lines in the current buffer
-" Tags [QUERY]    |  Tags in the project (ctags -R)
-" BTags [QUERY]   |  Tags in the current buffer
-" Marks           |  Marks
-" Windows         |  Windows
-" Locate PATTERN  |  locate command output
-" History         |  v:oldfiles and open buffers
-" History:        |  Command history
-" History/        |  Search history
-" Snippets        |  Snippets (UltiSnips)
-" Commits         |  Git commits (requires fugitive.vim)
-" BCommits        |  Git commits for the current buffer
-" Commands        |  Commands
-" Maps            |  Normal mode mappings
-" Helptags        |  Help tags 1
-" Filetypes       |  File types
+" solarized {{{2
+if isdirectory(expand('~/.vim/plugged/vim-colors-solarized'))
+    let g:solarized_termcolors=256
+    let g:solarized_termtrans=1
+    let g:solarized_contrast="normal"
+    let g:solarized_visibility="normal"
+endif
+" }}}2
 
+" molokai {{{2
+if isdirectory(expand('~/.vim/plugged/molokai'))
+    let g:rehash256 = 1
+    let g:molokai_original = 1
+    colorscheme molokai
+endif
 " }}}2
 
 " }}}1
@@ -1591,8 +1554,6 @@ call DoMap('nnore', 'l', ':Lines<cr>')
 " others -------------------------------------------------------------------{{{1
 " 尝试加载extesion
 let g:s_loaded_extesion = TryLoad('~/.vim/supervim/extesion.vim')
-" 尝试加载fork的vimrc
-let g:s_loaded_fork = TryLoad('~/.vim/fork.vim')
 " 尝试加载自定义vimrc
 let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
 " 尝试加载自定义的gvimrc
