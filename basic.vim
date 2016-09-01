@@ -1096,6 +1096,7 @@ if isdirectory(expand('~/.vim/plugged/vimshell.vim'))
     \| call vimshell#altercmd#define('l', 'll')
     \| call vimshell#altercmd#define('ll', 'ls -l')
     \| call vimshell#altercmd#define('la', 'ls -lahk')
+    \| call vimshell#altercmd#define('p', 'python3')
     \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
 
     function! MyChpwd(args, context)
@@ -1528,6 +1529,7 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim'))
     nnoremap <leader>ff :Ag<cr>
     nnoremap <leader>fb :Buffers<cr>
     call DoMap('nnore', 'o', ':Files<cr>')
+    call DoMap('nnore', 'O', ':Files ')
     call DoMap('nnore', 'b', ':Buffers<cr>')
     call DoMap('nnore', 'a', ':Ag<cr>')
     call DoMap('nnore', 'l', ':Lines<cr>')
