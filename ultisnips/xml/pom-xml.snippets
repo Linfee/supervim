@@ -129,11 +129,37 @@ snippet pom_build_full "完整buile模板" b
 		<plugins>
 			<!-- 配置Tomcat插件 -->
 			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
+				<groutId>org.apache.tomcat.maven</groutId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
+				<configuration>
+					<path>/</path>
+					<!-- config for run -->
+					<port>8080</port>
+					<!-- config for hot deploy -->
+					<url>http://127.0.0.1/manager/text</url> <!--tomcat管理的url-->
+					<username>tomcat</username>
+					<password>tomcat</password>
+				</configuration>
 			</plugin>
 		</plugins>
 	</pluginManagement>
 </build>
+endsnippet
+
+snippet pom_tomcat7_plugin "完整buile模板" b
+<plugin>
+	<groutId>org.apache.tomcat.maven</groutId>
+	<artifactId>tomcat7-maven-plugin</artifactId>
+	<version>2.2</version>
+	<configuration>
+		<path>/</path>
+		<!-- config for run -->
+		<port>8080</port>
+		<!-- config for hot deploy -->
+		<url>http://127.0.0.1/manager/text</url> <!--tomcat管理的url-->
+		<username>tomcat</username>
+		<password>tomcat</password>
+	</configuration>
+</plugin>
 endsnippet
