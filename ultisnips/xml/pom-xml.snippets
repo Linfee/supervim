@@ -1,4 +1,4 @@
-snippet pom "pom.xml template" b
+snippet pom "pom模板" b
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,20 +9,131 @@ snippet pom "pom.xml template" b
 	<groupId>com.linfee.${1:groupId}</groupId>
 	<artifactId>${2:artifactId}</artifactId>
 	<packaging>${3:war}</packaging>
+
 	<version>${4:0.0.1-SNAPSHOT}</version>
 	<name>${5:name}</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	${0:dependencies}
 </project>
 endsnippet
 
-snippet pom-dependencies "The dependencies tag" b
+snippet parent "parent标签" b
+<parent>
+	<groupId>${1:groupId}</groupId>
+	<artifactId>${2:artifactId}</artifactId>
+	<version>${3:version}</version>
+</parent>
+endsnippet
+
+snippet dependencies "dependencies标签" b
 <dependencies>
 	${0:<!-- dependency -->}
 </dependencies>
 endsnippet
 
-snippet pom-dep-junit "The junit4 dependency" b
+snippet build "build标签" b
+<build>
+	<finalName>${1:finalName}</finalName>
+	$0
+</build>
+endsnippet
+
+snippet plugins "plugins标签" b
+<plugins>
+	${0:<!-- plugins -->}
+</plugins>
+endsnippet
+
+snippet build-full "完整buile模板" b
+<build>
+	<finalName>${1:artifactId}</finalName>
+	<plugins>
+		<!-- java编译插件 -->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.5.1</version>
+			<configuration>
+			<source>1.8</source>
+			<target>1.8</target>
+			<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
+		<!-- 配置Tomcat插件 -->
+		<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<path>/</path>
+				<!-- config for run -->
+				<port>8080</port>
+				<!-- config for hot deploy -->
+				<url>http://127.0.0.1/manager/text</url> <!--tomcat管理的url-->
+				<username>tomcat</username>
+				<password>tomcat</password>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
+endsnippet
+
+snippet plug-compiler "资源文件拷贝插件" b
+<!-- 资源文件拷贝插件 -->
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-resources-plugin</artifactId>
+	<version>2.7</version>
+	<configuration>
+		<encoding>UTF-8</encoding>
+	</configuration>
+</plugin>
+endsnippet
+
+snippet plug-compiler "java编译插件" b
+<!-- java编译插件 -->
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<version>3.5.1</version>
+	<configuration>
+	<source>1.8</source>
+	<target>1.8</target>
+	<encoding>UTF-8</encoding>
+	</configuration>
+</plugin>
+endsnippet
+
+snippet plug-tomcat7 "tomcat7插件" b
+<plugin>
+	<groupId>org.apache.tomcat.maven</groupId>
+	<artifactId>tomcat7-maven-plugin</artifactId>
+	<version>2.2</version>
+	<configuration>
+		<path>/</path>
+		<!-- config for run -->
+		<port>8080</port>
+		<!-- config for hot deploy -->
+		<url>http://127.0.0.1/manager/text</url> <!--tomcat管理的url-->
+		<username>tomcat</username>
+		<password>tomcat</password>
+	</configuration>
+</plugin>
+endsnippet
+
+snippet prop-encoding "设置编码属性" b
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+endsnippet
+
+########################################
+#            常见依赖的模板            #
+########################################
+
+snippet dep-junit "The junit4 dependency" b
 <dependency>
 	<groupId>junit</groupId>
 	<artifactId>junit</artifactId>
@@ -32,7 +143,7 @@ snippet pom-dep-junit "The junit4 dependency" b
 $0
 endsnippet
 
-snippet pom-dep-servlet "The servlet dependency" b
+snippet dep-servlet "The servlet dependency" b
 <dependency>
 	<groupId>javax.servlet</groupId>
 	<artifactId>javax.servlet-api</artifactId>
@@ -42,26 +153,33 @@ snippet pom-dep-servlet "The servlet dependency" b
 $0
 endsnippet
 
-snippet pom-dep-jstl "The jstl dependency" b
+snippet dep-jstl "The jstl dependency" b
 <dependency>
-  <groupId>javax.servlet</groupId>
-  <artifactId>jstl</artifactId>
-  <version>${1:1.2}</version>
+	<groupId>javax.servlet</groupId>
+	<artifactId>jstl</artifactId>
+	<version>${1:1.2}</version>
 </dependency>
 $0
 endsnippet
 
-snippet pom-dep-mysql "The mysql dependency" b
+snippet dep-freemarker "The freemarker dependency" b
 <dependency>
-  <groupId>mysql</groupId>
-  <artifactId>mysql-connector-java</artifactId>
-  <version>${1:5.1.2}</version>
+	<groupId>org.freemarker</groupId>
+	<artifactId>freemarker</artifactId>
+	<version>2.3.23</version>
 </dependency>
-$0
-
 endsnippet
 
-snippet pom-dep-mybatis "The mybatis dependency" b
+snippet dep-mysql "The mysql dependency" b
+<dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+	<version>${1:5.1.2}</version>
+</dependency>
+$0
+endsnippet
+
+snippet dep-mybatis "The mybatis dependency" b
 <dependency>
 	<groupId>org.mybatis</groupId>
 	<artifactId>mybatis</artifactId>
@@ -84,7 +202,7 @@ snippet pom-dep-mybatis "The mybatis dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-log4j "The log4j dependency" b
+snippet dep-log4j "The log4j dependency" b
 <dependency>
 	<groupId>log4j</groupId>
 	<artifactId>log4j</artifactId>
@@ -93,7 +211,7 @@ snippet pom-dep-log4j "The log4j dependency" b
 $0
 endsnippet
 
-snippet pom-dep-commons-lang3 "The commons-lang3 dependency" b
+snippet dep-commons-lang3 "The commons-lang3 dependency" b
 <dependency>
 	<groupId>org.apache.commons</groupId>
 	<artifactId>commons-lang3</artifactId>
@@ -101,7 +219,7 @@ snippet pom-dep-commons-lang3 "The commons-lang3 dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-io "The commons-io dependency" b
+snippet dep-commons-io "The commons-io dependency" b
 <dependency>
 	<groupId>commons-io</groupId>
 	<artifactId>commons-io</artifactId>
@@ -109,7 +227,7 @@ snippet pom-dep-commons-io "The commons-io dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-logging "The common-logging dependency" b
+snippet dep-commons-logging "The common-logging dependency" b
 <dependency>
 	<groupId>commons-logging</groupId>
 	<artifactId>commons-logging</artifactId>
@@ -117,7 +235,7 @@ snippet pom-dep-commons-logging "The common-logging dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-codec "The commons-codec dependency" b
+snippet dep-commons-codec "The commons-codec dependency" b
 <dependency>
 	<groupId>commons-codec</groupId>
 	<artifactId>commons-codec</artifactId>
@@ -125,7 +243,7 @@ snippet pom-dep-commons-codec "The commons-codec dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-beanutil "The common-beanutils dependency" b
+snippet dep-commons-beanutil "The common-beanutils dependency" b
 <dependency>
 	<groupId>commons-beanutils</groupId>
 	<artifactId>commons-beanutils</artifactId>
@@ -133,7 +251,7 @@ snippet pom-dep-commons-beanutil "The common-beanutils dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-cli "The commons-cli dependency" b
+snippet dep-commons-cli "The commons-cli dependency" b
 <dependency>
 	<groupId>commons-cli</groupId>
 	<artifactId>commons-cli</artifactId>
@@ -141,7 +259,7 @@ snippet pom-dep-commons-cli "The commons-cli dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-fileupload "The commons-fileuplocad dependency" b
+snippet dep-commons-fileupload "The commons-fileuplocad dependency" b
 <dependency>
 	<groupId>commons-fileupload</groupId>
 	<artifactId>commons-fileupload</artifactId>
@@ -149,7 +267,7 @@ snippet pom-dep-commons-fileupload "The commons-fileuplocad dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-math "The commons-math dependency" b
+snippet dep-commons-math "The commons-math dependency" b
 <dependency>
 	<groupId>org.apache.commons</groupId>
 	<artifactId>commons-math3</artifactId>
@@ -157,7 +275,7 @@ snippet pom-dep-commons-math "The commons-math dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-commons-net "The commons-net dependency" b
+snippet dep-commons-net "The commons-net dependency" b
 <dependency>
 	<groupId>commons-net</groupId>
 	<artifactId>commons-net</artifactId>
@@ -165,7 +283,7 @@ snippet pom-dep-commons-net "The commons-net dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-alibaba-druid "The alibaba-druid 数据库连接池 dependency" b
+snippet dep-alibaba-druid "The alibaba-druid 数据库连接池 dependency" b
 <dependency>
 	<groupId>com.alibaba</groupId>
 	<artifactId>druid</artifactId>
@@ -173,7 +291,7 @@ snippet pom-dep-alibaba-druid "The alibaba-druid 数据库连接池 dependency" 
 </dependency>
 endsnippet
 
-snippet pom-dep-c3p0 "The C3P0 datasource" b
+snippet dep-c3p0 "The C3P0 datasource" b
 <dependency>
 	<groupId>com.mchange</groupId>
 	<artifactId>c3p0</artifactId>
@@ -181,7 +299,7 @@ snippet pom-dep-c3p0 "The C3P0 datasource" b
 </dependency>
 endsnippet
 
-snippet pom-dep-joda-time "The joda-time dependency" b
+snippet dep-joda-time "The joda-time dependency" b
 <dependency>
 	<groupId>joda-time</groupId>
 	<artifactId>joda-time</artifactId>
@@ -189,7 +307,7 @@ snippet pom-dep-joda-time "The joda-time dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-httpclient "The httpclient dependency" b
+snippet dep-httpclient "The httpclient dependency" b
 <dependency>
 	<groupId>org.apache.httpcomponents</groupId>
 	<artifactId>httpclient</artifactId>
@@ -197,7 +315,7 @@ snippet pom-dep-httpclient "The httpclient dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-jackson "The jackson dependency" b
+snippet dep-jackson "The jackson dependency" b
 <dependency>
 	<groupId>com.fasterxml.jackson.core</groupId>
 	<artifactId>jackson-databind</artifactId>
@@ -205,7 +323,7 @@ snippet pom-dep-jackson "The jackson dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-spring "The spring dependencies" b
+snippet dep-spring "The spring dependencies" b
 <dependency>
 	<groupId>org.springframework</groupId>
 	<artifactId>spring-context</artifactId>
@@ -238,7 +356,7 @@ snippet pom-dep-spring "The spring dependencies" b
 </dependency>
 endsnippet
 
-snippet pom-dep-slf4j-log4j "The slf4j and log4j dependency" b
+snippet dep-slf4j-log4j "The slf4j and log4j dependency" b
 <dependency>
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-api</artifactId>
@@ -251,99 +369,10 @@ snippet pom-dep-slf4j-log4j "The slf4j and log4j dependency" b
 </dependency>
 endsnippet
 
-snippet pom-dep-shiro-core "The shiro core dependency" b
+snippet dep-shiro-core "The shiro core dependency" b
 <dependency>
 	<groupId>org.apache.shiro</groupId>
 	<artifactId>shiro-core</artifactId>
 	<version>1.3.0</version>
 </dependency>
-endsnippet
-
-snippet pom-build-min "最小的build模板" b
-<build>
-  <finalName>${1:finalName}</finalName>
-  $0
-</build>
-endsnippet
-
-snippet pom-plugin-compiler "maven compiler plugn" b
-<!-- java编译插件 -->
-<plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<version>3.5.1</version>
-	<configuration>
-	<source>1.7</source>
-	<target>1.7</target>
-	<encoding>UTF-8</encoding>
-	</configuration>
-</plugin>
-endsnippet
-
-snippet pom-build-full "完整buile模板" b
-<build>
-	<finalName>${project.artifactId}</finalName>
-	<plugins>
-		<!-- 资源文件拷贝插件 -->
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-resources-plugin</artifactId>
-			<version>2.7</version>
-			<configuration>
-			<encoding>UTF-8</encoding>
-			</configuration>
-		</plugin>
-		<!-- java编译插件 -->
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>3.5.1</version>
-			<configuration>
-			<source>1.7</source>
-			<target>1.7</target>
-			<encoding>UTF-8</encoding>
-			</configuration>
-		</plugin>
-	</plugins>
-	<pluginManagement>
-		<plugins>
-			<!-- 配置Tomcat插件 -->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<path>/</path>
-					<!-- config for run -->
-					<port>8080</port>
-					<!-- config for hot deploy -->
-					<url>http://127.0.0.1/manager/text</url> <!--tomcat管理的url-->
-					<username>tomcat</username>
-					<password>tomcat</password>
-				</configuration>
-			</plugin>
-		</plugins>
-	</pluginManagement>
-</build>
-endsnippet
-
-snippet pom-tomcat7-plugin "完整buile模板" b
-<plugin>
-	<groupId>org.apache.tomcat.maven</groupId>
-	<artifactId>tomcat7-maven-plugin</artifactId>
-	<version>2.2</version>
-	<configuration>
-		<path>/</path>
-		<!-- config for run -->
-		<port>8080</port>
-		<!-- config for hot deploy -->
-		<url>http://127.0.0.1/manager/text</url> <!--tomcat管理的url-->
-		<username>tomcat</username>
-		<password>tomcat</password>
-	</configuration>
-</plugin>
-endsnippet
-
-snippet pom-encoding-property "设置编码属性" b
-<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 endsnippet

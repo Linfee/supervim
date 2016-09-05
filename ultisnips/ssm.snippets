@@ -22,6 +22,13 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 <package name="${1}" />
 </typeAliases>
 
+ <!--配置pageHelper插件 -->
+ <plugins>
+  <plugin interceptor="com.github.pagehelper.PageHelper">
+   <property name="dialect" value="mysql" />
+  </plugin>
+ </plugins>
+
 </configuration>
 endsnippet
 
@@ -49,6 +56,12 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 		</environment>
 	</environments>
 
+ <!--配置pageHelper插件 -->
+ <plugins>
+  <plugin interceptor="com.github.pagehelper.PageHelper">
+   <property name="dialect" value="mysql" />
+  </plugin>
+ </plugins>
 
 	<mappers>
 	$0
@@ -60,62 +73,48 @@ endsnippet
 snippet ssm-mybatis-generator-config "xml:mybatis-generator用来生成java代码的xml配置模板" b
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
-	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
-	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
+<context id="testTables" targetRuntime="MyBatis3">
+    <commentGenerator>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true" />
+    </commentGenerator>
+    <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+      connectionURL="jdbc:mysql://localhost:3306/example" userId="root"
+      password="root">
+    </jdbcConnection>
+    <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+      NUMERIC 类型解析为java.math.BigDecimal -->
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
 
-	context id="testTables" targetRuntime="MyBatis3">
+    <!-- targetProject:生成PO类的位置 -->
+    <javaModelGenerator targetPackage="com.example.pojo" targetProject="./src/main/java">
+      <!-- enableSubPackages:是否让schema作为包的后缀 -->
+      <property name="enableSubPackages" value="false" />
+      <!-- 从数据库返回的值被清理前后的空格 -->
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    <!-- targetProject:mapper映射文件生成的位置 -->
+    <sqlMapGenerator targetPackage="com.example.mapper" targetProject="./src/main/resources">
+      <!-- enableSubPackages:是否让schema作为包的后缀 -->
+      <property name="enableSubPackages" value="false" />
+    </sqlMapGenerator>
+    <!-- targetPackage：mapper接口生成的位置 -->
+    <javaClientGenerator type="XMLMAPPER"
+      targetPackage="com.example.mapper" targetProject="./src/main/java">
+      <!-- enableSubPackages:是否让schema作为包的后缀 -->
+      <property name="enableSubPackages" value="false" />
+    </javaClientGenerator>
+    <!-- 指定数据库表 -->
+    <table tableName="" domainObjectName="" />
 
-	<!--是否删除自动生成的注释-->
-	<commentGenerator>
-		<property name="suppressAllComments" value="true"/>
-	</commentGenerator>
-
-	<!--数据库连接信息-->
-	<jdbcConnection driverClass="${2:com.mysql.jdbc.Driver}"
-					connectionURL="${3:jdbc:mysql://localhost:3306/test}"
-					userId="${4:root}"
-					password="${5:root}"/>
-
-	<!--
-	<jdbcConnection driverClass="oracle.jdbc.OraclerDriver"
-					connectionURL="jdbc:oracle:thin@localhost:user"
-					userId="uer"
-					password="password"/>
-	-->
-
-
-	<!--默认false, 把 JDBC DECIMAL 和 NUMERIC 类极细微 Integer, 为true就解析为BigDecimal-->
-	<javaTypeResolver>
-		<property name="forceBigDecimals" value="false"/>
-	</javaTypeResolver>
-
-	<!--生成po类的位置-->
-	<javaModelGenerator targetPackage="${6:com.linfee.project.po}" targetProject="${8:../java}">
-		<!--是否让schema作为包的后缀-->
-		<property name="enableSubPackages" value="false"/>
-		<!--从数据库返回的值是否被trim-->
-		<property name="trimStrings" value="true"/>
-		</javaModelGenerator>
-
-		<!--生成mapper映射文件的位置-->
-		<sqlMapGenerator targetPackage="${7:com.linfee.project.mapper}" targetProject="${8}">
-		<!--是否让schema作为包的后缀-->
-		<property name="enableSubPackages" value="false"/>
-		</sqlMapGenerator>
-
-		<!--生成mapper接口的位置-->
-		<javaClientGenerator type="XMLMAPPER" targetPackage="${6:com.linfee.project.mapper}" targetProject="${8}">
-		<!--是否让schema作为包的后缀-->
-		<property name="enableSubPackages" value="false"/>
-		</javaClientGenerator>
-
-		<!--指定使用哪些数据库表-->
-		<table tableName="${9:tableName}" domainObjectName=${10:className}/>$0
-
-	</context>
-
+  </context>
 </generatorConfiguration>
 endsnippet
 
