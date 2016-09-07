@@ -34,7 +34,7 @@ if !exists("g:ideavim")
     Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
     Plug 'scrooloose/nerdcommenter' " 快捷注释 尝试重新实现
     if executable('ctags') " 需要ctags支持
-        Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
+        Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar', 'NERDTree']}
         let g:s_has_ctags = 1
     endif
     Plug 'kshenoy/vim-signature' " 显示书签
@@ -58,7 +58,6 @@ if !exists("g:ideavim")
 
     Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
-    Plug 'Yggdroot/indentLine' " 缩进可视化
     Plug 'altercation/vim-colors-solarized'
     Plug 'flazz/vim-colorschemes' " 主题包
     Plug 'tomasr/molokai'
@@ -69,7 +68,7 @@ if !exists("g:ideavim")
     Plug 'junegunn/vim-easy-align' " 排版插件
     Plug 'easymotion/vim-easymotion' " 尝试重新实现
     " css等语言中高亮显示颜色
-    " Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']} " 太费时间了, 尝试重新实现
+    " Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']}
     Plug 'terryma/vim-expand-region' " 扩展选择
     Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
     Plug 'vim-scripts/EasyGrep', {'on': ['Grep', 'GrepAdd', 'Replace', 'ReplaceUndo', 'GrepOptions', 'ResultListFilter', 'ResultListOpen']}

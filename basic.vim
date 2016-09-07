@@ -110,9 +110,9 @@ set wildignore=*.o,*~,*.pyc,*.class
 " 防止连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
 set nojoinspaces
 if IsWin()
-	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 else
-	set wildignore+=.git\*,.hg\*,.svn\*
+    set wildignore+=.git\*,.hg\*,.svn\*
 endif
 
 " 定义单词结尾
@@ -186,7 +186,7 @@ call BackupUndo()
 " format -------------------------------------------------------------------{{{1
 set nowrap                       " 不要软换行
 set autoindent                   " 自动缩进
-set expandtab                    " 将制表符扩展为tab
+" set expandtab                    " 将制表符扩展为空格
 set smarttab                     " 只能缩进
 set shiftwidth=4                 " 格式化时制表符占几个空格位置
 set tabstop=4                    " 编辑时制表符占几个空格位置
@@ -228,14 +228,6 @@ set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
 
 " 提亮一下光标行
 hi CursorLine ctermbg=235   cterm=none
-
-" 定制补全菜单颜色
-" 补全菜单的前景和背景
-hi pmenu  guifg=#b6b6a6 guibg=#1B1D1E ctermfg=144 ctermbg=233
-" 滚动条guibg
-hi pmenusbar  guifg=#ff0000 guibg=#ffff00 gui=none ctermfg=darkcyan ctermbg=233 cterm=none
-" 滑块guibg
-hi pmenuthumb  guifg=#ffff00 guibg=#ff0000 gui=none ctermfg=lightgray ctermbg=144 cterm=none
 
 "  设置状态行的样式
 if has('cmdline_info')
@@ -847,6 +839,8 @@ if isdirectory(expand('~/.vim/plugged/nerdtree'))
     " nnoremap <Leader>n <plug>NERDTreeTabsToggle<CR>
     " nnoremap <Leader>n :NERDTreeTabsToggle<CR>
     call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
+    " 快速切换nerdtree到当前文件目录
+    nnoremap <silent><leader>n :exec("NERDTree ".expand('%:h'))<CR>
 endif
 " }}}2
 
@@ -1593,7 +1587,16 @@ endif
 if isdirectory(expand('~/.vim/plugged/molokai'))
     let g:rehash256 = 1
     let g:molokai_original = 1
+
     colorscheme molokai
+    " 定制补全菜单颜色
+    " 补全菜单的前景和背景
+    hi pmenu  guifg=#b6b6a6 guibg=#272823 ctermfg=250 ctermbg=233
+    " 滚动条guibg
+    hi pmenusbar  guifg=#a7a78f guibg=#151515 gui=none ctermfg=248 ctermbg=233 cterm=none
+    " 滑块guibg
+    hi pmenuthumb  guifg=#151515 guibg=#e16b11 gui=none ctermfg=233 ctermbg=166 cterm=none
+
 endif
 " }}}2
 

@@ -83,6 +83,20 @@ augroup RL
 augroup END
 " }
 
+"  空格与制表转换 {
+fu! ToggleTab(t)
+    if a:t == 'tab'
+        setl noet
+        ret!
+    elsei a:t == 'space'
+        setl et
+        ret
+    en
+endf
+com! -nargs=0 ToSpace call ToggleTab('space')
+com! -nargs=0 ToTab call ToggleTab('tab')
+" }
+
 " mybatis逆向工程 {
 let g:mybatis_gnenerate_core="none"
 let g:driverPath="none"
