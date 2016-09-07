@@ -79,7 +79,7 @@ endfunction
 " 自动添加80列参考线
 augroup RL
     autocmd!
-    autocmd FileType * call SetRL(80)
+    autocmd FileType * call SetRL(81)
 augroup END
 " }
 

@@ -22,12 +22,12 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 <package name="${1}" />
 </typeAliases>
 
- <!--配置pageHelper插件 -->
- <plugins>
-  <plugin interceptor="com.github.pagehelper.PageHelper">
-   <property name="dialect" value="mysql" />
-  </plugin>
- </plugins>
+<!--配置pageHelper插件 -->
+<plugins>
+	<plugin interceptor="com.github.pagehelper.PageHelper">
+		<property name="dialect" value="mysql" />
+	</plugin>
+</plugins>
 
 </configuration>
 endsnippet
@@ -56,12 +56,12 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 		</environment>
 	</environments>
 
- <!--配置pageHelper插件 -->
- <plugins>
-  <plugin interceptor="com.github.pagehelper.PageHelper">
-   <property name="dialect" value="mysql" />
-  </plugin>
- </plugins>
+<!--配置pageHelper插件 -->
+<plugins>
+	<plugin interceptor="com.github.pagehelper.PageHelper">
+		<property name="dialect" value="mysql" />
+	</plugin>
+</plugins>
 
 	<mappers>
 	$0
@@ -348,5 +348,37 @@ snippet ssm-jedisCluster-config-mini "推荐的，最简单的jedis集群配置"
 	</set>
 	</constructor-arg>
 	<constructor-arg name="poolConfig" value="jedisPoolConfig"/>
+</bean>
+endsnippet
+
+snippet ssm-freemarker-view-resolver "springmvc的freemarker配置" b
+<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	<property name="templateLoaderPath" value="/WEB-INF/freemarker"/>
+</bean>
+<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	<property name="cache" value="true"/>
+	<property name="prefix" value=""/>
+	<property name="suffix" value=".ftl"/>
+	<property name="contentType" value="text/html;charset=utf-8"/>
+</bean>
+endsnippet
+
+snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
+<bean class="org.springframework.web.servlet.view.ContentNegotiaingViewResolver>"
+	<property name="viewResolvers">
+		<list>
+			<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+				<property name="cache" value="true"/>
+				<property name="prefix" value=""/>
+				<property name="suffix" value=".ftl"/>
+				<property name="contentType" value="text/html;charset=utf-8"/>
+			</bean>
+		</list>
+	</property>
+	<property name="defaultViews">
+		<list>
+			<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+		</list>
+	</property>
 </bean>
 endsnippet

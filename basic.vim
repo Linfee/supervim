@@ -236,9 +236,6 @@ hi pmenu  guifg=#b6b6a6 guibg=#1B1D1E ctermfg=144 ctermbg=233
 hi pmenusbar  guifg=#ff0000 guibg=#ffff00 gui=none ctermfg=darkcyan ctermbg=233 cterm=none
 " 滑块guibg
 hi pmenuthumb  guifg=#ffff00 guibg=#ff0000 gui=none ctermfg=lightgray ctermbg=144 cterm=none
-" hi pmenu  guifg=#000000 guibg=#f8f8f8 ctermfg=black ctermbg=lightgray
-" hi pmenusbar  guifg=#8a95a7 guibg=#f8f8f8 gui=none ctermfg=darkcyan ctermbg=lightgray cterm=none
-" hi pmenuthumb  guifg=#f8f8f8 guibg=#8a95a7 gui=none ctermfg=lightgray ctermbg=darkcyan cterm=none
 
 "  设置状态行的样式
 if has('cmdline_info')
@@ -620,7 +617,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " Set minimum syntax keyword length.
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     let g:neocomplete#enable_auto_delimiter = 1
-    let g:neocomplete#max_list = 15
+    " let g:neocomplete#max_list = 15
     let g:neocomplete#force_overwrite_completefunc = 1
     " Define dictionary.
     let g:neocomplete#sources#dictionary#dictionaries = {
@@ -735,8 +732,8 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     let g:UltiSnipsListSnippets="<c-tab>"
     " let g:UltiSnipsJumpForwardTrigger="<c-j>"
     " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-    let g:UltiSnipsJumpForwardTrigger="∆"
-    let g:UltiSnipsJumpBackwardTrigger="˚"
+    let g:UltiSnipsJumpForwardTrigger="<tab>"
+    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
