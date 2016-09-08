@@ -1289,8 +1289,8 @@ endif
 
 " vim-yankstack {{{2
 if isdirectory(expand('~/.vim/plugged/vim-yankstack'))
-    call DoAltMap('n', 'P', '<Plug>yankstack_substitute_older_paste')
-    call DoAltMap('n', 'p', '<Plug>yankstack_substitute_newer_paste')
+    call DoAltMap('n', 'p', '<Plug>yankstack_substitute_older_paste')
+    call DoAltMap('n', 'P', '<Plug>yankstack_substitute_newer_paste')
     " 让Y表示复制到行尾
     call yankstack#setup()
     nmap Y y$
