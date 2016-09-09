@@ -7,7 +7,7 @@
 ### 必须依赖
 
 -   Vim7.4 +
--   Vim +python or +python3, +lua
+-   Vim +python or +python3, +lua (不知道怎么看，点[这里](#faq))
 -   Git, curl, make
 
 ### 非必须依赖
@@ -26,5 +26,29 @@
 
 ### Linux和Mac上安装
 
-如果你的环境已经满足了必须依赖，直接执行[这个脚本](https://github.com/Linfee/supervim/blob/master/bin/install.sh)，
+如果你的环境已经满足了必须依赖，直接执行下面的命令
 __注意:__如果你不希望丢失你现有的vim配置，请先备份它们。包括`~/.vimrc`和`~/.vim/`
+
+    curl https://raw.githubusercontent.com/Linfee/supervim/master/bin/install.sh -o /tmp/install.sh && bash /tmp/install.sh
+
+### windows上安装
+
+敬请期待
+
+## FAQ
+
+### 我不知道如何查看像 +python 这样的依赖?
+
+在你的终端输入`vim --version`回车，会看到很多输出，找到下面这行，说明已经支持
+python3了，其他也是这样，如果看到的是`-python3`说明不支持
+
+    +cscope          +lispindent      +python3         +wildignore
+
+### 如果我没有这些依赖该怎么办?
+
+有些发行版只要把vim和vim-gtk(或vim的其他图形终端)装了，并且系统安装了python等，
+vim就会支持这个特性。mac下使用brew安装macvim，并加入相关选项，如下，即可支持这些
+特性。Windows下可以寻找别人编译好的具有这些特性的vim包，通常还需要安装python。利
+用搜索引擎寻找相关内容，最后，任何系统下都可以自己编译vim，使其支持这些特性。
+
+    brew install macvim --with-cscope --with-lua --override-system-vim
