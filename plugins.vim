@@ -1,12 +1,13 @@
-" | |   _        ___                 _
-" | |  (_)_ __  / _/___ ___  __   __(_)_ __ ___  _ __ ___
-" | |  | | '_ \| |_/ _ \ _ \ \ \ / /| | '_ ` _ \| '__/ __|
-" | |__| | | | |  _| __/ __/  \ V / | | | | | | | | | (__
-" |____|_|_| |_|_| \___\___|   \_/  |_|_| |_| |_|_|  \___|
+"                                       _
+"     ___ _   _ _ __  ___ _ ___.__   __(_)_ __ ___
+"    / __| | | | '_ \/ _ \ '__/ \ \ / /| | '_ ` _ \
+"    \__ | |_| | |_) | __/ |     \ V / | | | | | | |
+"    |___/\___/| .__/\___|_|      \_/  |_|_| |_| |_|
+"              |_|
 "
 " Author: Linfee
 " REPO: https://github.com/Linfee/supervim
-
+"
 
 " 尝试加载plug插件管理器
 let g:s_loaded_plug = TryLoad('~/.vim/supervim/plug.vim', 1)
@@ -14,18 +15,18 @@ let g:s_loaded_plug = TryLoad('~/.vim/supervim/plug.vim', 1)
 if !exists("g:ideavim")
     call plug#begin('~/.vim/plugged')
     " language support
-    Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
-    Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+    Plug 'derekwyatt/vim-scala', {'for': 'scala'}
+    Plug 'davidhalter/jedi-vim', {'for': 'python'}
     Plug 'Valloric/MatchTagAlways', {'for': ['html', 'xml']} " 高亮显示匹配html标签 尝试重新实现
     Plug 'amirh/HTML-AutoCloseTag', {'for': ['html', 'xml']} " 自动关闭html标签
     Plug 'mattn/emmet-vim', {'for': 'html'}
     Plug 'pangloss/vim-javascript', {'for': 'javascript'}
     Plug 'elzr/vim-json', {'for': 'json'}
-    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+    Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
     Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
     if executable('javac') " 需要javac支持
-        Plug 'artur-shaik/vim-javacomplete2', { 'for': 'java' }
+        Plug 'artur-shaik/vim-javacomplete2', {'for': 'java'}
     endif
 
     Plug 'tomtom/tlib_vim' " Some utility functions for VIM
@@ -79,7 +80,7 @@ if !exists("g:ideavim")
     if executable('brew')
         Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
     else
-        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+        Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
         Plug 'junegunn/fzf.vim'
     endif
     Plug 'tpope/vim-fugitive' " git集成 比较费时间
