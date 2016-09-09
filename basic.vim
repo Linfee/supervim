@@ -1380,7 +1380,12 @@ endif
 
 " MarkdownPreview {{{2
 if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
-    let g:mkdp_path_to_chrome = "google-chrome"
+    if IsOSX()
+        let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
+        " path to the chrome or the command to open chrome(or other modern browsers)
+    elseif IsLinux()
+        let g:mkdp_path_to_chrome = "chromium-browser"
+    endif
     " path to the chrome or the command to open chrome(or other modern browsers)
 
     let g:mkdp_auto_start = 0

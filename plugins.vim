@@ -50,7 +50,7 @@ if !exists("g:ideavim")
 
     Plug 'Shougo/neocomplete.vim' " 补全插件
 
-    " Plug 'Linfee/ultisnips-zh-doc'
+    Plug 'Linfee/ultisnips-zh-doc'
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'ujihisa/neco-look'
     Plug 'luochen1990/rainbow' " 彩虹括号增强版
@@ -74,15 +74,13 @@ if !exists("g:ideavim")
     Plug 'terryma/vim-expand-region' " 扩展选择
     Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
     Plug 'vim-scripts/EasyGrep', {'on': ['Grep', 'GrepAdd', 'Replace', 'ReplaceUndo', 'GrepOptions', 'ResultListFilter', 'ResultListOpen']}
-    if executable('fzf') " 强大的模糊搜索，必备神器，需要命令行工具fzf支持
-        " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
-        if executable('brew')
-            Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-        else
-            Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-            Plug 'junegunn/fzf.vim'
-        endif
-        let g:s_has_fzf = 1
+    " 强大的模糊搜索，必备神器，需要命令行工具fzf支持
+    " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
+    if executable('brew')
+        Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+    else
+        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+        Plug 'junegunn/fzf.vim'
     endif
     Plug 'tpope/vim-fugitive' " git集成 比较费时间
     Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
@@ -93,7 +91,6 @@ if !exists("g:ideavim")
     Plug 'junegunn/goyo.vim'
     Plug 'ryanoasis/vim-devicons' " 各种小图标
     Plug 'strom3xFeI/vimdoc-cn'
-
 
     call plug#end()
 endif

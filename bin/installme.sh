@@ -20,5 +20,3 @@ vim -u ~/.vim/supervim/basic.vim -c 'call Init()'
 cd ~/.vim/plugged/vimproc.vim
 
 make
-
-npm -g install instant-markdown-d
