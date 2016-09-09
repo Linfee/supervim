@@ -49,6 +49,8 @@ if !exists("g:ideavim")
     Plug 'coderifous/textobj-word-column.vim' " 列文本对象 c
 
     Plug 'Shougo/neocomplete.vim' " 补全插件
+
+    " Plug 'Linfee/ultisnips-zh-doc'
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'ujihisa/neco-look'
     Plug 'luochen1990/rainbow' " 彩虹括号增强版
@@ -91,6 +93,7 @@ if !exists("g:ideavim")
     Plug 'junegunn/goyo.vim'
     Plug 'ryanoasis/vim-devicons' " 各种小图标
     Plug 'strom3xFeI/vimdoc-cn'
+
 
     call plug#end()
 endif
