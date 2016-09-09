@@ -14,7 +14,7 @@
 ### 必须依赖
 
 -   Vim7.4 +
--   Vim +python or +python3, +lua (不知道怎么看，点[这里](#faq))
+-   Vim +python or +python3, +lua (不知道怎么看，点[这里](#user-content-faq))
 -   Git, curl, make
 
 ### 非必须依赖
