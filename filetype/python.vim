@@ -28,6 +28,7 @@ endfunction
 
 
 func! RunPy()
+    exec "w"
     exec "!python3 %"
 endf
 

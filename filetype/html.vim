@@ -10,6 +10,7 @@ setl softtabstop=2
 
 func! RunHtml()
     if IsOSX()
+        exe 'w'
         exe 'silent !open % &'
         exe 'redraw!'
     endif
