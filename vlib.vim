@@ -10,13 +10,13 @@
 "
 
 " 判断环境 {{
-silent fun IsOSX()
+silent fun! IsOSX()
     return has('macunix')
 endf
-silent fun IsLinux()
+silent fun! IsLinux()
     return has('unix') && !has('macunix') && !has('win32unix')
 endf
-silent fun IsWin()
+silent fun! IsWin()
     return  (has('win32') || has('win64'))
 endf
 silent function! IsGui()
@@ -24,7 +24,7 @@ silent function! IsGui()
 endf " }}
 
 " 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 {{
-silent fun EncodingForCn()
+silent fun! EncodingForCn()
     set fileencoding=utf8
     set fileencodings=utf8,chinese,latin1,gbk,big5,ucs-bom
     if IsWin()
@@ -51,20 +51,22 @@ endf " }}
 let g:leadercustom = "<space>"
 " 该函数用来快捷定义使用 g:leadercustom 的映射，参照下面的调用使用
 " 第四个参数是使用临时定义的 leadercustom 代替 g:leadercustom
-" call DoMap('nnore', '<cr>', ':nohlsearch<cr>', '', ['<silent>'])
+" call DoMap('nnore', '<cr>', ':nohlsearch<cr>', ['<silent>'], '<enter>')
 function! DoMap(prefix, key, operation, ...)
     let s:c = a:prefix
     let key_prefix = exists('g:leadercustom') ? g:leadercustom : '<space>'
-    if a:0 > 0
-        let	key_prefix = a:1
-    endif
     if s:c !~ "map"
         let s:c = s:c . 'map'
     endif
-    if a:0 > 1
-        for n in a:2
+    " 添加第一个可选参数，接受数组，常传入['<slient>', '<buffer>']等
+    if a:0 > 0
+        for n in a:1
             let s:c = s:c . ' ' . n
         endfor
+    endif
+    " 添加第二个可选参数，用于映射不是<space>打头的映射
+    if a:0 > 1
+        let	key_prefix = a:2
     endif
     let s:c = s:c . ' ' . key_prefix . a:key . ' ' . a:operation
     " echo s:c
@@ -79,7 +81,7 @@ endfunction " }}
 " 简单说就是alt+e|n|i|c|u不要映射，alt+backspace或功能键也不要映射
 " 如果指定key2应该指定为原有的样子，而不是表中的简写形式
 " call DoAltMap('<prefix>', '<key1>', '<operaiton>', '<key2>', ['<silent>等'])
-silent fun DoAltMap(prefix, key1, operation, ...)
+silent fun! DoAltMap(prefix, key1, operation, ...)
 
     let s:c = a:prefix
     if s:c !~ "map"
@@ -113,7 +115,7 @@ silent fun DoAltMap(prefix, key1, operation, ...)
 endf " }}
 
 " 尝试加载文件 {{
-silent fun TryLoad(file, ...)
+silent fun! TryLoad(file, ...)
     if filereadable(expand(a:file))
         exe('source '. expand(a:file))
         return 1
@@ -132,7 +134,7 @@ silent fun TryLoad(file, ...)
 endf "}}
 
 " 快速切换背景色 {{
-silent fun ToggleBG()
+silent fun! ToggleBG()
     let s:tbg = &background
     if s:tbg == "dark"
         set background=light
@@ -142,7 +144,7 @@ silent fun ToggleBG()
 endf "}}
 
 " 让vim和系统共享默认剪切板 {{
-silent fun ShareClipboard()
+silent fun! ShareClipboard()
     if has('clipboard')
         if has('unnamedplus')  " When possible use + register for copy-paste
             set clipboard=unnamed,unnamedplus
@@ -153,14 +155,14 @@ silent fun ShareClipboard()
 endf " }}
 
 " 创建文件夹，如果文件夹不存在的化 {{
-silent fun MkdirIfNotExists(dir)
+silent fun! MkdirIfNotExists(dir)
     if !isdirectory(expand(a:dir))
         call mkdir(expand(a:dir))
     endif
 endf " }}
 
 " Initialize NERDTree as needed {{
-fun NERDTreeInitAsNeeded()
+fun! NERDTreeInitAsNeeded()
     redir => bufoutput
     buffers!
     redir END
@@ -173,7 +175,7 @@ fun NERDTreeInitAsNeeded()
 endf " }}
 
 " Strip whitespace {{
-fun StripTrailingWhitespace()
+fun! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.
     let _s=@/
     let l = line(".")
@@ -186,7 +188,7 @@ fun StripTrailingWhitespace()
 endf " }}
 
 " Run shell command {{
-fun s:RunShellCommand(cmdline)
+fun! s:RunShellCommand(cmdline)
     botright new
 
     setlocal buftype=nofile

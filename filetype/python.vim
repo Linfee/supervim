@@ -26,3 +26,9 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 endfunction
 
+
+func! RunPy()
+    exec "!python3 %"
+endf
+
+call DoMap('nnore', 'r', ':call RunPy()<cr>', ['<buffer>'])

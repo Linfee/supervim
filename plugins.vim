@@ -25,9 +25,9 @@ if !exists("g:ideavim")
     Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
     Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
-    if executable('javac') " 需要javac支持
-        Plug 'artur-shaik/vim-javacomplete2', {'for': 'java'}
-    endif
+    " if executable('javac')
+    "     Plug 'artur-shaik/vim-javacomplete2', {'for': 'java'}
+    " endif
 
     Plug 'tomtom/tlib_vim' " Some utility functions for VIM
     Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}

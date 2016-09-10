@@ -15,5 +15,4 @@ func! RunHtml()
     endif
 endf
 
-nnoremap <leader>r :call RunHtml()<cr>
-call DoMap('nnore', 'r', ':call RunHtml()<cr>')
+call DoMap('nnore', 'r', ':call RunHtml()<cr>', ['<buffer>'])
