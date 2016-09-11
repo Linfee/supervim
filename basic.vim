@@ -561,10 +561,6 @@ function! Init()
     exe "quit"
 endfunction
 
-function! UpdateSupervim()
-    exe '!cd ~/.vim/supervim && git pull'
-endfunction
-
 " 编译和运行 {{{2
 " 按F5编译运行
 nnoremap <F5> :call Run()<CR>
@@ -752,7 +748,7 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " execute是一个命令，没有对应的方法，定义一个，在snippets中用
     function! EXE(e)
         execute(a:e)
-    endfunction
+    endfunctio
 endif
 " }}}2
 
@@ -904,29 +900,47 @@ endif
 
 " lightline {{{2
 if isdirectory(expand('~/.vim/plugged/lightline.vim'))
-    let g:lightline = {
-                \ 'colorscheme': 'wombat',
-                \ 'active': {
-                \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
-                \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-                \ },
-                \ 'component_function': {
-                \   'fugitive': 'LightLineFugitive',
-                \   'filename': 'LightLineFilename',
-                \   'fileformat': 'LightLineFileformat',
-                \   'filetype': 'LightLineFiletype',
-                \   'fileencoding': 'LightLineFileencoding',
-                \   'mode': 'LightLineMode',
-                \   'ctrlpmark': 'CtrlPMark',
-                \ },
-                \ 'component_expand': {
-                \   'syntastic': 'SyntasticStatuslineFlag',
-                \ },
-                \ 'component_type': {
-                \   'syntastic': 'error',
-                \ },
-                \ 'subseparator': { 'left': '›', 'right': '‹' }
-                \ }
+    if exists("g:s_no_devicons") " {{{3
+        let g:lightline = {
+                    \ 'colorscheme': 'wombat',
+                    \ 'active': {
+                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+                    \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+                    \ },
+                    \ 'component_expand': {
+                    \   'syntastic': 'SyntasticStatuslineFlag',
+                    \ },
+                    \ 'component_type': {
+                    \   'syntastic': 'error',
+                    \ },
+                    \ 'subseparator': { 'left': '›', 'right': '‹' }
+                    \ }
+    else
+        let g:lightline = {
+                    \ 'colorscheme': 'wombat',
+                    \ 'active': {
+                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+                    \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+                    \ },
+                    \ 'component_function': {
+                    \   'fugitive': 'LightLineFugitive',
+                    \   'filename': 'LightLineFilename',
+                    \   'fileformat': 'LightLineFileformat',
+                    \   'filetype': 'LightLineFiletype',
+                    \   'fileencoding': 'LightLineFileencoding',
+                    \   'mode': 'LightLineMode',
+                    \   'ctrlpmark': 'CtrlPMark',
+                    \ },
+                    \ 'component_expand': {
+                    \   'syntastic': 'SyntasticStatuslineFlag',
+                    \ },
+                    \ 'component_type': {
+                    \   'syntastic': 'error',
+                    \ },
+                    \ 'subseparator': { 'left': '›', 'right': '‹' }
+                    \ }
+    endif " }}}3
+
 
     function! LightLineModified()
         return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -1231,7 +1245,7 @@ endif
 " }}}2
 
 " vim-devicons {{{2
-if isdirectory(expand('~/.vim/plugged/vim-devicons'))
+if isdirectory(expand('~/.vim/plugged/vim-devicons')) && !exists("g:s_no_devicons")
     let g:airline_powerline_fonts = 1
     let g:vimfiler_as_default_explorer = 1
     " font use double width glyphs

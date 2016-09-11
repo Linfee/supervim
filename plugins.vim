@@ -90,7 +90,9 @@ if !exists("g:ideavim")
     Plug 'reedes/vim-litecorrect' " 轻量级的拼写纠正
 
     Plug 'junegunn/goyo.vim'
-    Plug 'ryanoasis/vim-devicons' " 各种小图标
+    if !exists("g:s_no_devicons")
+        Plug 'ryanoasis/vim-devicons' " 各种小图标
+    endif
     Plug 'strom3xFeI/vimdoc-cn'
 
     call plug#end()
