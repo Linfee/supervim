@@ -1032,34 +1032,34 @@ endif
 " }}}2
 
 " javacomplete2 {{{2
-" if isdirectory(expand('~/.vim/plugged/vim-javacomplete2'))
-"     augroup javacomplete2
-"         autocmd!
-"         autocmd FileType java setlocal omnifunc=javacomplete#Complete
-"         autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
-        "autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
-"         autocmd FileType java inoremap  . .
-"         autocmd FileType java call JavaComplete2Config()
-"     augroup END
-"     function! JavaComplete2Config()
-"         " 自动闭合方法的反括号
-"         let g:JavaComplete_ClosingBrace = 1
-"         " 不要自动导入第一个
-"         let g:JavaComplete_ImportDefault = -1
-"         "Enable smart (trying to guess import option) inserting class imports
-"         nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-"         imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-"         "Enable usual (will ask for import option) inserting class imports
-"         nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-"         imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-"         "Add all missing imports
-"         nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-"         imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-"         "Remove all missing imports
-"         nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-"         imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-"     endfunction
-" endif
+if isdirectory(expand('~/.vim/plugged/vim-javacomplete2'))
+    augroup javacomplete2
+        autocmd!
+        autocmd FileType java setlocal omnifunc=javacomplete#Complete
+        autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
+        autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
+        autocmd FileType java inoremap  . .
+        autocmd FileType java call JavaComplete2Config()
+    augroup END
+    function! JavaComplete2Config()
+        " 自动闭合方法的反括号
+        let g:JavaComplete_ClosingBrace = 1
+        " 不要自动导入第一个
+        let g:JavaComplete_ImportDefault = -1
+        "Enable smart (trying to guess import option) inserting class imports
+        nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
+        imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
+        "Enable usual (will ask for import option) inserting class imports
+        nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
+        imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
+        "Add all missing imports
+        nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
+        imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
+        "Remove all missing imports
+        nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+        imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
+    endfunction
+endif
 " }}}2
 
 " vim-shell {{{2
