@@ -129,6 +129,9 @@ call DoMap('nnore', 'sv', ':source ~/.vimrc<cr>')
 
 " 备份光标
 function! BackupCursor()
+    if exists("g:s_backup_cursor")
+        return
+    endif
     function! ResCur()
         if line("'\"") <= line("$")
             silent! normal! g`"
@@ -142,17 +145,25 @@ function! BackupCursor()
         " 编辑git commit时是一个例外
         au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
     augroup END
+    let g:s_backup_cursor = 1
 endfunction
 
 " 备份文件
 function! BackupFile()
+    if exists("g:s_backup_cursor")
+        return
+    endif
     set backup
     set backupdir=~/.vim/temp/backup
     set backupext=.__bak__
+    let g:s_backup_fiie = 1
 endfunction
 
 " 备份undo
 function! BackupUndo()
+    if exists("g:s_backup_undo")
+        return
+    endif
     if has('persistent_undo')
         set undofile
         " 设置undofile的存储目录
@@ -162,10 +173,14 @@ function! BackupUndo()
         " Maximum number lines to save for undo on a buffer reload
         set undoreload=10000
     endif
+    let g:s_backup_undo = 1
 endfunction
 
 " 备份view
 function! BackupView()
+    if exists("g:s_backup_view")
+        return
+    endif
     set viewoptions=folds,options,cursor,unix,slash
     set viewdir=~/.vim/temp/view
     augroup backupView
@@ -175,12 +190,13 @@ function! BackupView()
     augroup END
     nnoremap <c-s-f12> :!find ~/.vim/temp/view -mtime +30 -exec rm -a{} \;<cr>
     " TODO: let vim delete too old file auto
+    let g:s_backup_view = 1
 endfunction
 
-call BackupCursor()
-call BackupUndo()
-" call BackupFile()
-" call BackupView()
+call BackupCursor() " 调用以自动恢复光标
+call BackupUndo() " 调用以自动备份undo
+" call BackupFile() " 调用以自动备份文件
+" call BackupView() " 调用以自动备份view
 " ---------------------------------}}}2
 
 " }}}1
@@ -285,12 +301,7 @@ else
     endif
 endif
 
-" 切换背景色
-noremap <leader>bg :call ToggleBG()<CR>
-
-" }}}3
-
-" }}}
+" }}}1
 
 " keymap -------------------------------------------------------------------{{{1
 " 设置 leader 键
@@ -426,16 +437,16 @@ call DoMap("nnore", '<space>', 'V')
 call DoMap("vnore", '<space>', 'V')
 
 " 快速设置foldlevel
-nnoremap <leader>f0 :set foldlevel=0<cr>
-nnoremap <leader>f1 :set foldlevel=1<cr>
-nnoremap <leader>f2 :set foldlevel=2<cr>
-nnoremap <leader>f3 :set foldlevel=3<cr>
-nnoremap <leader>f4 :set foldlevel=4<cr>
-nnoremap <leader>f5 :set foldlevel=5<cr>
-nnoremap <leader>f6 :set foldlevel=6<cr>
-nnoremap <leader>f7 :set foldlevel=7<cr>
-nnoremap <leader>f8 :set foldlevel=8<cr>
-nnoremap <leader>f9 :set foldlevel=9<cr>
+nnoremap <leader><f0> :set foldlevel=0<cr>
+nnoremap <leader><f1> :set foldlevel=1<cr>
+nnoremap <leader><f2> :set foldlevel=2<cr>
+nnoremap <leader><f3> :set foldlevel=3<cr>
+nnoremap <leader><f4> :set foldlevel=4<cr>
+nnoremap <leader><f5> :set foldlevel=5<cr>
+nnoremap <leader><f6> :set foldlevel=6<cr>
+nnoremap <leader><f7> :set foldlevel=7<cr>
+nnoremap <leader><f8> :set foldlevel=8<cr>
+nnoremap <leader><f9> :set foldlevel=9<cr>
 
 " ----------------------------------}}}2
 
@@ -472,7 +483,7 @@ nnoremap <tab>m :tabmove
 nnoremap <tab>t :tabonly<cr> 
 
 " 关闭所有缓冲区
-map <leader>Q :bufdo bd<cr>
+nnoremap <leader>Q :bufdo bd<cr>
 " 切换当前和上一个标签
 let g:lasttab = 1
 nnoremap <tab><tab> :exe "tabn ".g:lasttab<CR>
@@ -490,13 +501,13 @@ endtry
 
 " 快速编辑
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
-map <leader>ew :e %%
-map <leader>es :sp %%
-map <leader>ev :vsp %%
-map <leader>et :tabe %%
+nnoremap <leader>ew :e %%
+nnoremap <leader>es :sp %%
+nnoremap <leader>ev :vsp %%
+nnoremap <leader>et :tabe %%
 " 切换工作目录到当前文件目录
-cmap cwd lcd %:p:h
-cmap cd. lcd %:p:h
+cnoremap cwd lcd %:p:h
+cnoremap cd. lcd %:p:h
 
 " 保存与退出
 call DoMap('nnore', 'q', ':close<cr>')
@@ -536,7 +547,7 @@ endif
 
 " [iabbrev]
 iabbrev xdate <c-r>=strftime("%Y/%d/%m %H:%M:%S")<cr>
-iabbrev viminfo vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} foldlevel=0 fdm=marker nospell:
+iabbrev viminfo vim: set sw=4 ts=4 sts=4 et tw=80 fmr={,} fdm=marker nospell:
 "  去除Windows的 ^M 在编码混乱的时候
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
@@ -1618,4 +1629,4 @@ let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
 let g:s_loaded_gvimrc = TryLoad('~/.vim/gvimrc.vim')
 " }}}1
 
-" vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} foldlevel=0 fdm=marker nospell:
+" vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} fdm=marker nospell:
