@@ -28,8 +28,11 @@ endfunction
 
 
 func! RunPy()
-    exec "w"
-    exec "!python3 %"
+    if !IsWin()
+        exe 'w'
+        exe 'chmod +x %'
+        exe "bash %"
+    endif
 endf
 
 call DoMap('nnore', 'r', ':call RunPy()<cr>', ['<buffer>'])
