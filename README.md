@@ -22,7 +22,7 @@
 -   Vim +clipboard, 为了和系统共享剪切板。
 
 -   google-chrome 或者 chromium-browser, 如果你的path中没有这些命令(如果是mac，安
-    装了chrom即可)，你需要在`~/.vim/custom.vim`中添加这一句，否则你就不能在浏览器
+    装了chrome即可)，你需要在`~/.vim/custom.vim`中添加这一句，否则你就不能在浏览器
     中预览markdown。
 
         let g:mkdp_path_to_chrome = "your browser command"
