@@ -2,7 +2,7 @@
 let g:ftconfigloaded = 1
 
 setl smarttab
-" setl expandtab
+setl expandtab
 setl autoindent
 setl shiftwidth=2
 setl tabstop=2
