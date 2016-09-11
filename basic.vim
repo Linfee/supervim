@@ -561,6 +561,10 @@ function! Init()
     exe "quit"
 endfunction
 
+function! UpdateSupervim()
+    exe '!cd ~/.vim/supervim && git pull'
+endfunction
+
 " 编译和运行 {{{2
 " 按F5编译运行
 nnoremap <F5> :call Run()<CR>
@@ -748,7 +752,7 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " execute是一个命令，没有对应的方法，定义一个，在snippets中用
     function! EXE(e)
         execute(a:e)
-    endfunctio
+    endfunction
 endif
 " }}}2
 
