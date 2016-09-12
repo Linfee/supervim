@@ -204,7 +204,7 @@ call BackupUndo() " 调用以自动备份undo
 " format -------------------------------------------------------------------{{{1
 set nowrap                       " 不要软换行
 set autoindent                   " 自动缩进
-" set expandtab                    " 将制表符扩展为空格
+set expandtab                    " 将制表符扩展为空格
 set smarttab                     " 只能缩进
 set shiftwidth=4                 " 格式化时制表符占几个空格位置
 set tabstop=4                    " 编辑时制表符占几个空格位置
@@ -565,30 +565,22 @@ nnoremap <F5> :call Run()<CR>
 function! Run()
     exec "w"
     if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "! ./%<"
+        exec "!gcc % -o %< && ./%<"
     elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        exec "! ./%<"
-    elseif &filetype == 'java' 
-        exec "!javac %" 
-        exec "!java %<"
+        exec "!g++ % -o %< && ./%<"
     elseif &filetype == 'sh'
-        :!./%
+        exec ":!./%"
     elseif &filetype == 'groovy'
         exec "!groovy %"
     elseif &filetype == 'scala'
-        exec "!scala -deprecation %" 
-    elseif &filetype == 'python'
-        exec "!python3 %"
+        exec "!scala -deprecation %"
     endif
 endfunction
 "C,C++的调试
 map <F8> :call Rungdb()<CR>
 function! Rungdb()
     exec "w"
-    exec "!g++ % -g -o %<"
-    exec "!gdb ./%<"
+    exec "!g++ % -g -o %< && gdb ./%<"
 endfunction
 " }}}2
 
@@ -647,6 +639,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
         autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
         " python使用jedi
         autocmd FileType python setlocal omnifunc=jedi#completions
+        " autocmd FileType python setlocal omnifunc=jedi#completions
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
     augroup END
     " Enable heavy omni completion.
@@ -926,7 +919,7 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
         let g:lightline = {
                     \ 'colorscheme': 'wombat',
                     \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
                     \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
                     \ },
                     \ 'component_expand': {
@@ -941,17 +934,15 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
         let g:lightline = {
                     \ 'colorscheme': 'wombat',
                     \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
+                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
                     \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
                     \ },
                     \ 'component_function': {
                     \   'fugitive': 'LightLineFugitive',
-                    \   'filename': 'LightLineFilename',
                     \   'fileformat': 'LightLineFileformat',
                     \   'filetype': 'LightLineFiletype',
                     \   'fileencoding': 'LightLineFileencoding',
                     \   'mode': 'LightLineMode',
-                    \   'ctrlpmark': 'CtrlPMark',
                     \ },
                     \ 'component_expand': {
                     \   'syntastic': 'SyntasticStatuslineFlag',
@@ -970,19 +961,6 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
 
     function! LightLineReadonly()
         return &ft !~? 'help' && &readonly ? 'RO' : ''
-    endfunction
-
-    function! LightLineFilename()
-        let fname = expand('%:t')
-        return fname == 'ControlP' && has_key(g:lightline, 'ctrlp_item') ? g:lightline.ctrlp_item :
-                    \ fname == '__Tagbar__' ? g:lightline.fname :
-                    \ fname =~ '__Gundo\|NERD_tree' ? '' :
-                    \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
-                    " \ &ft == 'unite' ? unite#get_status_string() :
-                    \ &ft == 'vimshell' ? vimshell#get_status_string() :
-                    \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-                    \ ('' != fname ? fname : '[No Name]') .
-                    \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
     endfunction
 
     function! LightLineFugitive()
@@ -1012,41 +990,12 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
     function! LightLineMode()
         let fname = expand('%:t')
         return fname == '__Tagbar__' ? 'Tagbar' :
-                    \ fname == 'ControlP' ? 'CtrlP' :
                     \ fname == '__Gundo__' ? 'Gundo' :
                     \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
                     \ fname =~ 'NERD_tree' ? 'NERDTree' :
-                    " \ &ft == 'unite' ? 'Unite' :
                     \ &ft == 'vimfiler' ? 'VimFiler' :
                     \ &ft == 'vimshell' ? 'VimShell' :
                     \ winwidth(0) > 60 ? lightline#mode() : ''
-    endfunction
-
-    function! CtrlPMark()
-        if expand('%:t') =~ 'ControlP' && has_key(g:lightline, 'ctrlp_item')
-            call lightline#link('iR'[g:lightline.ctrlp_regex])
-            return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-                        \ , g:lightline.ctrlp_next], 0)
-        else
-            return ''
-        endif
-    endfunction
-
-    let g:ctrlp_status_func = {
-                \ 'main': 'CtrlPStatusFunc_1',
-                \ 'prog': 'CtrlPStatusFunc_2',
-                \ }
-
-    function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-        let g:lightline.ctrlp_regex = a:regex
-        let g:lightline.ctrlp_prev = a:prev
-        let g:lightline.ctrlp_item = a:item
-        let g:lightline.ctrlp_next = a:next
-        return lightline#statusline(0)
-    endfunction
-
-    function! CtrlPStatusFunc_2(str)
-        return lightline#statusline(0)
     endfunction
 
     let g:tagbar_status_func = 'TagbarStatusFunc'
@@ -1056,14 +1005,6 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
         return lightline#statusline(0)
     endfunction
 
-    augroup AutoSyntastic
-        autocmd!
-        autocmd BufWritePost *.c,*.cpp call s:syntastic()
-    augroup END
-    function! s:syntastic()
-        SyntasticCheck
-        call lightline#update()
-    endfunction
 endif
 " }}}2
 
