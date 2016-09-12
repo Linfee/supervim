@@ -347,8 +347,6 @@ call DoAltMap('inore', 'd', '<c-w>')
 call DoAltMap('cnore', 'd', '<c-w>')
 " alt+= 使用表达式寄存器
 call DoAltMap('inore', '=', '<c-r>=')
-" leader q格式化
-nnoremap <silent> <leader>q gwip
 " 开关折叠
 nnoremap - za
 nnoremap _ zf
@@ -894,7 +892,31 @@ endif
 
 " vim-multiple-cursors {{{2
 if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
-    let g:multi_cursor_next_key="\<c-s>"
+    let g:multi_cursor_next_key='<C-n>'
+    let g:multi_cursor_prev_key='<C-p>'
+    let g:multi_cursor_skip_key='<C-x>'
+    let g:multi_cursor_quit_key='<c-[>'
+    nnoremap <c-c> :call multiple_cursors#quit()<CR>
+    call DoMap('nnore', '/', ':MultipleCursorsFind <c-r>/<cr>', ['<silent>'])
+    call DoMap('vnore', '/', ':MultipleCursorsFind <c-r>/<cr>', ['<silent>'])
+
+    " 和 neocomplete 整合{{{3
+    " Called once right before you start selecting multiple cursors
+    function! Multiple_cursors_before()
+      if exists(':NeoCompleteLock')==2
+        exe 'NeoCompleteLock'
+      endif
+    endfunction
+
+    " Called once only when the multiple selection is canceled (default <Esc>)
+    function! Multiple_cursors_after()
+      if exists(':NeoCompleteUnlock')==2
+        exe 'NeoCompleteUnlock'
+      endif
+    endfunction " }}}3
+    " 多光标高亮样式 (see help :highlight and help :highlight-link)
+    " highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
+    " highlight link multiple_cursors_visual Visual
 endif
 " }}}2
 
