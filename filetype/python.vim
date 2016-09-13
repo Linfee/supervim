@@ -26,12 +26,4 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 endfunction
 
-
-func! RunPy()
-    if !IsWin()
-        exec "w"
-        exec "!chmod +x % && ./%"
-    endif
-endf
-
-call DoMap('nnore', 'r', ':call RunPy()<cr>', ['<buffer>'])
+call DoMap('nnore', 'r', ':w<cr>:!chmod +x % && ./%<cr>', ['<buffer>'])

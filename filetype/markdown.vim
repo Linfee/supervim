@@ -12,8 +12,4 @@ setl nowrap
 
 inoremap · `
 
-func! RunMd()
-    exe 'MarkdownPreview'
-endf
-
-call DoMap('nnore', 'r', ':call RunMd()<cr>', ['<buffer>'])
+call DoMap('nnore', 'r', ':MarkdownPreview<cr>', ['<buffer>'])

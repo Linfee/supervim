@@ -10,9 +10,4 @@ setl softtabstop=2
 
 setl nowrap
 
-func! RunJava()
-    exec "w"
-    exec "!javac % && java %<"
-endf
-
-call DoMap('nnore', 'r', ':call RunJava()<cr>', ['<buffer>'])
+call DoMap('nnore', 'r', ':w<cr>:!javac % && java %<<cr>', ['<buffer>'])

@@ -8,12 +8,6 @@ setl shiftwidth=2
 setl tabstop=2
 setl softtabstop=2
 
-func! RunHtml()
-    if IsOSX()
-        exe 'w'
-        exe 'silent !open % &'
-        exe 'redraw!'
-    endif
-endf
-
-call DoMap('nnore', 'r', ':call RunHtml()<cr>', ['<buffer>'])
+if IsOSX()
+    call DoMap('nnore', 'r', ':w<cr>:silent !open % &<cr>:redraw!<cr>', ['<buffer>'])
+endif
