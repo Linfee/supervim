@@ -19,7 +19,7 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 <!--</settings>-->
 
 <typeAliases>
-<package name="${1}" />
+	<package name="${1}" />
 </typeAliases>
 
 <!--配置pageHelper插件 -->
@@ -35,13 +35,13 @@ endsnippet
 snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
 	<properties resource="db.properties"/>
 
 	<typeAliases>
-	$1
+		$1
 	</typeAliases>
 
 	<environments default="development">
@@ -63,9 +63,9 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 	</plugin>
 </plugins>
 
-	<mappers>
+<mappers>
 	$0
-	</mappers>
+</mappers>
 
 </configuration>
 endsnippet
@@ -77,44 +77,44 @@ PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-<context id="testTables" targetRuntime="MyBatis3">
-    <commentGenerator>
-      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-      <property name="suppressAllComments" value="true" />
-    </commentGenerator>
-    <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
-    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-      connectionURL="jdbc:mysql://localhost:3306/example" userId="root"
-      password="root">
-    </jdbcConnection>
-    <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
-      NUMERIC 类型解析为java.math.BigDecimal -->
-    <javaTypeResolver>
-      <property name="forceBigDecimals" value="false" />
-    </javaTypeResolver>
+	<context id="testTables" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/example" userId="root"
+			password="root">
+		</jdbcConnection>
+		<!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+		NUMERIC 类型解析为java.math.BigDecimal -->
+	<javaTypeResolver>
+		<property name="forceBigDecimals" value="false" />
+	</javaTypeResolver>
 
-    <!-- targetProject:生成PO类的位置 -->
-    <javaModelGenerator targetPackage="com.example.pojo" targetProject="./src/main/java">
-      <!-- enableSubPackages:是否让schema作为包的后缀 -->
-      <property name="enableSubPackages" value="false" />
-      <!-- 从数据库返回的值被清理前后的空格 -->
-      <property name="trimStrings" value="true" />
-    </javaModelGenerator>
-    <!-- targetProject:mapper映射文件生成的位置 -->
-    <sqlMapGenerator targetPackage="com.example.mapper" targetProject="./src/main/resources">
-      <!-- enableSubPackages:是否让schema作为包的后缀 -->
-      <property name="enableSubPackages" value="false" />
-    </sqlMapGenerator>
-    <!-- targetPackage：mapper接口生成的位置 -->
-    <javaClientGenerator type="XMLMAPPER"
-      targetPackage="com.example.mapper" targetProject="./src/main/java">
-      <!-- enableSubPackages:是否让schema作为包的后缀 -->
-      <property name="enableSubPackages" value="false" />
-    </javaClientGenerator>
-    <!-- 指定数据库表 -->
-    <table tableName="" domainObjectName="" />
+	<!-- targetProject:生成PO类的位置 -->
+	<javaModelGenerator targetPackage="com.example.pojo" targetProject="./src/main/java">
+		<!-- enableSubPackages:是否让schema作为包的后缀 -->
+		<property name="enableSubPackages" value="false" />
+		<!-- 从数据库返回的值被清理前后的空格 -->
+		<property name="trimStrings" value="true" />
+	</javaModelGenerator>
+	<!-- targetProject:mapper映射文件生成的位置 -->
+	<sqlMapGenerator targetPackage="com.example.mapper" targetProject="./src/main/resources">
+		<!-- enableSubPackages:是否让schema作为包的后缀 -->
+		<property name="enableSubPackages" value="false" />
+	</sqlMapGenerator>
+	<!-- targetPackage：mapper接口生成的位置 -->
+	<javaClientGenerator type="XMLMAPPER"
+		targetPackage="com.example.mapper" targetProject="./src/main/java">
+		<!-- enableSubPackages:是否让schema作为包的后缀 -->
+		<property name="enableSubPackages" value="false" />
+	</javaClientGenerator>
+	<!-- 指定数据库表 -->
+	<table tableName="" domainObjectName="" />
 
-  </context>
+</context>
 </generatorConfiguration>
 endsnippet
 
@@ -139,15 +139,15 @@ snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 <!--使用注解驱动的处理器适配器和映射器-->
 <mvc:annotation-driven/>
 
+<!--配置资源映射, 仅在DispatcherServlet的url-pattern配置为/时需要-->
+<mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
+<mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
+
 <!--配置视图解析器，这里使用jsp-->
 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	<property name="prefix" value="/WEB-INF/jsp/"/>
 	<property name="suffix" value=".jsp"/>
 </bean>
-
-<!--配置资源映射, 仅在DispatcherServlet的url-pattern配置为/时需要-->
-<mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
-<mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
 endsnippet
 
 snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的Datasource" b
@@ -207,7 +207,7 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 <servlet-mapping>
 	<!--
 	1. *.action  处理以 .action 结尾的请求
-	2. /  处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
+	2. /	处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
 	3. /*  这样配置不对, 会导致 jsp 也有 DispatcherServlet 解析, 会报错
 	-->
 	<servlet-name>spring-mvc</servlet-name>
@@ -324,7 +324,7 @@ snippet ssm-jedisCluster-config-ful "带有JedisPoolConfig的jedis集群配置" 
 				<constructor-arg name="host" value="127.0.0.1"/>
 				<constructor-arg name="port" value="7003"/>
 			</bean>
-	</set>
+		</set>
 	</constructor-arg>
 </bean>
 endsnippet
@@ -345,7 +345,7 @@ snippet ssm-jedisCluster-config-mini "推荐的，最简单的jedis集群配置"
 				<constructor-arg name="host" value="127.0.0.1"/>
 				<constructor-arg name="port" value="7003"/>
 			</bean>
-	</set>
+		</set>
 	</constructor-arg>
 	<constructor-arg name="poolConfig" value="jedisPoolConfig"/>
 </bean>
@@ -353,7 +353,7 @@ endsnippet
 
 snippet ssm-freemarker-view-resolver "springmvc的freemarker配置" b
 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-	<property name="templateLoaderPath" value="/WEB-INF/freemarker"/>
+	<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
 </bean>
 <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 	<property name="cache" value="true"/>
@@ -364,7 +364,11 @@ snippet ssm-freemarker-view-resolver "springmvc的freemarker配置" b
 endsnippet
 
 snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
-<bean class="org.springframework.web.servlet.view.ContentNegotiaingViewResolver>"
+<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+</bean>
+
+<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 	<property name="viewResolvers">
 		<list>
 			<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
