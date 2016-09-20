@@ -265,4 +265,26 @@ function! VisualSelection(direction, extra_filter) range " {{
     let @" = l:saved_reg
 endfunction "}}
 
+function! Replace(confirm, wholeword, replace) " 替换函数 {{
+    " 替换函数。参数说明：
+    " confirm：是否替换前逐一确认
+    " wholeword：是否整词匹配
+    " replace：被替换字符串
+    wa
+    let flag = ''
+    if a:confirm
+        let flag .= 'gec'
+    else
+        let flag .= 'ge'
+    endif
+    let search = ''
+    if a:wholeword
+        let search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
+    else
+        let search .= expand('<cword>')
+    endif
+    let replace = escape(a:replace, '/\&~')
+    execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
+endfunction " }}
+
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:

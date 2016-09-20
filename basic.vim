@@ -221,9 +221,6 @@ set textwidth=500
 set foldmethod=marker
 nnoremap <f10> :set foldenable!<cr>
 
-" 设置vim切换粘贴模式的快捷键，不能点击的终端启用
-set pastetoggle=<leader>pp
-
 " }}}1
 
 " look and feel ------------------------------------------------------------{{{1
@@ -307,14 +304,22 @@ endif
 " 设置 leader 键
 let mapleader = ";"
 let maplocalleader = "\\"
+call DoAltMap('nnore', ';', ';')    " 使用<a-;>来完成原来;的工作
 
 " editing --------------------------{{{2
+" 搜索替换
+    " 搜索并替换所有
+    call DoMap('vnore', 'r', ":call VisualSelection('replace', '')<CR>", ['<silent>'])
+    " 不确认、非整词
+    nnoremap <Leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+    " 不确认、整词
+    nnoremap <Leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+    " 确认、非整词
+    nnoremap <Leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+    " 确认、整词
+    nnoremap <Leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
 " 快速关闭搜索高亮
 call DoMap('nnore', '<cr>', ':nohlsearch<cr>', ['<silent>'])
-" 搜索并替换所有
-call DoMap('vnore', 'r', ":call VisualSelection('replace', '')<CR>", ['<silent>'])
-" 搜索并替换所有
-vnoremap <silent> <leader>fr :call VisualSelection('replace', '')<CR>
 " 查找并合并冲突
 nnoremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 " 横向滚动
@@ -336,16 +341,16 @@ nnoremap <c-u> g~iw
 inoremap <c-u> <esc>g~iwea
 " 使用Y复制到行尾
 nnoremap Y y$
-" i_alt-x删除当前行
+" <a-x>删除当前行
 call DoAltMap('inore', 'x', '<c-o>dd')
-" 使用<M-p>代替<C-n>进行补全
+" 使用<a-p>代替<C-n>进行补全
 call DoAltMap('inore', 'p', '<c-n>')
 " 设置补全菜单样式
 set completeopt=longest,menu,preview
-" alt+d 删除词
+" <a-d> 删除词
 call DoAltMap('inore', 'd', '<c-w>')
 call DoAltMap('cnore', 'd', '<c-w>')
-" alt+= 使用表达式寄存器
+" <alt-=> 使用表达式寄存器
 call DoAltMap('inore', '=', '<c-r>=')
 " 开关折叠
 nnoremap - za
@@ -446,6 +451,8 @@ nnoremap <leader><f7> :set foldlevel=7<cr>
 nnoremap <leader><f8> :set foldlevel=8<cr>
 nnoremap <leader><f9> :set foldlevel=9<cr>
 
+" 设置vim切换粘贴模式的快捷键，不能点击的终端启用
+nnoremap <leader>tp :set paste!<cr>
 " ----------------------------------}}}2
 
 " file buffer tab and window -------{{{2
@@ -512,7 +519,7 @@ call DoMap('nnore', 'q', ':close<cr>')
 call DoMap('nnore', 'w', ':w<cr>')
 " 以sudo权限保存
 if !IsWin()
-    cnoremap W! !sudo tee % > /dev/null<cr>
+    cnoremap W !sudo tee % > /dev/null<cr>
     call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
 endif
 
@@ -545,7 +552,6 @@ endif
 
 " [iabbrev]
 iabbrev xdate <c-r>=strftime("%Y/%d/%m %H:%M:%S")<cr>
-iabbrev viminfo vim: set sw=4 ts=4 sts=4 et tw=80 fmr={,} fdm=marker nospell:
 "  去除Windows的 ^M 在编码混乱的时候
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
@@ -840,8 +846,7 @@ if isdirectory(expand('~/.vim/plugged/nerdtree'))
     call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515')
 
     nnoremap <leader>e :NERDTreeFind<CR>
-    " nnoremap <Leader>n <plug>NERDTreeTabsToggle<CR>
-    " nnoremap <Leader>n :NERDTreeTabsToggle<CR>
+    nnoremap <Leader>tn :NERDTreeTabsToggle<CR>
     call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
     " 快速切换nerdtree到当前文件目录
     nnoremap <silent><leader>n :exec("NERDTree ".expand('%:h'))<CR>
@@ -1056,8 +1061,8 @@ endif
 
 " vim-shell {{{2
 if isdirectory(expand('~/.vim/plugged/vimshell.vim'))
-    nnoremap <space>s :VimShellTab<cr> 
-    nnoremap <space>d :VimShellPop<cr>
+    nnoremap <space>s :VimShellTab<cr>
+    nnoremap <space>d :VimShellPop<cr><esc>
 
     if has('win32') || has('win64')
       " Display user name on Windows.
@@ -1107,11 +1112,9 @@ if isdirectory(expand('~/.vim/plugged/indentLine'))
     let g:indentLine_color_tty_light = 7 " (default: 4)
     let g:indentLine_color_dark = 1 " (default: 2)
     " 设置表示缩进的字符
-    " let g:indentLine_char = 'c'
-    " 默认关闭
+    " let g:indentLine_char = ''
     let g:indentLine_enabled = 0
-    nnoremap <space>i :IndentLinesToggle<cr>
-    nnoremap <leader>ai :IndentLinesToggle<cr>
+    nnoremap <leader>ti :IndentLinesToggle<cr>
 endif
 " }}}2
 
@@ -1175,7 +1178,7 @@ endif
 
 " undotree {{{2
 if isdirectory(expand('~/.vim/plugged/undotree'))
-    nnoremap <leader>u :UndotreeToggle<cr>
+    nnoremap <leader>tu :UndotreeToggle<cr>
     nnoremap <space>u :UndotreeToggle<cr>
     let g:undotree_SetFocusWhenToggle=1
 endif
@@ -1185,7 +1188,7 @@ endif
 if isdirectory(expand('~/.vim/plugged/auto-pairs'))
     "  什么时候想自己写插件应该看看这个插件的源码
     let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
-    let g:AutoPairsShortcutToggle = '<leader>ac'
+    let g:AutoPairsShortcutToggle = '<leader>ta'
     if IsOSX()
         let g:AutoPairsShortcutFastWrap = 'å'
     elseif IsLinux() && !IsGui()
@@ -1329,7 +1332,7 @@ if isdirectory(expand('~/.vim/plugged/rainbow'))
         \   }
         \}
     let g:rainbow_active = 1
-    nnoremap <leader>rb :RainbowToggle<cr>
+    nnoremap <leader>tr :RainbowToggle<cr>
 endif
 " }}}2
 
@@ -1337,7 +1340,7 @@ endif
 if isdirectory(expand('~/.vim/plugged/HTML-AutoCloseTag'))
     " Make it so AutoCloseTag works for xml and xhtml files as well
     au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
-    nnoremap <Leader>at <Plug>ToggleAutoCloseMappings
+    nnoremap <Leader>tt <Plug>ToggleAutoCloseMappings
 endif
 " }}}2
 
@@ -1408,45 +1411,15 @@ if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
 endif
 " }}}2
 
-" Goyo {{{2
-if isdirectory(expand('~/.vim/plugged/goyo.vim'))
-    function! s:goyo_enter()
-        if has('gui_running')
-            set fullscreen
-            " set background=light
-            set linespace=7
-        elseif exists('$TMUX')
-            silent !tmux set status off
-        endif
-    endfunction
+" vim-over {{{2
+" <leader>rr快速执行替换预览
+nnoremap <leader>rr :OverCommandLine<cr>%s/
+" }}}2
 
-    function! s:goyo_leave()
-        if has('gui_running')
-            set nofullscreen
-            " set background=dark
-            set linespace=0
-        elseif exists('$TMUX')
-            silent !tmux set status on
-        endif
-    endfunction
-
-    " autocmd! User GoyoEnter nested call <SID>goyo_enter()
-    " autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-    let g:s_goyo_on = 0
-    func GoyoToggle()
-        if g:s_goyo_on
-            call <SID>goyo_leave()
-            exe 'Goyo'
-            let g:s_goyo_on = 0
-        else
-            call <SID>goyo_enter()
-            exe 'Goyo'
-            let g:s_goyo_on = 1
-        endif
-    endf
-    " 使用<space>来切换goyo
-    call DoMap('nnore', 'g', ':call GoyoToggle()<cr>')
+" CtrlSF {{{2
+if isdirectory(expand('~/.vim/plugged/ctrlsf.vim'))
+    call DoAltMap('nnore', 'f', ':CtrlSF ')
+    call DoMap('nnore', 'f', ':CtrlSFToggle<cr>')
 endif
 " }}}2
 
@@ -1570,15 +1543,6 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim'))
     " Maps            |  Normal mode mappings
     " Helptags        |  Help tags 1
     " Filetypes       |  File types
-endif
-" }}}2
-
-" solarized {{{2
-if isdirectory(expand('~/.vim/plugged/vim-colors-solarized'))
-    let g:solarized_termcolors=256
-    let g:solarized_termtrans=1
-    let g:solarized_contrast="normal"
-    let g:solarized_visibility="normal"
 endif
 " }}}2
 
