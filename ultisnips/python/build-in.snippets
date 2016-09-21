@@ -1,0 +1,294 @@
+########################################
+#  build-in functions
+########################################
+
+snippet abs "abs(number) -> number" i
+abs(${1:number})$0
+endsnippet
+snippet all "all(iterable) -> bool, equal &&" i
+all(${1:iterable})$0
+endsnippet
+snippet any "any(iterable) -> bool, equal ||" i
+any(${1:iterable})$0
+endsnippet
+snippet ascii "like repr(), escape non-ascii characters" i
+ascii(${1:object})$0
+endsnippet
+snippet bin "bin(number) -> string" i
+bin(${1:number})$0
+endsnippet
+snippet bool "bool(x) -> bool" i
+bool(${1:x})$0
+endsnippet
+snippet bytearray1 "bytearray(string, encoding[, errors]) -> bytearray." i
+bytearray(${1:string}, ${2:encoding, ${3:[errors]}})$0
+endsnippet
+snippet bytearray2 "bytearray(iterable_of_ints) -> bytearray" i
+bytearray(${1:iterable_of_ints})$0
+endsnippet
+snippet bytearray3 "bytearray(bytes_or_bytearray) -> mutable copy of bytes_or_bytearray." i
+bytearray(${1:bytes_or_bytearray})$0
+endsnippet
+snippet bytearray4 "bytearray(memory_view) -> bytearray." i
+bytearray(${1:memory_view})$0
+endsnippet
+snippet bytes1 "bytes() -> empty bytes object" i
+bytes()
+endsnippet
+snippet bytes2 "bytes(iterable_of_ints) -> bytes" i
+bytes(${1:iterable_of_ints})
+endsnippet
+snippet bytes3 "bytes(string, encoding[, errors]) -> bytes" i
+bytes(${1:string}, ${2:encoding}, ${3:[errors]})
+endsnippet
+snippet bytes4 "bytes(bytes_or_buffer) -> immutable copy of bytes_or_buffer" i
+bytes(${1:bytes_or_buffer})$0
+endsnippet
+snippet bytes5 "bytes(int) -> bytes object of size given by the parameter initialized with null bytes" i
+bytes(${1:int})$0
+endsnippet
+snippet callable "callable(object) -> bool" i
+callable(${1:object})$0
+endsnippet
+snippet chr "chr(i) -> character" i
+chr(${1:i})$0
+endsnippet
+snippet classmethod "classmethod(function) -> method" b
+classmethod(${1:function})$0
+endsnippet
+snippet compile "compile(source, filename, mode[, flags[, dont_inherit]]) -> code object" b
+compile(${1:source}, ${2:filename}, ${3:mode}, ${4:[flags], ${5:[dont_inherit]}})$0
+endsnippet
+snippet complex "complex(real[, imag]) -> complex number" i
+complex(${1:real}, ${2:imag})
+endsnippet
+snippet delattr "delattr(object, name)" i
+delattr(${1:object}, ${2:name})
+endsnippet
+snippet dict1 "dict() -> new empty dictionary" i
+dict()$0
+endsnippet
+snippet dict2 "dict(mapping) -> new dictionary initialized from a mapping object's (key, value) pairs" i
+dict(${1:mapping})$0
+endsnippet
+snippet dict3 "dict(iterable) -> new dictionary initialized from a iterable" i
+dict(p${1:iterable})$0
+endsnippet
+snippet dict4 "dict(**kwargs) -> new dictionary initialized with the name=value pairs" i
+dict(${1:**kwargs})$0
+endsnippet
+snippet dir "dir([object]) -> list of strings" i
+dir(${1:[object]})$0
+endsnippet
+snippet divmod "divmod(x, y) -> (quotient, remainder)" i
+divmod(${1:x}, ${2:y})$0
+endsnippet
+snippet enumerate "enumerate(iterable[, start]) -> iterator for index, value of iterable" i
+enumerate(${1:iterable}, ${2:[start]})$0
+endsnippet
+snippet eval "eval(source[, globals[, locals]]) -> value" i
+eval(${1:source}, ${2:[globals], ${3:[locals]}})$0
+endsnippet
+snippet exec "exec(source, globals=None, locals=None)" i
+exec(${1:source}, ${2:[globals=None]}, ${4:[locals=None]})$0
+endsnippet
+snippet filter "filter(function or None, sequence) -> list, tuple, or string" i
+filter(${1:function or None}, ${2:sequence})$0
+endsnippet
+snippet float "float(x) -> floating point number" i
+float(${1:x})$0
+endsnippet
+snippet format "format(value[, format_spec]) -> string" i
+format(${1:value}, ${2:[format_spec]})$0
+endsnippet
+snippet frozenset1 "frozenset() -> empty frozenset object" i
+frozenset()$0
+endsnippet
+snippet frozenset2 "frozenset(iterable) -> frozenset object" i
+frozenset(${1:iterable})$0
+endsnippet
+snippet getattr "getattr(object, name[, default]) -> value" i
+getattr(${1:object}, ${2:name}, ${3:[default]})$0
+endsnippet
+snippet globals "globals() -> dictionary" i
+globals()$0
+endsnippet
+snippet hasattr "hasattr(object, name) -> bool" i
+hasattr(${1:object}, ${2:name})$0
+endsnippet
+snippet hash "hash(object) -> integer" i
+hash(${1:object})$0
+endsnippet
+snippet help "help" i
+help(${1:[object]})$0
+endsnippet
+snippet hex "hex(number) -> string" i
+hex(${1:number})$0
+endsnippet
+snippet id "id(object) -> integer" i
+id(${1:object})$0
+endsnippet
+snippet input "input([prompt]) -> value" i
+input(${1:[prompt]})$0
+endsnippet
+snippet int1 "int(x=0) -> int or long" i
+int(${1:x=${2:0}})$0
+endsnippet
+snippet int2 "int(x, base=10) -> int or long" i
+int(${1:x}, ${2:[base=10]})$0
+endsnippet
+snippet isinstance "isinstance(object, class-or-type-or-tuple) -> bool" i
+isinstance(${1:object}, ${2:class-or-type-or-tuple})$0
+endsnippet
+snippet issubclass "issubclass(C, B) -> bool" i
+issubclass(${1:C}, ${2:B})$0
+endsnippet
+snippet iter "iter(collection, sentinel=None)" i
+iter(${1:collection}, ${2:[sentinel=None]})$0
+endsnippet
+snippet len "len(object) -> integer" i
+len(${1:object})$0
+endsnippet
+snippet list1 "list() -> new empty list" i
+list()$0
+endsnippet
+snippet list2 "list(iterable) -> new list initialized from iterable's items" i
+list(${1:iterable})$0
+endsnippet
+snippet locals "locals() -> dictionary" i
+locals()$0
+endsnippet
+snippet map "map(function, sequence[, sequence, ...]) -> list" i
+map(${1:function}, ${2:sequence}, ${3:[sequences]})$0
+endsnippet
+snippet max1 "max(iterable[, key=func]) -> value" i
+max(${1:iterable}, ${2:[key=func]})$0
+endsnippet
+snippet max2 "max(a, b, c, ...[, key=func]) -> value" i
+max(${1:a, b, c, ...}, ${2:[key=func]})$0
+endsnippet
+snippet memoryview "memoryview(object)" i
+memoryview(${1:object})$0
+endsnippet
+snippet min1 "min(iterable[, key=func]) -> value" i
+min(${1:iterable}, ${2:[key=func]})$0
+endsnippet
+snippet min2 "min(a, b, c, ...[, key=func]) -> value" i
+min(${1:a, b, c, ...}, ${2:[key=func]})$0
+endsnippet
+snippet next "next(iterator, default=None)" i
+next(${1:iterator}, ${2:[default=None]})$0
+endsnippet
+snippet object "The most base type" i
+object()$0
+endsnippet
+snippet oct "oct(number) -> string" i
+oct(${1:number})$0
+endsnippet
+snippet open "open(name, mode=None, buffering=None)" i
+open(${1:[name]}, ${2:[mode=None]}, ${3:[buffering=None]})$0
+endsnippet
+snippet ord "ord(c) -> integer" i
+ord(${1:c})$0
+endsnippet
+snippet pow "pow(x, y[, z]) -> number" i
+pow(${1:x}, ${2:y}, ${3:[z]})$0
+endsnippet
+snippet print1 "print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)" i
+print(${1:[value, ...]}, ${2:[sep=' ']}, ${3:[end='\n']}, ${4:[file=sys.stdout]}, ${5:[flush=False]})$0
+endsnippet
+snippet print2 "print(value, ..., sep=' ', end='\n')" i
+print(${1:value, ...}, sep=${2:' '}, end=${3:'\n'})$0
+endsnippet
+snippet print3 "print(value, ..., end='\n')" i
+print(${1:value, ...}, end=${2:'\n'})$0
+endsnippet
+snippet print "print()" i
+print($1)$0
+endsnippet
+snippet property "property(fget=None, fset=None, fdel=None, doc=None) -> property attribute" i
+property(${1:[fget=None]}, ${2:[fset=None]}, ${3:[fdel=None]}, ${4:[doc=None]})$0
+endsnippet
+snippet range "range(start, stop=None, step=1)" i
+range(${1:start}, ${2:[stop=None]}, ${3:[step=1]})$0
+endsnippet
+snippet repr "repr(object) -> string" i
+repr(${1:object})$0
+endsnippet
+snippet reversed "reversed(sequence) -> reverse iterator over values of the sequence" i
+reversed(${1:sequence})$0
+endsnippet
+snippet round "round(number[, ndigits]) -> floating point number" i
+round(${1:number}, ${2:[ndigits]})$0
+endsnippet
+snippet set "set(iterable) -> new set object" i
+set(${1:[iterable]})$0
+endsnippet
+snippet setattr "setattr(object, name, value)" i
+setattr(${1:object}, ${2:name}, ${3:value})$0
+endsnippet
+snippet slice "slice(start, stop)" i
+slice(${1:start}, ${2:stop})$0
+endsnippet
+snippet slice1 "slice(start, stop[, step])" i
+slice(${1:start}, ${2:stop}, ${3:[step]})$0
+endsnippet
+snippet sorted "sorted(iterable, cmp=None, key=None, reverse=False)" i
+sorted(${1:iterable}, ${2:[cmp=None]}, ${3:[key=None]}, ${4:[reverse=False]})$0
+endsnippet
+snippet staticmethod "staticmethod(function) -> method" i
+staticmethod(${1:function})$0
+endsnippet
+snippet str "str(object='') -> string" i
+str(${1:object=''})$0
+endsnippet
+snippet sum "sum(sequence[, start]) -> value" i
+sum(${1:sequence}, ${2:[start]})$0
+endsnippet
+snippet super1 "super(type, obj) -> bound super object; requires isinstance(obj, type)" i
+super(${1:type}, ${2:obj})$0
+endsnippet
+snippet super2 "super(type) -> unbound super object" i
+super(${1:type})$0
+endsnippet
+snippet super3 "super(type, type2) -> bound super object; requires issubclass(type2, type)" i
+super(${1:type}, ${2:type2})$0
+endsnippet
+snippet tuple "tuple(iterable) -> tuple initialized from iterable's items" i
+tuple(${1:[iterable]})$0
+endsnippet
+snippet type1 "type(object) -> the object's type" i
+type(${1:object})$0
+endsnippet
+snippet type2 "type(name, bases, dict) -> a new type" b
+type(${1:name}, ${2:bases}, ${3:dict})$0
+endsnippet
+snippet vars "vars([object]) -> dictionary" i
+vars(${1:[object]})$0
+endsnippet
+snippet zip "zip(seq1 [, seq2 [...]]) -> [(seq1[0], seq2[0] ...), (...)]" i
+zip(${1:seq1} , ${2:[seq2]...})
+endsnippet
+snippet __import__ "__import__(name, globals={}, locals={}, fromlist=[], level=-1) -> module" i
+__import__(${1:name}, ${2:globals={}}, ${3:locals={}}, ${4:fromlist=[]}, ${5:level=-1})
+endsnippet
+
+########################################
+#  build-in constants
+########################################
+
+snippet "[Ff]al?s?e?" "False" r
+False
+endsnippet
+snippet "[Tt]rue?" "True" r
+True
+endsnippet
+snippet "[Nn]one?" "None" r
+None
+endsnippet
+snippet "[Nn]ot[Ii]m?p?l?e?m?e?n?t?e?d?" "NotImplemented" r
+NotImplemented
+endsnippet
+snippet "[Ee]lli?p?s?i?s?" "Ellipsis" r
+Ellipsis
+endsnippet

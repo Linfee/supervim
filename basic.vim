@@ -519,7 +519,7 @@ call DoMap('nnore', 'q', ':close<cr>')
 call DoMap('nnore', 'w', ':w<cr>')
 " 以sudo权限保存
 if !IsWin()
-    cnoremap W !sudo tee % > /dev/null<cr>
+    cnoremap W! !sudo tee % > /dev/null<cr>
     call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
 endif
 
