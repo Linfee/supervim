@@ -565,6 +565,10 @@ function! Init()
     exe "quit"
 endfunction
 
+function! UpdateSupervim()
+    exe "!cd ~/.vim/supervim && git pull"
+endfunctio
+
 " 编译和运行 {{{2
 " 按F5编译运行
 nnoremap <F5> :call Run()<CR>
