@@ -75,7 +75,6 @@ if !exists("g:ideavim")
     " Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']}
     Plug 'terryma/vim-expand-region' " 扩展选择
     Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
-    Plug 'fholgado/minibufexpl.vim'
 
     Plug 'vim-scripts/EasyGrep', {'on': ['Grep', 'GrepAdd', 'Replace', 'ReplaceUndo', 'GrepOptions', 'ResultListFilter', 'ResultListOpen']}
     Plug 'dyng/ctrlsf.vim' " 强大的工程查找工具，依赖ack，ag
