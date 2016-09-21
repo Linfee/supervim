@@ -3,7 +3,7 @@
 ########################################
 
 
-snippet "^(import\s)(\w+[.\w+]*)\." "import foo to from foo import" r
+snippet "^(import\s)(\w+[.\w+]*)\." "import_foo to from foo import" r
 `!p
 snip.rv=' '.join(('from', match.group(2), 'import '))`
 endsnippet
@@ -14,750 +14,750 @@ snip.rv=' '.join(('import', match.group(2)))`
 endsnippet
 
 # 字符串处理
-snippet "import re" "[text] 正则表达式模块" b
+snippet import_re "[text] 正则表达式模块" b
 import re
 endsnippet
-snippet "import string" "[text] 字符串操作" b
+snippet import_string "[text] 字符串操作" b
 import string
 endsnippet
-snippet "import difflib" "[text] 正则表达式" b
+snippet import_difflib "[text] 正则表达式" b
 import difflib
 endsnippet
-snippet "import difflib" "[text]" b
+snippet import_difflib "[text]" b
 import string
 endsnippet
-snippet "import textwrap" "[text] 文本包装和填充" b
+snippet import_textwrap "[text] 文本包装和填充" b
 import textwrap
 endsnippet
-snippet "import unicodedata" "[text] unicode数据库" b
+snippet import_unicodedata "[text] unicode数据库" b
 import unicodedata
 endsnippet
-snippet "import stringprep" "[text]" b
+snippet import_stringprep "[text]" b
 import stringprep
 endsnippet
-snippet "import readline" "[text]" b
+snippet import_readline "[text]" b
 import readline
 endsnippet
-snippet "import rlcompleter" "[text]" b
+snippet import_rlcompleter "[text]" b
 import rlcompleter
 endsnippet
 
 # 二进制相关
-snippet "import struct" "[binary]" b
+snippet import_struct "[binary]" b
 import struct
 endsnippet
-snippet "import codecs" "[binary]" b
+snippet import_codecs "[binary]" b
 import codecs
 endsnippet
 
 # 数据类型
-snippet "import datetime" "[datatypes] 基本日期时间类型" b
+snippet import_datetime "[datatypes] 基本日期时间类型" b
 import datetime
 endsnippet
-snippet "import calendat" "[datatypes] 与日历相关的一些函数" b
+snippet import_calendat "[datatypes] 与日历相关的一些函数" b
 import calendat
 endsnippet
-snippet "import collections" "[datatypes] 容器" b
+snippet import_collections "[datatypes] 容器" b
 import collections
 endsnippet
-snippet "import collections.abc" "[datatypes] 容器的抽象基类" b
+snippet import_collections.abc "[datatypes] 容器的抽象基类" b
 import collections.abc
 endsnippet
-snippet "import heapq" "[datatypes] 堆队列算法" b
+snippet import_heapq "[datatypes] 堆队列算法" b
 import heapq
 endsnippet
-snippet "import bisect" "[datatypes] 数组二分算法" b
+snippet import_bisect "[datatypes] 数组二分算法" b
 import bisect
 endsnippet
-snippet "import array" "[datatypes]" b
+snippet import_array "[datatypes]" b
 import array
 endsnippet
-snippet "import weakref" "[datatypes] 弱引用" b
+snippet import_weakref "[datatypes] 弱引用" b
 import weakref
 endsnippet
-snippet "import types" "[datatypes] 动态类型创建以及为内置类型命令" b
+snippet import_types "[datatypes] 动态类型创建以及为内置类型命令" b
 import types
 endsnippet
-snippet "import copy" "[datatypes] 浅层和深层复制操作" b
+snippet import_copy "[datatypes] 浅层和深层复制操作" b
 import copy
 endsnippet
-snippet "import pprint" "[datatypes] 打印整洁的数据" b
+snippet import_pprint "[datatypes] 打印整洁的数据" b
 import pprint
 endsnippet
-snippet "import reprlib" "[datatypes] repr()的替代实现" b
+snippet import_reprlib "[datatypes] repr()的替代实现" b
 import reprlib
 endsnippet
-snippet "import enum" "[datatypes] 枚举类型支持" b
+snippet import_enum "[datatypes] 枚举类型支持" b
 import enum
 endsnippet
 
 # 数字与数学模块
-snippet "import numbers" "[math & bumber] 数字抽象基类" b
+snippet import_numbers "[math & bumber] 数字抽象基类" b
 import numbers
 endsnippet
-snippet "import math" "[math & bumber] 数学函数" b
+snippet import_math "[math & bumber] 数学函数" b
 import math
 endsnippet
-snippet "import cmath" "[math & bumber] 用于复数的数学函数" b
+snippet import_cmath "[math & bumber] 用于复数的数学函数" b
 import cmath
 endsnippet
-snippet "import decimal" "[math & bumber]" b
+snippet import_decimal "[math & bumber]" b
 import decimal
 endsnippet
-snippet "import fractions" "[math & bumber] 有理数" b
+snippet import_fractions "[math & bumber] 有理数" b
 import fractions
 endsnippet
-snippet "import random" "[math & bumber] 生成伪随机数" b
+snippet import_random "[math & bumber] 生成伪随机数" b
 import random
 endsnippet
-snippet "import statistics" "[math & bumber] 数理统计函数" b
+snippet import_statistics "[math & bumber] 数理统计函数" b
 import statistics
 endsnippet
 
 # 函数式编程模块
-snippet "import itertools" "[functional] 创建高效迭代器的函数" b
+snippet import_itertools "[functional] 创建高效迭代器的函数" b
 import itertools
 endsnippet
-snippet "import functools" "[functional] 高级函数，可调用对象的操作" b
+snippet import_functools "[functional] 高级函数，可调用对象的操作" b
 import functools
 endsnippet
-snippet "import operator" "[functional]" b
+snippet import_operator "[functional]" b
 import operator
 endsnippet
 
 # 文件与目录访问
-snippet "import pathlib" "[filesys]" b
+snippet import_pathlib "[filesys]" b
 import pathlib
 endsnippet
-snippet "import os.path" "[filesys]" b
+snippet import_os.path "[filesys]" b
 import os.path
 endsnippet
-snippet "import fileinput" "[filesys]" b
+snippet import_fileinput "[filesys]" b
 import fileinput
 endsnippet
-snippet "import stat" "[filesys] 解析stat()的结果" b
+snippet import_stat "[filesys] 解析stat()的结果" b
 import stat
 endsnippet
-snippet "import filecmp" "[filesys] 文件和目录的比较" b
+snippet import_filecmp "[filesys] 文件和目录的比较" b
 import filecmp
 endsnippet
-snippet "import tempfile" "[filesys] 生成临时文件和目录" b
+snippet import_tempfile "[filesys] 生成临时文件和目录" b
 import tempfile
 endsnippet
-snippet "import glob" "[filesys]" b
+snippet import_glob "[filesys]" b
 import glob
 endsnippet
-snippet "import fnmatch" "[filesys] unix风格的文件名模式匹配" b
+snippet import_fnmatch "[filesys] unix风格的文件名模式匹配" b
 import fnmatch
 endsnippet
-snippet "import linecache" "[filesys] 文本行随机访问" b
+snippet import_linecache "[filesys] 文本行随机访问" b
 import linecache
 endsnippet
-snippet "import shutil" "[filesys] 高级文件操作" b
+snippet import_shutil "[filesys] 高级文件操作" b
 import shutil
 endsnippet
-snippet "import macpath" "[filesys] mac os 9 路径操作函数" b
+snippet import_macpath "[filesys] mac os 9 路径操作函数" b
 import macpath
 endsnippet
 
 # 数据持久化
-snippet "import pickle" "[persistence] python对象序列化" b
+snippet import_pickle "[persistence] python对象序列化" b
 import pickle
 endsnippet
-snippet "import copyreg" "[persistence]" b
+snippet import_copyreg "[persistence]" b
 import copyreg
 endsnippet
-snippet "import shelve" "[persistence]" b
+snippet import_shelve "[persistence]" b
 import shelve
 endsnippet
-snippet "import marshal" "[persistence]" b
+snippet import_marshal "[persistence]" b
 import marshal
 endsnippet
-snippet "import dbm" "[persistence]" b
+snippet import_dbm "[persistence]" b
 import dbm
 endsnippet
-snippet "import sqlite3" "[persistence] 对应DB-API2.0的sqlite数据库接口" b
+snippet import_sqlite3 "[persistence] 对应DB-API2.0的sqlite数据库接口" b
 import sqlite3
 endsnippet
 
 # 数据压缩和归档
-snippet "import zlib" "[archiving] 兼容gzip压缩" b
+snippet import_zlib "[archiving] 兼容gzip压缩" b
 import zlib
 endsnippet
-snippet "import gzip" "[archiving] 支持gzip文件" b
+snippet import_gzip "[archiving] 支持gzip文件" b
 import gzip
 endsnippet
-snippet "import bz2" "[archiving] 支持bzip2压缩" b
+snippet import_bz2 "[archiving] 支持bzip2压缩" b
 import bz2
 endsnippet
-snippet "import lzma" "[archiving] 使用lzma算法压缩" b
+snippet import_lzma "[archiving] 使用lzma算法压缩" b
 import lzma
 endsnippet
-snippet "import zipfile" "[archiving] 使用zip压缩文档" b
+snippet import_zipfile "[archiving] 使用zip压缩文档" b
 import zipfile
 endsnippet
-snippet "import tarfile" "[archiving] 读取与压缩tar文件" b
+snippet import_tarfile "[archiving] 读取与压缩tar文件" b
 import tarfile
 endsnippet
 
 # 文件格式
-snippet "import cvs" "[fileformat]" b
+snippet import_cvs "[fileformat]" b
 import cvs
 endsnippet
-snippet "import configparser" "[fileformat]" b
+snippet import_configparser "[fileformat]" b
 import configparser
 endsnippet
-snippet "import netrc" "[fileformat]" b
+snippet import_netrc "[fileformat]" b
 import netrc
 endsnippet
-snippet "import xdrlib" "[fileformat]" b
+snippet import_xdrlib "[fileformat]" b
 import xdrlib
 endsnippet
 
 # 加密
-snippet "import hashlib" "[crypto]" b
+snippet import_hashlib "[crypto]" b
 import hashlib
 endsnippet
-snippet "import hmac" "[crypto]" b
+snippet import_hmac "[crypto]" b
 import hmac
 endsnippet
 
 # 通用操作系统服务
-snippet "import os" "[datatypes]" b
+snippet import_os "[datatypes]" b
 import os
 endsnippet
-snippet "import io" "[datatypes]" b
+snippet import_io "[datatypes]" b
 import io
 endsnippet
-snippet "import time" "[datatypes]" b
+snippet import_time "[datatypes]" b
 import time
 endsnippet
-snippet "import argparse" "[datatypes]" b
+snippet import_argparse "[datatypes]" b
 import argparse
 endsnippet
-snippet "import getopt" "[datatypes]" b
+snippet import_getopt "[datatypes]" b
 import getopt
 endsnippet
-snippet "import logging" "[datatypes]" b
+snippet import_logging "[datatypes]" b
 import logging
 endsnippet
-snippet "import logging.config" "[datatypes]" b
+snippet import_logging.config "[datatypes]" b
 import logging.config
 endsnippet
-snippet "import logging.handlers" "[datatypes]" b
+snippet import_logging.handlers "[datatypes]" b
 import logging.handlers
 endsnippet
-snippet "import getpass" "[datatypes]" b
+snippet import_getpass "[datatypes]" b
 import getpass
 endsnippet
-snippet "import curses" "[datatypes]" b
+snippet import_curses "[datatypes]" b
 import curses
 endsnippet
-snippet "import curses.textpad" "[datatypes]" b
+snippet import_curses.textpad "[datatypes]" b
 import curses.textpad
 endsnippet
-snippet "import curses.ascii" "[datatypes]" b
+snippet import_curses.ascii "[datatypes]" b
 import curses.ascii
 endsnippet
-snippet "import curses.panel" "[datatypes]" b
+snippet import_curses.panel "[datatypes]" b
 import curses.panel
 endsnippet
-snippet "import platform" "[datatypes]" b
+snippet import_platform "[datatypes]" b
 import platform
 endsnippet
-snippet "import errno" "[datatypes]" b
+snippet import_errno "[datatypes]" b
 import errno
 endsnippet
-snippet "import ctypes" "[datatypes]" b
+snippet import_ctypes "[datatypes]" b
 import ctypes
 endsnippet
 
 # 并发
-snippet "import threading" "[concurrency]" b
+snippet import_threading "[concurrency]" b
 import threading
 endsnippet
-snippet "import multiprocessing" "[concurrency]" b
+snippet import_multiprocessing "[concurrency]" b
 import multiprocessing
 endsnippet
-snippet "import concurrent.futures" "[concurrency]" b
+snippet import_concurrent.futures "[concurrency]" b
 import concurrent.futures
 endsnippet
-snippet "import subprocess" "[concurrency]" b
+snippet import_subprocess "[concurrency]" b
 import subprocess
 endsnippet
-snippet "import sched" "[concurrency]" b
+snippet import_sched "[concurrency]" b
 import sched
 endsnippet
-snippet "import queue" "[concurrency]" b
+snippet import_queue "[concurrency]" b
 import queue
 endsnippet
-snippet "import dummy_threading" "[concurrency]" b
+snippet import_dummy_threading "[concurrency]" b
 import dummy_threading
 endsnippet
-snippet "import _thread" "[concurrency]" b
+snippet import__thread "[concurrency]" b
 import _thread
 endsnippet
-snippet "import _dummy_thread" "[concurrency]" b
+snippet import__dummy_thread "[concurrency]" b
 import _dummy_thread
 endsnippet
 
 # 进程通信和联网
-snippet "import socket" "[socket]" b
+snippet import_socket "[socket]" b
 import socket
 endsnippet
-snippet "import ssl" "[socket]" b
+snippet import_ssl "[socket]" b
 import ssl
 endsnippet
-snippet "import select" "[socket]" b
+snippet import_select "[socket]" b
 import select
 endsnippet
-snippet "import selectors" "[socket]" b
+snippet import_selectors "[socket]" b
 import selectors
 endsnippet
-snippet "import asyncore" "[socket]" b
+snippet import_asyncore "[socket]" b
 import asyncore
 endsnippet
-snippet "import asynchat" "[socket]" b
+snippet import_asynchat "[socket]" b
 import asynchat
 endsnippet
-snippet "import signal" "[socket]" b
+snippet import_signal "[socket]" b
 import signal
 endsnippet
-snippet "import mmap" "[socket]" b
+snippet import_mmap "[socket]" b
 import mmap
 endsnippet
 
 # 互联网数据处理
-snippet "import email" "[netdata]" b
+snippet import_email "[netdata]" b
 import email
 endsnippet
-snippet "import json" "[netdata]" b
+snippet import_json "[netdata]" b
 import json
 endsnippet
-snippet "import mailcap" "[netdata]" b
+snippet import_mailcap "[netdata]" b
 import mailcap
 endsnippet
-snippet "import mailbox" "[netdata]" b
+snippet import_mailbox "[netdata]" b
 import mailbox
 endsnippet
-snippet "import mimetypes" "[netdata]" b
+snippet import_mimetypes "[netdata]" b
 import mimetypes
 endsnippet
-snippet "import base64" "[netdata]" b
+snippet import_base64 "[netdata]" b
 import base64
 endsnippet
-snippet "import binhex" "[netdata]" b
+snippet import_binhex "[netdata]" b
 import binhex
 endsnippet
-snippet "import binascii" "[netdata]" b
+snippet import_binascii "[netdata]" b
 import binascii
 endsnippet
-snippet "import uu" "[netdata]" b
+snippet import_uu "[netdata]" b
 import uu
 endsnippet
 
 # 结构化标记处理
-snippet "import html" "[markup]" b
+snippet import_html "[markup]" b
 import html
 endsnippet
-snippet "import html.paster" "[markup]" b
+snippet import_html.paster "[markup]" b
 import html.paster
 endsnippet
-snippet "import html.entities" "[markup]" b
+snippet import_html.entities "[markup]" b
 import html.entities
 endsnippet
-snippet "import xml.etree.ElementTree" "[markup]" b
+snippet import_xml.etree.ElementTree "[markup]" b
 import xml.etree.ElementTree
 endsnippet
-snippet "import xml.dom" "[markup]" b
+snippet import_xml.dom "[markup]" b
 import xml.dom
 endsnippet
-snippet "import xml.dom.minidom" "[markup]" b
+snippet import_xml.dom.minidom "[markup]" b
 import xml.dom.minidom
 endsnippet
-snippet "import xml.dom.pulldom" "[markup]" b
+snippet import_xml.dom.pulldom "[markup]" b
 import xml.dom.pulldom
 endsnippet
-snippet "import xml.sax.handler" "[markup]" b
+snippet import_xml.sax.handler "[markup]" b
 import xml.sax.handler
 endsnippet
-snippet "import xml.sax.saxutils" "[markup]" b
+snippet import_xml.sax.saxutils "[markup]" b
 import xml.sax.saxutils
 endsnippet
-snippet "import xml.sax.xmlreader" "[markup]" b
+snippet import_xml.sax.xmlreader "[markup]" b
 import xml.sax.xmlreader
 endsnippet
-snippet "import xml.parsers.expat" "[markup]" b
+snippet import_xml.parsers.expat "[markup]" b
 import xml.parsers.expat
 endsnippet
 
 # 网络协议与支持
-snippet "import webbrowser" "[internet]" b
+snippet import_webbrowser "[internet]" b
 import webbrowser
 endsnippet
-snippet "import cgi" "[internet]" b
+snippet import_cgi "[internet]" b
 import cgi
 endsnippet
-snippet "import cgitb" "[internet]" b
+snippet import_cgitb "[internet]" b
 import cgitb
 endsnippet
-snippet "import utllib" "[internet]" b
+snippet import_utllib "[internet]" b
 import utllib
 endsnippet
-snippet "import utllib.request" "[internet]" b
+snippet import_utllib.request "[internet]" b
 import utllib.request
 endsnippet
-snippet "import utllib.response" "[internet]" b
+snippet import_utllib.response "[internet]" b
 import utllib.response
 endsnippet
-snippet "import utllib.parse" "[internet]" b
+snippet import_utllib.parse "[internet]" b
 import utllib.parse
 endsnippet
-snippet "import utllib.error" "[internet]" b
+snippet import_utllib.error "[internet]" b
 import utllib.error
 endsnippet
-snippet "import utllib.robotparser" "[internet]" b
+snippet import_utllib.robotparser "[internet]" b
 import utllib.robotparser
 endsnippet
-snippet "import http" "[internet]" b
+snippet import_http "[internet]" b
 import http
 endsnippet
-snippet "import http.client" "[internet]" b
+snippet import_http.client "[internet]" b
 import http.client
 endsnippet
-snippet "import ftplib" "[internet]" b
+snippet import_ftplib "[internet]" b
 import ftplib
 endsnippet
-snippet "import poplib" "[internet]" b
+snippet import_poplib "[internet]" b
 import poplib
 endsnippet
-snippet "import imaplib" "[internet]" b
+snippet import_imaplib "[internet]" b
 import imaplib
 endsnippet
-snippet "import nntplib" "[internet]" b
+snippet import_nntplib "[internet]" b
 import nntplib
 endsnippet
-snippet "import smtplib" "[internet]" b
+snippet import_smtplib "[internet]" b
 import smtplib
 endsnippet
-snippet "import smtpd" "[internet]" b
+snippet import_smtpd "[internet]" b
 import smtpd
 endsnippet
-snippet "import telnetlib" "[internet]" b
+snippet import_telnetlib "[internet]" b
 import telnetlib
 endsnippet
-snippet "import uuid" "[internet]" b
+snippet import_uuid "[internet]" b
 import uuid
 endsnippet
-snippet "import socketserver" "[internet]" b
+snippet import_socketserver "[internet]" b
 import socketserver
 endsnippet
-snippet "import http.server" "[internet]" b
+snippet import_http.server "[internet]" b
 import http.server
 endsnippet
-snippet "import http.cookies" "[internet]" b
+snippet import_http.cookies "[internet]" b
 import http.cookies
 endsnippet
-snippet "import http.cookiejar" "[internet]" b
+snippet import_http.cookiejar "[internet]" b
 import http.cookiejar
 endsnippet
-snippet "import ipaddress" "[internet]" b
+snippet import_ipaddress "[internet]" b
 import ipaddress
 endsnippet
 
 # 多媒体服务
-snippet "import audioop" "[mm]" b
+snippet import_audioop "[mm]" b
 import audioop
 endsnippet
-snippet "import aifc" "[mm]" b
+snippet import_aifc "[mm]" b
 import aifc
 endsnippet
-snippet "import sunau" "[mm]" b
+snippet import_sunau "[mm]" b
 import sunau
 endsnippet
-snippet "import wave" "[mm]" b
+snippet import_wave "[mm]" b
 import wave
 endsnippet
-snippet "import chunk" "[mm]" b
+snippet import_chunk "[mm]" b
 import chunk
 endsnippet
-snippet "import colorsys" "[mm]" b
+snippet import_colorsys "[mm]" b
 import colorsys
 endsnippet
-snippet "import imghdr" "[mm]" b
+snippet import_imghdr "[mm]" b
 import imghdr
 endsnippet
-snippet "import sndhdr" "[mm]" b
+snippet import_sndhdr "[mm]" b
 import sndhdr
 endsnippet
-snippet "import ossaudiodev" "[mm]" b
+snippet import_ossaudiodev "[mm]" b
 import ossaudiodev
 endsnippet
 
 # 国际化
-snippet "import gettext" "[i18n]" b
+snippet import_gettext "[i18n]" b
 import gettext
 endsnippet
-snippet "import locale" "[i18n]" b
+snippet import_locale "[i18n]" b
 import locale
 endsnippet
 
 # 程序框架
-snippet "import turtle" "[frameworks]" b
+snippet import_turtle "[frameworks]" b
 import turtle
 endsnippet
-snippet "import cmd" "[frameworks]" b
+snippet import_cmd "[frameworks]" b
 import cmd
 endsnippet
-snippet "import shlex" "[frameworks]" b
+snippet import_shlex "[frameworks]" b
 import shlex
 endsnippet
 
 # tk用户图形接口
-snippet "import tkinter" "[tk]" b
+snippet import_tkinter "[tk]" b
 import tkinter
 endsnippet
-snippet "import tkinter.ttk" "[tk]" b
+snippet import_tkinter.ttk "[tk]" b
 import tkinter.ttk
 endsnippet
-snippet "import tkinter.tix" "[tk]" b
+snippet import_tkinter.tix "[tk]" b
 import tkinter.tix
 endsnippet
-snippet "import tkinter.scrolledtext" "[tk]" b
+snippet import_tkinter.scrolledtext "[tk]" b
 import tkinter.scrolledtext
 endsnippet
 
 # 开发工具
-snippet "import typing" "[development]" b
+snippet import_typing "[development]" b
 import typing
 endsnippet
-snippet "import pydoc" "[development]" b
+snippet import_pydoc "[development]" b
 import pydoc
 endsnippet
-snippet "import doctest" "[development]" b
+snippet import_doctest "[development]" b
 import doctest
 endsnippet
-snippet "import unittest" "[development]" b
+snippet import_unittest "[development]" b
 import unittest
 endsnippet
-snippet "import unittest.mock" "[development]" b
+snippet import_unittest.mock "[development]" b
 import unittest.mock
 endsnippet
-snippet "import 2to3" "[development]" b
+snippet import_2to3 "[development]" b
 import 2to3
 endsnippet
-snippet "import test" "[development]" b
+snippet import_test "[development]" b
 import test
 endsnippet
-snippet "import test.support" "[development]" b
+snippet import_test.support "[development]" b
 import test.support
 endsnippet
 
 # 调试和分析
-snippet "import bdb" "[debug]" b
+snippet import_bdb "[debug]" b
 import bdb
 endsnippet
-snippet "import faulthandler" "[debug]" b
+snippet import_faulthandler "[debug]" b
 import faulthandler
 endsnippet
-snippet "import pdb" "[debug]" b
+snippet import_pdb "[debug]" b
 import pdb
 endsnippet
-snippet "import timeit" "[debug]" b
+snippet import_timeit "[debug]" b
 import timeit
 endsnippet
-snippet "import trace" "[debug]" b
+snippet import_trace "[debug]" b
 import trace
 endsnippet
-snippet "import tracemalloc" "[debug]" b
+snippet import_tracemalloc "[debug]" b
 import tracemalloc
 endsnippet
 
 # 软件打包与发布
-snippet "import distutils" "[distribution]" b
+snippet import_distutils "[distribution]" b
 import distutils
 endsnippet
-snippet "import ensurepip" "[distribution]" b
+snippet import_ensurepip "[distribution]" b
 import ensurepip
 endsnippet
-snippet "import venv" "[distribution]" b
+snippet import_venv "[distribution]" b
 import venv
 endsnippet
-snippet "import zipapp" "[distribution]" b
+snippet import_zipapp "[distribution]" b
 import zipapp
 endsnippet
 
 # python运行时服务
-snippet "import sys" "[python]" b
+snippet import_sys "[python]" b
 import sys
 endsnippet
-snippet "import sysconfig" "[python]" b
+snippet import_sysconfig "[python]" b
 import sysconfig
 endsnippet
-snippet "import builtins" "[python]" b
+snippet import_builtins "[python]" b
 import builtins
 endsnippet
-snippet "import __main__" "[python]" b
+snippet import___main__ "[python]" b
 import __main__
 endsnippet
-snippet "import warnings" "[python]" b
+snippet import_warnings "[python]" b
 import warnings
 endsnippet
-snippet "import contextlib" "[python]" b
+snippet import_contextlib "[python]" b
 import contextlib
 endsnippet
-snippet "import abc" "[python]" b
+snippet import_abc "[python]" b
 import abc
 endsnippet
-snippet "import atexit" "[python]" b
+snippet import_atexit "[python]" b
 import atexit
 endsnippet
-snippet "import traceback" "[python]" b
+snippet import_traceback "[python]" b
 import traceback
 endsnippet
-snippet "import __future__" "[python]" b
+snippet import___future__ "[python]" b
 import __future__
 endsnippet
-snippet "import gc" "[python]" b
+snippet import_gc "[python]" b
 import gc
 endsnippet
-snippet "import inspect" "[python]" b
+snippet import_inspect "[python]" b
 import inspect
 endsnippet
-snippet "import site" "[python]" b
+snippet import_site "[python]" b
 import site
 endsnippet
-snippet "import fpectl" "[python]" b
+snippet import_fpectl "[python]" b
 import fpectl
 endsnippet
 
 # 自定义python解释器
-snippet "import code" "[custominterp]" b
+snippet import_code "[custominterp]" b
 import code
 endsnippet
-snippet "import codeop" "[custominterp]" b
+snippet import_codeop "[custominterp]" b
 import codeop
 endsnippet
 
 # 模块
-snippet "import zipimport" "[modules]" b
+snippet import_zipimport "[modules]" b
 import zipimport
 endsnippet
-snippet "import pkgutil" "[modules]" b
+snippet import_pkgutil "[modules]" b
 import pkgutil
 endsnippet
-snippet "import modulefinder" "[modules]" b
+snippet import_modulefinder "[modules]" b
 import modulefinder
 endsnippet
-snippet "import runpy" "[modules]" b
+snippet import_runpy "[modules]" b
 import runpy
 endsnippet
-snippet "import importlib" "[modules]" b
+snippet import_importlib "[modules]" b
 import importlib
 endsnippet
 
 # 语言服务
-snippet "import parser" "[language]" b
+snippet import_parser "[language]" b
 import parser
 endsnippet
-snippet "import ast" "[language]" b
+snippet import_ast "[language]" b
 import ast
 endsnippet
-snippet "import symtable" "[language]" b
+snippet import_symtable "[language]" b
 import symtable
 endsnippet
-snippet "import token" "[language]" b
+snippet import_token "[language]" b
 import token
 endsnippet
-snippet "import keyword" "[language]" b
+snippet import_keyword "[language]" b
 import keyword
 endsnippet
-snippet "import tokenize" "[language]" b
+snippet import_tokenize "[language]" b
 import tokenize
 endsnippet
-snippet "import tabnanny" "[language]" b
+snippet import_tabnanny "[language]" b
 import tabnanny
 endsnippet
-snippet "import pyclbr" "[language]" b
+snippet import_pyclbr "[language]" b
 import pyclbr
 endsnippet
-snippet "import py_compile" "[language]" b
+snippet import_py_compile "[language]" b
 import py_compile
 endsnippet
-snippet "import compileall" "[language]" b
+snippet import_compileall "[language]" b
 import compileall
 endsnippet
-snippet "import dis" "[language]" b
+snippet import_dis "[language]" b
 import dis
 endsnippet
-snippet "import pickletools" "[language]" b
+snippet import_pickletools "[language]" b
 import pickletools
 endsnippet
 
 # 杂项
-snippet "import formatter" "[misc]" b
+snippet import_formatter "[misc]" b
 import hmac
 endsnippet
 
 # windows专用服务
-snippet "import msilib" "[windows] 读写mis安装文件" b
+snippet import_msilib "[windows] 读写mis安装文件" b
 import msilib
 endsnippet
-snippet "import msvcrt" "[windows]" b
+snippet import_msvcrt "[windows]" b
 import msvcrt
 endsnippet
-snippet "import winreg" "[windows] 注册表访问" b
+snippet import_winreg "[windows] 注册表访问" b
 import winreg
 endsnippet
-snippet "import winsound" "[windows] windows声音接口" b
+snippet import_winsound "[windows] windows声音接口" b
 import winsound
 endsnippet
 
 # unix专用服务
-snippet "import posix" "[unix] 通用的unix系统调用接口" b
+snippet import_posix "[unix] 通用的unix系统调用接口" b
 import posix
 endsnippet
-snippet "import pwd" "[unix] 密码数据库" b
+snippet import_pwd "[unix] 密码数据库" b
 import pwd
 endsnippet
-snippet "import spwd" "[unix]" b
+snippet import_spwd "[unix]" b
 import spwd
 endsnippet
-snippet "import grp" "[unix]" b
+snippet import_grp "[unix]" b
 import grp
 endsnippet
-snippet "import crypt" "[unix]" b
+snippet import_crypt "[unix]" b
 import crypt
 endsnippet
-snippet "import termios" "[unix]" b
+snippet import_termios "[unix]" b
 import termios
 endsnippet
-snippet "import tty" "[unix]" b
+snippet import_tty "[unix]" b
 import tty
 endsnippet
-snippet "import pty" "[unix]" b
+snippet import_pty "[unix]" b
 import pty
 endsnippet
-snippet "import fcntl" "[unix]" b
+snippet import_fcntl "[unix]" b
 import fcntl
 endsnippet
-snippet "import pipes" "[unix]" b
+snippet import_pipes "[unix]" b
 import pipes
 endsnippet
-snippet "import resource" "[unix]" b
+snippet import_resource "[unix]" b
 import resource
 endsnippet
-snippet "import nis" "[unix]" b
+snippet import_nis "[unix]" b
 import nis
 endsnippet
-snippet "import syslog" "[unix]" b
+snippet import_syslog "[unix]" b
 import syslog
 endsnippet
 
 # 作废模块
-snippet "import optparse" "[superseded]" b
+snippet import_optparse "[superseded]" b
 import optparse
 endsnippet
-snippet "import imp" "[superseded]" b
+snippet import_imp "[superseded]" b
 import imp
 endsnippet
