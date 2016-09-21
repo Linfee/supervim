@@ -8,7 +8,7 @@ snippet "^(import\s)(\w+[.\w+]*)\." "import_foo to from foo import" r
 snip.rv=' '.join(('from', match.group(2), 'import '))`
 endsnippet
 
-snippet "^(from\s)(\w+[.\w+]*)(\simport\s)\." "from foo import to import foo" r
+snippet "^(from\s)(\w+[.\w+]*)(\simport\s)" "from foo import to import foo" r
 `!p
 snip.rv=' '.join(('import', match.group(2)))`
 endsnippet
