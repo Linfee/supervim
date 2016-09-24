@@ -45,3 +45,7 @@ def ${1:name}(${2:args}):
 
 $0
 endsnippet
+
+snippet partial "建立偏函数" b
+functools.partial(${1:func}, ${2:*args and **kw})
+endsnippet
