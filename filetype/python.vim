@@ -1,5 +1,4 @@
 " filetype config for .py file
-let g:ftconfigloaded = 1
 
 setl smarttab
 setl tabstop=4
@@ -26,4 +25,9 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 endfunction
 
-call DoMap('nnore', 'r', ':w<cr>:!chmod +x % && ./%<cr>', ['<buffer>'])
+" 运行
+call DoMap('nnore', 'r', ':w<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
+" vim-autopep8格式化
+call DoAltMap('nnore', 'F', ':Autopep8<cr>')
+
+" nnoremap <f5> :w<cr>:AsyncRun chmod u+x % && AsyncRun ./%<cr>:cw<cr>:

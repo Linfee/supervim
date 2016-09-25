@@ -1,5 +1,4 @@
 " filetype config for .md file
-let g:ftconfigloaded = 1
 
 setl smarttab
 " setl expandtab
@@ -10,6 +9,6 @@ setl softtabstop=4
 
 setl nowrap
 
-inoremap · `
+inoremap <buffer> · `
 
 call DoMap('nnore', 'r', ':MarkdownPreview<cr>', ['<buffer>'])

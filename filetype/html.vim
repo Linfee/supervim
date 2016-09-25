@@ -1,5 +1,4 @@
 " filetype config for .html file
-let g:ftconfigloaded = 1
 
 setl smarttab
 setl expandtab

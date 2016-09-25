@@ -566,32 +566,7 @@ endfunction
 
 function! UpdateSupervim()
     exe "!cd ~/.vim/supervim && git pull"
-endfunctio
-
-" 编译和运行 {{{2
-" 按F5编译运行
-nnoremap <F5> :call Run()<CR>
-function! Run()
-    exec "w"
-    if &filetype == 'c'
-        exec "!gcc % -o %< && ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %< && ./%<"
-    elseif &filetype == 'sh'
-        exec ":!./%"
-    elseif &filetype == 'groovy'
-        exec "!groovy %"
-    elseif &filetype == 'scala'
-        exec "!scala -deprecation %"
-    endif
 endfunction
-"C,C++的调试
-map <F8> :call Rungdb()<CR>
-function! Rungdb()
-    exec "w"
-    exec "!g++ % -g -o %< && gdb ./%<"
-endfunction
-" }}}2
 
 " }}}1
 
@@ -748,7 +723,7 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " execute是一个命令，没有对应的方法，定义一个，在snippets中用
     function! EXE(e)
         execute(a:e)
-    endfunctio
+    endfunction
 endif
 " }}}2
 
@@ -1547,6 +1522,11 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim'))
     " Helptags        |  Help tags 1
     " Filetypes       |  File types
 endif
+" }}}2
+
+" vim-autopep8 {{{2
+" 格式化完成后不要显示diff窗口
+let g:autopep8_disable_show_diff = 0
 " }}}2
 
 " molokai {{{2

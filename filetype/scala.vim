@@ -1,5 +1,4 @@
 " filetype config for .scala file
-let g:ftconfigloaded = 1
 
 setl smarttab
 setl expandtab
@@ -10,3 +9,6 @@ setl softtabstop=2
 
 iabbrev <buffer> scsh #!/bin/sh<cr>exec scala "$0<right> "$@<right><cr>!#<cr><cr>
 iabbrev <buffer> sisr scala.io.StdIn.readLine("")<left>
+
+" 运行
+" call DoMap('nnore', 'r', ':w<cr>:!scala -deprecation %', ['<buffer>'])

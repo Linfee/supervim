@@ -1,5 +1,4 @@
 " filetype config for .c file
-let g:ftconfigloaded = 1
 
 setl smarttab
 setl expandtab
@@ -9,3 +8,9 @@ setl tabstop=2
 setl softtabstop=2
 
 setl nowrap
+
+" 运行
+call DoMap('nnore', 'r', ':w<cr>:!gcc % -o %< && ./%<<cr>', ['<buffer>'])
+
+" 调试
+nnoremap <buffer> <F8> :w<cr>:!g++ % -g -o %< && gdb ./%<<cr>
