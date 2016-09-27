@@ -8,6 +8,7 @@
 " Author: Linfee
 " REPO: https://github.com/Linfee/supervim
 "
+" supervim for vrapper
 
 set smartindent
 set autoindent

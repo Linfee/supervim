@@ -710,11 +710,16 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " Trigger configuration.
     let g:UltiSnipsExpandTrigger="<tab>"
     let g:UltiSnipsListSnippets="<c-tab>"
-    " let g:UltiSnipsJumpForwardTrigger="<c-j>"
-    " let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-    let g:UltiSnipsJumpForwardTrigger="<tab>"
-    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
+    if IsLinux() && !IsGui()
+        let g:UltiSnipsJumpForwardTrigger="j"
+        let g:UltiSnipsJumpBackwardTrigger="k"
+    elseif IsOSX()
+        let g:UltiSnipsJumpForwardTrigger="∆"
+        let g:UltiSnipsJumpBackwardTrigger="˚"
+    else
+        let g:UltiSnipsJumpForwardTrigger="<a-j>"
+        let g:UltiSnipsJumpBackwardTrigger="<a-k>"
+    endif
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
     nnoremap <leader>au :UltiSnipsAddFiletypes<space>
@@ -840,9 +845,10 @@ if isdirectory(expand('~/.vim/plugged/nerdcommenter'))
     " Set a language to use its alternate delimiters by default
     let g:NERDAltDelims_java = 1
     " 添加自定义注释或者覆盖已有注释
-    " let g:NERDCustomDelimiters={
-    "     \ 'markdown': { 'left': '<!--', 'right': '-->' },
-    "     \ }
+    let g:NERDCustomDelimiters={
+        \ 'python': { 'left': '#' },
+        \ }
+        " \ 'python': { 'left': '#', 'right': '#' }
     " 可以注释和反注释空行
     let g:NERDCommentEmptyLines = 1
     " 取消注释的时候去掉两端空格
@@ -854,6 +860,12 @@ endif
 
 " tagbar {{{2
 if isdirectory(expand('~/.vim/plugged/tagbar'))
+    let g:tagbar_left=0
+    let g:tagbar_width = 30
+    let g:tagbar_zoomwidth = 0          " 缩放以使最长行可见
+    let g:tagbar_show_visibility = 1    " 显示可见性
+    let g:tagbar_iconchars = ['▶', '▼'] " 折叠字符
+
     nnoremap <leader>tt :TagbarToggle<cr>
     call DoMap('nnore', 't', ':TagbarToggle<cr>')
 endif
@@ -1359,7 +1371,13 @@ if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
         let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
         " path to the chrome or the command to open chrome(or other modern browsers)
     elseif IsLinux()
-        let g:mkdp_path_to_chrome = "chromium-browser"
+        if executable('chrome')
+            let g:mkdp_path_to_chrome = "chrome"
+        elseif executable('chromium')
+            let g:mkdp_path_to_chrome = "chromium"
+        elseif executable('chromium-browser')
+            let g:mkdp_path_to_chrome = "chromium-browser"
+        endif
     endif
     " path to the chrome or the command to open chrome(or other modern browsers)
 

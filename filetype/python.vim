@@ -29,5 +29,3 @@ endfunction
 call DoMap('nnore', 'r', ':w<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
 " vim-autopep8格式化
 call DoAltMap('nnore', 'F', ':Autopep8<cr>')
-
-" nnoremap <f5> :w<cr>:AsyncRun chmod u+x % && AsyncRun ./%<cr>:cw<cr>:

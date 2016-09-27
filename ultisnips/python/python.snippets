@@ -49,3 +49,23 @@ endsnippet
 snippet partial "建立偏函数" b
 functools.partial(${1:func}, ${2:*args and **kw})
 endsnippet
+
+snippet class1 "class without docstring" b
+class ${1:MyClass}(${2:object}):
+
+	def __init__(self$3):`!p
+if not len(t[3]):
+	snip >> 2
+	snip += 'pass'
+else:
+	s = t[3][1:]
+	s = s.replace(' ', '')
+	args = s.split(',')
+	args = map(lambda s: s[0:s.find('=')] if '=' in s else s, args)
+	result = map(lambda s: 'self.__{0} = {0}'.format(s), args)
+	snip >> 2
+	for r in result:
+		snip += r `
+
+$0
+endsnippet

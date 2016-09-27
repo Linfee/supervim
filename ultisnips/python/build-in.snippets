@@ -159,7 +159,7 @@ snippet locals "locals() -> dictionary" i
 locals()$0
 endsnippet
 snippet map "map(function, sequence[, sequence, ...]) -> list" i
-map(${1:function}, ${2:sequence}, ${3:[sequences]})$0
+map(${1:function}, ${2:sequences}})$0
 endsnippet
 snippet max1 "max(iterable[, key=func]) -> value" i
 max(${1:iterable}, ${2:[key=func]})$0
@@ -206,9 +206,9 @@ endsnippet
 snippet print "print()" i
 print($1)$0
 endsnippet
-snippet property "property(fget=None, fset=None, fdel=None, doc=None) -> property attribute" i
-property(${1:[fget=None]}, ${2:[fset=None]}, ${3:[fdel=None]}, ${4:[doc=None]})$0
-endsnippet
+# snippet property "property(fget=None, fset=None, fdel=None, doc=None) -> property attribute" i
+# property(${1:[fget=None]}, ${2:[fset=None]}, ${3:[fdel=None]}, ${4:[doc=None]})$0
+# endsnippet
 snippet range "range(start, stop=None, step=1)" i
 range($1)$0
 endsnippet
