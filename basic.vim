@@ -710,16 +710,8 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " Trigger configuration.
     let g:UltiSnipsExpandTrigger="<tab>"
     let g:UltiSnipsListSnippets="<c-tab>"
-    if IsLinux() && !IsGui()
-        let g:UltiSnipsJumpForwardTrigger="j"
-        let g:UltiSnipsJumpBackwardTrigger="k"
-    elseif IsOSX()
-        let g:UltiSnipsJumpForwardTrigger="∆"
-        let g:UltiSnipsJumpBackwardTrigger="˚"
-    else
-        let g:UltiSnipsJumpForwardTrigger="<a-j>"
-        let g:UltiSnipsJumpBackwardTrigger="<a-k>"
-    endif
+    let g:UltiSnipsJumpForwardTrigger="<tab>"
+    let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
     nnoremap <leader>au :UltiSnipsAddFiletypes<space>
@@ -1012,7 +1004,7 @@ if isdirectory(expand('~/.vim/plugged/vim-markdown'))
     let g:vim_markdown_toc_autofit = 1
     let g:vim_markdown_emphasis_multiline = 0
     " 关闭语法隐藏，显示markdown源码而不要隐藏一些东西
-    let g:vim_markdown_conceal = 0
+    " let g:vim_markdown_conceal = 0
     " 代码块语法
     let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
 endif

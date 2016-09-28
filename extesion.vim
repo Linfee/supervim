@@ -133,4 +133,32 @@ augroup miscs
 augroup ENDJ
 " }
 
+" fcitx-support {
+let g:input_toggle = 0
+function! Fcitx2en()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status == 2
+      let g:input_toggle = 1
+      let l:a = system("fcitx-remote -c")
+   endif
+endfunction
+
+function! Fcitx2zh()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status != 2 && g:input_toggle == 1
+      let l:a = system("fcitx-remote -o")
+      let g:input_toggle = 0
+   endif
+endfunction
+
+if IsLinux() && !exists('g:s_no_fcitx_vim')
+    set timeoutlen=200
+    augroup FcitxSupport
+        autocmd!
+        autocmd InsertLeave * call Fcitx2en()
+        autocmd InsertEnter * call Fcitx2zh()
+    augroup END
+endif
+" }
+
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:
