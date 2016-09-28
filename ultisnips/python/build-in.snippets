@@ -261,7 +261,7 @@ snippet type1 "type(object) -> the object's type" i
 type(${1:object})$0
 endsnippet
 snippet type2 "type(name, bases, dict) -> a new type" b
-type(${1:name}, ${2:bases}, ${3:dict})$0
+type(${1:name}, ${2:(super_classes)} ${3:{class_members}})$0
 endsnippet
 snippet vars "vars([object]) -> dictionary" i
 vars(${1:[object]})$0
