@@ -186,7 +186,7 @@ snippet oct "oct(number) -> string" i
 oct(${1:number})$0
 endsnippet
 snippet open "open(name, mode=None, buffering=None)" i
-open(${1:[name]}, ${2:[mode=None]}, ${3:[buffering=None]})$0
+open(${1:name}, mode='${2:r}'${4:, errors='ignore'})$0
 endsnippet
 snippet ord "ord(c) -> integer" i
 ord(${1:c})$0
