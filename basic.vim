@@ -1559,8 +1559,8 @@ endif
 " }}}1
 
 " others -------------------------------------------------------------------{{{1
-" 尝试加载extesion
-let g:s_loaded_extesion = TryLoad('~/.vim/supervim/extesion.vim')
+" 尝试加载extension
+let g:s_loaded_extension = TryLoad('~/.vim/supervim/extension.vim')
 " 尝试加载自定义vimrc
 let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
 " 尝试加载自定义的gvimrc

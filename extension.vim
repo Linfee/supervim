@@ -152,7 +152,7 @@ function! Fcitx2zh()
 endfunction
 
 if IsLinux() && !exists('g:s_no_fcitx_vim')
-    set timeoutlen=200
+    set timeoutlen=300
     augroup FcitxSupport
         autocmd!
         autocmd InsertLeave * call Fcitx2en()
