@@ -81,12 +81,8 @@ if !exists("g:ideavim")
     Plug 'dyng/ctrlsf.vim' " 强大的工程查找工具，依赖ack，ag
     " 强大的模糊搜索，必备神器，需要命令行工具fzf支持
     " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
-    if executable('brew')
-        Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-    else
-        Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-        Plug 'junegunn/fzf.vim'
-    endif
+    Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+    Plug 'junegunn/fzf.vim'
 
     Plug 'tpope/vim-fugitive' " git集成 比较费时间
     Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
