@@ -34,6 +34,8 @@
 
 -   jedi，python补全，没有安装将不能使用python补全，使用`pip install jedi`安装
 
+-   autopep8，用于python的pep8格式化，使用`pip install autopep8`安装
+
 ### Linux和Mac上安装
 
 如果你的环境已经满足了必须依赖，直接执行下面的命令
