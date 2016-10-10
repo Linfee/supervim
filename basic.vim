@@ -1084,22 +1084,6 @@ if isdirectory(expand('~/.vim/plugged/vimshell.vim'))
 endif
 " }}}2
 
-" indentLine {{{2
-if isdirectory(expand('~/.vim/plugged/indentLine'))
-    " Vim
-    let g:indentLine_color_term = 239
-    "GVim
-    let g:indentLine_color_gui = '#A4E57E'
-    " none X terminal
-    let g:indentLine_color_tty_light = 7 " (default: 4)
-    let g:indentLine_color_dark = 1 " (default: 2)
-    " 设置表示缩进的字符
-    " let g:indentLine_char = ''
-    let g:indentLine_enabled = 0
-    nnoremap <leader>ti :IndentLinesToggle<cr>
-endif
-" }}}2
-
 " vim-easy-align {{{2
 if isdirectory(expand('~/.vim/plugged/vim-easy-align'))
     " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -1257,38 +1241,6 @@ if isdirectory(expand('~/.vim/plugged/vim-fugitive'))
 endif
 " }}}2
 
-" sessionman {{{2
-if isdirectory(expand('~/.vim/plugged/sessionman.vim'))
-    set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
-    nnoremap <leader>sl :SessionList<CR>
-    nnoremap <leader>ss :SessionSave<CR>
-    nnoremap <leader>sc :SessionClose<CR>
-endif
-" }}}2
-
-" vim-yankstack {{{2
-if isdirectory(expand('~/.vim/plugged/vim-yankstack'))
-    call DoAltMap('n', 'p', '<Plug>yankstack_substitute_older_paste')
-    call DoAltMap('n', 'P', '<Plug>yankstack_substitute_newer_paste')
-    " 让Y表示复制到行尾
-    call yankstack#setup()
-    nmap Y y$
-endif
-" }}}2
-
-" TextObj Sentence {{{2
-if isdirectory(expand('~/.vim/plugged/vim-textobj-sentence'))
-    augroup textobj_sentence
-        autocmd!
-        autocmd filetype markdown call textobj#sentence#init()
-        autocmd filetype textile call textobj#sentence#init()
-        autocmd filetype text call textobj#sentence#init()
-    augroup end
-    map <silent> <leader>qc <Plug>ReplaceWithCurly
-    map <silent> <leader>qs <Plug>ReplaceWithStraight
-endif
-" }}}2
-
 " rainbow {{{2
 if isdirectory(expand('~/.vim/plugged/rainbow'))
     let g:rainbow_conf = {
@@ -1400,8 +1352,10 @@ endif
 " }}}2
 
 " vim-over {{{2
-" <leader>rr快速执行替换预览
-nnoremap <leader>rr :OverCommandLine<cr>%s/
+if isdirectory(expand('~/.vim/plugged/vim-over'))
+    " <leader>rr快速执行替换预览
+    nnoremap <leader>rr :OverCommandLine<cr>%s/
+endif
 " }}}2
 
 " CtrlSF {{{2
@@ -1535,9 +1489,37 @@ endif
 " }}}2
 
 " vim-autopep8 {{{2
-" 格式化完成后不要显示diff窗口
-let g:autopep8_disable_show_diff = 0
+if isdirectory(expand('~/.vim/plugged/vim-autopep8'))
+    " 格式化完成后不要显示diff窗口
+    let g:autopep8_disable_show_diff = 0
+endif
 " }}}2
+
+" syntastic {{{2
+if isdirectory(expand('~/.vim/plugged/syntastic'))
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 1
+    let g:syntastic_enable_signs=1
+    let g:syntastic_always_populate_loc_list = 1
+    " let g:syntastic_aggregate_errors = 1 " 显示多个检查器的错误
+    let g:syntastic_python_checkers=['flake8']
+    let g:syntastic_javascript_checkers = ['jshint']
+    " Don't warn on
+    "   E121 continuation line indentation is not a multiple of four
+    "   E128 continuation line under-indented for visual indent
+    "   E711 comparison to None should be 'if cond is not None:'
+    "   E301 expected 1 blank line, found 0
+    "   E261 at least two spaces before inline comment
+    "   E241 multiple spaces after ':'
+    "   E124 closing bracket does not match visual indentation
+    "   E126 continuation line over-indented for hanging indent
+    "   E721 do not compare types, use 'isinstance()'
+    " let g:syntastic_python_flake8_args='--ignore=E121,E128,E711,E301,E261,E241,E124,E126,E721
+        " \ --max-line-length=84'
+endif
+"}}}2
 
 " molokai {{{2
 if isdirectory(expand('~/.vim/plugged/molokai'))
