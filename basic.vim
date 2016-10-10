@@ -1516,8 +1516,7 @@ if isdirectory(expand('~/.vim/plugged/syntastic'))
     "   E124 closing bracket does not match visual indentation
     "   E126 continuation line over-indented for hanging indent
     "   E721 do not compare types, use 'isinstance()'
-    " let g:syntastic_python_flake8_args='--ignore=E121,E128,E711,E301,E261,E241,E124,E126,E721
-        " \ --max-line-length=84'
+    let g:syntastic_python_flake8_args='--max-line-length=84'
 endif
 "}}}2
 
