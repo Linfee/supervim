@@ -2,7 +2,6 @@
 #  The python standard libary
 ########################################
 
-
 snippet "^(import\s)(\w+[.\w+]*)\." "import_foo to from foo import" r
 `!p
 snip.rv=' '.join(('from', match.group(2), 'import '))`

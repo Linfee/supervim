@@ -134,7 +134,9 @@ endsnippet
 
 snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 <!--开启组件扫描-->
-<context:component-scan base-package="com.linfee.st.mr.controller"/>
+<context:component-scan base-package="com.babsport" use-default-filters="false">
+	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+</context:component-scan>
 
 <!--使用注解驱动的处理器适配器和映射器-->
 <mvc:annotation-driven/>
@@ -385,4 +387,56 @@ snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
 		</list>
 	</property>
 </bean>
+endsnippet
+
+snippet ssm-service "xml:springmvc配置模板" b
+<context:component-scan base-package="com.linfee">
+	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+</context:component-scan>
+endsnippet
+
+snippet ssm-datasource-c3p0 "The c3p0 datasource" b
+<!--配置数据源-->
+<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	<property name="driverClassName" value="${jdbc.driver}"/>
+	<property name="url" value="${jdbc.url}"/>
+	<property name="username" value="${jdbc.username}"/>
+	<property name="password" value="${jdbc.password}"/>
+	<property name="maxActive" value="10"/>
+	<property name="minIdle" value="5"/>
+</bean>
+endsnippet
+
+snippet ssm-placeholder "The placeholder" b
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<property name="locations">
+		<list>
+			<value>classpath:db.properties</value>
+		</list>
+	</property>
+</bean>
+endsnippet
+
+snippet ssm-mybatis-without-SqlMapConfig "Description" b
+<!--配置sqlSessionFactory -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource" />
+	<property name="mapperLocations" value="classpath:com/babsport/mapper.xml"/>
+	<property name="typeAliasesPackage" value="com.babsport.pojo"/>
+</bean>
+endsnippet
+
+snippet ssm-mapper-scan "Mybatis mapper scan" b
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property name="basePackage" value="com.babsport.mapper"/>
+</bean>
+endsnippet
+
+snippet ssm-mapper "The mapper.xml template" b
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linfee.st.mapper.UserMapper">
+$0
+</mapper>
 endsnippet

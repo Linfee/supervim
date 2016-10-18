@@ -33,3 +33,12 @@ endsnippet
 snippet viminfo "The viminfo" b
 vim: set sw=4 ts=4 sts=4 et tw=80 fmr={,} fdm=marker nospell:
 endsnippet
+
+snippet "([a-zA-Z0-9.-_]+)\.import" "导入指定的snippets" r
+`!p
+c = match.group(1)
+r = vim.command(' '.join(('UltiSnipsAddFiletypes', c)))
+vim.command('echo "Done"')
+snip.rv = ''
+`
+endsnippet

@@ -77,7 +77,7 @@ vim就会支持这个特性。mac下使用brew安装macvim，并加入相关选�
 特性。Windows下可以寻找别人编译好的具有这些特性的vim包，通常还需要安装python。利
 用搜索引擎寻找相关内容，最后，任何系统下都可以自己编译vim，使其支持这些特性。
 
-    brew install macvim --with-cscope --with-lua --override-system-vim
+    brew install macvim --with-cscope --with-lua --with-override-system-vim --with-python3
 
 ### 如果安装脚本执行报错，或者失败怎么办？
 

@@ -7,3 +7,12 @@ snippet < "Inline tag" b
 <${1:tag}>${2:content}</${1/([\w:._-]+).*/$1/}>
 endsnippet
 
+
+snippet tomcat-role "The tomcat roles and users" b
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<role rolename="admin-gui"/>
+<role rolename="admin-script"/>
+<user username="admin" password="passwd" roles="admin-gui,admin-script,manager-gui,manager-script"/>
+<user username="" password="" roles="manager"/>
+endsnippet
