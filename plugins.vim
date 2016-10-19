@@ -24,7 +24,6 @@ if !exists("g:ideavim")
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
     Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
-    Plug 'tomtom/tlib_vim' " Some utility functions for VIM
     Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle', 'NERDTreeFind']}
     Plug 'jistr/vim-nerdtree-tabs', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
     Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
