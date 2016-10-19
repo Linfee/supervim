@@ -635,8 +635,6 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-
-    let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     let g:neocomplete#use_vimproc = 1 " }}}3
 
     " 自动打开关闭弹出式的预览窗口 {{{3
@@ -1007,37 +1005,6 @@ if isdirectory(expand('~/.vim/plugged/vim-markdown'))
     " let g:vim_markdown_conceal = 0
     " 代码块语法
     let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
-endif
-" }}}2
-
-" javacomplete2 {{{2
-if isdirectory(expand('~/.vim/plugged/vim-javacomplete2'))
-    augroup javacomplete2
-        autocmd!
-        autocmd FileType java setlocal omnifunc=javacomplete#Complete
-        autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInf
-        autocmd FileType java inoremap <expr><space> pumvisible() ? "\<F2>" : "<space>"
-        autocmd FileType java inoremap  . .
-        autocmd FileType java call JavaComplete2Config()
-    augroup END
-    function! JavaComplete2Config()
-        " 自动闭合方法的反括号
-        let g:JavaComplete_ClosingBrace = 1
-        " 不要自动导入第一个
-        let g:JavaComplete_ImportDefault = -1
-        "Enable smart (trying to guess import option) inserting class imports
-        nmap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-        imap <buffer> <F2> <Plug>(JavaComplete-Imports-AddSmart)
-        "Enable usual (will ask for import option) inserting class imports
-        nmap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-        imap <buffer> <F3> <Plug>(JavaComplete-Imports-Add)
-        "Add all missing imports
-        nmap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-        imap <buffer> <F4> <Plug>(JavaComplete-Imports-AddMissing)
-        "Remove all missing imports
-        nmap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-        imap <buffer> <F6> <Plug>(JavaComplete-Imports-RemoveUnused)
-    endfunction
 endif
 " }}}2
 
