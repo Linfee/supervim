@@ -1487,6 +1487,18 @@ if isdirectory(expand('~/.vim/plugged/syntastic'))
 endif
 "}}}2
 
+" textobj-user {{{2
+if isdirectory(expand('~/.vim/plugged/vim-textobj-user'))
+    call textobj#user#plugin('datetime', {
+    \   'date': {
+    \     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
+    \     'select': ['ad', 'id'],
+    \   },
+    \ })
+endif
+"}}}2
+
+
 " molokai {{{2
 if isdirectory(expand('~/.vim/plugged/molokai'))
     let g:rehash256 = 1
