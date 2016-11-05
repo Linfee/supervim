@@ -31,9 +31,10 @@ Dear $1,$0Yours sincerely,$2
 endsnippet
 
 snippet viminfo "The viminfo" b
-vim: set sw=4 ts=4 sts=4 et tw=80 fmr={,} fdm=marker nospell:
+vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{,}} fdm=marker nospell:
 endsnippet
 
+# snippets 导入
 snippet "([a-zA-Z0-9.-_]+)\.import" "导入指定的snippets" r
 `!p
 c = match.group(1)
@@ -42,3 +43,12 @@ vim.command('echo "Done"')
 snip.rv = ''
 `
 endsnippet
+
+# 执行vim命令
+snippet "^(.+)\.cmd" "执行vim命令" r
+`!p
+r = vim.command(match.group(1))
+snip.rv = ''
+`
+endsnippet
+

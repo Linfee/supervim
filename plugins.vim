@@ -50,6 +50,7 @@ if !exists("g:ideavim")
     Plug 'Shougo/vimproc.vim', {'do': 'make'}
     Plug 'Shougo/vimshell.vim'
 
+    Plug 'kana/vim-textobj-user' " 方便地自定义文本对象
     Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
     Plug 'tomasr/molokai'
@@ -65,7 +66,7 @@ if !exists("g:ideavim")
     Plug 'tell-k/vim-autopep8', {'for': 'python'} " pep8自动格式化
 
     Plug 'dyng/ctrlsf.vim' " 强大的工程查找工具，依赖ack，ag
-    " 强大的模糊搜索，必备神器，需要命令行工具fzf支持
+    " 强大的模糊搜索，需要命令行工具fzf支持
     " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
     Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
     Plug 'junegunn/fzf.vim'

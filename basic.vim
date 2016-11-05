@@ -1466,7 +1466,7 @@ endif
 if isdirectory(expand('~/.vim/plugged/syntastic'))
     let g:syntastic_always_populate_loc_list = 1
     let g:syntastic_auto_loc_list = 1
-    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_open = 0
     let g:syntastic_check_on_wq = 1
     let g:syntastic_enable_signs=1
     let g:syntastic_always_populate_loc_list = 1
@@ -1486,6 +1486,18 @@ if isdirectory(expand('~/.vim/plugged/syntastic'))
     let g:syntastic_python_flake8_args='--max-line-length=84'
 endif
 "}}}2
+
+" textobj-user {{{2
+if isdirectory(expand('~/.vim/plugged/vim-textobj-user'))
+    call textobj#user#plugin('datetime', {
+    \   'date': {
+    \     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
+    \     'select': ['ad', 'id'],
+    \   },
+    \ })
+endif
+"}}}2
+
 
 " molokai {{{2
 if isdirectory(expand('~/.vim/plugged/molokai'))
