@@ -14,13 +14,13 @@ silent fun! IsOSX()
     return has('macunix')
 endf
 silent fun! IsLinux()
-    return has('unix') && !has('macunix') && !has('win32unix')
+    return has('unix') && !has('macunix') || has('win32unix')
 endf
 silent fun! IsWin()
     return  (has('win32') || has('win64'))
 endf
 silent function! IsGui()
-	return has('gui_running')
+    return has('gui_running')
 endf " }}
 
 " 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 {{
@@ -66,7 +66,7 @@ function! DoMap(prefix, key, operation, ...)
     endif
     " 添加第二个可选参数，用于映射不是<space>打头的映射
     if a:0 > 1
-        let	key_prefix = a:2
+        let key_prefix = a:2
     endif
     let s:c = s:c . ' ' . key_prefix . a:key . ' ' . a:operation
     " echo s:c
