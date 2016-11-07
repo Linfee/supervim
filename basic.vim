@@ -900,46 +900,20 @@ endif
 
 " lightline {{{2
 if isdirectory(expand('~/.vim/plugged/lightline.vim'))
-    if exists("g:s_no_devicons") " {{{3
-        let g:lightline = {
-                    \ 'colorscheme': 'wombat',
-                    \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
-                    \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-                    \ },
-                    \ 'component_expand': {
-                    \   'syntastic': 'SyntasticStatuslineFlag',
-                    \ },
-                    \ 'component_type': {
-                    \   'syntastic': 'error',
-                    \ },
-                    \ 'subseparator': { 'left': '›', 'right': '‹' }
-                    \ }
-    else
-        let g:lightline = {
-                    \ 'colorscheme': 'wombat',
-                    \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
-                    \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-                    \ },
-                    \ 'component_function': {
-                    \   'fugitive': 'LightLineFugitive',
-                    \   'fileformat': 'LightLineFileformat',
-                    \   'filetype': 'LightLineFiletype',
-                    \   'fileencoding': 'LightLineFileencoding',
-                    \   'mode': 'LightLineMode',
-                    \ },
-                    \ 'component_expand': {
-                    \   'syntastic': 'SyntasticStatuslineFlag',
-                    \ },
-                    \ 'component_type': {
-                    \   'syntastic': 'error',
-                    \ },
-                    \ 'subseparator': { 'left': '›', 'right': '‹' }
-                    \ }
-    endif " }}}3
-
-
+    let g:lightline = {
+                \ 'colorscheme': 'wombat',
+                \ 'active': {
+                \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
+                \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+                \ },
+                \ 'component_expand': {
+                \   'syntastic': 'SyntasticStatuslineFlag',
+                \ },
+                \ 'component_type': {
+                \   'syntastic': 'error',
+                \ },
+                \ 'subseparator': { 'left': '›', 'right': '‹' }
+                \ }
     function! LightLineModified()
         return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
     endfunction
@@ -1140,54 +1114,6 @@ if isdirectory(expand('~/.vim/plugged/MatchTagAlways'))
                 \ 'xhtml' : 1,
                 \ 'xml' : 1,
                 \}
-endif
-" }}}2
-
-" vim-devicons {{{2
-if isdirectory(expand('~/.vim/plugged/vim-devicons')) && !exists("g:s_no_devicons")
-    let g:airline_powerline_fonts = 1
-    let g:vimfiler_as_default_explorer = 1
-    " font use double width glyphs
-    let g:WebDevIconsUnicodeGlyphDoubleWidth = 1
-    " enable open and close folder/directory glyph flags
-    let g:DevIconsEnableFoldersOpenClose = 1
-    " specify OS to decide an icon for unix fileformat
-    let g:WebDevIconsOS = 'Darwin'
-
-    " patch font for lightline
-    let g:lightline = {
-                \ 'component_function': {
-                \   'filetype': 'MyFiletype',
-                \   'fileformat': 'MyFileformat',
-                \ }
-                \ }
-
-    function! MyFiletype()
-        return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-    endfunction
-
-    function! MyFileformat()
-        return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-    endfunction
-    " path font for nerd git
-    let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
-
-    " nerd icon
-    augroup nerdColor
-        autocmd!
-        " NERDTress File highlighting only the glyph/icon
-        " test highlight just the glyph (icons) in nerdtree:
-        autocmd filetype nerdtree highlight haskell_icon ctermbg=none ctermfg=Red guifg=#ffa500
-        autocmd filetype nerdtree highlight html_icon ctermbg=none ctermfg=Red guifg=#ffa500
-        autocmd filetype nerdtree highlight go_icon ctermbg=none ctermfg=Red guifg=#ffa500
-
-        autocmd filetype nerdtree syn match haskell_icon ## containedin=NERDTreeFile
-        " if you are using another syn highlight for a given line (e.g.
-        " NERDTreeHighlightFile) need to give that name in the 'containedin' for this
-        " other highlight to work with it
-        autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
-        autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
-    augroup END
 endif
 " }}}2
 

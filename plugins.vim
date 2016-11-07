@@ -75,9 +75,6 @@ if !exists("g:ideavim")
     Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
 
     Plug 'Konfekt/FastFold' " 快速折叠，处理某些折叠延迟
-    if !exists("g:s_no_devicons")
-        Plug 'ryanoasis/vim-devicons' " 各种小图标
-    endif
     Plug 'strom3xFeI/vimdoc-cn'
 
     call plug#end()
