@@ -901,7 +901,7 @@ endif
 " lightline {{{2
 if isdirectory(expand('~/.vim/plugged/lightline.vim'))
     let g:lightline = {
-                \ 'colorscheme': 'wombat',
+                \ 'colorscheme': 'default',
                 \ 'active': {
                 \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
                 \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
@@ -914,56 +914,12 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
                 \ },
                 \ 'subseparator': { 'left': '›', 'right': '‹' }
                 \ }
-    function! LightLineModified()
-        return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-    endfunction
-
-    function! LightLineReadonly()
-        return &ft !~? 'help' && &readonly ? 'RO' : ''
-    endfunction
-
-    function! LightLineFugitive()
-        try
-            if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
-                let mark = ''  " edit here for cool mark
-                let branch = fugitive#head()
-                return branch !=# '' ? mark.branch : ''
-            endif
-        catch
-        endtry
-        return ''
-    endfunction
-
-    function! LightLineFileformat()
-        return winwidth(0) > 70 ? &fileformat : ''
-    endfunction
-
-    function! LightLineFiletype()
-        return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-    endfunction
-
-    function! LightLineFileencoding()
-        return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
-    endfunction
-
-    function! LightLineMode()
-        let fname = expand('%:t')
-        return fname == '__Tagbar__' ? 'Tagbar' :
-                    \ fname == '__Gundo__' ? 'Gundo' :
-                    \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
-                    \ fname =~ 'NERD_tree' ? 'NERDTree' :
-                    \ &ft == 'vimfiler' ? 'VimFiler' :
-                    \ &ft == 'vimshell' ? 'VimShell' :
-                    \ winwidth(0) > 60 ? lightline#mode() : ''
-    endfunction
-
     let g:tagbar_status_func = 'TagbarStatusFunc'
 
     function! TagbarStatusFunc(current, sort, fname, ...) abort
         let g:lightline.fname = a:fname
         return lightline#statusline(0)
     endfunction
-
 endif
 " }}}2
 
@@ -1061,25 +1017,6 @@ endif
 " vim-surround {{{2
 if isdirectory(expand('~/.vim/plugged/vim-surround'))
     vmap Si S(i_<esc>f)
-" vim-surround常用快捷键
-"Normal mode
-"    ds  - delete a surrounding
-"    cs  - change a surrounding
-"    ys  - add a surrounding
-"    yS  - add a surrounding and place the surrounded text on a new line + indent it
-"    yss - add a surrounding to the whole line
-"    ySs - add a surrounding to the whole line, place it on a new line + indent it
-"    ySS - same as ySs
-
-" Visual mode
-"    s   - in visual mode, add a surrounding
-"    S   - in visual mode, add a surrounding but place text on new line + indent it
-
-" Insert mode
-"    <CTRL-s> - in insert mode, add a surrounding
-"    <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
-"    <CTRL-g>s - same as <CTRL-s>
-"    <CTRL-g>S - same as <CTRL-s><CTRL-s>
 endif
 " }}}2
 
@@ -1160,14 +1097,6 @@ if isdirectory(expand('~/.vim/plugged/rainbow'))
         \}
     let g:rainbow_active = 1
     nnoremap <leader>tr :RainbowToggle<cr>
-endif
-" }}}2
-
-" AutoCloseTag {{{2
-if isdirectory(expand('~/.vim/plugged/HTML-AutoCloseTag'))
-    " Make it so AutoCloseTag works for xml and xhtml files as well
-    au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
-    nnoremap <Leader>tt <Plug>ToggleAutoCloseMappings
 endif
 " }}}2
 
@@ -1399,16 +1328,6 @@ if isdirectory(expand('~/.vim/plugged/syntastic'))
     " let g:syntastic_aggregate_errors = 1 " 显示多个检查器的错误
     let g:syntastic_python_checkers=['flake8']
     let g:syntastic_javascript_checkers = ['jshint']
-    " Don't warn on
-    "   E121 continuation line indentation is not a multiple of four
-    "   E128 continuation line under-indented for visual indent
-    "   E711 comparison to None should be 'if cond is not None:'
-    "   E301 expected 1 blank line, found 0
-    "   E261 at least two spaces before inline comment
-    "   E241 multiple spaces after ':'
-    "   E124 closing bracket does not match visual indentation
-    "   E126 continuation line over-indented for hanging indent
-    "   E721 do not compare types, use 'isinstance()'
     let g:syntastic_python_flake8_args='--max-line-length=84'
 endif
 "}}}2
@@ -1423,7 +1342,6 @@ if isdirectory(expand('~/.vim/plugged/vim-textobj-user'))
     \ })
 endif
 "}}}2
-
 
 " molokai {{{2
 if isdirectory(expand('~/.vim/plugged/molokai'))
