@@ -99,14 +99,14 @@ com! -nargs=0 ToTab call ToggleTab('tab')
 " }
 
 " mybatis逆向工程 {
-let g:mybatis_gnenerate_core="none"
+let g:mybatis_generate_core="none"
 let g:driverPath="none"
 func! MybatisGenerate()
-    if g:mybatis_gnenerate_core == "none" || g:driverPath == "none"
-        echo "你必须设置 g:driverPath 和 g:mybatis_gnenerate_core 才能运行该方法"
+    if g:mybatis_generate_core == "none" || g:driverPath == "none"
+        echo "你必须设置 g:driverPath 和 g:mybatis_generate_core 才能运行该方法"
         return
     endif
-    exe("!java -Xbootclasspath/a:" . g:driverPath . " -jar " . g:mybatis_gnenerate_core . expand(" -configfile %") . " -overwrite")
+    exe("!java -Xbootclasspath/a:" . g:driverPath . " -jar " . g:mybatis_generate_core . expand(" -configfile %") . " -overwrite")
 endfunc
 " }
 

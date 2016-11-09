@@ -25,7 +25,8 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 endfunction
 
+
 " 运行
-call DoMap('nnore', 'r', ':w<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
+call DoMap('nnore', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
 " vim-autopep8格式化
 call DoAltMap('nnore', 'F', ':Autopep8<cr>')
