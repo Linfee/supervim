@@ -1179,6 +1179,10 @@ endif
 
 " ctrlp {{{2
 if isdirectory(expand("~/.vim/plugged/ctrlp.vim"))
+    " 设置样式
+    let g:ctrlp_match_window = 'top,order:ttb,min:1,max:10,results:10'
+    " 默认可以使用正则表达式匹配文件名
+    let g:ctrlp_regexp = 1
     " 如果安装了pymatcher使用它
     if isdirectory(expand("~/.vim/plugged/ctrlp-py-matcher"))
         let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
