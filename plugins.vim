@@ -47,8 +47,10 @@ if !exists("g:ideavim")
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'luochen1990/rainbow' " 彩虹括增强版
 
-    " Plug 'Shougo/vimproc.vim', {'do': 'make'}
-    " Plug 'Shougo/vimshell.vim'
+    if IsLinux() && !IsWinUnix()
+        Plug 'Shougo/vimproc.vim', {'do': 'make'}
+        Plug 'Shougo/vimshell.vim'
+    endif
 
     Plug 'kana/vim-textobj-user' " 方便地自定义文本对象
     Plug 'mhinz/vim-startify' " 启动画面
@@ -66,13 +68,16 @@ if !exists("g:ideavim")
     Plug 'tell-k/vim-autopep8', {'for': 'python'} " pep8自动格式化
 
     Plug 'dyng/ctrlsf.vim' " 强大的工程查找工具，依赖ack，ag
-    " 强大的模糊搜索，需要命令行工具fzf支持
-    " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
-    " Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-    " Plug 'junegunn/fzf.vim'
-    Plug 'ctrlpvim/ctrlp.vim' " ctrlp
-    Plug 'tacahiroy/ctrlp-funky' " ctrlp 扩展
-    Plug 'FelikZ/ctrlp-py-matcher' " ctrlp  match function with python2/3
+    if IsWin() || IsWinUnix()
+        Plug 'ctrlpvim/ctrlp.vim' " ctrlp
+        Plug 'tacahiroy/ctrlp-funky' " ctrlp 扩展
+        Plug 'FelikZ/ctrlp-py-matcher' " ctrlp  match function with python2/3
+    elseif IsLinux() || IsOSX()
+        " 强大的模糊搜索，需要命令行工具fzf支持
+        " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
+        Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+        Plug 'junegunn/fzf.vim'
+    endif
 
     Plug 'tpope/vim-fugitive' " git集成 比较费时间
     Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件

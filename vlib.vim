@@ -16,6 +16,9 @@ endf
 silent fun! IsLinux()
     return has('unix') && !has('macunix') || has('win32unix')
 endf
+silent fun! IsWinUnix()
+    return has('win32unix')
+endf
 silent fun! IsWin()
     return  (has('win32') || has('win64'))
 endf
