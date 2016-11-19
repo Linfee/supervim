@@ -27,6 +27,14 @@ endfunction
 
 
 " 运行
-call DoMap('nnore', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
+if IsWin() && !IsWinUnix() " for windows
+    if exists("g:s_py2")
+        call DoMap('nnore', 'r', ':w<cr>:!echo "____________________"<cr>:!py %<cr>', ['<buffer>'])
+    else
+        call DoMap('nnore', 'r', ':w<cr>:!echo ____________________<cr>:!python %<cr>', ['<buffer>'])
+    endif
+else " for linux, osx, mingw, msys2, cygwin
+    call DoMap('nnore', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
+endif
 " vim-autopep8格式化
 call DoAltMap('nnore', 'F', ':Autopep8<cr>')
