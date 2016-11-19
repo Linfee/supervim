@@ -1422,6 +1422,9 @@ if isdirectory(expand('~/.vim/plugged/molokai'))
     let g:molokai_original = 1
 
     colorscheme molokai
+    if NoPlugin() || (IsWin() && !IsWinUnix() && !IsGui())
+        colorscheme desert
+    endif
     " 定制补全菜单颜色
     " 补全菜单的前景和背景
     hi pmenu  guifg=#b6b6a6 guibg=#272823 ctermfg=250 ctermbg=233
