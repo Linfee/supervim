@@ -25,7 +25,13 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 <!--配置pageHelper插件 -->
 <plugins>
 	<plugin interceptor="com.github.pagehelper.PageHelper">
-		<property name="dialect" value="mysql" />
+		<property name="dialect" value="mysql"/>
+		<!--使用RowBounds分页会进行count查询-->
+		<property name="rowBoundsWithCount" value="true"/>
+		<!--为true时，当pageSize-0或RowBounds.limit=0会查出全部结果-->
+		<property name="pageSizeZero" value="true"/>
+		<!--参数合理化，默认禁用，启用时，页码不在返回会查询第一页或最后一页，禁用时，页码不在返回返回空数据-->
+		<property name="reasonable" value="true"/>
 	</plugin>
 </plugins>
 
@@ -58,8 +64,27 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 
 <!--配置pageHelper插件 -->
 <plugins>
+	<!--配置pageHelper插件 -->
 	<plugin interceptor="com.github.pagehelper.PageHelper">
-		<property name="dialect" value="mysql" />
+		<property name="dialect" value="mysql"/>
+		<!--使用RowBounds分页会进行count查询-->
+		<property name="rowBoundsWithCount" value="true"/>
+	</plugin>
+	<!--配置通用mapper-->
+	<plugin interceptor="com.github.abel533.mapperhelper.MapperInterceptor">
+		<!--UUID生成策略-->
+		<!--配置UUID生成策略需要使用OGNL表达式-->
+		<!--默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")-->
+		<!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
+		<!--主键自增回写方法,默认值MYSQL,详细说明请看文档-->
+		<property name="IDENTITY" value="MYSQL"/>
+		<!--序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle-->
+		<!--可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName,PropertyName-->
+		<!--<property name="seqFormat" value="{0}.nextval"/>-->
+		<!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
+		<!--<property name="ORDER" value="AFTER"/>-->
+		<!--通用Mapper接口，多个通用接口用逗号隔开-->
+		<property name="mappers" value="com.github.abel533.mapper.Mapper"/>
 	</plugin>
 </plugins>
 
@@ -153,8 +178,21 @@ snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 endsnippet
 
 snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的Datasource" b
-<!--加载数据库配置文件-->
+<!--加载数据库配置文件，方式一-->
 <context:property-placeholder location="classpath:db.properties"/>
+<!--加载数据库配置文件，方式二，更底层-->
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<!--允许jvm参数覆盖-->
+	<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+	<!--忽略没有找到的资源文件-->
+	<property name="ignoreResourceNotFound" value="true"/>
+	<!--配置资源文件-->
+	<property name="locations">
+		<list>
+			<value>classpath:db.properties</value>
+		</list>
+	</property>
+</bean>
 
 <!--配置数据源-->
 <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
@@ -209,8 +247,9 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 <servlet-mapping>
 	<!--
 	1. *.action  处理以 .action 结尾的请求
-	2. /	处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
-	3. /*  这样配置不对, 会导致 jsp 也有 DispatcherServlet 解析, 会报错
+	2. /    处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
+	3. /x/* /x下的全部
+	4. /*   这样配置不对, 会导致 jsp 也有 DispatcherServlet 解析, 会报错
 	-->
 	<servlet-name>spring-mvc</servlet-name>
 	<url-pattern>*.do</url-pattern>
@@ -404,6 +443,16 @@ snippet ssm-datasource-c3p0 "The c3p0 datasource" b
 	<property name="password" value="${jdbc.password}"/>
 	<property name="maxActive" value="10"/>
 	<property name="minIdle" value="5"/>
+</bean>
+endsnippet
+
+snippet ssm-datasource-bonecp "The bonecp datasource" b
+<!--配置数据源-->
+<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+	<property name="driverClass" value="${jdbc.driver}"/>
+	<property name="jdbcUrl" value="${jdbc.url}"/>
+	<property name="username" value="${jdbc.username}"/>
+	<property name="password" value="${jdbc.password}"/>
 </bean>
 endsnippet
 
