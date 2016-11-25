@@ -146,17 +146,6 @@ silent fun! ToggleBG()
     endif
 endf "}}
 
-" 让vim和系统共享默认剪切板 {{
-silent fun! ShareClipboard()
-    if has('clipboard')
-        if has('unnamedplus')  " When possible use + register for copy-paste
-            set clipboard=unnamed,unnamedplus
-        else         " On mac and Windows, use * register for copy-paste
-            set clipboard=unnamed
-        endif
-    endif
-endf " }}
-
 " 创建文件夹，如果文件夹不存在的化 {{
 silent fun! MkdirIfNotExists(dir)
     if !isdirectory(expand(a:dir))

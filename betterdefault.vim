@@ -1,20 +1,34 @@
+"                                       _
+"     ___ _   _ _ __  ___ _ ___.__   __(_)_ __ ___
+"    / __| | | | '_ \/ _ \ '__/ \ \ / /| | '_ ` _ \
+"    \__ | |_| | |_) | __/ |     \ V / | | | | | | |
+"    |___/\___/| .__/\___|_|      \_/  |_|_| |_| |_|
+"              |_|
+"
+" Author: Linfee
+" REPO:   https://github.com/Linfee/supervim
+" Module: BetterDefault
+" USAGE:  Use as your .vimrc to get a better default or as a module of
+"         supervim.
+"
+
 " --------------------------------------
 " functions to judgment environment
 " --------------------------------------
 silent function! IsOSX()
-    return has('macunix')
+  return has('macunix')
 endfunction
 silent function! IsLinux()
-    return has('unix') && !has('macunix')
+  return has('unix') && !has('macunix')
 endfunction
 silent function! WINDOWS()
-    return  (has('win32') || has('win64'))
+  return  (has('win32') || has('win64'))
 endfunction
 silent function! IsWinUnix()
-    return has('win32unix')
+  return has('win32unix')
 endf
 silent function! IsGui()
-    return has('gui_running')
+  return has('gui_running')
 endf
 
 " --------------------------------------
@@ -22,9 +36,8 @@ endf
 " --------------------------------------
 " use ~/.vim but ~/vimfiles on windows
 if has('win32') || has('win64')
-    set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
-
 
 set nocompatible                 " 关闭vi兼容性
 filetype plugin indent on        " 自动指定文件类型、缩进
@@ -42,7 +55,6 @@ set noshowmode                   " 不显示模式，由插件显示模式
 set hidden                       " 隐藏缓冲区而不是卸载缓冲区
 set backspace=indent,eol,start   " 删除在插入模式可以删除的特殊内容
 set laststatus=2                 " 最后一个窗口总有状态行
-set wildmenu                     " 命令行补全
 set wildmode=list:longest,full   " 设置命令行模式补全模式
 set foldcolumn=2                 " 在左端添加额外折叠列
 set winminheight=0               " 窗口的最小高度
@@ -71,23 +83,22 @@ set splitbelow
 set showmatch
 set mat=2
 
-" 关掉错误声音
+" 关掉错误声音，这个设置仅仅对gui有效
 set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
 
-
-" 设置忽略补全的文件名
+" 命令行补全和忽略补全的文件类型
+set wildmenu
 set wildignore=*.o,*~,*.pyc,*.class
-
+if IsWin()
+  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+else
+  set wildignore+=.git\*,.hg\*,.svn\*
+endif
 " 防止连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
 set nojoinspaces
-if IsWin()
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
-else
-    set wildignore+=.git\*,.hg\*,.svn\*
-endif
 
 " 定义单词结尾
 set iskeyword-=.
@@ -95,6 +106,15 @@ set iskeyword-=#
 set iskeyword-=-
 set iskeyword-=，
 set iskeyword-=。
+
+" 让vim和系统共享默认剪切板
+if has('clipboard')
+  if has('unnamedplus')  " When possible use + register for copy-paste
+    set clipboard=unnamed,unnamedplus
+  else         " On mac and Windows, use * register for copy-paste
+    set clipboard=unnamed
+  endif
+endif
 
 " --------------------------------------
 " format
@@ -110,7 +130,6 @@ set matchpairs+=<:>              " 设置形成配对的字符
 set nospell                      " 默认不要开启拼写检查
 set foldenable                   " 基于缩进或语法进行代码折叠
 
-
 " --------------------------------------
 " look and feel
 " --------------------------------------
@@ -124,14 +143,14 @@ highlight clear LineNr           " 移除当前行号处的高亮色
 highlight clear CursorLineNr     " 删掉当前行号上的高亮
 
 " 高亮某些特殊位置的特殊字符
-set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
+set listchars=tab:›\ ,trail:•,nbsp:.,extends:#,precedes:#
 
 if !IsGui() && !IsWin() && !has('nvim')
-    set term=$TERM
-    if &term == 'xterm' || &term == 'screen'
-        " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
-        set t_Co=256
-    endif
+  set term=$TERM
+  if &term == 'xterm' || &term == 'screen'
+    " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+    set t_Co=256
+  endif
 endif
 
 " 设置补全菜单样式
@@ -144,7 +163,7 @@ set completeopt=longest,menu,preview
 inoremap jk <esc>
 " 使用Y复制到行尾
 nnoremap Y y$
-" [move] j/k可以移动到软换行上
+" j/k可以移动到软换行上
 nnoremap j gj
 nnoremap k gk
 
@@ -162,3 +181,5 @@ vnoremap > >gv
 
 " 允许使用 . 对选中的行执行上一个命令
 vnoremap . :normal .<cr>
+
+" vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
