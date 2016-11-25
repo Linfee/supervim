@@ -444,11 +444,6 @@ cnoremap cd. lcd %:p:h
 " 保存与退出
 call DoMap('nnore', 'q', ':close<cr>')
 call DoMap('nnore', 'w', ':w<cr>')
-" 以sudo权限保存
-if !IsWin()
-    cnoremap W! !sudo tee % > /dev/null<cr>
-    call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
-endif
 
 " ----------------------------------}}}2
 
@@ -522,7 +517,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " let g:neocomplete#max_list = 15
     let g:neocomplete#force_overwrite_completefunc = 1
     " Define dictionary.
-    if (IsLinux() || IsOSX()) && !IsWinUnix()
+    if !IsWin()
         let g:neocomplete#sources#dictionary#dictionaries = {
                     \ 'default' : '',
                     \ 'vimshell' : $HOME.'/.vimshell_hist',
@@ -565,7 +560,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-    if (IsLinux() || IsOSX()) && !IsWinUnix()
+    if !IsWin()
         let g:neocomplete#use_vimproc = 1
     endif " }}}3
 
@@ -1110,7 +1105,7 @@ endif
 "}}}2
 
 " vim-shell {{{2 for linux and osx
-if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && (IsLinux() || IsOSX()) && !IsWinUnix()
+if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && !IsWin()
     nnoremap <space>s :VimShellTab<cr>
     nnoremap <space>d :VimShellPop<cr><esc>
 
@@ -1153,7 +1148,7 @@ endif
 " }}}2
 
 " FZF {{{2 for linux and osx
-if isdirectory(expand('~/.vim/plugged/fzf.vim')) && (IsLinux() || IsOSX()) && !IsWinUnix()
+if isdirectory(expand('~/.vim/plugged/fzf.vim')) && !IsWin()
     if exists('g:s_has_fzf')
         " 这三个快捷键指定用什么方式打开选中的内容
         let g:fzf_action = {
@@ -1275,74 +1270,10 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim')) && (IsLinux() || IsOSX()) && !I
 endif
 " }}}2
 
-" ctrlp {{{2 for windows
-if isdirectory(expand("~/.vim/plugged/ctrlp.vim")) && (IsWin() || IsWinUnix())
-    " 设置样式
-    let g:ctrlp_match_window = 'top,order:ttb,min:1,max:10,results:10'
-    " 默认可以使用正则表达式匹配文件名
-    let g:ctrlp_regexp = 1
-    " 如果安装了pymatcher使用它
-    if isdirectory(expand("~/.vim/plugged/ctrlp-py-matcher"))
-        let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
-    endif
-    let g:ctrlp_working_path_mode = 'ra'
-    " If none of the default markers (.git .hg .svn .bzr _darcs) are present in 
-    " a project, you can define additional ones with g:ctrlp_root_markers:
-    let g:ctrlp_root_markers = ['pom.xml', '.p4ignore']
-    " 忽略版本管理工具以及其他不希望搜索的文件
-    if IsWin()
-        set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-    else
-        set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-    endif
-    let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-    let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-      \ 'file': '\v\.(exe|so|dll|pyc)$',
-      \ 'link': 'some_bad_symbolic_links',
-      \ }
-    if executable('ag')
-        let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-    elseif executable('ack-grep')
-        let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
-    elseif executable('ack')
-        let s:ctrlp_fallback = 'ack %s --nocolor -f'
-    " On Windows use "dir" as fallback command.
-    elseif IsWin()
-        let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
-    else
-        let s:ctrlp_fallback = 'find %s -type f'
-    endif
-    if exists("g:ctrlp_user_command")
-        unlet g:ctrlp_user_command
-    endif
-    let g:ctrlp_user_command = {
-        \ 'types': {
-            \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-        \ },
-        \ 'fallback': s:ctrlp_fallback
-    \ }
-    " keys
-    call DoMap('nnore', 'o', ':CtrlP<cr>')
-    call DoMap('nnore', 'm', ':CtrlPMRU<cr>')
-    call DoMap('nnore', 'l', ':CtrlPLine<cr>')
-    call DoMap('nnore', 'h', ':CtrlPUndo<cr>')
-    nnoremap <leader>fd :CtrlPDir<cr>
-    nnoremap <leader>fc :CtrlPChange<cr>
-    " ctrlp扩展
-    let g:ctrlp_extensions = ['buffertag', 'dir', 'undo', 'line', 'changes', 
-                \ 'mixed', 'funky']
-    let g:ctrlp_funky_matchtype = 'path'
-    let g:ctrlp_funky_syntax_highlight = 1
-    nnoremap <Leader>fu :CtrlPFunky<Cr>
-endif
-" }}}2
-
 " monokai {{{2
 if isdirectory(expand('~/.vim/plugged/vim-monokai'))
     colorscheme monokai
-    if NoPlugin() || (IsWin() && !IsWinUnix() && !IsGui())
+    if NoPlugin()
         colorscheme desert
     endif
 endif
