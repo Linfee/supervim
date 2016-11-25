@@ -49,7 +49,6 @@ endfunction
 filetype plugin indent on
 " ---------------------------------}}}2
 
-" >>>>>
 " general ---------------------------{{{2
 " set noswapfile                   " 不要使用swp文件做备份
 " set confirm                      " 退出需要确认
@@ -191,7 +190,7 @@ if IsGui()
     elseif IsWin()
         set guifont=Source\ Code\ Pro:h9
     else
-        set guifont=SauceCodePro\ Nerd\ Font:h9
+        set guifont=SauceCodePro\ Nerd\ Font:h11
     endif
 endif
 
@@ -523,7 +522,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " let g:neocomplete#max_list = 15
     let g:neocomplete#force_overwrite_completefunc = 1
     " Define dictionary.
-    if IsLinux() && !IsWinUnix()
+    if (IsLinux() || IsOSX()) && !IsWinUnix()
         let g:neocomplete#sources#dictionary#dictionaries = {
                     \ 'default' : '',
                     \ 'vimshell' : $HOME.'/.vimshell_hist',
@@ -566,7 +565,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-    if IsLinux() && !IsWinUnix()
+    if (IsLinux() || IsOSX()) && !IsWinUnix()
         let g:neocomplete#use_vimproc = 1
     endif " }}}3
 
@@ -925,7 +924,7 @@ if isdirectory(expand('~/.vim/plugged/auto-pairs'))
     let g:AutoPairsShortcutToggle = '<leader>ta'
     if IsOSX()
         let g:AutoPairsShortcutFastWrap = 'å'
-    elseif IsLinux() && !IsGui()
+    elseif (IsLinux() IsOSX()) && !IsGui()
         let g:AutoPairsShortcutFastWrap = 'a'
     else
         let g:AutoPairsShortcutFastWrap = '<a-a>'
@@ -1111,7 +1110,7 @@ endif
 "}}}2
 
 " vim-shell {{{2 for linux and osx
-if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && IsLinux() && !IsWinUnix()
+if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && (IsLinux() || IsOSX()) && !IsWinUnix()
     nnoremap <space>s :VimShellTab<cr>
     nnoremap <space>d :VimShellPop<cr><esc>
 
@@ -1154,7 +1153,7 @@ endif
 " }}}2
 
 " FZF {{{2 for linux and osx
-if isdirectory(expand('~/.vim/plugged/fzf.vim')) && IsLinux() && !IsWinUnix()
+if isdirectory(expand('~/.vim/plugged/fzf.vim')) && (IsLinux() || IsOSX()) && !IsWinUnix()
     if exists('g:s_has_fzf')
         " 这三个快捷键指定用什么方式打开选中的内容
         let g:fzf_action = {
