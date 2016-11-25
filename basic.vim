@@ -274,18 +274,12 @@ if IsGui()
     " 隐藏不需要的gui组件
     set guioptions-=m   " remove menu
     set guioptions-=T   " remove toolbar
-    set guioptions-=L
+    set guioptions-=L   " remove scoll bar
     set guioptions-=r
     set guioptions-=b
     set guioptions-=e
     " 设置字体
-    if IsLinux()
-        set guifont=SauceCodePro\ Nerd\ Font\ 11
-    elseif IsWin()
-        set guifont=Source_Code_Pro:h9
-    else
-        set guifont=SauceCodePro\ Nerd\ Font:h12
-    endif
+    set guifont=Source\ Code\ Pro:h9
 else
     " 让箭头键和其它键能使用
     if !IsWin() && !has('nvim')
