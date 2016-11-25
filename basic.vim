@@ -364,6 +364,16 @@ nnoremap <tab>m :tabmove<space>
 nnoremap <tab>m :tabmove
 nnoremap <tab>t :tabonly<cr> 
 
+call DoAltMap('nnore', '1', '1gt')
+call DoAltMap('nnore', '2', '2gt')
+call DoAltMap('nnore', '3', '3gt')
+call DoAltMap('nnore', '4', '4gt')
+call DoAltMap('nnore', '5', '5gt')
+call DoAltMap('nnore', '6', '6gt')
+call DoAltMap('nnore', '7', '7gt')
+call DoAltMap('nnore', '8', '8gt')
+call DoAltMap('nnore', '9', '9gt')
+
 " 关闭所有缓冲区
 nnoremap <leader>Q :bufdo bd<cr>
 " 切换当前和上一个标签
@@ -405,7 +415,43 @@ endif
 " macro ----------------------------{{{2
 " 使用alt+.快速重复上一个宏
 call DoAltMap('nnore', '.', '@@')
-" }}}2
+" 关闭所有缓冲区
+nnoremap <leader>Q :bufdo bd<cr>
+" 切换当前和上一个标签
+let g:lasttab = 1
+nnoremap <tab><tab> :exe "tabn ".g:lasttab<CR>
+au TabLeave * let g:lasttab = tabpagenr()
+" 切换到当前打开buffer的目录
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+" 在一个新的标签中打开当前buffer的文件
+map <tab>g :tabedit <c-r>=expand("%:p:h")<cr>/
+" 指定在缓冲区间切换时的行为
+try
+    set switchbuf=useopen,usetab,newtab
+    set stal=2
+catch
+endtry
+
+" 快速编辑
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+nnoremap <leader>ew :e %%
+nnoremap <leader>es :sp %%
+nnoremap <leader>ev :vsp %%
+nnoremap <leader>et :tabe %%
+" 切换工作目录到当前文件目录
+cnoremap cwd lcd %:p:h
+cnoremap cd. lcd %:p:h
+
+" 保存与退出
+call DoMap('nnore', 'q', ':close<cr>')
+call DoMap('nnore', 'w', ':w<cr>')
+" 以sudo权限保存
+if !IsWin()
+    cnoremap W! !sudo tee % > /dev/null<cr>
+    call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
+endif
+
+" ----------------------------------}}}2
 
 " }}}1
 
