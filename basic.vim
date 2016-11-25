@@ -1416,12 +1416,12 @@ if isdirectory(expand("~/.vim/plugged/ctrlp.vim")) && (IsWin() || IsWinUnix())
 endif
 " }}}2
 
-" molokai {{{2
-if isdirectory(expand('~/.vim/plugged/molokai'))
-    let g:rehash256 = 1
-    let g:molokai_original = 1
+" monokai {{{2
+if isdirectory(expand('~/.vim/plugged/vim-monokai'))
+    " let g:rehash256 = 1
+    " let g:molokai_original = 1
 
-    colorscheme molokai
+    colorscheme monokai
     if NoPlugin() || (IsWin() && !IsWinUnix() && !IsGui())
         colorscheme desert
     endif
