@@ -279,7 +279,13 @@ if IsGui()
     set guioptions-=b
     set guioptions-=e
     " 设置字体
-    set guifont=Source\ Code\ Pro:h9
+    if IsLinux()
+        set guifont=Source\ Code\ Pro\ 9
+    elseif IsWin()
+        set guifont=Source\ Code\ Pro:h9
+    else
+        set guifont=SauceCodePro\ Nerd\ Font:h9
+    endif
 else
     " 让箭头键和其它键能使用
     if !IsWin() && !has('nvim')
