@@ -47,7 +47,7 @@ if !exists("g:ideavim")
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'luochen1990/rainbow' " 彩虹括增强版
 
-    if IsLinux() && !IsWinUnix()
+    if (IsLinux() || IsOSX()) && !IsWinUnix()
         Plug 'Shougo/vimproc.vim', {'do': 'make'}
         Plug 'Shougo/vimshell.vim'
     endif
