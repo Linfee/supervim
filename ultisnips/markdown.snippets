@@ -1,6 +1,6 @@
 # markdown.snippets
 
-snippet "(^#+\s.*)[.。#]fold" "vim折叠标记加markdown标题" r
+snippet "(^#+\s.*)[.。]fold" "使用.fold为md标题插入vim折叠标记" r
 <!-- `!p
 snip.rv=match.group(1)` {{${1:1} -->
 `!p
@@ -9,3 +9,17 @@ $0
 <!-- }}$1 -->
 endsnippet
 
+snippet "^h(\d)" "使用h1~h6快速插入标题" r
+`!p
+i = '#' * int(match.group(1))
+snip.rv=i` ${1:title} `!p
+snip.rv=i`
+$0
+endsnippet
+
+snippet "(^.*)[.。]h(\d)" "使用.h1~h6快速插入标题" r
+`!p
+title = match.group(1)
+i = '#' * int(match.group(2))
+snip.rv = ' '.join((i, title, i))`
+endsnippet
