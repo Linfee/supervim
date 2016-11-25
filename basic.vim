@@ -1342,21 +1342,10 @@ endif
 
 " monokai {{{2
 if isdirectory(expand('~/.vim/plugged/vim-monokai'))
-    " let g:rehash256 = 1
-    " let g:molokai_original = 1
-
     colorscheme monokai
     if NoPlugin() || (IsWin() && !IsWinUnix() && !IsGui())
         colorscheme desert
     endif
-    " 定制补全菜单颜色
-    " 补全菜单的前景和背景
-    hi pmenu  guifg=#b6b6a6 guibg=#272823 ctermfg=250 ctermbg=233
-    " 滚动条guibg
-    hi pmenusbar  guifg=#a7a78f guibg=#151515 gui=none ctermfg=248 ctermbg=233 cterm=none
-    " 滑块guibg
-    hi pmenuthumb  guifg=#151515 guibg=#e16b11 gui=none ctermfg=233 ctermbg=166 cterm=none
-
 endif
 " }}}2
 
