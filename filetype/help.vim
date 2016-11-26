@@ -1,2 +1,2 @@
-nnoremap <cr> <c-]>
-nnoremap <bs> <c-o>
+nnoremap <buffer> <cr> <c-]>
+nnoremap <buffer> <bs> <c-o>

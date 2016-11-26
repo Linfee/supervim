@@ -9,11 +9,6 @@ setl softtabstop=4
 
 setl nowrap
 
-function ExeCurrentLIne()
-    echo ">>> " . getline(".") ."\n" 
-    exe getline(".")
-endfunction
-
-" 将当前行当作vim命令执行
-nnoremap <cr> :call ExeCurrentLIne()<cr>
+" 执行默认缓冲区内容
+call DoMap('nnore', 'e', ':@*<cr>')
 
