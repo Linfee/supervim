@@ -919,7 +919,7 @@ if isdirectory(expand('~/.vim/plugged/auto-pairs'))
     let g:AutoPairsShortcutToggle = '<leader>ta'
     if IsOSX()
         let g:AutoPairsShortcutFastWrap = 'å'
-    elseif (IsLinux() IsOSX()) && !IsGui()
+    elseif IsLinux() && !IsGui()
         let g:AutoPairsShortcutFastWrap = 'a'
     else
         let g:AutoPairsShortcutFastWrap = '<a-a>'
