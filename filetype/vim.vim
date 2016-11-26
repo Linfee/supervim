@@ -8,3 +8,7 @@ setl tabstop=4
 setl softtabstop=4
 
 setl nowrap
+
+" 将当前行当作vim命令执行
+nnoremap <cr> :exe getline(".")<cr>
+

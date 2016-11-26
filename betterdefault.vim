@@ -67,7 +67,7 @@ set whichwrap=b,s,h,l,<,>,[,]    " 左右移动光标键可以移动到的额外
 set autoread                     " 当文件被改变时自动载入
 set cursorline                   " 高亮显示当前行
 " set cursorcolumn                 " 高亮显示当前列
-set cmdheight=2                  " 命令行高度
+" set cmdheight=2                  " 命令行高度
 set fileformats=unix             " 文件类型(使用的结尾符号)
 scriptencoding utf8              " 设置脚本的编码
 " set confirm                      " 退出需要确认
