@@ -43,7 +43,7 @@ set nocompatible                 " 关闭vi兼容性
 filetype plugin indent on        " 自动指定文件类型、缩进
 syntax on                        " 开启语法高亮
 
-set number                       " 现实绝对行号
+set number                       " 显示绝对行号
 " set relativenumber               " 显示相对行号
 set mouse=a                      " 允许使用鼠标
 set mousehide                    " 输入时隐藏鼠标
@@ -100,13 +100,6 @@ endif
 " 防止连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
 set nojoinspaces
 
-" 定义单词结尾
-set iskeyword-=.
-set iskeyword-=#
-set iskeyword-=-
-set iskeyword-=，
-set iskeyword-=。
-
 " 让vim和系统共享默认剪切板
 if has('clipboard')
   if has('unnamedplus')  " When possible use + register for copy-paste
@@ -157,7 +150,7 @@ endif
 set completeopt=longest,menu,preview
 
 " --------------------------------------
-" look and feel
+" keymap
 " --------------------------------------
 " 使用jk退出插入模式
 inoremap jk <esc>

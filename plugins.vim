@@ -56,6 +56,7 @@ if !exists("g:ideavim")
     Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
     Plug 'sickill/vim-monokai'
+    Plug 'tomasr/molokai'
     Plug 'terryma/vim-multiple-cursors' " 多光标
     Plug 'tpope/vim-surround' " 包围插件
     Plug 'tpope/vim-repeat' " 使用.重复第三方插件的功能
