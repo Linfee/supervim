@@ -21,7 +21,7 @@ endfunction
 silent function! IsLinux()
   return has('unix') && !has('macunix')
 endfunction
-silent function! WINDOWS()
+silent function! IsWin()
   return  (has('win32') || has('win64'))
 endfunction
 silent function! IsWinUnix()
