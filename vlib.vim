@@ -9,23 +9,6 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" 判断环境 {{
-silent fun! IsOSX()
-    return has('macunix')
-endf
-silent fun! IsLinux()
-    return has('unix') && !has('macunix') || has('win32unix')
-endf
-silent fun! IsWinUnix()
-    return has('win32unix')
-endf
-silent fun! IsWin()
-    return  (has('win32') || has('win64'))
-endf
-silent function! IsGui()
-    return has('gui_running')
-endf " }}
-
 " 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 {{
 silent fun! EncodingForCn()
     set fileencoding=utf8
