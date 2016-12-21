@@ -161,4 +161,30 @@ if IsLinux() && !exists('g:s_no_fcitx_vim')
 endif
 " }
 
+" translate operation {
+nnoremap <space>t :set operatorfunc=<SID>Translate<cr>g@
+vnoremap <space>t :<c-u>call <SID>Translate(visualmode())<cr>
+
+py3 import translate
+
+function! s:Translate(type)
+    let saved_unnamed_register = @@
+
+    if a:type ==# 'v'
+        normal! `<v`>y
+    elseif a:type ==# 'char'
+        normal! `[v`]y
+    else
+        return
+    endif
+
+    " silent execute "grep! -R " . shellescape(@@) . " ."
+    " echom @@
+    py3 print(translate.query(vim.eval('@@')))
+    " copen
+
+    let @@ = saved_unnamed_register
+endfunction
+" }
+
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:

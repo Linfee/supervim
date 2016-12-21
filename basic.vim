@@ -26,6 +26,7 @@ call TryLoad('~/.vim/supervim/betterdefault.vim')
 
 " 处理中文编码
 call EncodingForCn()
+set rtp+=~/.vim/supervim
 
 " ----------------------------------}}}2
 
@@ -784,7 +785,7 @@ if isdirectory(expand('~/.vim/plugged/tagbar'))
     let g:tagbar_iconchars = ['▶', '▼'] " 折叠字符
 
     nnoremap <leader>tt :TagbarToggle<cr>
-    call DoMap('nnore', 't', ':TagbarToggle<cr>')
+    " call DoMap('nnore', 't', ':TagbarToggle<cr>')
 endif
 " }}}2
 

@@ -1,3 +1,5 @@
 plug.vim
 .ropeproject
 plug.vim.old
+*.pyc
+__pycache__
