@@ -264,22 +264,22 @@ if !exists('g:s_wrapRelMotion')
     endfunction
 
     " Map g* keys in Normal, Operator-pending, and Visual+select
-    noremap $ :call WrapRelativeMotion("$")<CR>
-    noremap <End> :call WrapRelativeMotion("$")<CR>
-    noremap 0 :call WrapRelativeMotion("0")<CR>
-    noremap <Home> :call WrapRelativeMotion("0")<CR>
-    noremap ^ :call WrapRelativeMotion("^")<CR>
+    noremap <silent> $ :call WrapRelativeMotion("$")<CR>
+    noremap <silent> <End> :call WrapRelativeMotion("$")<CR>
+    noremap <silent> 0 :call WrapRelativeMotion("0")<CR>
+    noremap <silent> <Home> :call WrapRelativeMotion("0")<CR>
+    noremap <silent> ^ :call WrapRelativeMotion("^")<CR>
     " Overwrite the operator pending $/<End> mappings from above
     " to force inclusive motion with :execute normal!
-    onoremap $ v:call WrapRelativeMotion("$")<CR>
-    onoremap <End> v:call WrapRelativeMotion("$")<CR>
+    onoremap <silent> $ v:call WrapRelativeMotion("$")<CR>
+    onoremap <silent> <End> v:call WrapRelativeMotion("$")<CR>
     " Overwrite the Visual+select mode mappings from above
     " to ensure the correct vis_sel flag is passed to function
-    vnoremap $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
-    vnoremap <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
-    vnoremap 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
-    vnoremap <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
-    vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
+    vnoremap <silent> $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
+    vnoremap <silent> <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
+    vnoremap <silent> 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
+    vnoremap <silent> <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
+    vnoremap <silent> ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
 endif
 
 call DoAltMap('inore', 'j', '<down>')

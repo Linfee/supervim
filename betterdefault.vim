@@ -92,19 +92,16 @@ set tm=500
 " 命令行补全和忽略补全的文件类型
 set wildmenu
 set wildignore=*.o,*~,*.pyc,*.class
-if IsWin()
-  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
-else
-  set wildignore+=.git\*,.hg\*,.svn\*
-endif
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,.git\*,.hg\*,.svn\*
+set wildignore+=*.sw*
 " 防止连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
 set nojoinspaces
 
 " 让vim和系统共享默认剪切板
 if has('clipboard')
-  if has('unnamedplus')  " When possible use + register for copy-paste
+  if has('unnamedplus') " When possible use + register for copy-paste
     set clipboard=unnamed,unnamedplus
-  else         " On mac and Windows, use * register for copy-paste
+  else " On mac and Windows, use * register for copy-paste
     set clipboard=unnamed
   endif
 endif
