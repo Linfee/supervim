@@ -85,83 +85,28 @@ augroup END
 " }
 
 "  空格与制表转换 {
-fu! ToggleTab(t)
-    if a:t == 'tab'
-        setl noet
-        ret!
-    elsei a:t == 'space'
-        setl et
-        ret
-    en
-endf
-com! -nargs=0 ToSpace call ToggleTab('space')
-com! -nargs=0 ToTab call ToggleTab('tab')
+com! -nargs=0 ToSpace call extension#ToggleTab('space')
+com! -nargs=0 ToTab call extension#ToggleTab('tab')
 " }
 
 " mybatis逆向工程 {
-let g:mybatis_generate_core="none"
-let g:driverPath="none"
-func! MybatisGenerate()
-    if g:mybatis_generate_core == "none" || g:driverPath == "none"
-        echo "你必须设置 g:driverPath 和 g:mybatis_generate_core 才能运行该方法"
-        return
-    endif
-    exe("!java -Xbootclasspath/a:" . g:driverPath . " -jar " . g:mybatis_generate_core . expand(" -configfile %") . " -overwrite")
-endfunc
+" let g:extension#mybatis_generate_core="none"
+" let g:extension#driverPath="none"
+com! -nargs=0 MybatisGenerate call extension#MybatisGenerate()
 " }
 
 " fcitx-support {
-let g:input_toggle = 0
-function! Fcitx2en()
-   let s:input_status = system("fcitx-remote")
-   if s:input_status == 2
-      let g:input_toggle = 1
-      let l:a = system("fcitx-remote -c")
-   endif
-endfunction
-
-function! Fcitx2zh()
-   let s:input_status = system("fcitx-remote")
-   if s:input_status != 2 && g:input_toggle == 1
-      let l:a = system("fcitx-remote -o")
-      let g:input_toggle = 0
-   endif
-endfunction
-
-if IsLinux() && !exists('g:s_no_fcitx_vim')
-    set timeoutlen=300
-    augroup FcitxSupport
-        autocmd!
-        autocmd InsertLeave * call Fcitx2en()
-        autocmd InsertEnter * call Fcitx2zh()
-    augroup END
+" let g:fcitx#no_fcitx_support = 1
+if IsLinux()
+    if !exists('g:fcitx#no_fcitx_support')
+        call fcitx#FcitxSupportOn()
+    endif
 endif
 " }
 
 " translate operation {
-nnoremap <space>t :set operatorfunc=<SID>Translate<cr>g@
-vnoremap <space>t :<c-u>call <SID>Translate(visualmode())<cr>
-
-py3 import translate
-
-function! s:Translate(type)
-    let saved_unnamed_register = @@
-
-    if a:type ==# 'v'
-        normal! `<v`>y
-    elseif a:type ==# 'char'
-        normal! `[v`]y
-    else
-        return
-    endif
-
-    " silent execute "grep! -R " . shellescape(@@) . " ."
-    " echom @@
-    py3 print(translate.query(vim.eval('@@')))
-    " copen
-
-    let @@ = saved_unnamed_register
-endfunction
+nnoremap <space>t :set operatorfunc=translate#Translate<cr>g@
+vnoremap <space>t :<c-u>call translate#Translate(visualmode())<cr>
 " }
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:
