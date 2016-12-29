@@ -15,7 +15,7 @@ let g:s_loaded_plug = TryLoad('~/.vim/supervim/plug.vim', 1)
 if !exists("g:ideavim")
     call plug#begin('~/.vim/plugged')
     " language support
-    Plug 'derekwyatt/vim-scala', {'for': 'scala'}
+    " Plug 'derekwyatt/vim-scala', {'for': 'scala'}
     Plug 'davidhalter/jedi-vim', {'for': 'python'} " python补全
     Plug 'Valloric/MatchTagAlways', {'for': ['html', 'xml']} " 高亮显示匹配html标签
     Plug 'pangloss/vim-javascript', {'for': 'javascript'}
