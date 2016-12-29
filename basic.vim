@@ -14,10 +14,10 @@
 " enviroment -----------------------{{{2
 let t = {}
 let t.vlib = reltime()[1]
-source ~/.vim/supervim/vlib.vim
+source ~/.vim/vlib.vim
 let t.vlib = reltime()[1] - t.vlib
 
-call TryLoad('~/.vim/supervim/betterdefault.vim')
+call TryLoad('~/.vim/betterdefault.vim')
 
 " if !IsWin()
 "     set shell=/bin/sh
@@ -29,7 +29,7 @@ call TryLoad('~/.vim/supervim/betterdefault.vim')
 
 " 处理中文编码
 call EncodingForCn()
-set rtp+=~/.vim/supervim
+" set rtp+=~/.vim
 
 " ----------------------------------}}}2
 
@@ -39,7 +39,7 @@ let g:s_loaded_before = TryLoad('~/.vim/before.vim')
 
 " 尝试加载插件配置文件
 if !exists("g:noplugin")
-    let g:s_loaded_plugins = TryLoad('~/.vim/supervim/plugins.vim', 1)
+    let g:s_loaded_plugins = TryLoad('~/.vim/plugins.vim', 1)
 else
     let g:s_loaded_plugins = 0
 endif
@@ -487,7 +487,7 @@ function! Init()
 endfunction
 
 function! UpdateSupervim()
-    exe "!cd ~/.vim/supervim && git pull"
+    exe "!cd ~/.vim && git pull"
 endfunction
 
 " }}}1
@@ -498,7 +498,7 @@ endfunction
 " for supervim with out plugin
 if NoPlugin()
     " 尝试加载extesion
-    let g:s_loaded_extesion = TryLoad('~/.vim/supervim/extesion.vim')
+    let g:s_loaded_extesion = TryLoad('~/.vim/extesion.vim')
     " 尝试加载自定义vimrc
     let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
     " 尝试加载自定义的gvimrc
@@ -633,8 +633,8 @@ endif
 " ultisnips {{{2
 if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " 定义snippet文件存放的位置
-    let g:UltiSnipsSnippetsDir=expand("~/.vim/supervim/ultisnips")
-    let g:UltiSnipsSnippetDirectories=["UltiSnips", "supervim/ultisnips"]
+    let g:UltiSnipsSnippetsDir=expand("~/.vim/ultisnips")
+    let g:UltiSnipsSnippetDirectories=["ultisnips"]
 
     " Trigger configuration.
     let g:UltiSnipsExpandTrigger="<tab>"
@@ -1287,7 +1287,7 @@ endif
 
 " others -------------------------------------------------------------------{{{1
 " 尝试加载extension
-let g:s_loaded_extension = TryLoad('~/.vim/supervim/extension.vim')
+let g:s_loaded_extension = TryLoad('~/.vim/extension.vim')
 " 尝试加载自定义vimrc
 let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
 " 尝试加载自定义的gvimrc

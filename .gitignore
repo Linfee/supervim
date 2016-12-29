@@ -3,3 +3,6 @@ plug.vim
 plug.vim.old
 *.pyc
 __pycache__
+temp
+plugged
+.netrwhist

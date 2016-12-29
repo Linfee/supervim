@@ -110,29 +110,6 @@ func! MybatisGenerate()
 endfunc
 " }
 
-" filetype {
-let $FT_DIR = '~/.vim/supervim/filetype'
-call MkdirIfNotExists($FT_DIR)
-function! LoadFTConfig()
-    let b:ftconfig = expand($FT_DIR) . '/' . &filetype . '.vim'
-    if filereadable(b:ftconfig)
-        execute ('source ' . b:ftconfig)
-    endif
-endfunction
-augroup FTConfig
-    autocmd!
-    autocmd FileType * call LoadFTConfig()
-augroup END
-
-augroup miscs
-    autocmd!
-    " Remove trailing whitespaces and ^M chars
-    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
-    " 自动切换目录到当前打开文件目录
-    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-augroup ENDJ
-" }
-
 " fcitx-support {
 let g:input_toggle = 0
 function! Fcitx2en()

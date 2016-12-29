@@ -67,6 +67,7 @@ endfunction " }}
 " 简单说就是alt+e|n|i|c|u不要映射，alt+backspace或功能键也不要映射
 " 如果指定key2应该指定为原有的样子，而不是表中的简写形式
 " call DoAltMap('<prefix>', '<key1>', '<operaiton>', '<key2>', ['<silent>等'])
+set cpo&vim
 silent fun! DoAltMap(prefix, key1, operation, ...)
 
     let s:c = a:prefix

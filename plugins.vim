@@ -10,7 +10,7 @@
 "
 
 " 尝试加载plug插件管理器
-let g:s_loaded_plug = TryLoad('~/.vim/supervim/plug.vim', 1)
+let g:s_loaded_plug = TryLoad('~/.vim/plug.vim', 1)
 
 if !exists("g:ideavim")
     call plug#begin('~/.vim/plugged')
