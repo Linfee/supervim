@@ -12,7 +12,10 @@
 " basic --------------------------------------------------------------------{{{1
 
 " enviroment -----------------------{{{2
+let t = {}
+let t.vlib = reltime()[1]
 source ~/.vim/supervim/vlib.vim
+let t.vlib = reltime()[1] - t.vlib
 
 call TryLoad('~/.vim/supervim/betterdefault.vim')
 

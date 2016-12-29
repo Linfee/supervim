@@ -115,20 +115,13 @@ endf " }}
 
 " 尝试加载文件 {{
 silent fun! TryLoad(file, ...)
+    let filename = split(fnamemodify(a:file, ':t'), '\.')[-2]
     if filereadable(expand(a:file))
+        exe 'let g:t.' . filename . ' = reltime()[1]'
         exe('source '. expand(a:file))
-        return 1
+        exe 'let g:t.' . filename . ' = reltime()[1] - g:t.' . filename
     else
-        if(a:0 > 1)
-            if(a:2 == 2)
-                echom '[error] Load file ' . expand(a:file) . ' fail'
-            elseif(a:2 == 1)
-                echoe '[error] Load file ' . expand(a:file) . ' fail'
-            else
-                echo '[error] Load file ' . expand(a:file) . ' fail'
-            endif
-        endif
-        return 0
+        exe 'let g:t.' . filename . ' = 0'
     endif
 endf "}}
 
