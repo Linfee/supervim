@@ -1276,20 +1276,20 @@ endif
 
 " monokai {{{2
 if isdirectory(expand('~/.vim/plugged/vim-monokai'))
-    " colorscheme monokai
-    " if NoPlugin()
-    "     colorscheme desert
-    " endif
-endif
-" }}}2
-
-" molokai {{{2
-if isdirectory(expand('~/.vim/plugged/molokai'))
-    colorscheme molokai
+    colorscheme monokai
     if NoPlugin()
         colorscheme desert
     endif
 endif
+" }}}2
+
+" molokai {{{2
+" if isdirectory(expand('~/.vim/plugged/molokai'))
+"     colorscheme molokai
+"     if NoPlugin()
+"         colorscheme desert
+"     endif
+" endif
 " }}}2
 
 " }}}1

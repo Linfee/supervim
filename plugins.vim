@@ -80,7 +80,8 @@ if !exists("g:ideavim")
     Plug 'Konfekt/FastFold' " 快速折叠，处理某些折叠延迟
     Plug 'strom3xFeI/vimdoc-cn'
 
-    Plug '~/tmp/vim/vim-potion' " potion语言支持，dev
+    " Plug '~/tmp/vim/vim-potion' " potion语言支持，dev
+    " Plug '~/tmp/vim/vim-md' " plugin for markdown
 
     call plug#end()
 endif
