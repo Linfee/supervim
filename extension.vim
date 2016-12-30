@@ -60,6 +60,7 @@ function! ReferenceLine(t)
         exec "setl cc=".ccc
     endif
 endf
+
 " 外部接口，调用它来设置列参考线，0表示没有参考线
 function! SetRL(n)
     if !exists('b:is_rl_added')
@@ -69,6 +70,7 @@ function! SetRL(n)
     endif
     let &cc = a:n
 endfunction
+
 " Bug: 新建立的缓冲区会继承之前的参考线
 " 外部接口，删除列参考线
 function! RemoveRL()
@@ -77,6 +79,7 @@ function! RemoveRL()
     endif
     let &cc = 0
 endfunction
+
 " 自动添加80列参考线
 augroup RL
     autocmd!

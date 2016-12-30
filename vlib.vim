@@ -170,7 +170,7 @@ fun! StripTrailingWhitespace()
 endf " }}
 
 " Run shell command {{
-fun! s:RunShellCommand(cmdline)
+fun! RunShellCommand(cmdline)
     botright new
 
     setlocal buftype=nofile
