@@ -521,18 +521,18 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " let g:neocomplete#max_list = 15
     let g:neocomplete#force_overwrite_completefunc = 1
     " Define dictionary.
-    if !IsWin()
+    " if !IsWin()
+    "     let g:neocomplete#sources#dictionary#dictionaries = {
+    "                 \ 'default' : '',
+    "                 \ 'vimshell' : $HOME.'/.vimshell_hist',
+    "                 \ 'scheme' : $HOME.'/.gosh_completions'
+    "                 \ }
+    " else
         let g:neocomplete#sources#dictionary#dictionaries = {
                     \ 'default' : '',
-                    \ 'vimshell' : $HOME.'/.vimshell_hist',
                     \ 'scheme' : $HOME.'/.gosh_completions'
                     \ }
-    else
-        let g:neocomplete#sources#dictionary#dictionaries = {
-                    \ 'default' : '',
-                    \ 'scheme' : $HOME.'/.gosh_completions'
-                    \ }
-    endif
+    " endif
 
     " Define keyword.
     if !exists('g:neocomplete#keyword_patterns')
@@ -564,9 +564,9 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-    if !IsWin()
-        let g:neocomplete#use_vimproc = 1
-    endif " }}}3
+    " if !IsWin()
+    "     let g:neocomplete#use_vimproc = 1
+    " endif " }}}3
 
     " 自动打开关闭弹出式的预览窗口 {{{3
     augroup AutoPopMenu
@@ -1098,57 +1098,57 @@ endif
 "}}}2
 
 " textobj-user {{{2
-if isdirectory(expand('~/.vim/plugged/vim-textobj-user'))
-    call textobj#user#plugin('datetime', {
-    \   'date': {
-    \     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
-    \     'select': ['ad', 'id'],
-    \   },
-    \ })
-endif
+" if isdirectory(expand('~/.vim/plugged/vim-textobj-user'))
+"     call textobj#user#plugin('datetime', {
+"     \   'date': {
+"     \     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
+"     \     'select': ['ad', 'id'],
+"     \   },
+"     \ })
+" endif
 "}}}2
 
 " vim-shell {{{2 for linux and osx
-if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && !IsWin()
-    nnoremap <space>s :VimShellTab<cr>
-    nnoremap <space>d :VimShellPop<cr><esc>
-
-    if has('win32') || has('win64')
-      " Display user name on Windows.
-      let g:vimshell_prompt = $USERNAME."% "
-    else
-      " Display user name on Linux.
-      let g:vimshell_prompt = $USER."% "
-    endif
-
-    " Initialize execute file list.
-    let g:vimshell_execute_file_list = {}
-    call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
-    let g:vimshell_execute_file_list['rb'] = 'ruby'
-    let g:vimshell_execute_file_list['pl'] = 'perl'
-    let g:vimshell_execute_file_list['py'] = 'python3'
-    call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
-
-    autocmd FileType vimshell
-    \ call vimshell#altercmd#define('g', 'git')
-    \| call vimshell#altercmd#define('i', 'iexe')
-    \| call vimshell#altercmd#define('l', 'll')
-    \| call vimshell#altercmd#define('ll', 'ls -l')
-    \| call vimshell#altercmd#define('la', 'ls -lahk')
-    \| call vimshell#altercmd#define('p', 'python3')
-    \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
-
-    function! MyChpwd(args, context)
-      call vimshell#execute('ls')
-    endfunction
-
-    " 覆盖statusline
-    let g:vimshell_force_overwrite_statusline=0
-    augroup vim_shell
-        autocmd!
-        autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
-    augroup END
-endif
+" if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && !IsWin()
+"     nnoremap <space>s :VimShellTab<cr>
+"     nnoremap <space>d :VimShellPop<cr><esc>
+"
+"     if has('win32') || has('win64')
+"       " Display user name on Windows.
+"       let g:vimshell_prompt = $USERNAME."% "
+"     else
+"       " Display user name on Linux.
+"       let g:vimshell_prompt = $USER."% "
+"     endif
+"
+"     " Initialize execute file list.
+"     let g:vimshell_execute_file_list = {}
+"     call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
+"     let g:vimshell_execute_file_list['rb'] = 'ruby'
+"     let g:vimshell_execute_file_list['pl'] = 'perl'
+"     let g:vimshell_execute_file_list['py'] = 'python3'
+"     call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
+"
+"     autocmd FileType vimshell
+"     \ call vimshell#altercmd#define('g', 'git')
+"     \| call vimshell#altercmd#define('i', 'iexe')
+"     \| call vimshell#altercmd#define('l', 'll')
+"     \| call vimshell#altercmd#define('ll', 'ls -l')
+"     \| call vimshell#altercmd#define('la', 'ls -lahk')
+"     \| call vimshell#altercmd#define('p', 'python3')
+"     \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
+"
+"     function! MyChpwd(args, context)
+"       call vimshell#execute('ls')
+"     endfunction
+"
+"     " 覆盖statusline
+"     let g:vimshell_force_overwrite_statusline=0
+"     augroup vim_shell
+"         autocmd!
+"         autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
+"     augroup END
+" endif
 " }}}2
 
 " FZF {{{2 for linux and osx
