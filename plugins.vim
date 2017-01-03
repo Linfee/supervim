@@ -20,7 +20,7 @@ if !exists("g:ideavim")
     " Plug 'Valloric/MatchTagAlways', {'for': ['html', 'xml']} " 高亮显示匹配html标签
     " Plug 'pangloss/vim-javascript', {'for': 'javascript'}
     " Plug 'elzr/vim-json', {'for': 'json'}
-    Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+    Plug 'Linfee/vim-markdown', {'for': 'markdown'}
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
     " Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
@@ -55,8 +55,9 @@ if !exists("g:ideavim")
     " Plug 'kana/vim-textobj-user' " 方便地自定义文本对象
     " Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
+    Plug 'itchyny/vim-cursorword'
     Plug 'sickill/vim-monokai'
-    " Plug 'tomasr/molokai'
+    Plug 'tomasr/molokai'
     " Plug 'terryma/vim-multiple-cursors' " 多光标
     Plug 'tpope/vim-surround' " 包围插件
     Plug 'tpope/vim-repeat' " 使用.重复第三方插件的功能

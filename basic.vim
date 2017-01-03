@@ -857,9 +857,6 @@ endif
 " vim-markdown {{{2
 if isdirectory(expand('~/.vim/plugged/vim-markdown'))
     " 关掉它自带的折叠
-    let g:vim_markdown_folding_disabled = 1
-    "let g:vim_markdown_folding_style_pythonic = 1
-    "let g:vim_markdown_folding_level = 2
     let g:vim_markdown_toc_autofit = 1
     let g:vim_markdown_emphasis_multiline = 0
     " 关闭语法隐藏，显示markdown源码而不要隐藏一些东西

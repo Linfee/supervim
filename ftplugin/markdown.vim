@@ -12,5 +12,3 @@ setl nowrap
 inoremap <buffer> · `
 
 call DoMap('nnore', 'r', ':MarkdownPreview<cr>', ['<buffer>'])
-
-colorscheme molokai
