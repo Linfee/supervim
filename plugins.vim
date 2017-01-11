@@ -20,7 +20,7 @@ if !exists("g:ideavim")
     " Plug 'Valloric/MatchTagAlways', {'for': ['html', 'xml']} " 高亮显示匹配html标签
     " Plug 'pangloss/vim-javascript', {'for': 'javascript'}
     " Plug 'elzr/vim-json', {'for': 'json'}
-    Plug 'Linfee/vim-markdown', {'for': 'markdown'}
+    " Plug 'Linfee/vim-markdown', {'for': 'markdown'}
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
     " Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
@@ -83,6 +83,8 @@ if !exists("g:ideavim")
 
     " Plug '~/tmp/vim/vim-potion' " potion语言支持，dev
     " Plug '~/tmp/vim/vim-md' " plugin for markdown
+    Plug '~/tmp/vim/vim-markdown' " plugin for markdown
+    Plug '~/tmp/vim/ctrlp.vim'
 
     call plug#end()
 endif
