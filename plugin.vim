@@ -9,505 +9,86 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" basic --------------------------------------------------------------------{{{1
+" 插件配置 {{
+call TryLoad('~/.vim/plug.vim')
 
-" enviroment -----------------------{{{2
-let t = {}
-let t.vlib = reltime()[1]
-source ~/.vim/vlib.vim
-let t.vlib = reltime()[1] - t.vlib
+call plug#begin('~/.vim/plugged')
+    " language support
+    " Plug 'derekwyatt/vim-scala', {'for': 'scala'}
+    Plug 'davidhalter/jedi-vim', {'for': 'python'} " python补全
+    " Plug 'Valloric/MatchTagAlways', {'for': ['html', 'xml']} " 高亮显示匹配html标签
+    " Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+    " Plug 'elzr/vim-json', {'for': 'json'}
+    " Plug 'Linfee/vim-markdown', {'for': 'markdown'}
+    Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
+    " Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
-call TryLoad('~/.vim/betterdefault.vim')
-
-" if !IsWin()
-"     set shell=/bin/sh
-" endif
-
-" if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
-"     inoremap <silent> <C-[>OC <RIGHT>
-" endif
-
-" 处理中文编码
-call EncodingForCn()
-" set rtp+=~/.vim
-
-" ----------------------------------}}}2
-
-" plugin ---------------------------{{{2
-" 尝试加载预加载文件
-let g:s_loaded_before = TryLoad('~/.vim/before.vim')
-
-" 尝试加载插件配置文件
-if !exists("g:noplugin")
-    let g:s_loaded_plugins = TryLoad('~/.vim/plugins.vim', 1)
-else
-    let g:s_loaded_plugins = 0
-endif
-
-" 无插件检测
-function! NoPlugin()
-    return !exists('g:s_loaded_plugins') || exists('g:noplugin')
-endfunction
-
-" 开启文件类型检测
-filetype plugin indent on
-" ---------------------------------}}}2
-
-" general ---------------------------{{{2
-" set noswapfile                   " 不要使用swp文件做备份
-" set confirm                      " 退出需要确认
-
-" 重新加载vimrc
-call DoMap('nnore', 'sv', ':source ~/.vimrc<cr>')
-
-" 备份光标
-function! BackupCursor()
-    if exists("g:s_backup_cursor")
-        return
+    Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle', 'NERDTreeFind']}
+    Plug 'jistr/vim-nerdtree-tabs', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
+    Plug 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
+    Plug 'scrooloose/nerdcommenter' " 快捷注释
+    if executable('ctags') " 需要ctags支持
+        Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
+        let g:s_has_ctags = 1
     endif
-    function! ResCur()
-        if line("'\"") <= line("$")
-            silent! normal! g`"
-            return 1
-        endif
-    endfunction
+    " Plug 'kshenoy/vim-signature' " 显示书签
+    Plug 'mbbill/undotree' " 撤销树
+    " Plug 'mhinz/vim-signify' " 快捷diff列
+    Plug 'osyo-manga/vim-over' " 可以预览的替换
 
-    augroup resCur
-        autocmd!
-        autocmd BufWinEnter * call ResCur()
-        " 编辑git commit时是一个例外
-        au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
-    augroup END
-    let g:s_backup_cursor = 1
-endfunction
-
-" 备份文件
-function! BackupFile()
-    if exists("g:s_backup_cursor")
-        return
+    Plug 'Shougo/neocomplete.vim' " 补全插件
+    if executable('look') " 需要ctags支持
+        Plug 'ujihisa/neco-look' " 提供补全英文单词的支持，依赖look命令
+        let g:s_has_look = 1
     endif
-    set backup
-    set backupdir=~/.vim/temp/backup
-    set backupext=.__bak__
-    let g:s_backup_fiie = 1
-endfunction
+    " Plug 'scrooloose/syntastic' " 静态语法检查
+    Plug 'Linfee/ultisnips-zh-doc'
+    Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+    Plug 'luochen1990/rainbow' " 彩虹括增强版
 
-" 备份undo
-function! BackupUndo()
-    if exists("g:s_backup_undo")
-        return
-    endif
-    if has('persistent_undo')
-        set undofile
-        " 设置undofile的存储目录
-        set undodir=~/.vim/temp/undo
-        " 最大可撤销次数
-        set undolevels=1000
-        " Maximum number lines to save for undo on a buffer reload
-        set undoreload=10000
-    endif
-    let g:s_backup_undo = 1
-endfunction
+    " if !IsWin()
+    "     Plug 'Shougo/vimproc.vim', {'do': 'make'}
+    "     Plug 'Shougo/vimshell.vim'
+    " endif
 
-" 备份view
-function! BackupView()
-    if exists("g:s_backup_view")
-        return
-    endif
-    set viewoptions=folds,options,cursor,unix,slash
-    set viewdir=~/.vim/temp/view
-    augroup backupView
-        autocmd!
-        autocmd BufWinLeave * if expand('%') != '' && &buftype == '' | mkview | endif
-        autocmd BufRead     * if expand('%') != '' && &buftype == '' | silent loadview | syntax on | endif
-    augroup END
-    nnoremap <c-s-f12> :!find ~/.vim/temp/view -mtime +30 -exec rm -a{} \;<cr>
-    " TODO: let vim delete too old file auto
-    let g:s_backup_view = 1
-endfunction
+    " Plug 'kana/vim-textobj-user' " 方便地自定义文本对象
+    " Plug 'mhinz/vim-startify' " 启动画面
+    Plug 'itchyny/lightline.vim'
+    Plug 'itchyny/vim-cursorword'
+    Plug 'sickill/vim-monokai'
+    Plug 'tomasr/molokai'
+    " Plug 'terryma/vim-multiple-cursors' " 多光标
+    Plug 'tpope/vim-surround' " 包围插件
+    Plug 'tpope/vim-repeat' " 使用.重复第三方插件的功能
+    Plug 'junegunn/vim-easy-align' " 排版插件
+    " Plug 'easymotion/vim-easymotion' " 快捷移动光标
+    " css等语言中高亮显示颜色
+    " Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']}
+    " Plug 'terryma/vim-expand-region' " 扩展选择
+    Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
+    Plug 'tell-k/vim-autopep8', {'for': 'python'} " pep8自动格式化
 
-call BackupCursor() " 调用以自动恢复光标
-call BackupUndo() " 调用以自动备份undo
-" call BackupFile() " 调用以自动备份文件
-" call BackupView() " 调用以自动备份view
-" ---------------------------------}}}2
+    " Plug 'dyng/ctrlsf.vim' " 强大的工程查找工具，依赖ack，ag
+    " 强大的模糊搜索，需要命令行工具fzf支持
+    " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
+    Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+    Plug 'junegunn/fzf.vim'
 
-" }}}1
+    " Plug 'tpope/vim-fugitive' " git集成 比较费时间
+    " Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
 
-" format -------------------------------------------------------------------{{{1
+    " Plug 'Konfekt/FastFold' " 快速折叠，处理某些折叠延迟
+    Plug 'strom3xFeI/vimdoc-cn'
 
-" 一定长度的行以换行显示
-set linebreak
-set textwidth=500
-" set wrapmargin=120
+    " Plug '~/tmp/vim/vim-potion' " potion语言支持，dev
+    " Plug '~/tmp/vim/vim-md' " plugin for markdown
+    Plug '~/tmp/vim/vim-markdown' " plugin for markdown
+    Plug '~/tmp/vim/ctrlp.vim'
+call plug#end() " }}
 
-set foldmethod=marker
-nnoremap <f10> :set foldenable!<cr>
+" plugin config ------------------------------------------------------------{{1
 
-" }}}1
-
-" look and feel ------------------------------------------------------------{{{1
-set background=dark              " 设置背景色
-
-if NoPlugin()
-    colorscheme desert
-endif
-
-"  设置状态行的样式
-if has('cmdline_info')
-    set ruler                    " 显示光标当前位置
-    " A ruler on steroids
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
-    set showcmd
-endif
-
-if has('statusline')
-    set laststatus=2
-    " Broken down into easily includeable segments
-    set statusline=%<%f\                     " Filename
-    set statusline+=%w%h%m%r                 " Options
-    if !NoPlugin()
-        set statusline+=%{fugitive#statusline()} " Git Hotness
-    endif
-    set statusline+=\ [%{&ff}/%Y]            " Filetype
-    set statusline+=\ [%{getcwd()}]          " Current dir
-    set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
-endif
-
-" 设置 gui 与 cli
-if IsGui()
-    " 设置窗口位置和大小
-    winpos 685 28
-    set lines=47 columns=90
-    " 设置gui下标签内容
-    set guitablabel=%M\ %t
-    " 隐藏不需要的gui组件
-    set guioptions-=m   " remove menu
-    set guioptions-=T   " remove toolbar
-    set guioptions-=L   " remove scoll bar
-    set guioptions-=r
-    set guioptions-=b
-    set guioptions-=e
-    " 设置字体
-    if IsLinux()
-        set guifont=Source\ Code\ Pro\ 9
-    elseif IsWin()
-        set guifont=Source\ Code\ Pro:h9
-    else
-        set guifont=SauceCodePro\ Nerd\ Font:h11
-    endif
-endif
-
-" }}}1
-
-" keymap -------------------------------------------------------------------{{{1
-" 设置 leader 键
-let mapleader = ";"
-let maplocalleader = "\\"
-call DoAltMap('nnore', ';', ';')    " 使用<a-;>来完成原来;的工作
-
-" editing --------------------------{{{2
-" 搜索替换
-    " 搜索并替换所有
-    call DoMap('vnore', 'r', ":call VisualSelection('replace', '')<CR>", ['<silent>'])
-    " 不确认、非整词
-    nnoremap <Leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-    " 不确认、整词
-    nnoremap <Leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-    " 确认、非整词
-    nnoremap <Leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-    " 确认、整词
-    nnoremap <Leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-" 快速关闭搜索高亮
-call DoMap('nnore', '<cr>', ':nohlsearch<cr>', ['<silent>'])
-" 查找并合并冲突
-nnoremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
-" 横向滚动
-map zl zL
-map zh zH
-" 快速查找当前单词
-nnoremap <leader>fw [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
-" 快速切换拼写检查
-noremap <c-f11> :setlocal spell!<cr>
-" 拼写检查功能
-noremap <leader>sn ]s
-noremap <leader>sp [s
-noremap <leader>sa zg
-noremap <leader>s? z=
-" 将光标所在单词切换成大写/小写
-nnoremap <c-u> g~iw
-inoremap <c-u> <esc>g~iwea
-" <a-x>删除当前行
-call DoAltMap('inore', 'x', '<c-o>dd')
-" 使用<a-p>代替<C-n>进行补全
-call DoAltMap('inore', 'p', '<c-n>')
-" 设置补全菜单样式
-set completeopt=longest,menu,preview
-" <a-d> 删除词
-call DoAltMap('inore', 'd', '<c-w>')
-call DoAltMap('cnore', 'd', '<c-w>')
-" <alt-=> 使用表达式寄存器
-call DoAltMap('inore', '=', '<c-r>=')
-" 开关折叠
-nnoremap - za
-nnoremap _ zf
-
-" 一些跟行有关的一定命令对软换行的表现
-if !exists('g:s_wrapRelMotion')
-    function! WrapRelativeMotion(key, ...)
-        let vis_sel=""
-        if a:0
-            let vis_sel="gv"
-        endif
-        if &wrap
-            execute "normal!" vis_sel . "g" . a:key
-        else
-            execute "normal!" vis_sel . a:key
-        endif
-    endfunction
-
-    " Map g* keys in Normal, Operator-pending, and Visual+select
-    noremap <silent> $ :call WrapRelativeMotion("$")<CR>
-    noremap <silent> <End> :call WrapRelativeMotion("$")<CR>
-    noremap <silent> 0 :call WrapRelativeMotion("0")<CR>
-    noremap <silent> <Home> :call WrapRelativeMotion("0")<CR>
-    noremap <silent> ^ :call WrapRelativeMotion("^")<CR>
-    " Overwrite the operator pending $/<End> mappings from above
-    " to force inclusive motion with :execute normal!
-    onoremap <silent> $ v:call WrapRelativeMotion("$")<CR>
-    onoremap <silent> <End> v:call WrapRelativeMotion("$")<CR>
-    " Overwrite the Visual+select mode mappings from above
-    " to ensure the correct vis_sel flag is passed to function
-    vnoremap <silent> $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
-    vnoremap <silent> <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
-    vnoremap <silent> 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
-    vnoremap <silent> <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
-    vnoremap <silent> ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
-endif
-
-call DoAltMap('inore', 'j', '<down>')
-call DoAltMap('inore', 'k', '<up>')
-call DoAltMap('inore', 'h', '<left>')
-call DoAltMap('inore', 'l', '<right>')
-call DoAltMap('inore', 'm', '<s-right>')
-call DoAltMap('inore', 'N', '<s-left>')
-call DoAltMap('inore', 'o', '<end>')
-call DoAltMap('inore', 'I', '<home>')
-call DoAltMap('nnore', 'j', '10gj')
-call DoAltMap('nnore', 'k', '10gk')
-
-call DoAltMap('cnore', 'j', '<down>')
-call DoAltMap('cnore', 'k', '<up>')
-call DoAltMap('cnore', 'h', '<left>')
-call DoAltMap('cnore', 'l', '<right>')
-call DoAltMap('cnore', 'm', '<s-right>')
-call DoAltMap('cnore', 'N', '<s-left>')
-call DoAltMap('cnore', 'o', '<end>')
-call DoAltMap('cnore', 'I', '<home>')
-
-call DoAltMap('vnore', 'j', '10gj')
-call DoAltMap('vnore', 'k', '10gk')
-
-" alt-s进入命令行模式
-call DoAltMap('nnore', 's', ':')
-call DoAltMap('inore', 's', '<c-o>:')
-call DoAltMap('vnore', 's', ':')
-" 在Visual mode下使用*和#搜索选中的内容
-vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
-vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
-" 切换行可视模式
-call DoMap("nnore", '<space>', 'V')
-call DoMap("vnore", '<space>', 'V')
-
-" 快速设置foldlevel
-nnoremap <leader><f0> :set foldlevel=0<cr>
-nnoremap <leader><f1> :set foldlevel=1<cr>
-nnoremap <leader><f2> :set foldlevel=2<cr>
-nnoremap <leader><f3> :set foldlevel=3<cr>
-nnoremap <leader><f4> :set foldlevel=4<cr>
-nnoremap <leader><f5> :set foldlevel=5<cr>
-nnoremap <leader><f6> :set foldlevel=6<cr>
-nnoremap <leader><f7> :set foldlevel=7<cr>
-nnoremap <leader><f8> :set foldlevel=8<cr>
-nnoremap <leader><f9> :set foldlevel=9<cr>
-
-" 设置vim切换粘贴模式的快捷键，不能点击的终端启用
-nnoremap <leader>tp :set paste!<cr>
-" ----------------------------------}}}2
-
-" file buffer tab and window -------{{{2
-nnoremap <tab><cr> <c-w>_
-nnoremap <tab>= <c-w>=
-nnoremap <tab>j <C-w>j
-nnoremap <tab>k <C-w>k
-nnoremap <tab>l <C-w>l
-nnoremap <tab>h <C-w>h
-nnoremap <tab><up> <C-w>-
-nnoremap <tab><down> <C-w>+
-nnoremap <tab><left> <C-w><
-nnoremap <tab><right> <C-w>>
-nnoremap <tab>i :tabprevious<cr>
-nnoremap <tab>o :tabnext<cr>
-nnoremap <tab>{ :tabfirst<cr>
-nnoremap <tab>} :tablast<cr>
-nnoremap <tab>n :tabnew<cr>
-nnoremap <tab>q :close<cr>
-
-nnoremap <tab>[ :bprevious<cr>
-nnoremap <tab>] :bnext<cr>
-nnoremap <tab>b :execute "ls"<cr>
-nnoremap <tab>- :split<cr>
-nnoremap <tab>\ :vsplit<cr>
-
-nnoremap <tab>x :tabclose<cr>
-nnoremap <tab>c :close<cr>
-nnoremap <tab>s :tabs<cr>
-nnoremap <tab>f :tabfind<space>
-nnoremap <tab>m :tabmove<space>
-nnoremap <tab>m :tabmove
-nnoremap <tab>t :tabonly<cr> 
-
-call DoAltMap('nnore', '1', '1gt')
-call DoAltMap('nnore', '2', '2gt')
-call DoAltMap('nnore', '3', '3gt')
-call DoAltMap('nnore', '4', '4gt')
-call DoAltMap('nnore', '5', '5gt')
-call DoAltMap('nnore', '6', '6gt')
-call DoAltMap('nnore', '7', '7gt')
-call DoAltMap('nnore', '8', '8gt')
-call DoAltMap('nnore', '9', '9gt')
-
-" 关闭所有缓冲区
-nnoremap <leader>Q :bufdo bd<cr>
-" 切换当前和上一个标签
-let g:lasttab = 1
-nnoremap <tab><tab> :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
-" 切换到当前打开buffer的目录
-nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
-" 在一个新的标签中打开当前buffer的文件
-map <tab>g :tabedit <c-r>=expand("%:p:h")<cr>/
-" 指定在缓冲区间切换时的行为
-try
-    set switchbuf=useopen,usetab,newtab
-    set stal=2
-catch
-endtry
-
-" 快速编辑
-cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
-nnoremap <leader>ew :e %%
-nnoremap <leader>es :sp %%
-nnoremap <leader>ev :vsp %%
-nnoremap <leader>et :tabe %%
-" 切换工作目录到当前文件目录
-cnoremap cwd lcd %:p:h
-cnoremap cd. lcd %:p:h
-
-" 保存与退出
-call DoMap('nnore', 'q', ':close<cr>')
-call DoMap('nnore', 'w', ':w<cr>')
-" 以sudo权限保存
-if !IsWin()
-    cnoremap W! !sudo tee % > /dev/null<cr>
-    call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
-endif
-
-" ----------------------------------}}}2
-
-" macro ----------------------------{{{2
-" 使用alt+.快速重复上一个宏
-call DoAltMap('nnore', '.', '@@')
-" 关闭所有缓冲区
-nnoremap <leader>Q :bufdo bd<cr>
-" 切换当前和上一个标签
-let g:lasttab = 1
-nnoremap <tab><tab> :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
-" 切换到当前打开buffer的目录
-nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
-" 在一个新的标签中打开当前buffer的文件
-map <tab>g :tabedit <c-r>=expand("%:p:h")<cr>/
-" 指定在缓冲区间切换时的行为
-try
-    set switchbuf=useopen,usetab,newtab
-    set stal=2
-catch
-endtry
-
-" 快速编辑
-cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
-nnoremap <leader>ew :e %%
-nnoremap <leader>es :sp %%
-nnoremap <leader>ev :vsp %%
-nnoremap <leader>et :tabe %%
-" 切换工作目录到当前文件目录
-cnoremap cwd lcd %:p:h
-cnoremap cd. lcd %:p:h
-
-" 保存与退出
-call DoMap('nnore', 'q', ':close<cr>')
-call DoMap('nnore', 'w', ':w<cr>')
-
-" ----------------------------------}}}2
-
-" }}}1
-
-" misc ---------------------------------------------------------------------{{{1
-
-" ctags
-if exists('g:has_ctags')
-    set tags=./tags;/,~/.vimtags
-    " Make tags placed in .git/tags file available in all levels of a repository
-    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-    if gitroot != ''
-        let &tags = &tags . ',' . gitroot . '/.git/tags'
-    endif
-endif
-
-" Make tags placed in .git/tags file available in all levels of a repository
-let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-if gitroot != ''
-    let &tags = &tags . ',' . gitroot . '/.git/tags'
-endif
-
-" [iabbrev]
-iabbrev xdate <c-r>=strftime("%Y/%d/%m %H:%M:%S")<cr>
-"  去除Windows的 ^M 在编码混乱的时候
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-function! Init()
-    call MkdirIfNotExists("~/.vim/temp")
-    call MkdirIfNotExists("~/.vim/temp/view")
-    call MkdirIfNotExists("~/.vim/temp/undo")
-    call MkdirIfNotExists("~/.vim/temp/backup")
-    exe "PlugInstall"
-    exe "quit"
-    exe "quit"
-endfunction
-
-function! UpdateSupervim()
-    exe "!cd ~/.vim && git pull"
-endfunction
-
-" }}}1
-
-" plugin config ------------------------------------------------------------{{{1
-
-" ------------------------exception {{{2
-" for supervim with out plugin
-if NoPlugin()
-    " 尝试加载extesion
-    let g:s_loaded_extesion = TryLoad('~/.vim/extesion.vim')
-    " 尝试加载自定义vimrc
-    let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
-    " 尝试加载自定义的gvimrc
-    let g:s_loaded_gvimrc = TryLoad('~/.vim/gvimrc.vim')
-    finish
-endif
-" ----------------------------------}}}2
-
-" Neocomplete {{{2
+" Neocomplete {{2
 if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " Disable AutoComplPop.
     let g:acp_enableAtStartup = 0
@@ -540,7 +121,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     endif
     let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-    " omni 补全配置 {{{3
+    " omni 补全配置 {{3
     augroup omnif
         autocmd!
         autocmd Filetype *
@@ -566,14 +147,14 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
     " if !IsWin()
     "     let g:neocomplete#use_vimproc = 1
-    " endif " }}}3
+    " endif " }}3
 
-    " 自动打开关闭弹出式的预览窗口 {{{3
+    " 自动打开关闭弹出式的预览窗口 {{3
     augroup AutoPopMenu
         autocmd!
         autocmd CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
     augroup END
-    set completeopt=menu,preview,longest "}}}3
+    set completeopt=menu,preview,longest "}}3
 
     " 回车键插入当前的补全项
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -628,9 +209,9 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 endif
-" }}}2
+" }}2
 
-" ultisnips {{{2
+" ultisnips {{2
 if isdirectory(expand('~/.vim/plugged/ultisnips'))
     " 定义snippet文件存放的位置
     let g:UltiSnipsSnippetsDir=expand("~/.vim/ultisnips")
@@ -651,9 +232,9 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
         execute(a:e)
     endfunction
 endif
-" }}}2
+" }}2
 
-" jedi-vim {{{2
+" jedi-vim {{2
 if isdirectory(expand('~/.vim/plugged/jedi-vim'))
     " jedi 补全快捷键, 有补全插件就不需要了
     " let g:jedi#completions_command = "<c-n>"
@@ -694,9 +275,9 @@ if isdirectory(expand('~/.vim/plugged/jedi-vim'))
     " 自动完成from .. import ..
     let g:jedi#smart_auto_mappings = 1
 endif
-" }}}2
+" }}2
 
-" nerdtree {{{2
+" nerdtree {{2
 if isdirectory(expand('~/.vim/plugged/nerdtree'))
     " 使用箭头表示文件夹折叠
     let g:NERDTreeDirArrowExpandable = '▶'
@@ -755,9 +336,9 @@ if isdirectory(expand('~/.vim/plugged/nerdtree'))
     " 快速切换nerdtree到当前文件目录
     nnoremap <silent><leader>n :exec("NERDTree ".expand('%:h'))<CR>
 endif
-" }}}2
+" }}2
 
-" nerdcommenter {{{2
+" nerdcommenter {{2
 if isdirectory(expand('~/.vim/plugged/nerdcommenter'))
     " Use compact syntax for prettified multi-line comments
     let g:NERDCompactSexyComs = 1
@@ -777,9 +358,9 @@ if isdirectory(expand('~/.vim/plugged/nerdcommenter'))
     let g:NERDSpaceDelims=1
     let g:NERDRemoveExtraSpaces=1
 endif
-" }}}2
+" }}2
 
-" tagbar {{{2
+" tagbar {{2
 if isdirectory(expand('~/.vim/plugged/tagbar'))
     let g:tagbar_left=0
     let g:tagbar_width = 30
@@ -790,16 +371,16 @@ if isdirectory(expand('~/.vim/plugged/tagbar'))
     nnoremap <leader>tt :TagbarToggle<cr>
     " call DoMap('nnore', 't', ':TagbarToggle<cr>')
 endif
-" }}}2
+" }}2
 
-" vim-expand-region {{{2
+" vim-expand-region {{2
 if isdirectory(expand('~/.vim/plugged/vim-expand-region'))
     vmap v <Plug>(expand_region_expand)
     vmap <C-v> <Plug>(expand_region_shrink)
 endif
-" }}}2
+" }}2
 
-" vim-multiple-cursors {{{2
+" vim-multiple-cursors {{2
 if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
     let g:multi_cursor_next_key='<C-n>'
     let g:multi_cursor_prev_key='<C-p>'
@@ -809,7 +390,7 @@ if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
     call DoMap('nnore', '/', ':MultipleCursorsFind <c-r>/<cr>', ['<silent>'])
     call DoMap('vnore', '/', ':MultipleCursorsFind <c-r>/<cr>', ['<silent>'])
 
-    " 和 neocomplete 整合{{{3
+    " 和 neocomplete 整合{{3
     " Called once right before you start selecting multiple cursors
     function! Multiple_cursors_before()
       if exists(':NeoCompleteLock')==2
@@ -822,14 +403,14 @@ if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
       if exists(':NeoCompleteUnlock')==2
         exe 'NeoCompleteUnlock'
       endif
-    endfunction " }}}3
+    endfunction " }}3
     " 多光标高亮样式 (see help :highlight and help :highlight-link)
     " highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
     " highlight link multiple_cursors_visual Visual
 endif
-" }}}2
+" }}2
 
-" lightline {{{2
+" lightline {{2
 if isdirectory(expand('~/.vim/plugged/lightline.vim'))
     let g:lightline = {
                 \ 'colorscheme': 'default',
@@ -852,9 +433,9 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
         return lightline#statusline(0)
     endfunction
 endif
-" }}}2
+" }}2
 
-" vim-markdown {{{2
+" vim-markdown {{2
 if isdirectory(expand('~/.vim/plugged/vim-markdown'))
     " 关掉它自带的折叠
     let g:vim_markdown_toc_autofit = 1
@@ -864,9 +445,9 @@ if isdirectory(expand('~/.vim/plugged/vim-markdown'))
     " 代码块语法
     let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
 endif
-" }}}2
+" }}2
 
-" vim-easy-align {{{2
+" vim-easy-align {{2
 if isdirectory(expand('~/.vim/plugged/vim-easy-align'))
     " Start interactive EasyAlign in visual mode (e.g. vipga)
     xmap ga <Plug>(EasyAlign)
@@ -897,23 +478,23 @@ if isdirectory(expand('~/.vim/plugged/vim-easy-align'))
     \   }
     \ }
 endif
-" }}}2
+" }}2
 
-" vim-surround {{{2
+" vim-surround {{2
 if isdirectory(expand('~/.vim/plugged/vim-surround'))
     vmap Si S(i_<esc>f)
 endif
-" }}}2
+" }}2
 
-" undotree {{{2
+" undotree {{2
 if isdirectory(expand('~/.vim/plugged/undotree'))
     nnoremap <leader>tu :UndotreeToggle<cr>
     nnoremap <space>u :UndotreeToggle<cr>
     let g:undotree_SetFocusWhenToggle=1
 endif
-" }}}2
+" }}2
 
-" autopair {{{2
+" autopair {{2
 if isdirectory(expand('~/.vim/plugged/auto-pairs'))
     "  什么时候想自己写插件应该看看这个插件的源码
     let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
@@ -926,9 +507,9 @@ if isdirectory(expand('~/.vim/plugged/auto-pairs'))
         let g:AutoPairsShortcutFastWrap = '<a-a>'
     endif
 endif
-" }}}2
+" }}2
 
-" MatchTagAlways {{{2
+" MatchTagAlways {{2
 if isdirectory(expand('~/.vim/plugged/MatchTagAlways'))
     let g:mta_use_matchparen_group = 1
     let g:mta_filetypes = {
@@ -937,9 +518,9 @@ if isdirectory(expand('~/.vim/plugged/MatchTagAlways'))
                 \ 'xml' : 1,
                 \}
 endif
-" }}}2
+" }}2
 
-" Fugitive {{{2
+" Fugitive {{2
 if isdirectory(expand('~/.vim/plugged/vim-fugitive'))
     nnoremap <silent> <leader>gs :Gstatus<CR>
     nnoremap <silent> <leader>gd :Gdiff<CR>
@@ -954,9 +535,9 @@ if isdirectory(expand('~/.vim/plugged/vim-fugitive'))
     nnoremap <silent> <leader>gi :Git add -p %<CR>
     nnoremap <silent> <leader>gg :SignifyToggle<CR>
 endif
-" }}}2
+" }}2
 
-" rainbow {{{2
+" rainbow {{2
 if isdirectory(expand('~/.vim/plugged/rainbow'))
     let g:rainbow_conf = {
         \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
@@ -983,16 +564,16 @@ if isdirectory(expand('~/.vim/plugged/rainbow'))
     let g:rainbow_active = 1
     nnoremap <leader>tr :RainbowToggle<cr>
 endif
-" }}}2
+" }}2
 
-" vim-json {{{2
+" vim-json {{2
 if isdirectory(expand('~/.vim/plugged/vim-json'))
     nnoremap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
     let g:vim_json_syntax_conceal = 0
 endif
-" }}}2
+" }}2
 
-" vim-javascript {{{2
+" vim-javascript {{2
 if isdirectory(expand('~/.vim/plugged/vim-javascript'))
     " 语法高亮插件
     let g:javascript_plugin_jsdoc = 1
@@ -1014,9 +595,9 @@ if isdirectory(expand('~/.vim/plugged/vim-javascript'))
     let g:javascript_conceal_super          = "Ω"
     let g:javascript_conceal_arrow_function = "⇒"
 endif
-" }}}2
+" }}2
 
-" MarkdownPreview {{{2
+" MarkdownPreview {{2
 if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
     if IsOSX()
         let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
@@ -1056,30 +637,30 @@ if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
         let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
     endif
 endif
-" }}}2
+" }}2
 
-" vim-over {{{2
+" vim-over {{2
 if isdirectory(expand('~/.vim/plugged/vim-over'))
     " <leader>rr快速执行替换预览
     nnoremap <leader>rr :OverCommandLine<cr>%s/
 endif
-" }}}2
+" }}2
 
-" CtrlSF {{{2
+" CtrlSF {{2
 if isdirectory(expand('~/.vim/plugged/ctrlsf.vim'))
     call DoAltMap('nnore', 'f', ':CtrlSF ')
     call DoMap('nnore', 'f', ':CtrlSFToggle<cr>')
 endif
-" }}}2
+" }}2
 
-" vim-autopep8 {{{2
+" vim-autopep8 {{2
 if isdirectory(expand('~/.vim/plugged/vim-autopep8'))
     " 格式化完成后不要显示diff窗口
     let g:autopep8_disable_show_diff = 0
 endif
-" }}}2
+" }}2
 
-" syntastic {{{2
+" syntastic {{2
 if isdirectory(expand('~/.vim/plugged/syntastic'))
     let g:syntastic_always_populate_loc_list = 1
     let g:syntastic_auto_loc_list = 1
@@ -1092,9 +673,9 @@ if isdirectory(expand('~/.vim/plugged/syntastic'))
     let g:syntastic_javascript_checkers = ['jshint']
     let g:syntastic_python_flake8_args='--max-line-length=84'
 endif
-"}}}2
+"}}2
 
-" textobj-user {{{2
+" textobj-user {{2
 " if isdirectory(expand('~/.vim/plugged/vim-textobj-user'))
 "     call textobj#user#plugin('datetime', {
 "     \   'date': {
@@ -1103,9 +684,9 @@ endif
 "     \   },
 "     \ })
 " endif
-"}}}2
+"}}2
 
-" vim-shell {{{2 for linux and osx
+" vim-shell {{2 for linux and osx
 " if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && !IsWin()
 "     nnoremap <space>s :VimShellTab<cr>
 "     nnoremap <space>d :VimShellPop<cr><esc>
@@ -1146,9 +727,9 @@ endif
 "         autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
 "     augroup END
 " endif
-" }}}2
+" }}2
 
-" FZF {{{2 for linux and osx
+" FZF {{2 for linux and osx
 if isdirectory(expand('~/.vim/plugged/fzf.vim')) && !IsWin()
     if exists('g:s_has_fzf')
         " 这三个快捷键指定用什么方式打开选中的内容
@@ -1269,35 +850,20 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim')) && !IsWin()
     " Helptags        |  Help tags 1
     " Filetypes       |  File types
 endif
-" }}}2
+" }}2
 
-" monokai {{{2
+" monokai {{2
 if isdirectory(expand('~/.vim/plugged/vim-monokai'))
     colorscheme monokai
-    if NoPlugin()
-        colorscheme desert
-    endif
 endif
-" }}}2
+" }}2
 
-" molokai {{{2
+" molokai {{2
 " if isdirectory(expand('~/.vim/plugged/molokai'))
 "     colorscheme molokai
-"     if NoPlugin()
-"         colorscheme desert
-"     endif
 " endif
-" }}}2
+" }}2
 
-" }}}1
+" }}1
 
-" others -------------------------------------------------------------------{{{1
-" 尝试加载extension
-let g:s_loaded_extension = TryLoad('~/.vim/extension.vim')
-" 尝试加载自定义vimrc
-let g:s_loaded_custom = TryLoad('~/.vim/custom.vim')
-" 尝试加载自定义的gvimrc
-let g:s_loaded_gvimrc = TryLoad('~/.vim/gvimrc.vim')
-" }}}1
-
-" vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{{,}}} fdm=marker nospell:
+" vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{,}} fdm=marker nospell:

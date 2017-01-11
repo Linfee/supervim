@@ -95,7 +95,9 @@ set wildignore=*.o,*~,*.pyc,*.class
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,.git\*,.hg\*,.svn\*
 set wildignore+=*.sw*
 " 防止连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
-set nojoinspaces
+" set nojoinspaces
+set cpo&vim
+
 
 " 让vim和系统共享默认剪切板
 if has('clipboard')
@@ -119,6 +121,8 @@ set softtabstop=4                " 把连续的空格看做制表符
 set matchpairs+=<:>              " 设置形成配对的字符
 set nospell                      " 默认不要开启拼写检查
 set foldenable                   " 基于缩进或语法进行代码折叠
+set linebreak
+set textwidth=500
 
 " --------------------------------------
 " look and feel
