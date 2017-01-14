@@ -47,7 +47,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'luochen1990/rainbow' " 彩虹括增强版
 
     " if !IsWin()
-    "     Plug 'Shougo/vimproc.vim', {'do': 'make'}
+        " Plug 'Shougo/vimproc.vim', {'do': 'make'}
     "     Plug 'Shougo/vimshell.vim'
     " endif
 
@@ -83,7 +83,11 @@ call plug#begin('~/.vim/plugged')
     " Plug '~/tmp/vim/vim-potion' " potion语言支持，dev
     " Plug '~/tmp/vim/vim-md' " plugin for markdown
     Plug '~/tmp/vim/vim-markdown' " plugin for markdown
-    Plug '~/tmp/vim/ctrlp.vim'
+    " Plug '~/tmp/vim/ctrlp.vim'
+    Plug '~/tmp/vim/newctrlp'
+    Plug '~/tmp/vim/finder'
+
+    Plug '~/tmp/vim/denite'
 call plug#end() " }}
 
 " plugin config ------------------------------------------------------------{{1

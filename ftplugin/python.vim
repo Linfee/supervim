@@ -37,4 +37,4 @@ else " for linux, osx, mingw, msys2, cygwin
     call DoMap('nnore', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
 endif
 " vim-autopep8格式化
-call DoAltMap('nnore', 'F', ':Autopep8<cr>')
+nnoremap = :Autopep8<cr>
