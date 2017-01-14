@@ -284,8 +284,8 @@ endif
 " nerdtree {{2
 if isdirectory(expand('~/.vim/plugged/nerdtree'))
     " 使用箭头表示文件夹折叠
-    let g:NERDTreeDirArrowExpandable = '▶'
-    let g:NERDTreeDirArrowCollapsible = '▼'
+    let g:NERDTreeDirArrowExpandable = '+'
+    let g:NERDTreeDirArrowCollapsible = '-'
     let g:NERDTreeWinPos = "left"
     let g:NERDTreeWinSize = "35"
     let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
@@ -302,17 +302,33 @@ if isdirectory(expand('~/.vim/plugged/nerdtree'))
     let g:nerdtree_tabs_open_on_gui_startup=0
     let g:nerdtree_tabs_open_on_new_tab=1
 
-    let g:NERDTreeIndicatorMapCustom = {
-                \ "Modified"  : "✹",
-                \ "Staged"    : "✚",
-                \ "Untracked" : "✭",
-                \ "Renamed"   : "➜",
-                \ "Unmerged"  : "═",
-                \ "Deleted"   : "✖",
-                \ "Dirty"     : "✗",
-                \ "Clean"     : "✔︎",
-                \ "Unknown"   : "?"
-                \ }
+    if IsWin()
+        let g:NERDTreeIndicatorMapCustom = {
+                    \ "Modified"  : "M",
+                    \ "Staged"    : "S",
+                    \ "Untracked" : "U",
+                    \ "Renamed"   : "R",
+                    \ "Unmerged"  : "u",
+                    \ "Deleted"   : "X",
+                    \ "Dirty"     : "D",
+                    \ "Clean"     : "C",
+                    \ "Unknown"   : "?"
+                    \ }
+    else
+        let g:NERDTreeIndicatorMapCustom = {
+                    \ "Modified"  : "✹",
+                    \ "Staged"    : "✚",
+                    \ "Untracked" : "✭",
+                    \ "Renamed"   : "➜",
+                    \ "Unmerged"  : "═",
+                    \ "Deleted"   : "✖",
+                    \ "Dirty"     : "✗",
+                    \ "Clean"     : "✔︎",
+                    \ "Unknown"   : "?"
+                    \ }
+    endif
+
+
 
     " NERDTress File highlighting
     function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
@@ -428,8 +444,9 @@ if isdirectory(expand('~/.vim/plugged/lightline.vim'))
                 \ 'component_type': {
                 \   'syntastic': 'error',
                 \ },
-                \ 'subseparator': { 'left': '›', 'right': '‹' }
+                \ 'subseparator': { 'left': '>', 'right': '<' }
                 \ }
+                " \ 'subseparator': { 'left': '›', 'right': '‹' }
     let g:tagbar_status_func = 'TagbarStatusFunc'
 
     function! TagbarStatusFunc(current, sort, fname, ...) abort
@@ -591,13 +608,13 @@ if isdirectory(expand('~/.vim/plugged/vim-javascript'))
     let g:javascript_conceal_function       = "ƒ"
     let g:javascript_conceal_null           = "ø"
     let g:javascript_conceal_this           = "@"
-    let g:javascript_conceal_return         = "⇚"
+    " let g:javascript_conceal_return         = "⇚"
     let g:javascript_conceal_undefined      = "¿"
-    let g:javascript_conceal_NaN            = "ℕ"
+    " let g:javascript_conceal_NaN            = "ℕ"
     let g:javascript_conceal_prototype      = "¶"
-    let g:javascript_conceal_static         = "•"
+    " let g:javascript_conceal_static         = "•"
     let g:javascript_conceal_super          = "Ω"
-    let g:javascript_conceal_arrow_function = "⇒"
+    " let g:javascript_conceal_arrow_function = "⇒"
 endif
 " }}2
 
