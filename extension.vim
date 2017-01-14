@@ -99,7 +99,7 @@ com! -nargs=0 MybatisGenerate call extension#MybatisGenerate()
 " }
 
 " fcitx-support {
-" let g:fcitx#no_fcitx_support = 1
+let g:fcitx#no_fcitx_support = 1
 if IsLinux()
     if !exists('g:fcitx#no_fcitx_support')
         call fcitx#FcitxSupportOn()
