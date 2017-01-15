@@ -27,9 +27,6 @@ call TryLoad('~/.vim/betterdefault.vim')
 call TryLoad('~/.vim/before.vim')
 
 call TryLoad('~/.vim/ui.vim')
-call TryLoad('~/.vim/keymap.vim')
-
-call TryLoad('~/.vim/plugin.vim')
 
 call backup#BackupCursor() " 调用以自动恢复光标
 call backup#BackupUndo() " 调用以自动备份undo
@@ -38,6 +35,10 @@ call backup#BackupUndo() " 调用以自动备份undo
 
 " 处理中文编码
 call vlib#EncodingForCn()
+
+call TryLoad('~/.vim/keymap.vim')
+
+call TryLoad('~/.vim/plugin.vim')
 
 call TryLoad('~/.vim/extension.vim')
 call TryLoad('~/.vim/custom.vim')
