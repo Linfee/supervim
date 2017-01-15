@@ -112,4 +112,12 @@ nnoremap <space>t :set operatorfunc=translate#Translate<cr>g@
 vnoremap <space>t :<c-u>call translate#Translate(visualmode())<cr>
 " }
 
+" backup {
+call backup#BackupCursor() " 调用以自动恢复光标
+call backup#BackupUndo() " 调用以自动备份undo
+" call backup#BackupFile() " 调用以自动备份文件
+" call backup#BackupView() " 调用以自动备份view
+
+" }
+
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:
