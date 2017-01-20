@@ -521,9 +521,9 @@ endif
 
 " autopair {{2
 if isdirectory(expand('~/.vim/plugged/auto-pairs'))
-    "  什么时候想自己写插件应该看看这个插件的源码
     let g:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'",'"':'"', '`':'`'}
-    let g:AutoPairsShortcutToggle = '<leader>ta'
+    let g:AutoPairsShortcutToggle = ''
+    nnoremap <leader>ta :call AutoPairsToggle()<cr>
     if IsOSX()
         let g:AutoPairsShortcutFastWrap = 'å'
     elseif IsLinux() && !IsGui()
