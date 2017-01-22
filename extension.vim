@@ -117,7 +117,12 @@ call backup#BackupCursor() " 调用以自动恢复光标
 call backup#BackupUndo() " 调用以自动备份undo
 " call backup#BackupFile() " 调用以自动备份文件
 " call backup#BackupView() " 调用以自动备份view
+" }
 
+" color preview for vim {
+" ~/.vim/syntax/colorful.vim
+" use syntax file from https://github.com/gko/vim-coloresque
+command! -nargs=0 -bar -bang ColorPreview exe 'w | syn include syntax/colorful.vim | e'
 " }
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:

@@ -31,58 +31,45 @@ call plug#begin('~/.vim/plugged')
         Plug 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
         let g:s_has_ctags = 1
     endif
-    " Plug 'kshenoy/vim-signature' " 显示书签
     Plug 'mbbill/undotree' " 撤销树
-    " Plug 'mhinz/vim-signify' " 快捷diff列
-    Plug 'osyo-manga/vim-over' " 可以预览的替换
+    " 在vim标记列显示diff标记
+    Plug 'mhinz/vim-signify', {'on': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh']}
+    " 可以预览的替换
+    Plug 'osyo-manga/vim-over', {'on': ['OverCommandLine']}
 
     Plug 'Shougo/neocomplete.vim' " 补全插件
-    if executable('look') " 需要ctags支持
-        Plug 'ujihisa/neco-look' " 提供补全英文单词的支持，依赖look命令
-        let g:s_has_look = 1
-    endif
     " Plug 'scrooloose/syntastic' " 静态语法检查
     Plug 'Linfee/ultisnips-zh-doc'
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'luochen1990/rainbow' " 彩虹括增强版
 
-    " if !IsWin()
-        " Plug 'Shougo/vimproc.vim', {'do': 'make'}
-    "     Plug 'Shougo/vimshell.vim'
-    " endif
-
     " Plug 'kana/vim-textobj-user' " 方便地自定义文本对象
     " Plug 'mhinz/vim-startify' " 启动画面
     Plug 'itchyny/lightline.vim'
     Plug 'itchyny/vim-cursorword'
-    Plug 'sickill/vim-monokai'
-    Plug 'tomasr/molokai'
+
+    " colorscheme
+    " Plug 'sickill/vim-monokai'
+    " Plug 'tomasr/molokai'
+    Plug 'morhetz/gruvbox'
+
     " Plug 'terryma/vim-multiple-cursors' " 多光标
     Plug 'tpope/vim-surround' " 包围插件
     Plug 'tpope/vim-repeat' " 使用.重复第三方插件的功能
     Plug 'junegunn/vim-easy-align' " 排版插件
     " Plug 'easymotion/vim-easymotion' " 快捷移动光标
-    " css等语言中高亮显示颜色
-    " Plug 'gorodinskiy/vim-coloresque', {'for': ['vim','html','css','js']}
-    " Plug 'terryma/vim-expand-region' " 扩展选择
     Plug 'jiangmiao/auto-pairs' " 自动插入配对括号引号
     Plug 'tell-k/vim-autopep8', {'for': 'python'} " pep8自动格式化
 
-    " Plug 'dyng/ctrlsf.vim' " 强大的工程查找工具，依赖ack，ag
     " 强大的模糊搜索，需要命令行工具fzf支持
     " Ag [PATTERN] 命令的支持需要安装 ggreer/the_silver_searcher
     Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
     Plug 'junegunn/fzf.vim'
 
-    " Plug 'tpope/vim-fugitive' " git集成 比较费时间
-    " Plug 'rhysd/conflict-marker.vim' " 处理git冲突文件
-
-    " Plug 'Konfekt/FastFold' " 快速折叠，处理某些折叠延迟
     Plug 'strom3xFeI/vimdoc-cn'
 
-    " Plug '~/tmp/vim/vim-potion' " potion语言支持，dev
     " Plug '~/tmp/vim/vim-md' " plugin for markdown
-    Plug '~/tmp/vim/vim-markdown' " plugin for markdown
+    Plug '~/tmp/vim/vim-markdown', {'for': 'markdown'} " pep8自动格式化
     " Plug '~/tmp/vim/ctrlp.vim'
     Plug '~/tmp/vim/newctrlp'
     Plug '~/tmp/vim/finder'
@@ -106,17 +93,10 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     " let g:neocomplete#max_list = 15
     let g:neocomplete#force_overwrite_completefunc = 1
     " Define dictionary.
-    " if !IsWin()
-    "     let g:neocomplete#sources#dictionary#dictionaries = {
-    "                 \ 'default' : '',
-    "                 \ 'vimshell' : $HOME.'/.vimshell_hist',
-    "                 \ 'scheme' : $HOME.'/.gosh_completions'
-    "                 \ }
-    " else
-        let g:neocomplete#sources#dictionary#dictionaries = {
-                    \ 'default' : '',
-                    \ 'scheme' : $HOME.'/.gosh_completions'
-                    \ }
+    let g:neocomplete#sources#dictionary#dictionaries = {
+                \ 'default' : '',
+                \ 'scheme' : $HOME.'/.gosh_completions'
+                \ }
     " endif
 
     " Define keyword.
@@ -149,9 +129,7 @@ if isdirectory(expand('~/.vim/plugged/neocomplete.vim'))
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-    " if !IsWin()
-    "     let g:neocomplete#use_vimproc = 1
-    " endif " }}3
+    " }}3
 
     " 自动打开关闭弹出式的预览窗口 {{3
     augroup AutoPopMenu
@@ -231,7 +209,6 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     nnoremap <leader>au :UltiSnipsAddFiletypes<space>
     nnoremap <space>au :UltiSnipsAddFiletypes<space>
 
-    " execute是一个命令，没有对应的方法，定义一个，在snippets中用
     function! EXE(e)
         execute(a:e)
     endfunction
@@ -397,13 +374,6 @@ if isdirectory(expand('~/.vim/plugged/tagbar'))
 endif
 " }}2
 
-" vim-expand-region {{2
-if isdirectory(expand('~/.vim/plugged/vim-expand-region'))
-    vmap v <Plug>(expand_region_expand)
-    vmap <C-v> <Plug>(expand_region_shrink)
-endif
-" }}2
-
 " vim-multiple-cursors {{2
 if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
     let g:multi_cursor_next_key='<C-n>'
@@ -437,25 +407,46 @@ endif
 " lightline {{2
 if isdirectory(expand('~/.vim/plugged/lightline.vim'))
     let g:lightline = {
-                \ 'colorscheme': 'default',
-                \ 'active': {
-                \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]],
-                \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-                \ },
-                \ 'component_expand': {
-                \   'syntastic': 'SyntasticStatuslineFlag',
-                \ },
-                \ 'component_type': {
-                \   'syntastic': 'error',
-                \ },
-                \ 'subseparator': { 'left': '>', 'right': '<' }
-                \ }
-                " \ 'subseparator': { 'left': '›', 'right': '‹' }
-    let g:tagbar_status_func = 'TagbarStatusFunc'
+          \ 'colorscheme': 'gruvbox',
+          \ 'mode_map': { 'c': 'NORMAL' },
+          \ 'active': {
+          \   'left': [ [ 'mode', 'paste' ], ['filename' ]],
+          \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+          \ },
+          \ 'component_function': {
+          \   'modified': 'LightlineModified',
+          \   'readonly': 'LightlineReadonly',
+          \   'fileformat': 'LightlineFileformat',
+          \   'filetype': 'LightlineFiletype',
+          \   'fileencoding': 'LightlineFileencoding',
+          \   'mode': 'LightlineMode',
+          \ },
+          \ 'separator': { 'left': '', 'right': '' },
+          \ 'subseparator': { 'left': '›', 'right': '‹' }
+          \ }
 
-    function! TagbarStatusFunc(current, sort, fname, ...) abort
-        let g:lightline.fname = a:fname
-        return lightline#statusline(0)
+    function! LightlineModified()
+      return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+    endfunction
+
+    function! LightlineReadonly()
+      return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '<>' : ''
+    endfunction
+
+    function! LightlineFileformat()
+      return winwidth(0) > 70 ? &fileformat : ''
+    endfunction
+
+    function! LightlineFiletype()
+      return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+    endfunction
+
+    function! LightlineFileencoding()
+      return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+    endfunction
+
+    function! LightlineMode()
+      return winwidth(0) > 60 ? lightline#mode() : ''
     endfunction
 endif
 " }}2
@@ -545,22 +536,27 @@ if isdirectory(expand('~/.vim/plugged/MatchTagAlways'))
 endif
 " }}2
 
-" Fugitive {{2
-if isdirectory(expand('~/.vim/plugged/vim-fugitive'))
-    nnoremap <silent> <leader>gs :Gstatus<CR>
-    nnoremap <silent> <leader>gd :Gdiff<CR>
-    nnoremap <silent> <leader>gc :Gcommit<CR>
-    nnoremap <silent> <leader>gb :Gblame<CR>
-    nnoremap <silent> <leader>gl :Glog<CR>
-    nnoremap <silent> <leader>gp :Git push<CR>
-    nnoremap <silent> <leader>gr :Gread<CR>
-    nnoremap <silent> <leader>gw :Gwrite<CR>
-    nnoremap <silent> <leader>ge :Gedit<CR>
-    " Mnemonic _i_nteractive
-    nnoremap <silent> <leader>gi :Git add -p %<CR>
-    nnoremap <silent> <leader>gg :SignifyToggle<CR>
-endif
-" }}2
+" vim-signify {{
+let g:signify_vcs_list = ['git'] " only use git
+let g:signify_vcs_cmds = {'git': 'git diff --no-color --no-ext-diff -U0 -- %f'}
+let g:signify_cursorhold_normal     = 1
+let g:signify_update_on_focusgained = 1
+let g:signify_disable_by_default = 1
+
+nnoremap <leader>tg :SignifyToggle<cr>
+nnoremap <leader>gh :SignifyToggleHighlight<cr>
+nnoremap <leader>gr :SignifyRefresh<cr>
+
+" hunk jumping
+nmap <leader>gj <plug>(signify-next-hunk)
+nmap <leader>gk <plug>(signify-prev-hunk)
+
+" hunk text object
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+omap ac <plug>(signify-motion-outer-pending)
+xmap ac <plug>(signify-motion-outer-visual)
+" }}
 
 " rainbow {{2
 if isdirectory(expand('~/.vim/plugged/rainbow'))
@@ -671,13 +667,6 @@ if isdirectory(expand('~/.vim/plugged/vim-over'))
 endif
 " }}2
 
-" CtrlSF {{2
-if isdirectory(expand('~/.vim/plugged/ctrlsf.vim'))
-    call DoAltMap('nnore', 'f', ':CtrlSF ')
-    call DoMap('nnore', 'f', ':CtrlSFToggle<cr>')
-endif
-" }}2
-
 " vim-autopep8 {{2
 if isdirectory(expand('~/.vim/plugged/vim-autopep8'))
     " 格式化完成后不要显示diff窗口
@@ -710,49 +699,6 @@ endif
 "     \ })
 " endif
 "}}2
-
-" vim-shell {{2 for linux and osx
-" if isdirectory(expand('~/.vim/plugged/vimshell.vim')) && !IsWin()
-"     nnoremap <space>s :VimShellTab<cr>
-"     nnoremap <space>d :VimShellPop<cr><esc>
-"
-"     if has('win32') || has('win64')
-"       " Display user name on Windows.
-"       let g:vimshell_prompt = $USERNAME."% "
-"     else
-"       " Display user name on Linux.
-"       let g:vimshell_prompt = $USER."% "
-"     endif
-"
-"     " Initialize execute file list.
-"     let g:vimshell_execute_file_list = {}
-"     call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
-"     let g:vimshell_execute_file_list['rb'] = 'ruby'
-"     let g:vimshell_execute_file_list['pl'] = 'perl'
-"     let g:vimshell_execute_file_list['py'] = 'python3'
-"     call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
-"
-"     autocmd FileType vimshell
-"     \ call vimshell#altercmd#define('g', 'git')
-"     \| call vimshell#altercmd#define('i', 'iexe')
-"     \| call vimshell#altercmd#define('l', 'll')
-"     \| call vimshell#altercmd#define('ll', 'ls -l')
-"     \| call vimshell#altercmd#define('la', 'ls -lahk')
-"     \| call vimshell#altercmd#define('p', 'python3')
-"     \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
-"
-"     function! MyChpwd(args, context)
-"       call vimshell#execute('ls')
-"     endfunction
-"
-"     " 覆盖statusline
-"     let g:vimshell_force_overwrite_statusline=0
-"     augroup vim_shell
-"         autocmd!
-"         autocmd FileType vimshell :UltiSnipsAddFiletypes vimshell<cr>
-"     augroup END
-" endif
-" }}2
 
 " FZF {{2 for linux and osx
 if isdirectory(expand('~/.vim/plugged/fzf.vim')) && !IsWin()
@@ -877,17 +823,17 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim')) && !IsWin()
 endif
 " }}2
 
-" monokai {{2
-if isdirectory(expand('~/.vim/plugged/vim-monokai'))
-    colorscheme monokai
+" colorschrme gruvbox {{2
+if isdirectory(expand('~/.vim/plugged/gruvbox'))
+    let g:gruvbox_italic=1 " enable italic text
+    let g:gruvbox_contrast_dark='soft'  " 对比度
+    let g:gruvbox_contrast_light='soft' " 对比度
+    " let g:gruvbox_hls_cursor='orange' " 搜索时光标的高亮颜色
+    " let g:gruvbox_italicize_strings=1 " 字符串是否使用斜体
+    colorscheme gruvbox
+    set background=dark
 endif
-" }}2
-
-" molokai {{2
-" if isdirectory(expand('~/.vim/plugged/molokai'))
-"     colorscheme molokai
-" endif
-" }}2
+" }}
 
 " }}1
 
