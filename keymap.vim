@@ -9,87 +9,75 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" Functions {{1
+" Functions: {{1
 
-" 自定义一个leader键(不同于vim内置，是额外的一个)，使用提供的方法映射 {{2
-let g:leadercustom = "<space>"
-" 该函数用来快捷定义使用 g:leadercustom 的映射，参照下面的调用使用
-" 第四个参数是使用临时定义的 leadercustom 代替 g:leadercustom
-" call DoMap('nnore', '<cr>', ':nohlsearch<cr>', ['<silent>'], '<enter>')
-function! DoMap(prefix, key, operation, ...)
-    let s:c = a:prefix
-    let key_prefix = exists('g:leadercustom') ? g:leadercustom : '<space>'
-    if s:c !~ "map"
-        let s:c = s:c . 'map'
-    endif
-    " 添加第一个可选参数，接受数组，常传入['<slient>', '<buffer>']等
-    if a:0 > 0
-        for n in a:1
-            let s:c = s:c . ' ' . n
-        endfor
-    endif
-    " 添加第二个可选参数，用于映射不是<space>打头的映射
-    if a:0 > 1
-        let key_prefix = a:2
-    endif
-    let s:c = s:c . ' ' . key_prefix . a:key . ' ' . a:operation
-    " echo s:c
-    exe s:c
-endfunction " }}2
+" 这两个a2b的方法是用于在使用了b键盘布局的情况下想保持a键盘布局的快捷键位置 " {{2
+" 注意：表示特殊键的字符串如 <space> <bs> <cr> 不要传递给这两个方法
+let s:qwerty_layout = 'qwertyuiopasdfghjkl;zxcvbnmQWERTYUIOPASDFGHJKL:ZXCVBNM'
+let s:workman_layout = 'qdrwbjfup;ashtgyneoizxmcvklQDRWBJFUP:ASHTGYNEOIZXMCVKL'
+silent fun! Qwerty2Workman(qwerty_key) " <a-j> -> <a-n>
+    let r = tr(a:qwerty_key, s:qwerty_layout, s:workman_layout)
+    let r = substitute(r, 'm-', 'c-', '')
+    let r = substitute(r, 'l-', 'm-', '')
+    return r
+endf
+silent fun! Workman2Qwerty(qwerty_key) " <a-j> -> <a-y>
+    let r = tr(a:qwerty_key, s:workman_layout, s:qwerty_layout)
+    let r = substitute(r, 'c-', 'm-', '')
+    let r = substitute(r, 'v-', 'c-', '')
+    return r
+endf " 2}}
 
-" 该函数用来映射所有的a-*映射以及a-s-*映射 {{
-" 支持的映射如下表，key1指定*，operation指定要映射的操作，
-" 另外还可以提供第key2，alt组合键之后的按键，以及可选的选项
-" key1只能指定下面dict的key，而且value为' '的指定了也无效，最好不用，
-" 虽然这是mac导致的(我的黑苹果)，但为了平台一致性，其它系统也取消了
-" 简单说就是alt+e|n|i|c|u不要映射，alt+backspace或功能键也不要映射
-" 如果指定key2应该指定为原有的样子，而不是表中的简写形式
-" call DoAltMap('<prefix>', '<key1>', '<operaiton>', '<key2>', ['<silent>等'])
-silent fun! DoAltMap(prefix, key1, operation, ...)
-
-    let s:c = a:prefix
-    if s:c !~ "map"
-        let s:c = s:c . 'map'
-    endif
-    if a:0 > 1 " 添加<silent>等选项
-        for n in a:2
-            let s:c = s:c . ' ' . n
-        endfor
-    endif
-    if IsOSX()
-        let s:d = { 'a': 'å', 'A': 'Å', 'b': '∫', 'B': 'ı', 'c': ' ', 'C': 'Ç',
-                  \ 'd': '∂', 'D': 'Î', 'e': ' ', 'E': '´', 'f': 'ƒ', 'F': 'Ï',
-                  \ 'g': '©', 'G': '˝', 'h': '˙', 'H': 'Ó', 'i': ' ', 'I': 'ˆ',
-                  \ 'j': '∆', 'J': 'Ô', 'k': '˚', 'K': '', 'l': '¬', 'L': 'Ò',
-                  \ 'm': 'µ', 'M': 'Â', 'n': ' ', 'N': '˜', 'o': 'ø', 'O': 'Ø',
-                  \ 'p': 'π', 'P': '∏', 'q': 'œ', 'Q': 'Œ', 'r': '®', 'R': '‰',
-                  \ 's': 'ß', 'S': 'Í', 't': '†', 'T': 'ˇ', 'u': ' ', 'U': '¨',
-                  \ 'v': '√', 'V': '◊', 'w': '∑', 'W': '„', 'x': '≈', 'X': '˛',
-                  \ 'y': '¥', 'Y': 'Á', 'z': 'Ω', 'Z': '¸', '-': '–', '_': '—',
-                  \ '=': '≠', '+': '±', '[': '“', '{': '”', ']': '‘', '}': '’',
-                  \ ';': '…', ':': 'æ', "'": 'æ', '"': 'Æ', ',': '≤', '<': '¯',
-                  \ '.': '≥', '>': '˘', '/': '÷', '?': '¿', '1': '¡', '2': '™',
-                  \ '3': '£', '4': '¢', '5': '∞', '6': '§', '7': '¶', '8': '•',
-                  \ '9': 'ª', '0': 'º'}
-        if has_key(s:d, a:key1)
-            let s:c = s:c . ' ' . get(s:d, a:key1)
-        else
-            return
-        endif
-    elseif IsLinux() && !IsGui()
-        let s:c = s:c . ' ' . a:key1
-    else
-        let s:c = s:c . ' <a-'
-        let s:c = s:c . a:key1
-        let s:c = s:c . '>'
-    endif
-
-    if a:0 > 0 " 如果有别的键也加上
-        let s:c = s:c . a:1
-    endif
-    let s:c = s:c . ' ' . a:operation
-    exe s:c
+silent func! DoMap(cmd, lhs, rhs) " TODO: 添加转化在workmap下使用qwerty快捷键位置的逻辑 {{
+    let lhs = a:lhs
+    exe a:cmd . ' ' . lhs . ' ' . a:rhs
 endf " }}
+
+" vim中有几个键很少用，例如普通模式的<space>，该函数可以把它们作为自定义leader定义映射 {{2
+" 默认使用<space>作为leader，通过修改 g:customleader 的值来更改(需要在调用该函数前设置)
+" 如果传入第四个参数，函数会忽略 g:customleader 的设置，使用第四个参数指定的leade
+" 例: call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>')
+"     call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>', '<tab>')
+silent func! DoCustomLeaderMap(cmd, lhs, rhs, ...)
+    let lhs = a:lhs
+    let customleader = '<space>'
+    if a:0 > 0
+        let customleader = a:1
+    elseif exists('g:customleader')
+        let customleader = g:customleader
+    endif
+    exe a:cmd . ' ' . customleader . lhs . ' ' . a:rhs
+    " echo a:cmd . ' ' . customleader . lhs . ' ' . a:rhs
+endf " 2}}
+
+" 提供跨平台的<a-*>以及<a-s-*>映射，后者是可以转换为前者 {{2
+" Arg: cmd 映射命令，如果有特殊参数，也一并算进来，例: 'nnoremap <buffer>'
+" Arg: lhs 包含<a-*>的映射，作为map系列命令的lhs参数，对于<a-*>映射，map命令的该
+"       参数在不同平台是不同的，该函数会将其转换为正确的参数使映射正常工作，用户
+"       只需要使用传入<a-*>即可，*<a-*>*或包含多个<a-*>都是可以的，对于<a-s-j>其
+"       实等效于<a-J>这里要求用户使用<a-J>，不要使用shift
+" Arg: rhs 该参数会直接作为map系列命令的rhs参数
+" 例: call DoAltMap('nnoremap <buffer>', '<a-j>', '<down>')
+let s:keys =      "abcdefghijklmnopqrtuvwxyzABCDEFGHIJKLMNOPQRsSTUVWXYZ-=[];'" . ',./_+{}:"<>?1234567890'
+let s:alt_keys =  "å∫ ∂ ƒ©˙ ∆˚¬µ øπœ®† √∑≈¥ΩÅıÇÎ´Ï˝ÓˆÔÒÂ˜Ø∏Œ‰ßÍˇ¨◊„˛Á¸–≠“‘…æ" . '≤≥÷—±”’æÆ¯˘¿¡™£¢∞§¶•ªº'
+silent func! DoAltMap(cmd, lhs, rhs)
+    let lhs = a:lhs
+    let m = match(lhs, '<a-.>')
+    while m != -1
+        let char = lhs[m+3]
+        if IsOSX()
+            let lhs = substitute(lhs, '<a-' . char . '>', tr(char, s:keys, s:alt_keys), '')
+        elseif IsLinux() && !IsGui() " 大多数现代Linux终端，使用 
+            let lhs = substitute(lhs, '<a-' . char . '>', "" . char, '')
+        else " 其他情况，如win，linux gui，都可以原样映射
+            break
+        endif
+        let m = match(lhs, '<a-.>')
+    endw
+    exe a:cmd . ' ' . lhs . ' ' . a:rhs
+    " echom a:cmd . ' ' . lhs . ' ' . a:rhs
+endf
+" 2}}
 
 function! VisualSelection(direction, extra_filter) range " {{2
     let l:saved_reg = @"
@@ -135,12 +123,12 @@ endfunction " }}2
 " 设置 leader 键
 let mapleader = ";"
 let maplocalleader = "\\"
-call DoAltMap('nnore', ';', ';')    " 使用<a-;>来完成原来;的工作
+call DoAltMap('nnoremap', '<a-;>', ';') " 使用<a-;>来完成原来;的工作
 
 " editing --------------------------{{
 " 搜索替换
 " 搜索并替换所有
-call DoMap('vnore', 'r', ":call VisualSelection('replace', '')<CR>", ['<silent>'])
+call DoCustomLeaderMap('vnoremap <silent>', 'r', ":call VisualSelection('replace', '')<CR>")
 " 非整词
 nnoremap <Leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
 " 整词
@@ -177,53 +165,53 @@ nnoremap <leader>tp :set paste!<cr>
 nnoremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " 快速关闭搜索高亮
-call DoMap('nnore', '<cr>', ':nohlsearch<cr>', ['<silent>'])
+call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>')
 " <alt-=> 使用表达式寄存器
-call DoAltMap('inore', '=', '<c-r>=')
+call DoAltMap('inoremap', '<a-=>', '<c-r>=')
 " 使用<a-p>代替<C-n>进行补全
-call DoAltMap('inore', 'p', '<c-n>')
+call DoAltMap('inoremap', '<a-p>', '<c-n>')
 " <a-x>删除当前行
-call DoAltMap('inore', 'x', '<c-o>dd')
+call DoAltMap('inoremap', '<a-x>', '<c-o>dd')
 " <a-d> 删除词
-call DoAltMap('inore', 'd', '<c-w>')
-call DoAltMap('cnore', 'd', '<c-w>')
+call DoAltMap('inoremap', '<a-d>', '<c-w>')
+call DoAltMap('cnoremap', '<a-d>', '<c-w>')
 
 " 快捷移动
-call DoAltMap('inore', 'j', '<down>')
-call DoAltMap('inore', 'k', '<up>')
-call DoAltMap('inore', 'h', '<left>')
-call DoAltMap('inore', 'l', '<right>')
-call DoAltMap('inore', 'm', '<s-right>')
-call DoAltMap('inore', 'N', '<s-left>')
-call DoAltMap('inore', 'o', '<end>')
-call DoAltMap('inore', 'I', '<home>')
-call DoAltMap('nnore', 'j', '10gj')
-call DoAltMap('nnore', 'k', '10gk')
+call DoAltMap('inoremap', '<a-j>', '<down>')
+call DoAltMap('inoremap', '<a-k>', '<up>')
+call DoAltMap('inoremap', '<a-h>', '<left>')
+call DoAltMap('inoremap', '<a-l>', '<right>')
+call DoAltMap('inoremap', '<a-m>', '<s-right>')
+call DoAltMap('inoremap', '<a-N>', '<s-left>')
+call DoAltMap('inoremap', '<a-o>', '<end>')
+call DoAltMap('inoremap', '<a-i>', '<home>')
+call DoAltMap('nnoremap', '<a-j>', '10gj')
+call DoAltMap('nnoremap', '<a-k>', '10gk')
 
-call DoAltMap('cnore', 'j', '<down>')
-call DoAltMap('cnore', 'k', '<up>')
-call DoAltMap('cnore', 'h', '<left>')
-call DoAltMap('cnore', 'l', '<right>')
-call DoAltMap('cnore', 'm', '<s-right>')
-call DoAltMap('cnore', 'N', '<s-left>')
-call DoAltMap('cnore', 'o', '<end>')
-call DoAltMap('cnore', 'I', '<home>')
+call DoAltMap('cnoremap', '<a-j>', '<down>')
+call DoAltMap('cnoremap', '<a-k>', '<up>')
+call DoAltMap('cnoremap', '<a-h>', '<left>')
+call DoAltMap('cnoremap', '<a-l>', '<right>')
+call DoAltMap('cnoremap', '<a-m>', '<s-right>')
+call DoAltMap('cnoremap', '<a-N>', '<s-left>')
+call DoAltMap('cnoremap', '<a-o>', '<end>')
+call DoAltMap('cnoremap', '<a-I>', '<home>')
 
-call DoAltMap('vnore', 'j', '10gj')
-call DoAltMap('vnore', 'k', '10gk')
+call DoAltMap('vnoremap', '<a-j>', '10gj')
+call DoAltMap('vnoremap', '<a-k>', '10gk')
 
 " alt-s进入命令行模式
-call DoAltMap('nnore', 's', ':')
-call DoAltMap('inore', 's', '<c-o>:')
-call DoAltMap('vnore', 's', ':')
+call DoAltMap('nnoremap', '<a-s>', ':')
+call DoAltMap('inoremap', '<a-s>', '<c-o>:')
+call DoAltMap('vnoremap', '<a-s>', ':')
 
 " 在Visual mode下使用*和#搜索选中的内容
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
 " 切换行可视模式
-call DoMap("nnore", '<space>', 'V')
-call DoMap("vnore", '<space>', 'V')
+call DoCustomLeaderMap("nnoremap", '<space>', 'V')
+call DoCustomLeaderMap("vnoremap", '<space>', 'V')
 
 " 快速设置foldlevel
 nnoremap <leader><f0> :set foldlevel=0<cr>
@@ -303,15 +291,15 @@ nnoremap <tab>m :tabmove<space>
 nnoremap <tab>m :tabmove
 nnoremap <tab>t :tabonly<cr> 
 
-call DoAltMap('nnore', '1', '1gt')
-call DoAltMap('nnore', '2', '2gt')
-call DoAltMap('nnore', '3', '3gt')
-call DoAltMap('nnore', '4', '4gt')
-call DoAltMap('nnore', '5', '5gt')
-call DoAltMap('nnore', '6', '6gt')
-call DoAltMap('nnore', '7', '7gt')
-call DoAltMap('nnore', '8', '8gt')
-call DoAltMap('nnore', '9', '9gt')
+call DoAltMap('nnoremap', '<a-1>', '1gt')
+call DoAltMap('nnoremap', '<a-2>', '2gt')
+call DoAltMap('nnoremap', '<a-3>', '3gt')
+call DoAltMap('nnoremap', '<a-4>', '4gt')
+call DoAltMap('nnoremap', '<a-5>', '5gt')
+call DoAltMap('nnoremap', '<a-6>', '6gt')
+call DoAltMap('nnoremap', '<a-7>', '7gt')
+call DoAltMap('nnoremap', '<a-8>', '8gt')
+call DoAltMap('nnoremap', '<a-9>', '9gt')
 
 " 关闭所有缓冲区
 nnoremap <leader>Q :bufdo bd<cr>
@@ -341,19 +329,19 @@ cnoremap cwd lcd %:p:h
 cnoremap cd. lcd %:p:h
 
 " 保存与退出
-call DoMap('nnore', 'q', ':close<cr>')
-call DoMap('nnore', 'w', ':w<cr>')
+call DoCustomLeaderMap('nnoremap', 'q', ':close<cr>')
+call DoCustomLeaderMap('nnoremap', 'w', ':w<cr>')
 " 以sudo权限保存
 if !IsWin()
     cnoremap W! !sudo tee % > /dev/null<cr>
-    call DoMap('nnore', 'W', ':!sudo tee % > /dev/null')
+    call DoCustomLeaderMap('nnoremap', 'W', ':!sudo tee % > /dev/null')
 endif
 
 " ----------------------------------}}
 
 " macro ----------------------------{{
 " 使用alt+.快速重复上一个宏
-call DoAltMap('nnore', '.', '@@')
+call DoAltMap('nnoremap', '<a-.>', '@@')
 " 关闭所有缓冲区
 nnoremap <leader>Q :bufdo bd<cr>
 " 切换当前和上一个标签
@@ -382,8 +370,8 @@ cnoremap cwd lcd %:p:h
 cnoremap cd. lcd %:p:h
 
 " 保存与退出
-call DoMap('nnore', 'q', ':close<cr>')
-call DoMap('nnore', 'w', ':w<cr>')
+call DoCustomLeaderMap('nnoremap', 'q', ':close<cr>')
+call DoCustomLeaderMap('nnoremap', 'w', ':w<cr>')
 
 " ----------------------------------}}
 

@@ -20,7 +20,7 @@ call plug#begin('~/.vim/plugged')
     " Plug 'pangloss/vim-javascript', {'for': 'javascript'}
     " Plug 'elzr/vim-json', {'for': 'json'}
     " Plug 'Linfee/vim-markdown', {'for': 'markdown'}
-    Plug 'iamcco/markdown-preview.vim', {'for': 'markdown'} " markdown实时预览
+    Plug 'iamcco/markdown-preview.vim', {'for': 'markdown', 'on': ['MarkdownPreview']} " markdown实时预览
     " Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
     Plug 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle', 'NERDTreeFind']}
@@ -329,7 +329,7 @@ if isdirectory(expand('~/.vim/plugged/nerdtree'))
 
     nnoremap <leader>e :NERDTreeFind<CR>
     nnoremap <Leader>tn :NERDTreeTabsToggle<CR>
-    call DoMap('nnore', 'n', ':NERDTreeTabsToggle<cr>')
+    call DoCustomLeaderMap('nnoremap', 'n', ':NERDTreeTabsToggle<cr>')
     " 快速切换nerdtree到当前文件目录
     nnoremap <silent><leader>n :exec("NERDTree ".expand('%:h'))<CR>
 endif
@@ -370,7 +370,7 @@ if isdirectory(expand('~/.vim/plugged/tagbar'))
     endif
 
     nnoremap <leader>tt :TagbarToggle<cr>
-    " call DoMap('nnore', 't', ':TagbarToggle<cr>')
+    " call DoCustomLeaderMap('nnoremap', 't', ':TagbarToggle<cr>')
 endif
 " }}2
 
@@ -381,8 +381,8 @@ if isdirectory(expand('~/.vim/plugged/vim-multiple-cursors'))
     let g:multi_cursor_skip_key='<C-x>'
     let g:multi_cursor_quit_key='<c-[>'
     nnoremap <c-c> :call multiple_cursors#quit()<CR>
-    call DoMap('nnore', '/', ':MultipleCursorsFind <c-r>/<cr>', ['<silent>'])
-    call DoMap('vnore', '/', ':MultipleCursorsFind <c-r>/<cr>', ['<silent>'])
+    call DoCustomLeaderMap('nnoremap <silent>', '/', ':MultipleCursorsFind <c-r>/<cr>')
+    call DoCustomLeaderMap('vnoremap <silent>', '/', ':MultipleCursorsFind <c-r>/<cr>')
 
     " 和 neocomplete 整合{{3
     " Called once right before you start selecting multiple cursors
@@ -792,11 +792,11 @@ if isdirectory(expand('~/.vim/plugged/fzf.vim')) && !IsWin()
     nnoremap <leader>f/ :History/<cr>
     nnoremap <leader>ff :Ag<cr>
     nnoremap <leader>fb :Buffers<cr>
-    call DoMap('nnore', 'o', ':Files<cr>')
-    call DoMap('nnore', 'O', ':Files ')
-    call DoMap('nnore', 'b', ':Buffers<cr>')
-    call DoMap('nnore', 'a', ':Ag<cr>')
-    call DoMap('nnore', 'l', ':Lines<cr>')
+    call DoCustomLeaderMap('nnoremap', 'o', ':Files<cr>')
+    call DoCustomLeaderMap('nnoremap', 'O', ':Files ')
+    call DoCustomLeaderMap('nnoremap', 'b', ':Buffers<cr>')
+    call DoCustomLeaderMap('nnoremap', 'a', ':Ag<cr>')
+    call DoCustomLeaderMap('nnoremap', 'l', ':Lines<cr>')
     " Files [PATH]    |  Files (similar to :FZF)
     " GFiles [OPTS]   |  Git files (git ls-files)
     " GFiles?         |  Git files (git status)

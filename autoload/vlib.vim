@@ -9,29 +9,25 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 {{
-silent fun! vlib#EncodingForCn()
-    set encoding=utf8
-    set fileencoding=utf8
-    set fileencodings=utf8,chinese,latin1,gbk,big5,ucs-bom
-    if IsWin()
-        if !IsGui()
-            " set fileencoding=chinese
-            set termencoding=utf8
-            " 解决console输出乱码
-            " language messages zh_CN.utf-8
-            language messages zh_CN.utf8
-        else
-            "set fileencodings=utf-8,chinese,latin-1
-            "set fileencoding=chinese
-            source $VIMRUNTIME/delmenu.vim
-            source $VIMRUNTIME/menu.vim
-            " 解决console输出乱码
-            set langmenu=none
-            language messages zh_CN.utf8
-        endif
-    endif
-endf " }}
+" Group: environment supervim {{
+
+function! vlib#Init() " 初始化，创建 ~/.vim/temp/{view, undo, backup}，PlugInstall {{2
+    call MkdirIfNotExists("~/.vim/temp")
+    call MkdirIfNotExists("~/.vim/temp/view")
+    call MkdirIfNotExists("~/.vim/temp/undo")
+    call MkdirIfNotExists("~/.vim/temp/backup")
+    exe "PlugInstall"
+    exe "quit"
+    exe "quit"
+endfunction " 2}}
+
+function! vlib#UpdateSupervim() " {{2
+    exe "!cd ~/.vim && git pull"
+    source ~/.vim/vimrc
+    echom "You'd better reopen your vim"
+endfunction " 2}}
+
+" }}
 
 " 快速切换背景色 {{
 silent fun! vlib#ToggleBG()
@@ -136,19 +132,5 @@ func! vlib#DeleteTrailingWhiteSpace() " 删除每行末尾的空白，对python�
     %s/\s\+$//ge
     exe "normal `z"
 endfunc " }}
-
-function! vlib#Init() " {{
-    call MkdirIfNotExists("~/.vim/temp")
-    call MkdirIfNotExists("~/.vim/temp/view")
-    call MkdirIfNotExists("~/.vim/temp/undo")
-    call MkdirIfNotExists("~/.vim/temp/backup")
-    exe "PlugInstall"
-    exe "quit"
-    exe "quit"
-endfunction " }}
-
-function! vlib#UpdateSupervim() " {{
-    exe "!cd ~/.vim && git pull"
-endfunction " }}
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:

@@ -10,5 +10,5 @@ setl softtabstop=4
 setl nowrap
 
 " 执行默认缓冲区内容
-call DoMap('nnore', 'e', ':@*<cr>')
+call DoCustomLeaderMap('nnoremap <buffer>', 'e', ':@*<cr>')
 
