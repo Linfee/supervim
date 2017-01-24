@@ -13,7 +13,7 @@
 
 " 这两个a2b的方法是用于在使用了b键盘布局的情况下想保持a键盘布局的快捷键位置 " {{2
 " 注意：表示特殊键的字符串如 <space> <bs> <cr> 不要传递给这两个方法
-let s:qwerty_layout = 'qwertyuiopasdfghjkl;zxcvbnmQWERTYUIOPASDFGHJKL:ZXCVBNM'
+let s:qwerty_layout =  'qwertyuiopasdfghjkl;zxcvbnmQWERTYUIOPASDFGHJKL:ZXCVBNM'
 let s:workman_layout = 'qdrwbjfup;ashtgyneoizxmcvklQDRWBJFUP:ASHTGYNEOIZXMCVKL'
 silent fun! Qwerty2Workman(qwerty_key) " <a-j> -> <a-n>
     let r = tr(a:qwerty_key, s:qwerty_layout, s:workman_layout)
@@ -28,14 +28,14 @@ silent fun! Workman2Qwerty(qwerty_key) " <a-j> -> <a-y>
     return r
 endf " 2}}
 
-silent func! DoMap(cmd, lhs, rhs) " TODO: 添加转化在workmap下使用qwerty快捷键位置的逻辑 {{
+silent func! DoMap(cmd, lhs, rhs) " TODO: 添加转化在workmap下使用qwerty快捷键位置的逻辑 {{2
     let lhs = a:lhs
     exe a:cmd . ' ' . lhs . ' ' . a:rhs
-endf " }}
+endf " 2}}
 
 " vim中有几个键很少用，例如普通模式的<space>，该函数可以把它们作为自定义leader定义映射 {{2
 " 默认使用<space>作为leader，通过修改 g:customleader 的值来更改(需要在调用该函数前设置)
-" 如果传入第四个参数，函数会忽略 g:customleader 的设置，使用第四个参数指定的leade
+" 如果传入第四个参数，函数会忽略 g:customleader 的设置，使用第四个参数指定的leader
 " 例: call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>')
 "     call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>', '<tab>')
 silent func! DoCustomLeaderMap(cmd, lhs, rhs, ...)
@@ -78,6 +78,9 @@ silent func! DoAltMap(cmd, lhs, rhs)
     " echom a:cmd . ' ' . lhs . ' ' . a:rhs
 endf
 " 2}}
+
+silent func! WorkmanKeyMap()
+endf
 
 function! VisualSelection(direction, extra_filter) range " {{2
     let l:saved_reg = @"
