@@ -29,12 +29,12 @@ endfunction
 " 运行
 if IsWin() && !IsWinUnix() " for windows
     if exists("g:s_py2")
-        call DoMap('nnore', 'r', ':w<cr>:!echo "____________________"<cr>:!py %<cr>', ['<buffer>'])
+        call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!echo "____________________"<cr>:!py %<cr>')
     else
-        call DoMap('nnore', 'r', ':w<cr>:!echo ____________________<cr>:!python %<cr>', ['<buffer>'])
+        call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!echo ____________________<cr>:!python %<cr>')
     endif
 else " for linux, osx, mingw, msys2, cygwin
-    call DoMap('nnore', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>', ['<buffer>'])
+    call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>')
 endif
 " vim-autopep8格式化
 nnoremap = :Autopep8<cr>

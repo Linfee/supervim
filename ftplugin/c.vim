@@ -10,7 +10,7 @@ setl softtabstop=4
 setl nowrap
 
 " 运行
-call DoMap('nnore', 'r', ':w<cr>:!gcc % -o %< && ./%<<cr>', ['<buffer>'])
+call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!gcc % -o %< && ./%<<cr>')
 
 " 调试
 nnoremap <buffer> <F8> :w<cr>:!g++ % -g -o %< && gdb ./%<<cr>

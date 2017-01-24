@@ -11,4 +11,4 @@ setl nowrap
 
 inoremap <buffer> · `
 
-call DoMap('nnore', 'r', ':MarkdownPreview<cr>', ['<buffer>'])
+call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':MarkdownPreview<cr>')
