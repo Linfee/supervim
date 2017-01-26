@@ -38,7 +38,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'osyo-manga/vim-over', {'on': ['OverCommandLine']}
 
     Plug 'Shougo/neocomplete.vim' " 补全插件
-    " Plug 'scrooloose/syntastic' " 静态语法检查
+    Plug 'vim-syntastic/syntastic' " 静态语法检查
     Plug 'Linfee/ultisnips-zh-doc'
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
     Plug 'luochen1990/rainbow' " 彩虹括增强版
@@ -674,8 +674,12 @@ if isdirectory(expand('~/.vim/plugged/vim-autopep8'))
 endif
 " }}2
 
-" syntastic {{2
+" vim-syntastic {{2
 if isdirectory(expand('~/.vim/plugged/syntastic'))
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+
     let g:syntastic_always_populate_loc_list = 1
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_check_on_open = 0
