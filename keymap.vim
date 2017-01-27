@@ -28,14 +28,10 @@ silent fun! Workman2Qwerty(qwerty_key) " <a-j> -> <a-y>
     return r
 endf " 2}}
 
-silent func! DoMap(cmd, lhs, rhs) " TODO: 添加转化在workmap下使用qwerty快捷键位置的逻辑 {{2
-    let lhs = a:lhs
-    exe a:cmd . ' ' . lhs . ' ' . a:rhs
-endf " 2}}
-
 " vim中有几个键很少用，例如普通模式的<space>，该函数可以把它们作为自定义leader定义映射 {{2
 " 默认使用<space>作为leader，通过修改 g:customleader 的值来更改(需要在调用该函数前设置)
-" 如果传入第四个参数，函数会忽略 g:customleader 的设置，使用第四个参数指定的leader
+" 如果传入第四个参数，函数会忽略 g:customleader 的设置，使用第四个参数指定的leader，
+" 如果希望执行unmap，指定第一个参数为相应的命令并让第三个参数为''即可
 " 例: call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>')
 "     call DoCustomLeaderMap('nnoremap <silent>', '<cr>', ':nohlsearch<cr>', '<tab>')
 silent func! DoCustomLeaderMap(cmd, lhs, rhs, ...)
@@ -46,8 +42,12 @@ silent func! DoCustomLeaderMap(cmd, lhs, rhs, ...)
     elseif exists('g:customleader')
         let customleader = g:customleader
     endif
-    exe a:cmd . ' ' . customleader . lhs . ' ' . a:rhs
-    " echo a:cmd . ' ' . customleader . lhs . ' ' . a:rhs
+    if strlen(a:rhs) == 0 " 用于 umap
+        exe a:cmd . ' ' . customleader . lhs
+    else " 正常 map
+        exe a:cmd . ' ' . customleader . lhs . ' ' . a:rhs
+    endif
+    " echom a:cmd . ' ' . customleader . lhs . ' ' . a:rhs
 endf " 2}}
 
 " 提供跨平台的<a-*>以及<a-s-*>映射，后者是可以转换为前者 {{2
@@ -56,8 +56,9 @@ endf " 2}}
 "       参数在不同平台是不同的，该函数会将其转换为正确的参数使映射正常工作，用户
 "       只需要使用传入<a-*>即可，*<a-*>*或包含多个<a-*>都是可以的，对于<a-s-j>其
 "       实等效于<a-J>这里要求用户使用<a-J>，不要使用shift
-" Arg: rhs 该参数会直接作为map系列命令的rhs参数
+" Arg: rhs 该参数会直接作为map系列命令的rhs参数，如果希望执行unmap，让该参数为''
 " 例: call DoAltMap('nnoremap <buffer>', '<a-j>', '<down>')
+"     call DoAltMap('nunmap <buffer>', '<a-j>', '')
 let s:keys =      "abcdefghijklmnopqrtuvwxyzABCDEFGHIJKLMNOPQRsSTUVWXYZ-=[];'" . ',./_+{}:"<>?1234567890'
 let s:alt_keys =  "å∫ ∂ ƒ©˙ ∆˚¬µ øπœ®† √∑≈¥ΩÅıÇÎ´Ï˝ÓˆÔÒÂ˜Ø∏Œ‰ßÍˇ¨◊„˛Á¸–≠“‘…æ" . '≤≥÷—±”’æÆ¯˘¿¡™£¢∞§¶•ªº'
 silent func! DoAltMap(cmd, lhs, rhs)
@@ -74,13 +75,14 @@ silent func! DoAltMap(cmd, lhs, rhs)
         endif
         let m = match(lhs, '<a-.>')
     endw
-    exe a:cmd . ' ' . lhs . ' ' . a:rhs
+    if strlen(a:rhs) == 0 " 用于 umap
+        exe a:cmd . ' ' . lhs
+    else " 正常 map
+        exe a:cmd . ' ' . lhs . ' ' . a:rhs
+    endif
     " echom a:cmd . ' ' . lhs . ' ' . a:rhs
 endf
 " 2}}
-
-silent func! WorkmanKeyMap()
-endf
 
 function! VisualSelection(direction, extra_filter) range " {{2
     let l:saved_reg = @"
@@ -133,17 +135,17 @@ call DoAltMap('nnoremap', '<a-;>', ';') " 使用<a-;>来完成原来;的工作
 " 搜索并替换所有
 call DoCustomLeaderMap('vnoremap <silent>', 'r', ":call VisualSelection('replace', '')<CR>")
 " 非整词
-nnoremap <Leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+nnoremap gR :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
 " 整词
-nnoremap <Leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+nnoremap grw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
 " 确认、非整词
-nnoremap <Leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
+nnoremap grc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
 " 确认、整词
-nnoremap <Leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+nnoremap grwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
 
 " 横向滚动
-map zl zL
-map zh zH
+nnoremap zl zL
+nnoremap zh zH
 
 " 快速切换拼写检查
 noremap <c-f11> :setlocal spell!<cr>
@@ -188,8 +190,8 @@ call DoAltMap('inoremap', '<a-m>', '<s-right>')
 call DoAltMap('inoremap', '<a-N>', '<s-left>')
 call DoAltMap('inoremap', '<a-o>', '<end>')
 call DoAltMap('inoremap', '<a-i>', '<home>')
-call DoAltMap('nnoremap', '<a-j>', '10gj')
-call DoAltMap('nnoremap', '<a-k>', '10gk')
+call DoAltMap('noremap', '<a-j>', '10gj')
+call DoAltMap('noremap', '<a-k>', '10gk')
 
 call DoAltMap('cnoremap', '<a-j>', '<down>')
 call DoAltMap('cnoremap', '<a-k>', '<up>')
@@ -199,9 +201,6 @@ call DoAltMap('cnoremap', '<a-m>', '<s-right>')
 call DoAltMap('cnoremap', '<a-N>', '<s-left>')
 call DoAltMap('cnoremap', '<a-o>', '<end>')
 call DoAltMap('cnoremap', '<a-I>', '<home>')
-
-call DoAltMap('vnoremap', '<a-j>', '10gj')
-call DoAltMap('vnoremap', '<a-k>', '10gk')
 
 " alt-s进入命令行模式
 call DoAltMap('nnoremap', '<a-s>', ':')

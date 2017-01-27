@@ -1,7 +1,7 @@
 global !p
 def arg2field(snip, t):
 	if not len(t[3]):
-		snip >> 2
+		snip >> 1
 		snip += 'pass'
 	else:
 		s = t[3][1:]
@@ -9,7 +9,7 @@ def arg2field(snip, t):
 		args = s.split(',')
 		args = map(lambda s: s[0:s.find('=')] if '=' in s else s, args)
 		result = map(lambda s: 'self.__{0} = {0}'.format(s), args)
-		snip >> 2
+		snip >> 1
 		for r in result:
 			snip += r
 endglobal

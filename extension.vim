@@ -122,7 +122,12 @@ call backup#BackupUndo() " 调用以自动备份undo
 " color preview for vim {
 " ~/.vim/syntax/colorful.vim
 " use syntax file from https://github.com/gko/vim-coloresque
-command! -nargs=0 -bar -bang ColorPreview exe 'w | syn include syntax/colorful.vim | e'
+command! -nargs=0 -bar ColorPreview exe 'w | syn include syntax/colorful.vim | e'
+" }
+
+" for workman layout normal mode {
+command! -nargs=0 UseWorkman call workman#toWorkman()
+command! -nargs=0 WorkmanToggle call workman#workmanToggle()
 " }
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:

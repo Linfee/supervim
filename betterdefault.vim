@@ -160,20 +160,18 @@ nnoremap Y y$
 " j/k可以移动到软换行上
 nnoremap j gj
 nnoremap k gk
+nnoremap gj j
+nnoremap gk k
 
 " H, L移动到行首行尾
-nmap H ^
-nmap L $
-vmap H ^
-vmap L $
-omap L $
-omap H ^
+map H ^
+map L $
 
 " vmode下能连续使用 < >
 vnoremap < <gv
 vnoremap > >gv
 
 " 允许使用 . 对选中的行执行上一个命令
-vnoremap . :normal .<cr>
+vnoremap . :normal! .<cr>
 
 " vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
