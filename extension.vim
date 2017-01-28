@@ -92,42 +92,51 @@ com! -nargs=0 ToSpace call extension#ToggleTab('space')
 com! -nargs=0 ToTab call extension#ToggleTab('tab')
 " }
 
-" mybatis逆向工程 {
-" let g:extension#mybatis_generate_core="none"
-" let g:extension#driverPath="none"
-com! -nargs=0 MybatisGenerate call extension#MybatisGenerate()
-" }
-
-" fcitx-support {
-let g:fcitx#no_fcitx_support = 1
+" Fcitx-support {
 if IsLinux()
-    if !exists('g:fcitx#no_fcitx_support')
+    if !exists('g:fcitx#no_fcitx_support') && executable('fcitx')
         call fcitx#FcitxSupportOn()
     endif
 endif
 " }
 
-" translate operation {
-nnoremap <space>t :set operatorfunc=translate#Translate<cr>g@
-vnoremap <space>t :<c-u>call translate#Translate(visualmode())<cr>
-" }
-
-" backup {
+" Backup {
 call backup#BackupCursor() " 调用以自动恢复光标
 call backup#BackupUndo() " 调用以自动备份undo
 " call backup#BackupFile() " 调用以自动备份文件
 " call backup#BackupView() " 调用以自动备份view
 " }
 
-" color preview for vim {
+" Color preview for vim {
 " ~/.vim/syntax/colorful.vim
 " use syntax file from https://github.com/gko/vim-coloresque
 command! -nargs=0 -bar ColorPreview exe 'w | syn include syntax/colorful.vim | e'
 " }
 
-" for workman layout normal mode {
+" For workman layout normal mode {
 command! -nargs=0 UseWorkman call workman#toWorkman()
 command! -nargs=0 WorkmanToggle call workman#workmanToggle()
 " }
+
+" mybatis逆向工程 {
+" let g:extension#mybatis_generate_core="none"
+" let g:extension#driverPath="none"
+com! -nargs=0 MybatisGenerate call extension#MybatisGenerate()
+" }
+
+" Operator: {1
+
+" Operator: translate {2
+nnoremap <space>t :set operatorfunc=translate#translate<cr>g@
+vnoremap <space>t :<c-u>call translate#translate(visualmode())<cr>
+command! -nargs=+ Trans call translate#ts(<f-args>)
+" 2}
+
+" Operator: execute vimscript {2
+nnoremap <space>e :set operatorfunc=vimscript#execute<cr>g@
+vnoremap <space>e :<c-u>call vimscript#execute(visualmode())<cr>
+" 2}
+
+" 1}
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker nospell:

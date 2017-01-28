@@ -68,7 +68,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'strom3xFeI/vimdoc-cn'
 
     " Plug '~/tmp/vim/vim-md' " plugin for markdown
-    Plug '~/tmp/vim/vim-markdown', {'for': 'markdown'} " pep8自动格式化
+    Plug '~/tmp/vim/vim-markdown', {'for': 'markdown'}
     " Plug '~/tmp/vim/ctrlp.vim'
     Plug '~/tmp/vim/newctrlp'
     Plug '~/tmp/vim/finder'

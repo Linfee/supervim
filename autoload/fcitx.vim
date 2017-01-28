@@ -2,6 +2,7 @@
 
 " 开启fcitx中英文切换
 func fcitx#FcitxSupportOn()
+    let g:input_toggle = 1
     let s:timeoutlen = &timeoutlen
     set timeoutlen=300
     augroup FcitxSupport
@@ -36,5 +37,3 @@ func fcitx#Fcitx2zh()
       let g:input_toggle = 0
    endif
 endf
-
-

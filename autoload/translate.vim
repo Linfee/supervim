@@ -1,8 +1,9 @@
 " 提供翻译支持
 
-func translate#Translate(type)
+py3 import translate
 
-    py3 import translate
+" Operator function
+func! translate#translate(type)
 
     let saved_unnamed_register = @@
 
@@ -14,10 +15,16 @@ func translate#Translate(type)
         return
     endif
 
-    " silent execute "grep! -R " . shellescape(@@) . " ."
-    " echom @@
-    py3 print(translate.query(vim.eval('@@')))
-    " copen
+    " Use vim's echo not python's print so it will show multi line
+    py3 vim.vars['translate#result'] = translate.translate(vim.eval('@@'))
+    echo g:translate#result
 
     let @@ = saved_unnamed_register
+endf
+
+" translate
+func! translate#ts(...)
+    for i in a:000
+        py3 print(translate.query(vim.eval('i')))
+    endfor
 endf
