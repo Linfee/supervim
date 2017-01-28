@@ -9,26 +9,6 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" Group: environment supervim {{
-
-function! vlib#Init() " 初始化，创建 ~/.vim/temp/{view, undo, backup}，PlugInstall {{2
-    call MkdirIfNotExists("~/.vim/temp")
-    call MkdirIfNotExists("~/.vim/temp/view")
-    call MkdirIfNotExists("~/.vim/temp/undo")
-    call MkdirIfNotExists("~/.vim/temp/backup")
-    exe "PlugInstall"
-    exe "quit"
-    exe "quit"
-endfunction " 2}}
-
-function! vlib#UpdateSupervim() " {{2
-    exe "!cd ~/.vim && git pull"
-    source ~/.vim/vimrc
-    echom "You'd better reopen your vim"
-endfunction " 2}}
-
-" }}
-
 " 快速切换背景色 {{
 silent fun! vlib#ToggleBG()
     let s:tbg = &background

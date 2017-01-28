@@ -9,20 +9,21 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-" Function: {{
+" Function: {{1
+" 尝试加载vim脚本 {{2
 let g:_t = {}
 silent fun! TryLoad(file)
-let filename = split(fnamemodify(a:file, ':t'), '\.')[-2]
-if filereadable(expand(a:file))
-    exe 'let g:_t.' . filename . ' = reltime()[1]'
-    exe 'source '. expand(a:file)
-    exe 'let g:_t.' . filename . ' = reltime()[1] - g:_t.' . filename
-else
-    exe 'let g:_t.' . filename . ' = 0'
-endif
-endf
+    let filename = split(fnamemodify(a:file, ':t'), '\.')[-2]
+    if filereadable(expand(a:file))
+        exe 'let g:_t.' . filename . ' = reltime()[1]'
+        exe 'source '. expand(a:file)
+        exe 'let g:_t.' . filename . ' = reltime()[1] - g:_t.' . filename
+    else
+        exe 'let g:_t.' . filename . ' = 0'
+    endif
+endf " 2}}
 
-" 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题
+" 处理编码问题，正确解决win(cmd,shell,gvim,解决绝大多数)和linux下的编码问题 2{{
 silent fun! EncodingForCn()
     set encoding=utf8
     set fileencoding=utf8
@@ -44,8 +45,32 @@ silent fun! EncodingForCn()
             language messages zh_CN.utf8
         endif
     endif
-endf
-"}}
+endf " 2}}
+
+" Init，download plug.vim, mkdir ~/.vim/temp/{view, undo, backup}，PlugInstall {{2
+function! Init()
+    if IsWin()
+        !md ~\vimfiles\autoload
+        !$uri = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+        !(New-Object Net.WebClient).DownloadFile($uri, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("~\vimfiles\autoload\plug.vim"))
+    else
+        !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    endif
+    call MkdirIfNotExists("~/.vim/temp")
+    call MkdirIfNotExists("~/.vim/temp/view")
+    call MkdirIfNotExists("~/.vim/temp/undo")
+    call MkdirIfNotExists("~/.vim/temp/backup")
+    exe "PlugInstall"
+    exe "quit"
+    exe "quit"
+endfunction " 2}}
+
+function! UpdateSupervim() " {{2
+    exe "!cd ~/.vim && git pull"
+    source ~/.vim/vimrc
+    echom "You'd better reopen your vim!"
+endfunction " 2}}
+" 1}}
 
 call TryLoad('~/.vim/betterdefault.vim')
 

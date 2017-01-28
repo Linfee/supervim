@@ -10,7 +10,6 @@
 "
 
 " 插件配置 {{
-call TryLoad('~/.vim/plug.vim')
 
 call plug#begin('~/.vim/plugged')
     " language support
