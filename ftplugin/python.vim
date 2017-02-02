@@ -29,9 +29,9 @@ endfunction
 " 运行
 if IsWin() && !IsWinUnix() " for windows
     if exists("g:s_py2")
-        call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:silent!echo "____________________"<cr>:!py %<cr>')
+        call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!py %<cr>')
     else
-        call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:silent!echo ____________________<cr>:!python %<cr>')
+        call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!python %<cr>')
     endif
 else " for linux, osx, mingw, msys2, cygwin
     call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>')
