@@ -5,11 +5,16 @@ func fcitx#FcitxSupportOn()
     let g:input_toggle = 1
     let s:timeoutlen = &timeoutlen
     set timeoutlen=300
-    augroup FcitxSupport
+    augroup Fcitx2En
         autocmd!
         autocmd InsertLeave * call fcitx#Fcitx2en()
-        autocmd InsertEnter * call fcitx#Fcitx2zh()
     augroup END
+    if exists('g:fcitx#auto_switch_zh')
+        augroup Fcitx2Zh
+            autocmd!
+            autocmd InsertEnter * call fcitx#Fcitx2zh()
+        augroup END
+    endif
 endf
 
 " 关闭fcitx中英文切换

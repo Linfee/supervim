@@ -1,10 +1,10 @@
 autocmd! * <buffer>
 autocmd InsertCharPre <buffer> call InterceptInsert()
 
-let b:key = ''
+let b:prompt = ''
 func! InterceptInsert()
-    let b:key = b:key . v:char
-    echo b:key
+    let b:prompt = b:prompt . v:char
+    echo b:prompt
     let v:char = ''
 endf
 
