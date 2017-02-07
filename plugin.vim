@@ -461,9 +461,9 @@ endif
 " vim-easy-align {{2
 if isdirectory(expand('~/.vim/plugged/vim-easy-align'))
     " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xnoremap <leader>a <Plug>(EasyAlign)
+    xmap <leader>a <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nnoremap <leader>a <Plug>(EasyAlign)
+    nmap <leader>a <Plug>(EasyAlign)
     let g:easy_align_delimiters = {
     \ '>': { 'pattern': '>>\|=>\|>' },
     \ '/': {
