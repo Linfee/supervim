@@ -72,8 +72,8 @@ call plug#begin('~/.vim/plugged')
     " Plug '~/tmp/vim/ctrlp.vim'
     Plug '~/tmp/vim/newctrlp'
     Plug '~/tmp/vim/finder'
-
     Plug '~/tmp/vim/denite'
+    Plug '~/tmp/vim/vim-gclog'
 call plug#end() " }}
 
 " plugin config ------------------------------------------------------------{{1
@@ -205,12 +205,8 @@ if isdirectory(expand('~/.vim/plugged/ultisnips'))
     let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
-    nnoremap <leader>au :UltiSnipsAddFiletypes<space>
-    nnoremap <space>au :UltiSnipsAddFiletypes<space>
-
-    function! EXE(e)
-        execute(a:e)
-    endfunction
+    nnoremap <leader>ua :UltiSnipsAddFiletypes<space>
+    nnoremap <space>ua :UltiSnipsAddFiletypes<space>
 endif
 " }}2
 
@@ -465,9 +461,9 @@ endif
 " vim-easy-align {{2
 if isdirectory(expand('~/.vim/plugged/vim-easy-align'))
     " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
+    xnoremap <leader>a <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
+    nnoremap <leader>a <Plug>(EasyAlign)
     let g:easy_align_delimiters = {
     \ '>': { 'pattern': '>>\|=>\|>' },
     \ '/': {

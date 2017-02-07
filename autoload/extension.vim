@@ -27,3 +27,17 @@ func extension#MybatisGenerate()
     endif
     exe("!java -Xbootclasspath/a:" . g:driverPath . " -jar " . g:mybatis_generate_core . expand(" -configfile %") . " -overwrite")
 endf
+
+" DOC: 切换hex编辑模式
+func extension#hexToggle()
+    if &bin " from hex
+        set nobin
+        exe 'set display='. b:option_display
+        exe 'silent%!xxd -r'
+    else " to hex
+        let b:option_display = &display
+        set bin
+        set display=uhex
+        exe 'silent%!xxd'
+    endif
+endf

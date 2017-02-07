@@ -88,8 +88,12 @@ augroup END
 " }
 
 "  空格与制表转换 {
-com! -nargs=0 ToSpace call extension#ToggleTab('space')
-com! -nargs=0 ToTab call extension#ToggleTab('tab')
+command! -nargs=0 ToSpace call extension#ToggleTab('space')
+command! -nargs=0 ToTab call extension#ToggleTab('tab')
+" }
+
+" hex editor {
+command! -nargs=0 HexToggle call extension#hexToggle()
 " }
 
 " Fcitx-support {
