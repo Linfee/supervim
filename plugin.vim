@@ -18,7 +18,7 @@ call plug#begin('~/.vim/plugged')
     " Plug 'Valloric/MatchTagAlways', {'for': ['html', 'xml']} " 高亮显示匹配html标签
     " Plug 'pangloss/vim-javascript', {'for': 'javascript'}
     " Plug 'elzr/vim-json', {'for': 'json'}
-    " Plug 'Linfee/vim-markdown', {'for': 'markdown'}
+    Plug 'Linfee/vim-markdown', {'for': 'markdown'}
     Plug 'iamcco/markdown-preview.vim', {'for': 'markdown', 'on': ['MarkdownPreview']} " markdown实时预览
     " Plug 'hail2u/vim-css3-syntax', {'for': 'css'} " css3语法高亮支持
 
@@ -67,8 +67,6 @@ call plug#begin('~/.vim/plugged')
 
     Plug 'strom3xFeI/vimdoc-cn'
 
-    " Plug '~/tmp/vim/vim-md' " plugin for markdown
-    Plug '~/tmp/vim/vim-markdown', {'for': 'markdown'}
     " Plug '~/tmp/vim/ctrlp.vim'
     Plug '~/tmp/vim/newctrlp'
     Plug '~/tmp/vim/finder'
