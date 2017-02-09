@@ -137,7 +137,8 @@ highlight clear LineNr           " 移除当前行号处的高亮色
 highlight clear CursorLineNr     " 删掉当前行号上的高亮
 
 " 高亮某些特殊位置的特殊字符
-set listchars=tab:›\ ,trail:•,nbsp:.,extends:#,precedes:#
+set listchars=tab:\|\ ,trail:.,nbsp:.,extends:#,precedes:#
+" set listchars=tab:\|\ ,trail:.,nbsp:.,extends:#,precedes:#,eol:$
 
 if !IsGui() && !IsWin() && !has('nvim')
   set term=$TERM
