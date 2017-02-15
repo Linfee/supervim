@@ -87,6 +87,8 @@ call TryLoad('~/.vim/plugin.vim')
 
 call TryLoad('~/.vim/extension.vim')
 call TryLoad('~/.vim/custom.vim')
-call TryLoad('~/.vim/gvimrc.vim')
+if IsGui()
+    call TryLoad('~/.vim/gvimrc.vim')
+endif
 
 " vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{,}} fdm=marker nospell:
