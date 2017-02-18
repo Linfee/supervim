@@ -624,6 +624,12 @@ if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
         elseif executable('chromium-browser')
             let g:mkdp_path_to_chrome = "chromium-browser"
         endif
+    else " for win
+        if executable('chrome')
+            let g:mkdp_path_to_chrome = "chrome"
+        else
+            let g:mkdp_path_to_chrome = 'C:\Program Files (x86)\Google\Chrome\Application\chrome'
+        endif
     endif
     " path to the chrome or the command to open chrome(or other modern browsers)
 
@@ -647,9 +653,6 @@ if isdirectory(expand('~/.vim/plugged/markdown-preview.vim'))
     let g:mkdp_command_for_global = 0
     " set to 1, the MarkdownPreview command can be use for all files,
     " by default it just can be use in markdown file vim-instant-markdown
-    if IsOSX()
-        let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
-    endif
 endif
 " }}2
 
