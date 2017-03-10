@@ -36,9 +36,43 @@ nnoremap = :Autopep8<cr>
 " }}1
 
 " fold {{1
-" setl foldmethod=expr
-" setl foldexpr=GetPythonFold(v:lnum)
-" setl foldtext=s:GetPythonFoldText()
-" }}1
+setl foldmethod=expr
+setl foldexpr=s:GetPythonFold(v:lnum)
+setl foldtext=GetPythonFoldText()
+
+let b:f = {'GetPythonFold':0, 'UpdateFoldTable':0}
+let b:foldTable = {}
+
+py3 import pyfold
+func! s:GetPythonFold(lnum)
+    let b:f.GetPythonFold += 1
+    if len(b:foldTable) == 0
+        call s:UpdateFoldTable()
+    endif
+    return get(b:foldTable, a:lnum, '=')
+endf
+
+func! s:UpdateFoldTable()
+    let b:f.UpdateFoldTable += 1
+    py3 pyfold.updateFoldTable()
+    if &foldenable
+        normal zx
+    endif
+endf
+
+func! GetPythonFoldText()
+    let line = getline(v:foldstart)
+    let foldedlinecount = v:foldend - v:foldstart
+    return line . '  + ' . foldedlinecount .' lines ... '
+endf
+
+augroup resCurPy
+    autocmd!
+    au InsertLeave *.py :set foldmethod=expr
+    au InsertEnter *.py :set foldmethod=manual
+    au BufEnter,InsertLeave,BufWrite,BufWritePre *.py call s:UpdateFoldTable()
+augroup END
+
 
 " vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{,}} fdm=marker nospell:
+
