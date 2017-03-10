@@ -9,13 +9,9 @@ setl expandtab
 setl autoindent
 setl fileformat=unix
 
-function! PythonFt()
-    call SetTab(4)
-    setl ff=unix
-    setl foldmethod=indent
-    setl foldlevel=99
-    match BadWhitespace /\s\+$/
-    py << EOF
+setl ff=unix
+match Error /\s\+$/
+py3 << EOF
 import os
 import sys
 if 'VIRTUAL_ENV' in os.environ:
@@ -23,10 +19,9 @@ if 'VIRTUAL_ENV' in os.environ:
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
     execfile(activate_this, dict(__file__=activate_this))
 EOF
-endfunction
 
 
-" 运行
+" run {{1
 if IsWin() && !IsWinUnix() " for windows
     if exists("g:s_py2")
         call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!py %<cr>')
@@ -38,3 +33,12 @@ else " for linux, osx, mingw, msys2, cygwin
 endif
 " vim-autopep8格式化
 nnoremap = :Autopep8<cr>
+" }}1
+
+" fold {{1
+" setl foldmethod=expr
+" setl foldexpr=GetPythonFold(v:lnum)
+" setl foldtext=s:GetPythonFoldText()
+" }}1
+
+" vim: set sw=4 ts=4 sts=4 et tw=80 fmr={{,}} fdm=marker nospell:
