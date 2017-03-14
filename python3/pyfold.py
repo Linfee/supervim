@@ -71,7 +71,7 @@ def updateFoldTable():
                     break
                 n += 1
         elif isDocEndLine(curLine):
-            setCbFoldTable(n, '<{}'.format(curIndent / 4 + 1))
+            setCbFoldTable(lineNum, '<{}'.format(curIndent / 4 + 1))
 
     # deal with importLines
     lastImportLine = -1
