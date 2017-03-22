@@ -70,7 +70,8 @@ call plug#begin('~/.vim/plugged')
     " Plug '~/tmp/vim/ctrlp.vim'
     Plug '~/tmp/vim/newctrlp'
     Plug '~/tmp/vim/finder'
-    Plug '~/tmp/vim/denite'
+    " Plug '~/tmp/vim/denite'
+    Plug 'Shougo/denite.nvim'
     Plug '~/tmp/vim/vim-gclog'
 call plug#end() " }}
 
