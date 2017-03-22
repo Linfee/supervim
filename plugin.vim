@@ -246,9 +246,9 @@ if isdirectory(expand('~/.vim/plugged/jedi-vim'))
     " 指定使用go to使用split的方式，并指定split位置
     let g:jedi#use_splits_not_buffers = 'bottom'
     " 强制使用python3运行jedi
-    " let g:jedi#force_py_version = 3
+    let g:jedi#force_py_version = 3
     " 自动完成from .. import ..
-    let g:jedi#smart_auto_mappings = 1
+    " let g:jedi#smart_auto_mappings = 1
 endif
 " }}2
 
