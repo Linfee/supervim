@@ -44,7 +44,9 @@ call plug#begin('~/.vim/plugged')
 
     " Plug 'kana/vim-textobj-user' " 方便地自定义文本对象
     " Plug 'mhinz/vim-startify' " 启动画面
-    Plug 'itchyny/lightline.vim'
+    if !(IsWin() && !IsGui()) " disable in windows cmd and powershell
+        Plug 'itchyny/lightline.vim'
+    endif
     Plug 'itchyny/vim-cursorword'
 
     " colorscheme
