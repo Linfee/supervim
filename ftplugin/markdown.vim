@@ -11,4 +11,6 @@ setl nowrap
 
 inoremap <buffer> · `
 
-call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':MarkdownPreview<cr>')
+if layer#is_layer_loaded('markdown')
+  nnoremap <buffer> <leader>r :MarkdownPreview<cr>
+en

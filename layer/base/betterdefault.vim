@@ -7,44 +7,20 @@
 "
 " Author: Linfee
 " REPO:   https://github.com/Linfee/supervim
-" Module: BetterDefault
-" USAGE:  Use as your .vimrc to get a better default or as a module of
-"         supervim.
-"
-
-" --------------------------------------
-" functions to judgment environment
-" --------------------------------------
-silent function! IsOSX()
-  return has('macunix')
-endfunction
-silent function! IsLinux()
-  return has('unix') && !has('macunix')
-endfunction
-silent function! IsWin()
-  return  (has('win32') || has('win64'))
-endfunction
-silent function! IsWinUnix()
-  return has('win32unix')
-endf
-silent function! IsGui()
-  return has('gui_running')
-endf
+" Layer: BetterDefault
 
 " --------------------------------------
 " better default
 " --------------------------------------
-" use ~/.vim but ~/vimfiles on windows
-if has('win32') || has('win64')
-  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
-endif
 
-set nocompatible                 " 关闭vi兼容性
+if !has('nvim')
+  set nocompatible                 " 关闭vi兼容性
+en
 filetype plugin indent on        " 自动指定文件类型、缩进
 syntax on                        " 开启语法高亮
 
 set number                       " 显示绝对行号
-" set relativenumber               " 显示相对行号
+set relativenumber               " 显示相对行号
 set mouse=a                      " 允许使用鼠标
 set mousehide                    " 输入时隐藏鼠标
 set virtualedit=onemore          " 虚拟编辑意味着光标可以定位在没有实际字符的地方
@@ -112,6 +88,7 @@ endif
 " format
 " --------------------------------------
 set nowrap                       " 不要软换行
+set fo-=t                        " 输入的时候不要自动软换行
 set autoindent                   " 自动缩进
 set expandtab                    " 将制表符扩展为空格
 set smarttab                     " 只能缩进
@@ -131,6 +108,8 @@ set ignorecase                   " 搜索时候忽略大小写
 set smartcase                    " 智能匹配大小写
 set hlsearch                     " 高亮显示搜索结果
 set incsearch                    " 使用增量查找
+set colorcolumn=80,120           " 80列和120列参考线
+highlight COlorColumn ctermbg=233
 set gcr=a:block-blinkon0         " 让gui光标不要闪
 highlight clear SignColumn       " 高亮列要匹配背景色
 highlight clear LineNr           " 移除当前行号处的高亮色
@@ -140,7 +119,7 @@ highlight clear CursorLineNr     " 删掉当前行号上的高亮
 set listchars=tab:\|\ ,trail:.,nbsp:.,extends:#,precedes:#
 " set listchars=tab:\|\ ,trail:.,nbsp:.,extends:#,precedes:#,eol:$
 
-if !IsGui() && !IsWin() && !has('nvim')
+if !has('gui_running') && !has('win32unix') && !has('nvim')
   set term=$TERM
   if &term == 'xterm' || &term == 'screen'
     " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
@@ -174,5 +153,8 @@ vnoremap > >gv
 
 " 允许使用 . 对选中的行执行上一个命令
 vnoremap . :normal! .<cr>
+
+nnoremap Q gqap
+vnoremap Q gq
 
 " vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:

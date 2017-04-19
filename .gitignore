@@ -1,8 +1,6 @@
-plug.vim
-.ropeproject
-plug.vim.old
-*.pyc
-__pycache__
-temp
+*.sw*
+repos
 plugged
+__pycache__
 .netrwhist
+autoload/plug.vim

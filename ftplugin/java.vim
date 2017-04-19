@@ -9,4 +9,4 @@ setl softtabstop=2
 
 setl nowrap
 
-call DoCustomLeaderMap('nnoremap <buffer>', 'r', ':w<cr>:!javac % && java %<<cr>')
+nnoremap <buffer> <leader>r :w<cr>:!javac % && java %<<cr>

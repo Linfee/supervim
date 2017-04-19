@@ -11,4 +11,4 @@ iabbrev <buffer> scsh #!/bin/sh<cr>exec scala "$0<right> "$@<right><cr>!#<cr><cr
 iabbrev <buffer> sisr scala.io.StdIn.readLine("")<left>
 
 " 运行
-" call DoMap('nnore', 'r', ':w<cr>:!scala -deprecation %', ['<buffer>'])
+" nnoremap <buffer> <leader>r :w<cr>:!scala -deprecation %
