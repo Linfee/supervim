@@ -10,6 +10,7 @@
 " Module: Layer support
 "
 
+" TODO: refactoring this file
 let s:cpo_save = &cpo
 set cpo&vim
 
