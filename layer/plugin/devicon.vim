@@ -39,4 +39,12 @@ fu! devicon#after()
     autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
     autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
   augroup END
+
+  if IsGui()
+    if IsLinux()
+      set guifont=SauceCodePro\ NF\ 9
+    elsei IsWin()
+      set guifont=SauceCodePro\ NF:h10
+    en
+  en
 endf

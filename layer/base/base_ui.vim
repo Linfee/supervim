@@ -39,7 +39,5 @@ if IsGui()
     set guifont=Source\ Code\ Pro\ 9
   elseif IsWin()
     set guifont=Source\ Code\ Pro:h9
-  else
-    set guifont=SauceCodePro\ Nerd\ Font:h11
   endif
 endif
