@@ -14,7 +14,7 @@ if !IsWinUnix()
 el
   UseLayer 'statusline'
 en
-UseLayer 'utils'
+UseLayer 'devicon'
 
 if has('nvim')
   " UseLayer 'ncm'
@@ -23,6 +23,7 @@ el
   UseLayer 'neocomplete'
 en
 
+UseLayer 'utils'
 UseLayer 'syntastic'
 UseLayer 'markdown'
 UseLayer 'front_end'

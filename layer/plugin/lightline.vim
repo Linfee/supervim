@@ -16,8 +16,8 @@ fu! lightline#after()
         \   'modified': 'LightlineModified',
         \   'fugitive': 'LightlineFugitive',
         \   'filename': 'LightlineFilename',
-        \   'fileformat': 'LightlineFileformat',
         \   'filetype': 'LightlineFiletype',
+        \   'fileformat': 'LightlineFileformat',
         \   'fileencoding': 'LightlineFileencoding',
         \   'mode': 'LightlineMode',
         \ },
@@ -56,12 +56,16 @@ fu! lightline#after()
     endtry
     retu ''
   endf
-  fu! LightlineFileformat()
-    retu winwidth(0) > 70 ? &fileformat : ''
-  endf
-  fu! LightlineFiletype()
-    retu winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-  endf
+  if !exists('*LightlineFileformat')
+    fu LightlineFileformat()
+      retu winwidth(0) > 70 ? &fileformat : ''
+    endf
+  en
+  if !exists('*LightlineFiletype')
+    fu LightlineFiletype()
+      retu winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+    endf
+  en
   fu! LightlineFileencoding()
     retu winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
   endf
