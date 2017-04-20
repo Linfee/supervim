@@ -46,7 +46,11 @@ fu! simple_ui#after()
   nnoremap <leader>tr :RainbowToggle<cr>
 
   " for themes
-  colorscheme gruvbox
+  if IsWinUnix()
+    colorscheme monokai
+  el
+    colorscheme gruvbox
+  en
 
   " for vim-signify
   nnoremap <leader>tg :SignifyToggle<cr>

@@ -9,15 +9,23 @@
 " REPO:   https://github.com/Linfee/supervim
 " Layer: BetterDefault
 
+if $LANG =~ 'zh_CN'
+  LayerSubLayers 'encodingforzh'
+en
+
 " --------------------------------------
 " better default
 " --------------------------------------
+
+scriptencoding utf-8
 
 if !has('nvim')
   set nocompatible                 " 关闭vi兼容性
 en
 filetype plugin indent on        " 自动指定文件类型、缩进
 syntax on                        " 开启语法高亮
+
+set encoding=utf8
 
 set number                       " 显示绝对行号
 set relativenumber               " 显示相对行号
@@ -45,7 +53,6 @@ set cursorline                   " 高亮显示当前行
 " set cursorcolumn                 " 高亮显示当前列
 " set cmdheight=2                  " 命令行高度
 set fileformats=unix             " 文件类型(使用的结尾符号)
-scriptencoding utf8              " 设置脚本的编码
 " set confirm                      " 退出需要确认
 
 set list
