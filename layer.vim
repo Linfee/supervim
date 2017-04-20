@@ -11,6 +11,8 @@ UseLayer 'editing'
 UseLayer 'simple_ui'
 if !IsWinUnix()
   UseLayer 'lightline'
+el
+  UseLayer 'statusline'
 en
 UseLayer 'utils'
 

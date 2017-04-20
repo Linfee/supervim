@@ -1,5 +1,8 @@
 " filetype config for .html file
 
+if &ft == 'markdown'
+  finish
+en
 setl smarttab
 setl expandtab
 setl autoindent

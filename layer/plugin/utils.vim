@@ -14,10 +14,15 @@ if executable('ctags')
   LayerPlugin 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
 en
 
-LayerSubLayers 'nerdtree', 'deol',  'denite'
+LayerSubLayers 'nerdtree' 
+if has('nvim')
+  LayerSubLayers 'denite', 'deol'
+en
 
 
 fu! utils#after()
+  " Key: goyo <leader>g
+  nnoremap <leader>g :Goyo<cr>
   " for goyo.vim
   let g:goyo_height = '90%'
   let g:hoyo_width = '120'
@@ -61,7 +66,8 @@ fu! utils#after()
     let g:tagbar_iconchars = ['▶', '▼'] " 折叠字符
   endif
 
-  nnoremap <leader>tt :TagbarToggle<cr>
+  " Key: <leader>t
+  nnoremap <leader>t :TagbarToggle<cr>
   " call DoCustomLeaderMap('nnoremap', 't', ':TagbarToggle<cr>')
 
   " for fastfold
@@ -72,6 +78,7 @@ fu! utils#after()
   let g:perl_fold = 1
 
   " for undotree
+  " Key: undotree <leader>u
   nnoremap <leader>u :UndotreeToggle<cr>
   let g:undotree_SetFocusWhenToggle=1
 

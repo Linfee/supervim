@@ -2,8 +2,10 @@
 LayerPlugin 'Shougo/denite.nvim', {'do': ':UpdateRemotePlugins'}
 LayerPlugin 'Shougo/neomru.vim', {'on': ['NeoMRUReload', 'NeoMRUSave', 'NeoMRUImportFile', 'NeoMRUImportDirectory']}
 
+LayerWhen 'has("nvim")'
+
 fu! denite#after()
-  let s:emoji = ['→ _→ ', '(ง •̀_•́)ง', '(/= _ =)/~┴┴ ', '(＞﹏＜)']
+  let s:emoji = ['→_→ ', '(ง •̀_•́)ง', '(/= _ =)/~┴┴ ', '(＞﹏＜)']
 
   " denite option
   let s:denite_options = {

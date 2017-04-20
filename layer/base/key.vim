@@ -84,11 +84,7 @@ fu! s:wrap_lhs(lhs)
   retu lhs
 endf
 
-if has('nvim')
-  fu! s:do_wrap(lhs, char)
-    retu a:lhs
-  endf
-elsei has('unix') && !has('macunix') && !has('gui_running')
+if has('unix') && !has('macunix') && !has('gui_running')
   fu! s:do_wrap(lhs, char)
     retu substitute(a:lhs, '<a-' . a:char . '>', '' . a:char, '')
   endf
@@ -98,7 +94,7 @@ elsei has('macunix')
   endf
 el
   fu! s:do_wrap(lhs, char)
-    retu 0
+    retu a:lhs
   endf
 en
 

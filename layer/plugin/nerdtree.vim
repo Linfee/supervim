@@ -72,9 +72,9 @@ fu! nerdtree#after()
   call NERDTreeHighlightFile('js'     , 'Red'     , 'none' , '#ffa500' , '#151515')
   call NERDTreeHighlightFile('python' , 'Magenta' , 'none' , '#ff00ff' , '#151515')
 
+  " Key: <leader>n nerdtree
+  nnoremap <Leader>n :NERDTreeTabsToggle<CR>
   nnoremap <leader>e :NERDTreeFind<CR>
-  nnoremap <Leader>tn :NERDTreeTabsToggle<CR>
-  call DoCustomLeaderMap('nnoremap', 'n', ':NERDTreeTabsToggle<cr>')
   " 快速切换nerdtree到当前文件目录
-  nnoremap <silent><leader>n :exec("NERDTree ".expand('%:h'))<CR>
+  nnoremap <silent><leader>xn :exec("NERDTree ".expand('%:h'))<CR>
 endf
