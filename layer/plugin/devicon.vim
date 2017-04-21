@@ -44,7 +44,7 @@ fu! devicon#after()
     if IsLinux()
       set guifont=SauceCodePro\ NF\ 9
     elsei IsWin()
-      set guifont=SauceCodePro\ NF:h10
+      set guifont=SauceCodePro\ NF:h9
     en
   en
 endf
