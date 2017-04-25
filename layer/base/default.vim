@@ -23,4 +23,5 @@ LayerSubLayers 'utils', 'syntastic', 'markdown', 'front_end'
 
 " extension
 LayerSubLayers 'translate'
+LayerSubLayers 'backup'
 

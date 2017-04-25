@@ -19,6 +19,7 @@ func! translate#translate(type)
     endif
 
     " Use vim's echo not python's print so it will show multi line
+    py3 import vim
     py3 vim.vars['translate#result'] = translate.translate(vim.eval('@@'))
     echo g:translate#result
 
