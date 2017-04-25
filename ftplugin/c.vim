@@ -10,7 +10,7 @@ setl softtabstop=2
 setl nowrap
 
 " 运行
-nnoremap <buffer> <leader>r :w<cr>:!gcc % -o %< && ./%<<cr>
+nnoremap <buffer> <space>r :w<cr>:!gcc % -o %< && ./%<<cr>
 
 " 调试
 nnoremap <buffer> <F8> :w<cr>:!g++ % -g -o %< && gdb ./%<<cr>

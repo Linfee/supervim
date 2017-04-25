@@ -14,7 +14,6 @@ ContentType = 'application/json; charset=utf-8'
 
 wrap = lambda s: ''.join(('[', s, ']'))
 
-
 def translate(key: str):
     '''翻译给定的字符串，返回适合打印的翻译结果'''
     result = _query(key)['content']
@@ -66,6 +65,6 @@ if __name__ == '__main__':
         print(
             "Translation tool(En/Zh).\nUsage: translate.py [words or setences]")
     else:
-        args = sys.argv[1:]
+        wargs = sys.argv[1:]
         for arg in args:
             print(translate(arg))

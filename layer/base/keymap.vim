@@ -11,10 +11,11 @@
 
 DepLayers 'key'
 
-" the leader key
-let g:mapleader = "\<space>"
+" use ; as mapleader
+let g:mapleader = ";"
 let g:maplocalleader = "\\"
-
+" use alt-; as ;
+Noremap n <a-;> ;
 
 " File and Editing {{1
 " switch cursor word case
@@ -33,19 +34,19 @@ cnoremap cd. lcd %:p:h
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " save and quit
-nnoremap <leader>q :close<cr>
-nnoremap <leader>w :update<cr>
+nnoremap <space>q :close<cr>
+nnoremap <space>w :update<cr>
 nnoremap <tab>Q :bufdo bd<cr>
 
 " save as sudo
 if !IsWin()
   cnoremap W! !sudo tee % > /dev/null<cr>
-  nnoremap <leader>W :!sudo tee % /dev/null<cr>
+  nnoremap <space>W :!sudo tee % /dev/null<cr>
 en
 
 " switch linewise-visual mode
-nnoremap <leader><space> V
-vnoremap <leader><space> V
+nnoremap <space><space> V
+vnoremap <space><space> V
 
 " switch tab and space
 com! -nargs=0 ToSpace setl et | ret
@@ -134,7 +135,7 @@ nnoremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 nnoremap <leader>fw [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 
 " disable the highlight of search result for now
-nnoremap <leader><cr> :nohlsearch<cr>
+nnoremap <space><cr> :nohlsearch<cr>
 
 " use * and # to search selected content in visual mode
 vnoremap <silent> * :<C-u>call s:visual_selection('', '')<CR>/<C-R>=@/<CR><CR>
@@ -253,6 +254,8 @@ fu! keymap#after() " {{2
 
   Noremap n <a-j> 10gj
   Noremap n <a-k> 10gk
+  Noremap v <a-j> 10gj
+  Noremap v <a-k> 10gk
 
   Noremap c <a-j> <down>
   Noremap c <a-k> <up>

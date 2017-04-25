@@ -15,4 +15,4 @@ setl nospell
 setl nowrap
 
 " 执行默认缓冲区内容
-nnoremap <buffer> <leader>e :@*<cr>
+nnoremap <buffer> <space>e :@*<cr>

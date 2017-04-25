@@ -24,12 +24,12 @@ EOF
 " run {{1
 if IsWin() && !IsWinUnix() " for windows
     if exists("g:s_py2")
-        nnoremap <buffer> <leader>r :w<cr>:!py %<cr>
+        nnoremap <buffer> <space>r :w<cr>:!py %<cr>
     else
-        nnoremap <buffer> <leader>r :w<cr>:!python %<cr>
+        nnoremap <buffer> <space>r :w<cr>:!python %<cr>
     endif
 else " for linux, osx, mingw, msys2, cygwin
-    nnoremap <buffer> <leader>r :w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>
+    nnoremap <buffer> <space>r :w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>
 endif
 " vim-autopep8格式化
 nnoremap = :Autopep8<cr>

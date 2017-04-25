@@ -12,5 +12,5 @@ setl nowrap
 inoremap <buffer> · `
 
 if layer#is_layer_loaded('markdown')
-  nnoremap <buffer> <leader>r :MarkdownPreview<cr>
+  nnoremap <buffer> <space>r :MarkdownPreview<cr>
 en
