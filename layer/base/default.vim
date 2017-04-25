@@ -21,5 +21,8 @@ en
 
 LayerSubLayers 'utils', 'syntastic', 'markdown', 'front_end'
 
+LayerSubLayers 'wakatime'
+
 " extension
 LayerSubLayers 'translate'
+
