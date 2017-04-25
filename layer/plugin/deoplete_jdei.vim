@@ -1,6 +1,6 @@
 LayerPlugin 'zchee/deoplete-jedi'
 
-ConflicLayers 'ncm', 'jedi'
+ConflicLayers 'ncm'
 
 LayerWhen 'expand("%")=~".py"'
 

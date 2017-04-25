@@ -13,7 +13,7 @@ en
 LayerSubLayers 'devicon'
 
 if has('nvim')
-  " UseLayer 'ncm'
+  " LayerSubLayers 'ncm'
   LayerSubLayers 'deoplete'
 el
   LayerSubLayers 'neocomplete'

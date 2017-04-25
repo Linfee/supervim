@@ -13,8 +13,9 @@ ConflicLayers 'ncm', 'necomplete'
 
 LayerWhen 'has("nvim")'
 
-" LayerSubLayers 'deoplete_jdei', 'javacomplete2'
-LayerSubLayers 'jedi', 'javacomplete2'
+LayerSubLayers 'deoplete_jdei'
+LayerSubLayers 'javacomplete2'
+LayerSubLayers 'jedi'
 
 if has("nvim")
   let g:deoplete#delimiters = ['/', '\']
@@ -38,6 +39,9 @@ if has("nvim")
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
   augroup END
 en
+
+" for jedi
+let g:jedi#completions_enabled = 0
 
 " after
 fu! deoplete#after()
@@ -165,4 +169,5 @@ fu! deoplete#after()
   let g:UltiSnipsEditSplit="vertical"
   nnoremap <leader>ua :UltiSnipsAddFiletypes<space>
   nnoremap <space>ua :UltiSnipsAddFiletypes<space>
+
 endf

@@ -3,8 +3,6 @@
 
 LayerPlugin 'davidhalter/jedi-vim', {'for': 'python'}
 
-ConflicLayers 'deoplete_jdei'
-
 fu! jedi#after()
   " for jedi
   " jedi 补全快捷键, 有补全插件就不需要了
@@ -31,8 +29,6 @@ fu! jedi#after()
   let g:jedi#show_call_signatures_delay = 300
   " 使用go to的时候使用tab而不是buffer
   let g:jedi#use_tabs_not_buffers = 1
-  " 开启jedi补全
-  let g:jedi#completions_enabled = 1
   " 指定使用go to使用split的方式，并指定split位置
   let g:jedi#use_splits_not_buffers = 'bottom'
   " 强制使用python3运行jedi

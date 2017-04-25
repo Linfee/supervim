@@ -13,7 +13,8 @@ if !has('nvim')
   LayerPlugin 'roxma/vim-hug-neovim-rpc'
 endif
 
-LayerSubLayers 'javacomplete2', 'jedi'
+LayerSubLayers 'jedi'
+LayerSubLayers 'javacomplete2'
 
 ConflicLayers 'deoplete', 'deoplete_jdei', 'necomplete'
 
