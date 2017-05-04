@@ -1,10 +1,17 @@
 " Layer: simple_ui
-LayerPlugin 'mhinz/vim-startify'
-LayerPlugin 'luochen1990/rainbow'
-LayerPlugin 'mhinz/vim-signify', {'on': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh', 'SignifyEnable']}
+" git diff
+let layer.plugins += ['mhinz/vim-startify']
+let layer.plugins += ['luochen1990/rainbow']
+let layer.plugins += [['mhinz/vim-signify',
+      \ {'on_cmd': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh', 'SignifyEnable']}]]
 
+let layer.sub_layers = ['base_ui', 'themes', 'devicon']
+if !IsWinUnix()
+  let layer.sub_layers += ['lightline']
+else
+  let layer.sub_layers += ['statusline']
+endif
 
-LayerSubLayers 'base_ui', 'themes'
 
 " before
 " for rainbow
@@ -41,7 +48,7 @@ let g:signify_disable_by_default = 1
 
 
 " after
-fu! simple_ui#after()
+fu! default_ui#after()
   " for rainbow
   nnoremap <leader>tr :RainbowToggle<cr>
 

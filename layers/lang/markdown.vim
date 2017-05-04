@@ -1,8 +1,9 @@
 " Supervim.layer
 " For markdown
-LayerPlugin 'godlygeek/tabular'
-LayerPlugin 'Linfee/vim-markdown', {'for': 'markdown'}
-LayerPlugin 'iamcco/markdown-preview.vim', {'for': 'markdown', 'on': ['MarkdownPreview']}
+" let layer.plugins += ['godlygeek/tabular']
+let layer.plugins += [['Linfee/vim-markdown',         {'on_ft': 'markdown'}]]
+let layer.plugins += [['iamcco/markdown-preview.vim', {'on_ft': 'markdown',
+      \ 'on_cmd': 'MarkdownPreview'}]]
 
 " before
 let g:vim_markdown_folding_style_pythonic = 1

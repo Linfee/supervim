@@ -1,8 +1,8 @@
 " Layer: lightline
+scriptencoding utf8
+let layer.condition = '!(IsWin() && !IsGui())'
+let layer.plugins += [['itchyny/lightline.vim']]
 
-LayerPlugin 'itchyny/lightline.vim'
-" disable in windows cmd and powershell
-LayerWhen '!(IsWin() && !IsGui())'
 
 fu! lightline#after()
   let g:lightline = {

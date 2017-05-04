@@ -1,15 +1,15 @@
 " Layer: syntastic
 
-LayerPlugin 'vim-syntastic/syntastic'
+let layer.plugins += [['vim-syntastic/syntastic', {'on_event': 'InsertEnter', 'after': 'syntastic#syntastic_after'}]]
 
-fu! syntastic#after()
+fu! syntastic#syntastic_after()
   if !filereadable('pom.xml') && !filereadable('build.gradle') && isdirectory('bin')
     let g:syntastic_java_javac_options = '-d bin'
   endif
 
-  set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
-  set statusline+=%*
+  " set statusline+=%#warningmsg#
+  " set statusline+=%{SyntasticStatuslineFlag()}
+  " set statusline+=%*
 
   let g:syntastic_always_populate_loc_list = 1
   let g:syntastic_auto_loc_list = 1

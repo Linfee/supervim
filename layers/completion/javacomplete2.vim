@@ -1,7 +1,8 @@
 " Layer: javacomplete2
 
-LayerPlugin 'artur-shaik/vim-javacomplete2', {'for': 'java'}
-LayerWhen 'executable("javac")'
+let layer.condition = 'executable("javac")'
+let layer.plugins += [['artur-shaik/vim-javacomplete2',
+      \ {'on_ft': 'java', 'on_event': 'InsertEnter'}]]
 
 
 fu! javacomplete2#after()

@@ -7,7 +7,6 @@
 "
 " Author: linfee
 " Repo: https://github.com/linfee/supervim
-"
 
 " Functions {{
 fu! IsWin()
@@ -29,16 +28,8 @@ fu! IsGui()
 endf
 " }}
 
-let &rtp = '~/.nvim,' . &rtp
-let g:layer#vimfile = '~/.nvim/'
+let &rtp = '~/.vim,'.&rtp
 
-let layer_config_abs = expand('~/.nvimrc')
-if filereadable(layer_config_abs)
-  let g:layer#config_abs = layer_config_abs
-en
+let g:layers = 'default'
 
-call log#init('info')
-
-call layer#init_layer()
-
-" vim: fmr={{,}} fdm=marker
+call layers#init()

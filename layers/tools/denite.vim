@@ -1,10 +1,13 @@
 " Layer: denite
-LayerPlugin 'Shougo/denite.nvim', {'do': ':UpdateRemotePlugins'}
-LayerPlugin 'Shougo/neomru.vim', {'on': ['NeoMRUReload', 'NeoMRUSave', 'NeoMRUImportFile', 'NeoMRUImportDirectory']}
+let layer.condition = 'has("nvim")'
+let layer.plugins += [['Shougo/denite.nvim',
+      \ {'do': ':UpdateRemotePlugins', 'after': 'denite#denite_after'}]]
+let layer.plugins += [['Shougo/neomru.vim',  {'on_cmd':
+      \ ['NeoMRUReload', 'NeoMRUSave', 'NeoMRUImportFile', 'NeoMRUImportDirectory']}]]
+" deol, shell in vim
+let layer.plugins += ['Shougo/deol.nvim']
 
-LayerWhen 'has("nvim")'
-
-fu! denite#after()
+fu! denite#denite_after()
   let s:emoji = ['→_→ ', '(ง •̀_•́)ง', '(/= _ =)/~┴┴ ', '(＞﹏＜)']
 
   " denite option
@@ -156,6 +159,6 @@ fu! denite#after()
   unlet s:m s:insert_mode_mappings s:normal_mode_mappings
 
   " mapping
-  nnoremap <leader>o :Denite file_rec<cr>
+  nnoremap <space>o :Denite file_rec<cr>
 
 endf

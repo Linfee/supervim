@@ -1,17 +1,16 @@
 " Layer: noecomplete
 " For completion
 " Dep: vim, lua
-LayerPlugin 'Shougo/neocomplete.vim' 
+let layer.plugins += [['Shougo/neocomplete.vim',  {'on_event': 'InsertEnter'}]]
+let layer.plugins += [['SirVer/ultisnips',        {'on_event': 'InsertEnter'}]]
+let layer.plugins += [['davidhalter/jedi-vim',    {'on_event': 'InsertEnter',
+      \ 'on_ft': 'python'}]]
 
-LayerPlugin 'Linfee/ultisnips-zh-doc'
-LayerPlugin 'SirVer/ultisnips'
-LayerPlugin 'davidhalter/jedi-vim', {'for': 'python'}
+let layer.plugins += ['Linfee/ultisnips-zh-doc']
 
-LayerSubLayers 'javacomplete2', 'jedi'
-
-ConflicLayers 'ncm', 'deoplete', 'deoplete_jdei'
-
-LayerWhen '!has("nvim")'
+let layer.sub_layers = ['javacomplete2', 'jedi']
+let layer.condition = '!has("nvim")'
+let layer.conflic = ['ncm', 'deoplete', 'deoplete_jdei']
 
 " before
 let g:neocomplete#enable_at_startup = 1
@@ -144,7 +143,7 @@ fu! neocomplete#after()
 
   " for ultisnip --------------------------------------------------------------
   " snippets files
-  let g:UltiSnipsSnippetsDir=expand(g:layer#vimfile."ultisnips")
+  let g:UltiSnipsSnippetsDir=expand('~/.vim/ultisnips')
   let g:UltiSnipsSnippetDirectories=["ultisnips"]
   " Trigger configuration.
   let g:UltiSnipsExpandTrigger="<tab>"

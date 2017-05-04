@@ -1,21 +1,15 @@
 " Layer: deplete
 " For completion
 " Dep: nvim python3
-LayerPlugin 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-LayerPlugin 'Shougo/neco-vim', {'for': 'vim'}
-LayerPlugin 'Shougo/echodoc.vim', {'for': ['vim', 'ruby']}
-
-LayerPlugin 'Linfee/ultisnips-zh-doc'
-LayerPlugin 'SirVer/ultisnips'
-LayerPlugin 'honza/vim-snippets'
-
-ConflicLayers 'ncm', 'necomplete'
-
-LayerWhen 'has("nvim")'
-
-LayerSubLayers 'deoplete_jdei'
-LayerSubLayers 'javacomplete2'
-LayerSubLayers 'jedi'
+let layer.conflic = ['ncm', 'neocomplete']
+let layer.condition = 'has("nvim")'
+let layer.sub_layers = ['deoplete_jdei', 'javacomplete2', 'jedi']
+let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}]]
+let layer.plugins += [['Shougo/neco-vim', {'on_ft': 'vim'}]]
+let layer.plugins += [['Shougo/echodoc.vim', {'on_ft': ['vim', 'ruby']}]]
+let layer.plugins += ['Linfee/ultisnips-zh-doc']
+let layer.plugins += ['SirVer/ultisnips']
+let layer.plugins += ['honza/vim-snippets']
 
 if has("nvim")
   let g:deoplete#delimiters = ['/', '\']
@@ -95,7 +89,7 @@ fu! deoplete#after()
         \'[^. \t0-9]\::\w*',
         \])
   let g:deoplete#omni#input_patterns.jsp = get(g:deoplete#omni#input_patterns, 'jsp', ['[^. \t0-9]\.\w*'])
-  if layer#is_layer_loaded('javacomplete2') " javacomplete2
+  if layers#is_layer_loaded('javacomplete2') " javacomplete2
     let g:deoplete#ignore_sources.java = get(g:deoplete#ignore_sources, 'java', ['omni'])
     call deoplete#custom#set('javacomplete2', 'mark', '')
   else
@@ -158,7 +152,7 @@ fu! deoplete#after()
 
   " for ultisnip --------------------------------------------------------------
   " snippets files
-  let g:UltiSnipsSnippetsDir=expand(g:layer#vimfile."ultisnips")
+  let g:UltiSnipsSnippetsDir=expand('~/.vim')
   let g:UltiSnipsSnippetDirectories=["ultisnips"]
   " Trigger configuration.
   let g:UltiSnipsExpandTrigger="<tab>"

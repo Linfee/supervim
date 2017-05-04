@@ -10,7 +10,7 @@
 " Layer: BetterDefault
 
 if $LANG =~ 'zh_CN'
-  LayerSubLayers 'encodingforzh'
+  let layer.sub_layers = ['encodingforzh']
 en
 
 " --------------------------------------

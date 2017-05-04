@@ -1,28 +1,29 @@
 " Layer: utils
 " file explorer, shell, denite
 
-LayerPlugin 'junegunn/goyo.vim', {'on': 'Goyo'}
-LayerPlugin 'mbbill/undotree', {'on': 'UndotreeToggle'}
-LayerPlugin 'Konfekt/FastFold'
-LayerPlugin 'tpope/vim-repeat'
+let layer.plugins += ['Konfekt/FastFold']
+let layer.plugins += ['tpope/vim-repeat']
 
-LayerPlugin 'tpope/vim-fugitive'
+let layer.plugins += [['tpope/vim-fugitive', {'on_cmd': [
+      \ 'Git', 'Gcd', 'Glcd', 'Gstatus', 'Gcommit', 'Gmerge', 'Gpull', 'Gpush',
+      \ 'Gfetch', 'Ggrep', 'Glgrep', 'Glog', 'Gllog', 'Gedit', 'Gsplit', 'Gvsplit',
+      \ 'Gtabedit', 'Gpedit', 'Gread', 'Gwrite', 'Gwq', 'Gdiff', 'Gsdiff', 'Gvdiff',
+      \ 'Gmove', 'Gremove', 'Gblame', 'Gbrowse' 
+      \ ]}]]
 
-LayerPlugin 'tell-k/vim-autopep8', {'for': 'python'}
+let layer.plugins += [['mbbill/undotree',   {'on_cmd': 'UndotreeToggle'}]]
+let layer.plugins += [['junegunn/goyo.vim', {'on_cmd': 'Goyo'}]]
 
-if executable('ctags')
-  LayerPlugin 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}
-en
+let layer.plugins += [['tell-k/vim-autopep8',
+      \ {'on_ft': 'python', 'on_cmd': 'Autopep8', 'after': 'utils#autopep8'}]]
+let layer.plugins += [['majutsushi/tagbar',
+      \ {'on_cmd': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}]]
 
-LayerSubLayers 'nerdtree' 
-if has('nvim')
-  LayerSubLayers 'denite', 'deol'
-en
-
+let layer.sub_layers = 'nerdtree'
 
 fu! utils#after()
   " Key: goyo <leader>g
-  nnoremap <leader>g :Goyo<cr>
+  nnoremap <space>g :Goyo<cr>
   " for goyo.vim
   let g:goyo_height = '90%'
   let g:hoyo_width = '120'
@@ -68,9 +69,10 @@ fu! utils#after()
     endif
   en
 
-  " Key: <leader>t
-  nnoremap <leader>t :TagbarToggle<cr>
-  " call DoCustomLeaderMap('nnoremap', 't', ':TagbarToggle<cr>')
+  if executable('ctags')
+    " Key: <leader>t
+    nnoremap <space>t :TagbarToggle<cr>
+  endif
 
   " for fastfold
   let g:tex_fold_enabled=1
@@ -81,10 +83,13 @@ fu! utils#after()
 
   " for undotree
   " Key: undotree <leader>u
-  nnoremap <leader>u :UndotreeToggle<cr>
+  nnoremap <space>u :UndotreeToggle<cr>
   let g:undotree_SetFocusWhenToggle=1
-
 
   " for autopep8
   let g:autopep8_disable_show_diff = 0
+endf
+fu! utils#autopep8()
+  " for autopep8
+  nnoremap == :Autopep8<cr>
 endf

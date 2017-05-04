@@ -1,7 +1,8 @@
 " Layer: jedi
 " for python completion
 
-LayerPlugin 'davidhalter/jedi-vim', {'for': 'python'}
+let layer.plugins += [['davidhalter/jedi-vim',
+      \ {'on_ft': 'python', 'on_event': 'InsertEnter'}]]
 
 fu! jedi#after()
   " for jedi

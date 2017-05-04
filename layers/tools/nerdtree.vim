@@ -1,7 +1,10 @@
 " Layer: nerdtree
-LayerPlugin 'scrooloose/nerdtree', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle', 'NERDTreeFind']}
-LayerPlugin 'jistr/vim-nerdtree-tabs', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
-LayerPlugin 'Xuyuanp/nerdtree-git-plugin', {'on': ['NERDTreeTabsToggle', 'NERDTreeToggle']}
+let layer.plugins += [['jistr/vim-nerdtree-tabs',
+      \ {'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeToggle']}]]
+let layer.plugins += [['scrooloose/nerdtree',
+      \ {'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeToggle', 'NERDTreeFind']}]]
+let layer.plugins += [['Xuyuanp/nerdtree-git-plugin',
+      \ {'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeToggle']}]]
 
 
 " before
@@ -52,8 +55,6 @@ endif
 
 fu! nerdtree#after()
   " Key: <leader>n nerdtree
-  nnoremap <Leader>n :NERDTreeTabsToggle<CR>
-  nnoremap <leader>e :NERDTreeFind<CR>
-  " 快速切换nerdtree到当前文件目录
-  nnoremap <silent><leader>xn :exec("NERDTree ".expand('%:h'))<CR>
+  nnoremap <space>n :NERDTreeTabsToggle<cr>
+  nnoremap <space>e :NERDTreeFind<CR>
 endf

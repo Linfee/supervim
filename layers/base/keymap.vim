@@ -9,7 +9,7 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-DepLayers 'key'
+let layer.dep = 'key'
 
 " use ; as mapleader
 let g:mapleader = ";"
@@ -268,6 +268,7 @@ fu! keymap#after() " {{2
 
   " <alt-=> Expression register
   Noremap i <a-=> <c-r>=
+  Noremap c <a-=> <c-r>=
 
   " complate
   Noremap i <a-p> <c-n>

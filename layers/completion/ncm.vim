@@ -2,21 +2,19 @@
 " For completion
 " Dep: pip3 install --user neovim jedi mistune psutil setproctitle
 
-LayerPlugin 'roxma/nvim-completion-manager'
+let layer.plugins += [['roxma/nvim-completion-manager', {'on_event': 'InsertEnter'}]]
+let layer.plugins += [['SirVer/ultisnips',              {'on_event': 'InsertEnter'}]]
+let layer.plugins += [['honza/vim-snippets',            {'on_event': 'InsertEnter'}]]
 
-LayerPlugin 'Linfee/ultisnips-zh-doc'
-LayerPlugin 'SirVer/ultisnips'
-LayerPlugin 'honza/vim-snippets'
+let layer.plugins += ['Linfee/ultisnips-zh-doc']
 
 " for vim8.0
 if !has('nvim')
-  LayerPlugin 'roxma/vim-hug-neovim-rpc'
+  let layer.plugins += ['roxma/vim-hug-neovim-rpc']
 endif
 
-LayerSubLayers 'jedi'
-LayerSubLayers 'javacomplete2'
-
-ConflicLayers 'deoplete', 'deoplete_jdei', 'necomplete'
+let layer.sub_layers = ['jedi', 'javacomplete2']
+let layer.conflic = ['deoplete', 'deoplete_jdei', 'necomplete']
 
 " before
 augroup omnif

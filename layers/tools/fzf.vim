@@ -1,10 +1,10 @@
 " Layer: fzf
 " TODO: finish this layer
-echo '[layer] Layer fzf is unfinished'
-finish
+" echo '[layer] Layer fzf is unfinished'
+" finish
 
-LayerPlugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-LayerPlugin 'junegunn/fzf.vim'
+let layer.plugins += [['junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}]]
+let layer.plugins += ['junegunn/fzf.vim']
 
 fu! fzf#after()
   " 这三个快捷键指定用什么方式打开选中的内容

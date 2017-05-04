@@ -1,6 +1,6 @@
 " Layer: devicon
 " This layer should load after lightline
-LayerPlugin 'ryanoasis/vim-devicons'
+let layer.plugins += [['ryanoasis/vim-devicons']]
 
 fu! devicon#after()
   let g:airline_powerline_fonts = 1
