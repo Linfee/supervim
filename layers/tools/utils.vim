@@ -4,6 +4,7 @@
 let layer.plugins += ['Konfekt/FastFold']
 let layer.plugins += ['tpope/vim-repeat']
 
+" TODO: these git command not work
 let layer.plugins += [['tpope/vim-fugitive', {'on_cmd': [
       \ 'Git', 'Gcd', 'Glcd', 'Gstatus', 'Gcommit', 'Gmerge', 'Gpull', 'Gpush',
       \ 'Gfetch', 'Ggrep', 'Glgrep', 'Glog', 'Gllog', 'Gedit', 'Gsplit', 'Gvsplit',

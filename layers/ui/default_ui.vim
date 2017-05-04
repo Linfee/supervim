@@ -1,9 +1,10 @@
 " Layer: simple_ui
-" git diff
 let layer.plugins += ['mhinz/vim-startify']
 let layer.plugins += ['luochen1990/rainbow']
+" show diff
 let layer.plugins += [['mhinz/vim-signify',
-      \ {'on_cmd': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh', 'SignifyEnable']}]]
+      \ {'on_cmd': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh', 'SignifyEnable'],
+      \ 'on_event': 'InsertEnter'}]]
 
 let layer.sub_layers = ['base_ui', 'themes', 'devicon']
 if !IsWinUnix()
@@ -44,7 +45,7 @@ let g:signify_vcs_list = ['git'] " only use git
 let g:signify_vcs_cmds = {'git': 'git diff --no-color --no-ext-diff -U0 -- %f'}
 let g:signify_cursorhold_normal     = 1
 let g:signify_update_on_focusgained = 1
-let g:signify_disable_by_default = 1
+" let g:signify_disable_by_default = 1
 
 
 " after

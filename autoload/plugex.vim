@@ -133,6 +133,7 @@ fu! s:def_class() " < class plugin > {{1
     if self.has('after')
       if exists('*'.self.after)
         exe 'call ' . self.after . '()'
+        echo 'call ' . self.after . '()'
       else
         call s:err('Specified after function for plugin ['.self.name.'] does not exists')
       endif

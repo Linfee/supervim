@@ -3,7 +3,7 @@ def arg2field(snip, t):
 	if not len(t[3]):
 		snip >> 1
 		snip += 'pass'
-		else:
+	else:
 		s = t[3][1:]
 		s = s.replace(' ', '')
 		args = s.split(',')
@@ -11,7 +11,7 @@ def arg2field(snip, t):
 		result = map(lambda s: 'self.__{0} = {0}'.format(s), args)
 		snip >> 1
 		for r in result:
-		snip += r
+			snip += r
 endglobal
 
 snippet #!3 "pyhton3文件模板" b
@@ -24,7 +24,7 @@ endsnippet
 
 snippet main "main" b
 if __name__ == '__main__':
-$0
+	$0
 endsnippet
 
 snippet doctest "doctest" b
@@ -40,24 +40,24 @@ endsnippet
 
 snippet decorator1 "Simple decorator" b
 def ${1:name}(func):
-@functools.wraps(func)
-def wrapper(*args, **kw):$2
-print('call %s():' % func.__name__)
-return func(*args, **kw)
-return wrapper
+	@functools.wraps(func)
+	def wrapper(*args, **kw):$2
+		print('call %s():' % func.__name__)
+		return func(*args, **kw)
+	return wrapper
 
 $0
 endsnippet
 
 snippet decorator2 "Complicated decorator" b
 def ${1:name}(${2:args}):
-def decorator(func):
-@functools.wraps(func)
-def wrapper(*args, **kw):$3
-print('%s %s():' % (text, func.__name__))
-return func(*args, **kw)
-return wrapper
-return decorator
+	def decorator(func):
+		@functools.wraps(func)
+		def wrapper(*args, **kw):$3
+			print('%s %s():' % (text, func.__name__))
+			return func(*args, **kw)
+		return wrapper
+	return decorator
 
 $0
 endsnippet
@@ -69,8 +69,8 @@ endsnippet
 snippet class1 "class without docstring" b
 class ${1:MyClass}(${2:object}):
 
-def __init__(self$3):`!p
-arg2field(snip, t)`
+	def __init__(self$3):`!p
+	arg2field(snip, t)`
 
 $0
 endsnippet
@@ -83,9 +83,9 @@ endsnippet
 snippet metaclass "metaclass" b
 class ${1:Demo}Metaclass(type):
 
-def __new__(cls, name, bases, attrs):
-${2:# do some thing}
-return type.__new__(cls, name, bases, attrs)
+	def __new__(cls, name, bases, attrs):
+		${2:# do some thing}
+		return type.__new__(cls, name, bases, attrs)
 $0
 endsnippet
 
@@ -93,8 +93,8 @@ endsnippet
 
 snippet __new__ "__new__() for metaclass" b
 def __new__(cls, name, bases, attrs):
-${1:pass}
-return type.__new__(cls, name, bases, attrs)
+	${1:pass}
+	return type.__new__(cls, name, bases, attrs)
 endsnippet
 snippet __init__ "__init__()" b
 def __init__(self$3):`!p
@@ -102,97 +102,97 @@ arg2field(snip, t)`
 endsnippet
 snippet __del__ "__del__()" b
 def __del__():
-${1:pass}
+	${1:pass}
 endsnippet
 
 # for str relr bytes and format
 snippet __str__ "__str__() for str()" b
 def __str__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __repr__ "__repr__() for repr()" b
 def __repr__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __bytes__ "__bytes__ for bytes()" b
 def __bytes__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __format__ "__format__ for format()" b
 def __format__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 # for compare
 snippet __lt__ "__lt__() for <" b
 def __lt__(self, other):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __le__ "__le__() for <=" b
 def __le__(self, other):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __eq__ "__eq__() for ==" b
 def __eq__(self, other):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __ne__ "__ne__() for !=" b
 def __ne__(self, other):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __gt__ "__gt__() for >" b
 def __gt__(self, other):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __ge__ "__ge__() for <=" b
 def __ge__(self, other):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __hash__ "__hash__ for hash()" b
 def __hash__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __bool__ "__bool__() for bool()" b
 def __bool__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 # for attr
 snippet __getattr__ "__getattr__() for getattr()" b
 def __getattr__(self, name):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __getttribute__ "__getttribute__()" b
 def __getattr__(self, name):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __setattr__ "__setattr__() for setattr()" b
 def __setattr__(self, name, value):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __delattr__ "__delattr__() for delattr()" b
 def __delattr__(self, name):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __dir__ "__dir__() for dir()" b
 def __dir__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __get__ "__get__()" b
 def __get__(self, instance, owner):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __set__ "__set__()" b
 def __set__(self, instance, owner):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __delete__ "__delete__()" b
 def __delete__(self, instance, owner):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __slots__ "__slots__" b
@@ -202,110 +202,110 @@ endsnippet
 
 snippet __instanceheck__ "__instanceheck__() for isinstance()" b
 def __instanceheck__(self, instance):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __subclasscheck__ "__subclasscheck__() for issubclass()" b
 def __subclasscheck__(self, subclass):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __call__ "__call__ for callable" b
 def __call__(self${1:args}):
-${2:pass}
+	${2:pass}
 endsnippet
 
 snippet __len__ "__len__() for len()" b
 def __len__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __length_hint__ "__length_hint__() for len()" b
 def __length_hint__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 # for item
 snippet __getitem__ "__getitem__() for list[index], dict[key], list[a:b:c]" b
 def __getitem__(self, ${1:key}):
-${2:pass}
+	${2:pass}
 endsnippet
 snippet __missing__ "__missing__()" b
 def __missing__(self, key):
-${2:pass}
+	${2:pass}
 endsnippet
 snippet __setitem__ "__setitem__() for list[index], dict[key], list[a:b:c]" b
 def __setitem__(self, key, value):
-${3:pass}
+	${3:pass}
 endsnippet
 snippet __delitem__ "__delitem__() for list[index], dict[key], list[a:b:c]" b
 def __delitem__(self, key):
-${3:pass}
+	${3:pass}
 endsnippet
 
 snippet __iter__ "__iter__() for 'for..in..' to get an iterator" b
 def __ietr__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __reversed__ "__reversed__() for reversed()" b
 def __reversed__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __contains__ "__contains__() for 'in'" b
 def __contains__(self, item):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __next__ "__next__() for 'for..in..' raise StopIteration finally" b
 def __next__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 # for + - abs ~
 snippet __- "__neg__() for single -" b
 def __neg__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __+ "__pos__() for single +" b
 def __pos__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __abs "__abs__() for abs()" b
 def __abs__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __~ "__invert__() for single ~" b
 def __invert__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 snippet __complex__ "__complex__()" b
 def __complex__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __int__ "__int__() for int()" b
 def __int__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __float__ "__float__() for float()" b
 def __float__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __round__ "__round__() for round()" b
 def __round__(self${1:, n}):
-${2:pass}
+	${2:pass}
 endsnippet
 snippet __index__ "__index__() for bin(), hex(), oct()" b
 def __index__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 
 # for with statement
 snippet __enter__ "__enter__() for with statement" b
 def __enter__(self):
-${1:pass}
+	${1:pass}
 endsnippet
 snippet __exit__ "__exit__() for with statement" b
 def __exit__(self, exc_type, exc_value, traceback):
-${1:pass}
+	${1:pass}
 endsnippet

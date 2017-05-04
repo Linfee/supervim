@@ -24,4 +24,3 @@
 -   The newest neovim with python3 (pip3 install neovim)
 -   git, curl
 
-

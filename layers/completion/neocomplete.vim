@@ -2,13 +2,10 @@
 " For completion
 " Dep: vim, lua
 let layer.plugins += [['Shougo/neocomplete.vim',  {'on_event': 'InsertEnter'}]]
-let layer.plugins += [['SirVer/ultisnips',        {'on_event': 'InsertEnter'}]]
 let layer.plugins += [['davidhalter/jedi-vim',    {'on_event': 'InsertEnter',
       \ 'on_ft': 'python'}]]
 
-let layer.plugins += ['Linfee/ultisnips-zh-doc']
-
-let layer.sub_layers = ['javacomplete2', 'jedi']
+let layer.sub_layers = ['javacomplete2', 'jedi', 'snippet']
 let layer.condition = '!has("nvim")'
 let layer.conflic = ['ncm', 'deoplete', 'deoplete_jdei']
 
@@ -139,20 +136,5 @@ fu! neocomplete#after()
   inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
   " inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-
-
-  " for ultisnip --------------------------------------------------------------
-  " snippets files
-  let g:UltiSnipsSnippetsDir=expand('~/.vim/ultisnips')
-  let g:UltiSnipsSnippetDirectories=["ultisnips"]
-  " Trigger configuration.
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsListSnippets="<c-tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  " If you want :UltiSnipsEdit to split your window.
-  let g:UltiSnipsEditSplit="vertical"
-  nnoremap <leader>ua :UltiSnipsAddFiletypes<space>
-  nnoremap <space>ua :UltiSnipsAddFiletypes<space>
 
 endf
