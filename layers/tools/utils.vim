@@ -72,7 +72,7 @@ fu! utils#after()
 
   if executable('ctags')
     " Key: <leader>t
-    nnoremap <space>t :TagbarToggle<cr>
+    nnoremap <leader>t :TagbarToggle<cr>
   endif
 
   " for fastfold
@@ -84,12 +84,13 @@ fu! utils#after()
 
   " for undotree
   " Key: undotree <leader>u
-  nnoremap <space>u :UndotreeToggle<cr>
+  nnoremap <leader>u :UndotreeToggle<cr>
   let g:undotree_SetFocusWhenToggle=1
 
   " for autopep8
   let g:autopep8_disable_show_diff = 0
 endf
+
 fu! utils#autopep8()
   " for autopep8
   nnoremap == :Autopep8<cr>

@@ -105,7 +105,7 @@ endf " }}
 fu! s:def_class() " < class plugin > {{1
   " variables " {{2
   let s:plug_attrs = [
-        \ 'as', 'branch', 'tag', 'commit',
+        \ 'as', 'branch', 'tag', 'commit', 'dep',
         \ 'path', 'frozen', 'rtp', 'enable', 'do', 'after',
         \ 'on_ft', 'on_cmd', 'on_event', 'on_if', 'on_func', 'on_map']
   let s:TYPE_REMOTE = 1
@@ -119,6 +119,20 @@ fu! s:def_class() " < class plugin > {{1
     endif
     if self.has('on_ft') && index(self.on_ft, &ft) == -1
       return
+    endif
+    if self.has('dep')
+      for l:p in s:pick_plugs(self.dep)
+        if !l:p.load()
+          return
+        endif
+      endfor
+    endif
+    if self.has('on_cmd')
+      for l:c in self.on_cmd
+        if exists(':'.l:c)
+          exe 'delcommand '.l:c
+        endif
+      endfor
     endif
     call self.add2rtp()
     let l:r = s:source(self.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
@@ -321,7 +335,7 @@ fu! s:def_class() " < class plugin > {{1
     endif
     " conver these attributes to list if user use string
     " rtp, on_ft, on_cmd, on_event, on_func, on_map
-    for l:attr in ['rtp', 'on_ft', 'on_cmd', 'on_event', 'on_func', 'on_map']
+    for l:attr in ['rtp', 'dep', 'on_ft', 'on_cmd', 'on_event', 'on_func', 'on_map']
       if l:plug.has(l:attr) && type(l:plug[l:attr]) == s:TYPE.string
         let l:plug[l:attr] = [l:plug[l:attr]]
       endif
@@ -331,7 +345,6 @@ fu! s:def_class() " < class plugin > {{1
     return plug
   endf " 2}}
   fu! s:fake_cmd(cmd, bang, l1, l2, args, plugs) " {{2
-    exe 'delcommand '.a:cmd
     for l:p in s:pick_plugs(a:plugs)
       call l:p.load()
     endfor
@@ -496,6 +509,7 @@ endf
 fu! plugex#install(...)
   " for PlugExInstall command
   let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
+  exe "normal! i\<esc>"
   let l:old_rtp = &rtp
   call s:init_plug(l:plugs)
   PlugInstall

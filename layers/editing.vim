@@ -12,7 +12,7 @@ let layer.plugins += [['scrooloose/nerdcommenter', {'on_map': [
       \ 'n<Plug>NERDCommenterMinimal', 'x<Plug>NERDCommenterToggle',
       \ 'n<Plug>NERDCommenterToggle', 'x<Plug>NERDCommenterComment',
       \ 'n<Plug>NERDCommenterComment'
-      \ ]}]]
+      \ ], 'on_event': 'InsertEnter'}]]
 let layer.plugins += [['jiangmiao/auto-pairs', {'on_event': 'InsertEnter', 'after': 'AutoPairsTryInit'}]]
 
 let layer.plugins += [['tpope/vim-surround', {'on_map': [

@@ -1,11 +1,8 @@
 " Layer: nerdtree
-let layer.plugins += [['jistr/vim-nerdtree-tabs',
-      \ {'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeToggle']}]]
+let layer.plugins += ['jistr/vim-nerdtree-tabs']
+let layer.plugins += ['Xuyuanp/nerdtree-git-plugin']
 let layer.plugins += [['scrooloose/nerdtree',
-      \ {'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeToggle', 'NERDTreeFind']}]]
-let layer.plugins += [['Xuyuanp/nerdtree-git-plugin',
-      \ {'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeToggle']}]]
-
+      \ {'on_cmd': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTreeTabsToggle']}]]
 
 " before
 let g:NERDTreeDirArrowExpandable = '+'
@@ -55,6 +52,6 @@ endif
 
 fu! nerdtree#after()
   " Key: <leader>n nerdtree
-  nnoremap <space>n :NERDTreeTabsToggle<cr>
-  nnoremap <space>e :NERDTreeFind<CR>
+  nnoremap <leader>n :NERDTreeTabsToggle<cr>
+  nnoremap <leader>e :NERDTreeFind<CR>
 endf
