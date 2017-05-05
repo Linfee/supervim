@@ -5,7 +5,12 @@ if has('nvim')
 else
   let layer.sub_layers += ['neocomplete']
 endif
-let layer.sub_layers += ['utils', 'syntastic', 'markdown', 'front_end']
-
+" tools
+let layer.sub_layers += ['utils',]
+" lang
+let layer.sub_layers += ['vimwiki', 'markdown', 'front_end']
+" syntax check
+let layer.sub_layers += ['syntastic']
+" extension
 let layer.sub_layers += ['translate']
 let layer.sub_layers += ['backup']

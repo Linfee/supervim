@@ -4,14 +4,8 @@
 let layer.plugins += ['Konfekt/FastFold']
 let layer.plugins += ['tpope/vim-repeat']
 
-" TODO: these git command not work
-let layer.plugins += [['tpope/vim-fugitive', {'on_cmd': [
-      \ 'Git', 'Gcd', 'Glcd', 'Gstatus', 'Gcommit', 'Gmerge', 'Gpull', 'Gpush',
-      \ 'Gfetch', 'Ggrep', 'Glgrep', 'Glog', 'Gllog', 'Gedit', 'Gsplit', 'Gvsplit',
-      \ 'Gtabedit', 'Gpedit', 'Gread', 'Gwrite', 'Gwq', 'Gdiff', 'Gsdiff', 'Gvdiff',
-      \ 'Gmove', 'Gremove', 'Gblame', 'Gbrowse' 
-      \ ]}]]
-
+let layer.plugins += ['tpope/vim-fugitive']
+let layer.plugins += [['gregsexton/gitv',   {'on_cmd': 'Gitv'}]]
 let layer.plugins += [['mbbill/undotree',   {'on_cmd': 'UndotreeToggle'}]]
 let layer.plugins += [['junegunn/goyo.vim', {'on_cmd': 'Goyo'}]]
 
@@ -19,6 +13,11 @@ let layer.plugins += [['tell-k/vim-autopep8',
       \ {'on_ft': 'python', 'on_cmd': 'Autopep8', 'after': 'utils#autopep8'}]]
 let layer.plugins += [['majutsushi/tagbar',
       \ {'on_cmd': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}]]
+" vim calendar
+let layer.plugins += [['itchyny/calendar.vim', {'on_cmd': 'Calendar',
+      \ 'after': 'utils#calendar'}]]
+" close anything
+let layer.plugins += [['mhinz/vim-sayonara', {'on_cmd': 'Sayonara'}]]
 
 let layer.sub_layers = 'nerdtree'
 
@@ -89,9 +88,17 @@ fu! utils#after()
 
   " for autopep8
   let g:autopep8_disable_show_diff = 0
+
+  " for vim-sayonara(
+  nnoremap <tab>q :Sayonara<cr>
 endf
 
 fu! utils#autopep8()
   " for autopep8
   nnoremap == :Autopep8<cr>
 endf
+
+fu! utils#calendar()
+  nnoremap <space>c :Calendar -view=year -split=horizontal -position=below -height=12
+endf
+
