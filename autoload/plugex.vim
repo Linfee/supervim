@@ -121,9 +121,14 @@ fu! s:def_class() " < class plugin > {{1
       return
     endif
     if self.has('dep')
-      for l:p in s:pick_plugs(self.dep)
+      let l:plugs = s:pick_plugs(self.dep)
+      if len(l:plugs) < len(self.dep)
+         return s:err('Plugin '.self.name.' has '.len(self.dep).
+               \ ' dependencies, but found '.len(l:plugs).'.')
+      endif
+      for l:p in l:plugs
         if !l:p.load()
-          return
+          return s:err('When load '.self.name.' , dependency plugin '.l:p.name.' load fail.')
         endif
       endfor
     endif
