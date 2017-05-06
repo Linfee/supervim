@@ -12,8 +12,7 @@ let layer.plugins += [['junegunn/goyo.vim', {'on_cmd': 'Goyo'}]]
 let layer.plugins += [['majutsushi/tagbar',
       \ {'on_cmd': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}]]
 " vim calendar
-let layer.plugins += [['itchyny/calendar.vim', {'on_cmd': 'Calendar',
-      \ 'after': 'utils#calendar'}]]
+let layer.plugins += [['itchyny/calendar.vim', {'on_cmd': 'Calendar'}]]
 " close anything
 let layer.plugins += [['mhinz/vim-sayonara', {'on_cmd': 'Sayonara'}]]
 
@@ -89,14 +88,12 @@ fu! utils#after()
 
   " for vim-sayonara(
   nnoremap <tab>q :Sayonara<cr>
+
+  " for calendar
+  nnoremap <space>c :Calendar -view=year -split=horizontal -position=below -height=12<cr>
 endf
 
 fu! utils#autopep8()
   " for autopep8
   nnoremap == :Autopep8<cr>
 endf
-
-fu! utils#calendar()
-  nnoremap <space>c :Calendar -view=year -split=horizontal -position=below -height=12
-endf
-
