@@ -2,10 +2,8 @@
 " For completion
 " Dep: vim, lua
 let layer.plugins += [['Shougo/neocomplete.vim',  {'on_event': 'InsertEnter'}]]
-let layer.plugins += [['davidhalter/jedi-vim',    {'on_event': 'InsertEnter',
-      \ 'on_ft': 'python'}]]
 
-let layer.sub_layers = ['javacomplete2', 'jedi', 'snippet']
+let layer.sub_layers = ['javacomplete2','snippet']
 let layer.condition = '!has("nvim")'
 let layer.conflic = ['ncm', 'deoplete', 'deoplete_jdei']
 
@@ -62,7 +60,7 @@ fu! neocomplete#after()
     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
     " python使用jedi
     autocmd FileType python setlocal omnifunc=jedi#completions
-    " autocmd FileType python setlocal omnifunc=jedi#completions
+    autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
   augroup END
   " Enable heavy omni completion.

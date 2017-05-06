@@ -44,7 +44,7 @@ set foldcolumn=2                 " 在左端添加额外折叠列
 set winminheight=0               " 窗口的最小高度
 set tabpagemax=15                " 最多打开的标签数目
 set scrolljump=1                 " 光标离开屏幕时(比如j)，最小滚动的行数，这样看起来舒服
-set scrolloff=15                 " 使用j/k的时候，光标到窗口的最小行数
+set scrolloff=5                 " 使用j/k的时候，光标到窗口的最小行数
 set lazyredraw                   " 执行完宏之后不要立刻重绘
 set linespace=0                  " 设置行间距
 set whichwrap=b,s,h,l,<,>,[,]    " 左右移动光标键可以移动到的额外虚拟位置

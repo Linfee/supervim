@@ -12,6 +12,7 @@
 "     rtp
 "     enable
 "     do
+"     before
 "     after
 "     on_ft
 "     onc_cmd
@@ -106,7 +107,7 @@ fu! s:def_class() " < class plugin > {{1
   " variables " {{2
   let s:plug_attrs = [
         \ 'as', 'branch', 'tag', 'commit', 'dep',
-        \ 'path', 'frozen', 'rtp', 'enable', 'do', 'after',
+        \ 'path', 'frozen', 'rtp', 'enable', 'do', 'before', 'after',
         \ 'on_ft', 'on_cmd', 'on_event', 'on_if', 'on_func', 'on_map']
   let s:TYPE_REMOTE = 1
   let s:TYPE_LOCAL = 0
@@ -115,9 +116,6 @@ fu! s:def_class() " < class plugin > {{1
   " 2}}
   fu! s:load() dict " {{2
     if !self.enable || self.loaded
-      return
-    endif
-    if self.has('on_ft') && index(self.on_ft, &ft) == -1
       return
     endif
     if self.has('dep')
@@ -139,6 +137,13 @@ fu! s:def_class() " < class plugin > {{1
         endif
       endfor
     endif
+    if self.has('before')
+      if exists('*'.self.before)
+        exe 'call ' . self.before . '()'
+      else
+        call s:err('Specified before function for plugin ['.self.name.'] does not exists')
+      endif
+    endif
     call self.add2rtp()
     let l:r = s:source(self.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
     " for vimscripts in plugin's subdirectory
@@ -152,7 +157,6 @@ fu! s:def_class() " < class plugin > {{1
     if self.has('after')
       if exists('*'.self.after)
         exe 'call ' . self.after . '()'
-        echo 'call ' . self.after . '()'
       else
         call s:err('Specified after function for plugin ['.self.name.'] does not exists')
       endif
@@ -230,6 +234,8 @@ fu! s:def_class() " < class plugin > {{1
     let l:r .= l:b . printf("frozen        : %s\n", self.has('frozen') ? self.frozen : 0)
     let l:r .= l:b . printf("rtp           : %s\n", self.has('rtp') ? self.rtp : '---')
     let l:r .= l:b . printf("type          : %s\n", self.type == s:TYPE_REMOTE ? 'remote' : 'local')
+    let l:r .= l:b . printf("before        : %s\n", self.has('before') ? self.before : '---')
+    let l:r .= l:b . printf("after         : %s\n", self.has('after') ? self.after : '---')
     let l:r .= l:b . printf("do            : %s\n", self.has('do') ? self.do : '---')
     let l:r .= l:b . printf("[lazy-load]   : %s\n", self.has('is_lazy') ? self.is_lazy : 0)
     let l:r .= l:b . printf("  |- on_ft    : %s\n", self.has('on_ft') ? string(self.on_ft) : '---')
@@ -409,9 +415,7 @@ fu! s:setup_lazy_load() " < setup lazyload > {{
         " ------------ on_ft -------------
         if l:plug.has('on_ft')
           let l:ft = join(s:plugs[l:i].on_ft, ',')
-          if !(l:plug.has('on_cmd') || l:plug.has('on_event') || l:plug.has('on_func') || l:plug.has('on_map'))
-            exe 'au FileType '.l:ft.' call s:plugs['.l:i.'].load()'
-          endif
+          exe 'au FileType '.l:ft.' call s:plugs['.l:i.'].load()'
         endif
         " ------------ on_cmd ------------
         if l:plug.has('on_cmd')

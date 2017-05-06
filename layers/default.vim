@@ -8,7 +8,7 @@ endif
 " tools
 let layer.sub_layers += ['utils',]
 " lang
-let layer.sub_layers += ['vimwiki', 'markdown', 'front_end']
+let layer.sub_layers += ['vimwiki', 'markdown', 'front_end', 'ruby', 'python']
 " syntax check
 let layer.sub_layers += ['syntastic']
 " extension

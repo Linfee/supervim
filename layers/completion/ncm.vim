@@ -13,7 +13,7 @@ if !has('nvim')
   let layer.plugins += ['roxma/vim-hug-neovim-rpc']
 endif
 
-let layer.sub_layers = ['jedi', 'javacomplete2']
+let layer.sub_layers = ['javacomplete2']
 let layer.conflic = ['deoplete', 'deoplete_jdei', 'necomplete']
 
 " before
@@ -28,6 +28,7 @@ augroup omnif
   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
   autocmd FileType python setlocal omnifunc=jedi#completions
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 augroup END
 
 " after

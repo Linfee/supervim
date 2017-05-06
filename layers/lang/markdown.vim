@@ -1,6 +1,6 @@
 " Supervim.layer
 " For markdown
-" let layer.plugins += ['godlygeek/tabular']
+let layer.plugins += ['godlygeek/tabular']
 let layer.plugins += [['Linfee/vim-markdown',         {'on_ft': 'markdown'}]]
 let layer.plugins += [['iamcco/markdown-preview.vim', {'on_ft': 'markdown',
       \ 'on_cmd': 'MarkdownPreview'}]]

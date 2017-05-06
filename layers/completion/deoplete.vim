@@ -3,7 +3,7 @@
 " Dep: nvim python3
 let layer.conflic = ['ncm', 'neocomplete']
 let layer.condition = 'has("nvim")'
-let layer.sub_layers = ['deoplete_jdei', 'javacomplete2', 'jedi']
+let layer.sub_layers = ['deoplete_jdei', 'javacomplete2']
 let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}]]
 let layer.plugins += [['Shougo/neco-vim', {'on_ft': 'vim'}]]
 let layer.plugins += [['Shougo/echodoc.vim', {'on_ft': ['vim', 'ruby']}]]
@@ -31,6 +31,7 @@ if has("nvim")
     autocmd FileType java setlocal omnifunc=javacomplete#Complete
     autocmd FileType python setlocal omnifunc=jedi#completions
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
   augroup END
 en
 

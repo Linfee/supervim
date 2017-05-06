@@ -2,9 +2,12 @@
 " for python completion
 
 let layer.plugins += [['davidhalter/jedi-vim',
-      \ {'on_ft': 'python', 'on_event': 'InsertEnter'}]]
+      \ {'on_event': 'InsertEnter', 'on_if': '&ft=="py"'}]]
 
-fu! jedi#after()
+let layer.plugins += [['tell-k/vim-autopep8',
+      \ {'on_cmd': 'Autopep8', 'after': 'utils#autopep8'}]]
+
+fu! python#after()
   " for jedi
   " jedi 补全快捷键, 有补全插件就不需要了
   " let g:jedi#completions_command = "<c-n>"
@@ -36,4 +39,9 @@ fu! jedi#after()
   let g:jedi#force_py_version = 3
   " 自动完成from .. import ..
   let g:jedi#smart_auto_mappings = 1
+endf
+
+fu! python#autopep8()
+  " for autopep8
+  nnoremap == :Autopep8<cr>
 endf

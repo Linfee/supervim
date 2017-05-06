@@ -9,8 +9,6 @@ let layer.plugins += [['gregsexton/gitv',   {'on_cmd': 'Gitv'}]]
 let layer.plugins += [['mbbill/undotree',   {'on_cmd': 'UndotreeToggle'}]]
 let layer.plugins += [['junegunn/goyo.vim', {'on_cmd': 'Goyo'}]]
 
-let layer.plugins += [['tell-k/vim-autopep8',
-      \ {'on_ft': 'python', 'on_cmd': 'Autopep8', 'after': 'utils#autopep8'}]]
 let layer.plugins += [['majutsushi/tagbar',
       \ {'on_cmd': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}]]
 " vim calendar
