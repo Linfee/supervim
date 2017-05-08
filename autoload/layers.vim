@@ -1,3 +1,4 @@
+" Note: unstable now
 let s:cpo_save = &cpo
 set cpo&vim
 
@@ -10,14 +11,14 @@ set cpo&vim
 " s:available_layers
 " s:loaded_layers
 " s:all_loaded_layers
-com! -nargs=0 ShowLayers echo s:layers
-com! -nargs=0 ShowLayersDir echo s:layers_dir
-com! -nargs=0 ShowAvLayers echo s:available_layers
-com! -nargs=0 ShowLoadedLayers echo s:loaded_layers
-com! -nargs=0 ShowAllLoadedLayers echo s:all_loaded_layers
-com! -nargs=0 Test for i in s:all_loaded_layers | echo i.to_str() | endfor
 
-
+" for test
+" com! -nargs=0 ShowLayers echo s:layers
+" com! -nargs=0 ShowLayersDir echo s:layers_dir
+" com! -nargs=0 ShowAvLayers echo s:available_layers
+" com! -nargs=0 ShowLoadedLayers echo s:loaded_layers
+" com! -nargs=0 ShowAllLoadedLayers echo s:all_loaded_layers
+" com! -nargs=0 Test for i in s:all_loaded_layers | echo i.to_str() | endfor
 
 let s:TYPE = {
       \   'string':  type(''),
@@ -294,4 +295,5 @@ endf " }}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
+
 " vim: fmr={{,}} fdm=marker nospell:

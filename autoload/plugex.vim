@@ -37,6 +37,9 @@
 "     PlugExinfo [name ...]
 " }}
 
+" TODO: FIX: Can't import python module in ~/.vim/python3 when use gvim,
+" but it works when use vim in msys2
+
 if exists('g:loaded_plugex')
   finish
 endif
