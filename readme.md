@@ -25,6 +25,7 @@ A cool vim configuration
 
 ## 安装 ##
 
--   `git clone https://github.com/Linfee/supervim/tree/refactoring ~/.vim`
+-   `git clone https://github.com/Linfee/supervim/ ~/.vim`
 -   打开vim，执行`PlugExInstall`
+-   安装完毕后最好重新打开vim
 >   如果是neovim或者是在windows上，请手动在对应的启动脚本里`source ~/.vim/vimrc`
