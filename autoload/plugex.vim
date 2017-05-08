@@ -521,27 +521,34 @@ endf
 fu! plugex#install(...)
   " for PlugExInstall command
   let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
-  exe "normal! i\<esc>"
+  if &ft == 'startify'
+    tabnew
+    exe "normal! i\<esc>"
+  else
+    exe "normal! i\<esc>"
+  endif
   let l:old_rtp = &rtp
   call s:init_plug(l:plugs)
   PlugInstall
+  let &rtp = l:old_rtp
   for l:p in l:plugs
     call l:p.load_ftdetect()
     call l:p.load()
   endfor
-  let &rtp = l:old_rtp
 endf
 
 fu! plugex#update(...)
   " for PlugExUpdate command
   let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
+  if &ft == 'startify'
+    tabnew
+    exe "normal! i\<esc>"
+  else
+    exe "normal! i\<esc>"
+  endif
   let l:old_rtp = &rtp
   call s:init_plug(l:plugs)
   PlugUpdate
-  " for l:p in l:plugs
-  "   call l:p.load_ftdetect()
-  "   call l:p.load()
-  " endfor
   let &rtp = l:old_rtp
 endf
 
