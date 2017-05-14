@@ -7,7 +7,7 @@ let layer.condition = 'has("nvim")'
 let layer.sub_layers = ['deoplete_jdei', 'javacomplete2', 'snippet']
 
 let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
-      \ 'on_event': 'InsertEnter'}]]
+      \ 'on_event': 'InsertEnter', 'after': 'deoplete#deoplete_after'}]]
 let layer.plugins += [['Shougo/neco-vim', {'on_event': 'InsertEnter',
       \ 'on_if': '&ft=="vim"'}]]
 let layer.plugins += [['Shougo/echodoc.vim', {'on_event': 'InsertEnter',
@@ -42,7 +42,20 @@ let g:jedi#completions_enabled = 0
 
 " after
 fu! deoplete#after()
+  " for neco-vim --------------------------------------------------------------
+  if !exists('g:necovim#complete_functions')
+    let g:necovim#complete_functions = {}
+  endif
+  let g:necovim#complete_functions.Ref =
+        \ 'ref#complete'
 
+  " for echodoc ---------------------------------------------------------------
+  set noshowmode
+  let g:echodoc_enable_at_startup = 1
+
+endf
+
+fu! deoplete#deoplete_after()
   " <C-h>, <BS>: close popup and delete backword char.
   inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
   inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
@@ -141,16 +154,5 @@ fu! deoplete#after()
   let g:deoplete#ignore_sources._ = get(g:deoplete#ignore_sources, '_', ['around'])
   inoremap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
   inoremap <expr><BS> deoplete#mappings#smart_close_popup()."\<C-h>"
-
-  " for neco-vim --------------------------------------------------------------
-  if !exists('g:necovim#complete_functions')
-    let g:necovim#complete_functions = {}
-  endif
-  let g:necovim#complete_functions.Ref =
-        \ 'ref#complete'
-
-  " for echodoc ---------------------------------------------------------------
-  set noshowmode
-  let g:echodoc_enable_at_startup = 1
 
 endf
