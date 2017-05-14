@@ -28,7 +28,7 @@ fu! IsGui()
 endf
 " }}
 
-let &rtp = '~/.vim,'.&rtp
+let &rtp = expand('~/.vim,').&rtp
 
 let g:layers = 'default'
 
