@@ -334,9 +334,9 @@ fu! s:def_class() " < class plugin > {{1
     call l:plug.set_repo(a:repo)
     " apply config
     let l:path = l:plug.path
-    for [k, v] in items(a:config)
+    for k in keys(a:config)
       if index(s:plug_attrs, k) != -1
-        let l:plug[k] = v
+        let l:plug[k] = a:config[k]
       else
         call s:err('Unsupported attribute: ' . k . ' for plug ' . l:plug.name)
       endif
