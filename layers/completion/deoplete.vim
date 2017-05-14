@@ -3,13 +3,15 @@
 " Dep: nvim python3
 let layer.conflic = ['ncm', 'neocomplete']
 let layer.condition = 'has("nvim")'
-let layer.sub_layers = ['deoplete_jdei', 'javacomplete2']
-let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}]]
-let layer.plugins += [['Shougo/neco-vim', {'on_ft': 'vim'}]]
-let layer.plugins += [['Shougo/echodoc.vim', {'on_ft': ['vim', 'ruby']}]]
-let layer.plugins += ['Linfee/ultisnips-zh-doc']
-let layer.plugins += ['SirVer/ultisnips']
-let layer.plugins += ['honza/vim-snippets']
+
+let layer.sub_layers = ['deoplete_jdei', 'javacomplete2', 'snippet']
+
+let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
+      \ 'on_event': 'InsertEnter'}]]
+let layer.plugins += [['Shougo/neco-vim', {'on_event': 'InsertEnter',
+      \ 'on_if': '&ft=="vim"'}]]
+let layer.plugins += [['Shougo/echodoc.vim', {'on_event': 'InsertEnter',
+      \ 'on_if': '&ft=="vim"||&ft=="ruby"'}]]
 
 if has("nvim")
   let g:deoplete#delimiters = ['/', '\']
@@ -150,19 +152,5 @@ fu! deoplete#after()
   " for echodoc ---------------------------------------------------------------
   set noshowmode
   let g:echodoc_enable_at_startup = 1
-
-  " for ultisnip --------------------------------------------------------------
-  " snippets files
-  let g:UltiSnipsSnippetsDir=expand('~/.vim')
-  let g:UltiSnipsSnippetDirectories=["ultisnips"]
-  " Trigger configuration.
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsListSnippets="<c-tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  " If you want :UltiSnipsEdit to split your window.
-  let g:UltiSnipsEditSplit="vertical"
-  nnoremap <leader>ua :UltiSnipsAddFiletypes<space>
-  nnoremap <space>ua :UltiSnipsAddFiletypes<space>
 
 endf
