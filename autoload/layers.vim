@@ -40,9 +40,11 @@ fu! layers#init(...) " {{
     return
   endif
   if type(g:layers) == s:TYPE.string
-    let g:layers = [g:layers]
+    let l:layers = [g:layers]
+  else
+    let l:layes = g:layers
   endif
-  let s:layers = g:layers
+  let s:layers = l:layers
 
   " init s:layers_dir
   if a:0 != 0
