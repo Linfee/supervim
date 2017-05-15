@@ -83,17 +83,9 @@ fu! utils#after()
   nnoremap <leader>u :UndotreeToggle<cr>
   let g:undotree_SetFocusWhenToggle=1
 
-  " for autopep8
-  let g:autopep8_disable_show_diff = 0
-
   " for vim-sayonara(
   nnoremap <tab>q :Sayonara<cr>
 
   " for calendar
   nnoremap <space>c :Calendar -view=year -split=horizontal -position=below -height=12<cr>
-endf
-
-fu! utils#autopep8()
-  " for autopep8
-  nnoremap == :Autopep8<cr>
 endf

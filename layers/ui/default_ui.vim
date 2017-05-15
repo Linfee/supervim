@@ -7,11 +7,7 @@ let layer.plugins += [['mhinz/vim-signify',
       \ 'on_event': 'InsertEnter'}]]
 
 let layer.sub_layers = ['base_ui', 'themes', 'devicon']
-if !IsWinUnix()
-  let layer.sub_layers += ['lightline']
-else
-  let layer.sub_layers += ['statusline']
-endif
+let layer.sub_layers += ['lightline']
 
 
 " before

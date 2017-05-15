@@ -14,3 +14,4 @@ let layer.sub_layers += ['syntastic']
 " extension
 let layer.sub_layers += ['translate']
 let layer.sub_layers += ['backup']
+let layer.sub_layers += ['zhdoc']

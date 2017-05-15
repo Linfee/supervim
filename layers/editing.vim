@@ -22,12 +22,23 @@ let layer.plugins += [['tpope/vim-surround', {'on_map': [
       \ '<Plug>VgSurround', '<Plug>Isurround', '<Plug>Isurround',
       \ '<Plug>ISurround'
       \ ]}]]
-let layer.plugins += [['osyo-manga/vim-over', {'on_cmd': 'OverCommandLine'}]]
-let layer.plugins += [['terryma/vim-expand-region', {'on_map': [
-      \ 'v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)' ]}]]
+" find and replace
+let layer.plugins += [['osyo-manga/vim-over',
+      \ {'on_cmd': 'OverCommandLine'}]]
+" expand region
+let layer.plugins += [['terryma/vim-expand-region',
+      \ {'on_map': ['v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)' ]}]]
+" align
 let layer.plugins += [['junegunn/vim-easy-align',
       \ {'on_map': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}]]
+" file format
+let layer.plugins += [['sbdchd/neoformat',
+      \ {'on_cmd': 'Neoformat'}]]
+let layer.plugins += [['easymotion/vim-easymotion']]
+" multiple cursors
 let layer.plugins += ['terryma/vim-multiple-cursors']
+
+" underline cursorword
 let layer.plugins += ['itchyny/vim-cursorword']
 
 " before
@@ -165,7 +176,7 @@ fu! editing#after()
   let g:multi_cursor_prev_key='<C-p>'
   let g:multi_cursor_skip_key='<C-x>'
   let g:multi_cursor_quit_key='<c-[>'
-  nnoremap <c-c> :call multiple_cursors#quit()<CR>
+  nnoremap <silent> <c-c> :call multiple_cursors#quit()<CR>
   nnoremap <silent> <space>/ :MultipleCursorsFind <c-r>/<cr>
   vnoremap <silent> <space>/ :MultipleCursorsFind <c-r>/<cr>
   " 多光标时禁用补全插件
