@@ -107,7 +107,7 @@ fu! s:def_class() " < class plugin > {{1
   " variables " {{2
   let s:plug_attrs = [
         \ 'as', 'branch', 'tag', 'commit', 'dep',
-        \ 'path', 'frozen', 'rtp', 'enable', 'do', 'before', 'after',
+        \ 'dir', 'path', 'frozen', 'rtp', 'enable', 'do', 'before', 'after',
         \ 'on_ft', 'on_cmd', 'on_event', 'on_if', 'on_func', 'on_map']
   let s:TYPE_REMOTE = 1
   let s:TYPE_LOCAL = 0
