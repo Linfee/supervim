@@ -233,7 +233,11 @@ vnoremap <silent> <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
 vnoremap <silent> ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
 " 1}}
 
-fu! keymap#after() " {{2
+" Other {{1
+Noremap c <a-p> <c-r>=substitute(@*.'', '\n', '', 'g')<cr>
+" 1}}
+
+fu! keymap#after() " {{1
   " alt+n switch tab
   Noremap n <a-1> 1gt
   Noremap n <a-2> 2gt

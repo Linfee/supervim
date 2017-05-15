@@ -56,9 +56,9 @@ fu! default_ui#after()
   " for themes
   if IsWinUnix()
     colorscheme monokai
-  el
-    colorscheme gruvbox
+    set background=dark
   en
+  colorscheme gruvbox
 
   " for vim-signify
   nnoremap <leader>tg :SignifyToggle<cr>

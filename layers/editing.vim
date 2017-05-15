@@ -24,7 +24,7 @@ let layer.plugins += [['tpope/vim-surround', {'on_map': [
       \ ]}]]
 let layer.plugins += [['osyo-manga/vim-over', {'on_cmd': 'OverCommandLine'}]]
 let layer.plugins += [['terryma/vim-expand-region', {'on_map': [
-      \ '<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)' ]}]]
+      \ 'v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)' ]}]]
 let layer.plugins += [['junegunn/vim-easy-align',
       \ {'on_map': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}]]
 let layer.plugins += ['terryma/vim-multiple-cursors']
@@ -114,7 +114,7 @@ fu! editing#after()
   nnoremap <leader>rr :OverCommandLine<cr>%s/
 
   " for vim-expand-region ------------------------------------------------------
-  map v <Plug>(expand_region_expand)
+  vmap v <Plug>(expand_region_expand)
   vmap V <Plug>(expand_region_shrink)
   let g:expand_region_text_objects = {
         \ 'iw'  :0,
