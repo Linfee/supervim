@@ -6,12 +6,12 @@ let layer.condition = 'has("nvim")'
 
 let layer.sub_layers = ['deoplete_jdei', 'javacomplete2', 'snippet']
 
-let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
-      \ 'on_event': 'InsertEnter', 'after': 'deoplete#deoplete_after'}]]
 let layer.plugins += [['Shougo/neco-vim', {'on_event': 'InsertEnter',
       \ 'on_if': '&ft=="vim"'}]]
 let layer.plugins += [['Shougo/echodoc.vim', {'on_event': 'InsertEnter',
       \ 'on_if': '&ft=="vim"||&ft=="ruby"'}]]
+let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
+      \ 'on_event': 'InsertEnter', 'after': 'deoplete#deoplete_after'}]]
 
 if has("nvim")
   let g:deoplete#delimiters = ['/', '\']
@@ -42,6 +42,9 @@ let g:jedi#completions_enabled = 0
 
 " after
 fu! deoplete#after()
+  " for deoplete
+  let g:deoplete#enable_at_startup = 1
+
   " for neco-vim --------------------------------------------------------------
   if !exists('g:necovim#complete_functions')
     let g:necovim#complete_functions = {}
@@ -52,7 +55,6 @@ fu! deoplete#after()
   " for echodoc ---------------------------------------------------------------
   set noshowmode
   let g:echodoc_enable_at_startup = 1
-
 endf
 
 fu! deoplete#deoplete_after()
@@ -85,7 +87,6 @@ fu! deoplete#deoplete_after()
   augroup END
 
   " deoplete options
-  let g:deoplete#enable_at_startup = 1
   " let g:deoplete#enable_ignore_case = 1
   " let g:deoplete#enable_smart_case = 1
   let g:deoplete#enable_camel_case = 1
@@ -154,5 +155,4 @@ fu! deoplete#deoplete_after()
   let g:deoplete#ignore_sources._ = get(g:deoplete#ignore_sources, '_', ['around'])
   inoremap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
   inoremap <expr><BS> deoplete#mappings#smart_close_popup()."\<C-h>"
-
 endf
