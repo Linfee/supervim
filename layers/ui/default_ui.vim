@@ -7,7 +7,11 @@ let layer.plugins += [['mhinz/vim-signify',
       \ 'on_event': 'InsertEnter'}]]
 
 let layer.sub_layers = ['base_ui', 'themes', 'devicon']
-let layer.sub_layers += ['lightline']
+if exists('g:gui_oni')
+  let layer.sub_layers += ['statusline']
+else
+  let layer.sub_layers += ['lightline']
+endif
 
 
 " before

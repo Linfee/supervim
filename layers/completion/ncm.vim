@@ -3,17 +3,13 @@
 " Dep: pip3 install --user neovim jedi mistune psutil setproctitle
 
 let layer.plugins += [['roxma/nvim-completion-manager', {'on_event': 'InsertEnter'}]]
-let layer.plugins += [['SirVer/ultisnips',              {'on_event': 'InsertEnter'}]]
-let layer.plugins += [['honza/vim-snippets',            {'on_event': 'InsertEnter'}]]
-
-let layer.plugins += ['Linfee/ultisnips-zh-doc']
+let layer.sub_layers = ['javacomplete2','snippet']
 
 " for vim8.0
 if !has('nvim')
   let layer.plugins += ['roxma/vim-hug-neovim-rpc']
 endif
 
-let layer.sub_layers = ['javacomplete2']
 let layer.conflic = ['deoplete', 'deoplete_jdei', 'necomplete']
 
 " before
@@ -53,27 +49,5 @@ fu! ncm#after()
           \ 'cm_refresh': {'omnifunc': 'csscomplete#CompleteCSS'},
           \ })
   augroup END
-
-
-  " for ultisnip --------------------------------------------------------------
-  let g:UltiSnipsExpandTrigger    = "<Plug>(ultisnips_expand)"
-  let g:UltiSnipsJumpForwardTrigger = "<c-j>"
-  let g:UltiSnipsJumpBackwardTrigger  = "<c-k>"
-  let g:UltiSnipsRemoveSelectModeMappings = 0
-  " optional
-  inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
-
-  " snippets files
-  let g:UltiSnipsSnippetsDir=expand(g:layer#vimfile."ultisnips")
-  let g:UltiSnipsSnippetDirectories=["ultisnips"]
-  " Trigger configuration.
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsListSnippets="<c-tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  " If you want :UltiSnipsEdit to split your window.
-  let g:UltiSnipsEditSplit="vertical"
-  nnoremap <leader>ua :UltiSnipsAddFiletypes<space>
-  nnoremap <space>ua :UltiSnipsAddFiletypes<space>
 
 endf
