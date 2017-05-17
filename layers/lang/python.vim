@@ -2,7 +2,7 @@
 " for python completion
 
 let layer.plugins += [['davidhalter/jedi-vim',
-      \ {'on_event': 'InsertEnter', 'on_if': '&ft=="py"'}]]
+      \ {'on_event': 'InsertEnter', 'on_if': '&ft=="python"'}]]
 
 fu! python#after()
   " for jedi
@@ -17,7 +17,7 @@ fu! python#after()
   " 在vim中打开模块(源码) :Pyimport
   let g:jedi#auto_initialization = 1
   " 关掉jedi的补全样式，使用自定义的
-  let g:jedi#auto_vim_configuration = 0
+  " let g:jedi#auto_vim_configuration = 0
   " 输入点的时候自动补全
   let g:jedi#popup_on_dot = 1
   " 自动选中第一个
