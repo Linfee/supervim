@@ -1,9 +1,10 @@
 " Supervim.layer
 " For markdown
-let layer.plugins += ['godlygeek/tabular']
-let layer.plugins += [['Linfee/vim-markdown',         {'on_ft': 'markdown'}]]
-let layer.plugins += [['iamcco/markdown-preview.vim', {'on_ft': 'markdown',
-      \ 'on_cmd': 'MarkdownPreview'}]]
+let layer.plugins += [['godlygeek/tabular',
+      \ {'on_cmd': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}]]
+let layer.plugins += ['plasticboy/vim-markdown'] " no plugin dir, no need to lazyload
+let layer.plugins += [['iamcco/markdown-preview.vim',
+      \ {'on_ft': 'markdown', 'on_cmd': 'MarkdownPreview'}]]
 
 " before
 let g:vim_markdown_folding_style_pythonic = 1
@@ -18,6 +19,18 @@ let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=java
 
 " after
 fu! markdown#after()
+  " for vim-markdown
+  " let g:vim_markdown_folding_style_pythonic = 1
+  let g:vim_markdown_override_foldtext = 1
+  " let g:vim_markdown_toc_autofit = 1
+  let g:vim_markdown_fenced_languages = ['c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini']
+  " Syntax extensions
+  let g:vim_markdown_json_frontmatter = 1
+  let g:vim_markdown_new_list_item_indent = 2
+  " let g:vim_markdown_no_extensions_in_markdown = 1
+  let g:vim_markdown_autowrite = 1
+
+
   " for markdown-preview
   if IsOSX()
     let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"

@@ -11,6 +11,8 @@
 
 " 设置补全菜单样式
 set completeopt=longest,menu,preview
+" 设置隐藏级别
+set conceallevel=2
 "  设置状态行的样式
 if has('cmdline_info')
   set ruler                    " 显示光标当前位置
