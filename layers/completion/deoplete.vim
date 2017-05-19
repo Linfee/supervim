@@ -4,7 +4,7 @@
 let layer.conflic = ['ncm', 'neocomplete']
 let layer.condition = 'has("nvim")'
 
-let layer.sub_layers = ['deoplete_jdei', 'javacomplete2', 'snippet']
+let layer.sub_layers = ['deoplete_jedi', 'javacomplete2', 'snippet']
 
 let layer.plugins += [['Shougo/neco-vim', {'on_event': 'InsertEnter',
       \ 'on_if': '&ft=="vim"'}]]
