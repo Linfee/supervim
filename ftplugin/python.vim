@@ -9,7 +9,6 @@ setl expandtab
 setl autoindent
 setl fileformat=unix
 
-setl ff=unix
 match Error /\s\+$/
 py3 << EOF
 import os
@@ -21,17 +20,15 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 
 
-" run {{1
-if IsWin() && !IsWinUnix() " for windows
+if IsWin()
     if exists("g:s_py2")
         nnoremap <buffer> <space>r :w<cr>:!py %<cr>
     else
         nnoremap <buffer> <space>r :w<cr>:!python %<cr>
     endif
+elseif IsWinUnix()
+    nnoremap <buffer> <space>r :w<cr>:!chmod u+x % && ./%<cr>
 else " for linux, osx, mingw, msys2, cygwin
     nnoremap <buffer> <space>r :w<cr>:!echo "\033[0;32m____________________\033[0m"<cr>:!chmod u+x % && ./%<cr>
 endif
-" vim-autopep8格式化
-nnoremap = :Autopep8<cr>
-" }}1
 
