@@ -41,10 +41,12 @@ fu! devicon#after()
   augroup END
 
   if IsGui()
-    if IsLinux()
-      set guifont=SauceCodePro\ NF\ 9
-    elsei IsWin()
+    if IsWin()
       set guifont=SauceCodePro\ NF:h9
+    elsei IsOSX()
+      set guifont=SauceCodePro\ NF:h11
+    else
+      set guifont=SauceCodePro\ NF\ 9
     en
   en
 endf
