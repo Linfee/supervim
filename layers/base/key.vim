@@ -31,6 +31,7 @@ let s:keys =      "abcdefghijklmnopqrtuvwxyzABCDEFGHIJKLMNOPQRsSTUVWXYZ-=[];'" .
 let s:alt_keys =  "å∫ ∂ ƒ©˙ ∆˚¬µ øπœ®† √∑≈¥ΩÅıÇÎ´Ï˝ÓˆÔÒÂ˜Ø∏Œ‰ßÍˇ¨◊„˛Á¸–≠“‘…æ" . '≤≥÷—±”’æÆ¯˘¿¡™£¢∞§¶•ªº'
 let s:map_args = ["<buffer>", "<nowait>", "<silent>", "<special>", "<script>", "<expr>", "<unique>"]
 let s:cmds = ['_', 'n', 'v', 'x', 's', 'o', 'i', 'l', 'c', 'nun', '_un', 'vun', 'xun', 'sun', 'oun', 'iun', 'lun', 'cun', 'un']
+let s:unsupposed_alt_key = "ineu" " unsupposed alt key on osx
 
 com! -nargs=+ -bang Noremap call s:do_map(1, <bang>0, [<f-args>])
 com! -nargs=+ -bang Map call s:do_map(0, <bang>0, [<f-args>])
@@ -64,7 +65,12 @@ fu! s:do_map(nore, bang, args)
     let rhs = rhs.' '.arg
   endfo
 
-  let cmd = cmd.s:wrap_lhs(lhs).rhs
+  let wraped_lhs = s:wrap_lhs(lhs)
+  if wraped_lhs =~ '^\s*$'
+    echom lhs . ' can not work on osx, please use another key.'
+    return
+  end
+  let cmd = cmd.wraped_lhs.rhs
   exe cmd
   " echo cmd
   " echo lhs

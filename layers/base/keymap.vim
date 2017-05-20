@@ -251,10 +251,10 @@ fu! keymap#after() " {{1
   Noremap i <a-k> <up>
   Noremap i <a-h> <left>
   Noremap i <a-l> <right>
-  Noremap i <a-n> <s-left>
+  Noremap i <a-N> <s-left>
   Noremap i <a-m> <s-right>
   Noremap i <a-o> <end>
-  Noremap i <a-i> <home>
+  Noremap i <a-I> <home>
 
   Noremap n <a-j> 10gj
   Noremap n <a-k> 10gk
@@ -268,7 +268,7 @@ fu! keymap#after() " {{1
   Noremap c <a-m> <s-right>
   Noremap c <a-N> <s-left>
   Noremap c <a-o> <end>
-  Noremap c <a-i> <home>
+  Noremap c <a-I> <home>
 
   " <alt-=> Expression register
   Noremap i <a-=> <c-r>=
