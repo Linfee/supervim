@@ -90,15 +90,15 @@ fu! s:wrap_lhs(lhs)
   retu lhs
 endf
 
-if has('macunix')
+if g:is_osx
   fu! s:do_wrap(lhs, char)
     retu substitute(a:lhs, '<a-' . a:char . '>', tr(a:char, s:keys, s:alt_keys), '')
   endf
-elsei has('nvim')
+elsei g:is_nvim
   fu! s:do_wrap(lhs, char)
     retu a:lhs
   endf
-elsei has('unix') && !has('macunix') && !has('gui_running')
+elseif g:is_linux && !g:is_gui
   fu! s:do_wrap(lhs, char)
     retu substitute(a:lhs, '<a-' . a:char . '>', '' . a:char, '')
   endf

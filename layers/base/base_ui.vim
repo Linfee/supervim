@@ -23,7 +23,7 @@ endif
 " behavior when swithc between buffers
 try | set switchbuf=useopen,usetab,newtab | set stal=2 | catch | endtry
 " 设置 gui 与 cli
-if IsGui()
+if g:is_gui
   " 设置窗口位置和大小
   winpos 685 20
   set lines=44 columns=90
@@ -37,9 +37,9 @@ if IsGui()
   set guioptions-=b
   set guioptions-=e
   " 设置字体
-  if IsLinux()
+  if g:is_linux
     set guifont=Source\ Code\ Pro\ 9
-  elseif IsWin()
+  elseif g:is_win
     set guifont=Source\ Code\ Pro:h9
   endif
 endif

@@ -8,25 +8,12 @@
 " Author: linfee
 " Repo: https://github.com/linfee/supervim
 
-" Functions {{
-fu! IsWin()
-  retu has('win32') || has('win64')
-endf
-fu! IsLinux()
-  " for linux, return 0 on osx
-  retu has('unix') && !has('macunix')
-endf
-fu! IsWinUnix()
-  " for cygwin and mingw on windows
-  retu has('win32unix')
-endf
-fu! IsOSX()
-  retu has('macunix')
-endf
-fu! IsGui()
-  retu has('gui_running')
-endf
-" }}
+let g:is_win = has('win32') || has('win64')
+let g:is_linux = has('unix') && !has('macunix')
+let g:is_win_unix = has('win32unix')
+let g:is_osx = has('macunix')
+let g:is_nvim = has('nvim')
+let g:is_gui = !has('nvim') && has('gui_running')
 
 let &rtp = expand('~/.vim,').&rtp
 

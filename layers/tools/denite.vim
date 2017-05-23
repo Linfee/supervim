@@ -56,7 +56,7 @@ fu! denite#denite_after()
   endf
 
   " denite command
-  if !IsWin()
+  if !g:is_win
     if executable('rg')
       " For ripgrep
       " Note: It is slower than ag

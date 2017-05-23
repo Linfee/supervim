@@ -1,6 +1,5 @@
 " Layer: lightline
 scriptencoding utf8
-" let layer.condition = '!(IsWin() && !IsGui())'
 let layer.plugins += [['itchyny/lightline.vim']]
 
 
@@ -27,8 +26,6 @@ fu! lightline#after()
         \ 'component_type': {
         \   'syntastic': 'error',
         \ },
-        \ 'subseparator': { 'left': '›', 'right': '‹' },
-        \ 'separator': { 'left': '›', 'right': '‹' },
         \ }
 
   fu! LightlineModified()

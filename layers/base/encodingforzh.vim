@@ -5,8 +5,8 @@ en
 set encoding=utf8
 set fileencoding=utf8
 set fileencodings=utf8,chinese,latin1,gbk,big5,ucs-bom
-if has('win32') || has('win64')
-  if !has('gui_running')
+if g:is_win
+  if g:is_gui
     " set fileencoding=chinese
     set termencoding=utf8
     " set encoding for console

@@ -39,7 +39,7 @@ nnoremap <space>w :update<cr>
 nnoremap <tab>Q :bufdo bd<cr>
 
 " save as sudo
-if !IsWin()
+if !g:is_win
   cnoremap W! !sudo tee % > /dev/null<cr>
   nnoremap <space>W :!sudo tee % /dev/null<cr>
 en

@@ -32,10 +32,10 @@ fu! markdown#after()
 
 
   " for markdown-preview
-  if IsOSX()
+  if g:is_osx
     let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
     " path to the chrome or the command to open chrome(or other modern browsers)
-  elseif IsLinux()
+  elseif g:is_linux
     if executable('chrome')
       let g:mkdp_path_to_chrome = "chrome"
     elseif executable('chromium')

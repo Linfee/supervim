@@ -10,7 +10,7 @@ fu! devicon#after()
   " enable open and close folder/directory glyph flags
   let g:DevIconsEnableFoldersOpenClose = 1
   " specify OS to decide an icon for unix fileformat, Darwin for osx
-  let g:WebDevIconsOS = 'Linux'
+  let g:WebDevIconsOS = 'Darwin'
 
   " patch font for lightline
   function! LightlineFiletype()
@@ -40,10 +40,10 @@ fu! devicon#after()
     autocmd FileType nerdtree syn match go_icon ## containedin=NERDTreeFile
   augroup END
 
-  if IsGui()
-    if IsWin()
+  if g:is_gui
+    if g:is_win()
       set guifont=SauceCodePro\ NF:h9
-    elsei IsOSX()
+    elsei g:is_osx()
       set guifont=SauceCodePro\ NF:h11
     else
       set guifont=SauceCodePro\ NF\ 9

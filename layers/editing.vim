@@ -89,9 +89,9 @@ let g:AutoPairsShortcutToggle = ''
 nnoremap <leader>ta :call AutoPairsToggle()<cr>
 if has('nvim')
   let g:AutoPairsShortcutFastWrap = '<a-a>'
-elseif IsOSX()
+elseif g:is_osx
   let g:AutoPairsShortcutFastWrap = 'å'
-elseif IsLinux() && !IsGui()
+elseif g:is_linux && !g:is_gui
   let g:AutoPairsShortcutFastWrap = 'a'
 else
   let g:AutoPairsShortcutFastWrap = '<a-a>'
@@ -113,9 +113,9 @@ fu! editing#after()
   xmap S   <Plug>VSurround
   xmap gS  <Plug>VgSurround
   if !exists("g:surround_no_insert_mappings") || ! g:surround_no_insert_mappings
-    if !hasmapto("<Plug>Isurround","i") && "" == mapcheck("<C-S>","i")
-      imap    <C-S> <Plug>Isurround
-    endif
+    " if !hasmapto("<Plug>Isurround","i") && "" == mapcheck("<C-S>","i")
+    "   imap    <C-S> <Plug>Isurround
+    " endif
     imap      <C-G>s <Plug>Isurround
     imap      <C-G>S <Plug>ISurround
   endif

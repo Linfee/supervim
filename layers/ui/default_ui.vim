@@ -54,7 +54,7 @@ fu! default_ui#after()
   nnoremap <leader>tr :RainbowToggle<cr>
 
   " for themes
-  if IsWinUnix()
+  if g:is_win_unix
     colorscheme monokai
     set background=dark
   en
