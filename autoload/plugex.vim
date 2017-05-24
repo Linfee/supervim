@@ -182,7 +182,6 @@ fu! s:def_class() " < class plugin > {{1
     endif
   endf " 2}}
   fu! s:add2rtp() dict " {{2
-    " only called by self.load
     if isdirectory(self.path)
       let l:rtp = s:split_rtp()
       call insert(l:rtp, self.path, 1)
@@ -361,7 +360,7 @@ fu! s:def_class() " < class plugin > {{1
     endfor
     exe printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
   endf " 2}}
-  fu! s:fake_map(the_map, with_prefix, prefix, plugs)" {{2
+  fu! s:fake_map(the_map, with_prefix, prefix, plugs) " {{2
     " https://github.com/junegunn/vim-plug/blob/master/plug.vim
     for l:p in s:pick_plugs(a:plugs)
       call l:p.load()

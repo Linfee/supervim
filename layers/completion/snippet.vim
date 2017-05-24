@@ -1,9 +1,12 @@
 " Layer: snippet
 
-let layer.plugins += [['SirVer/ultisnips',
-      \ {'on_event': 'InsertEnter', 'after': 'snippet#ultisnip_after'}]]
-let layer.plugins += [['honza/vim-snippets', {'on_event': 'InsertEnter'}]]
 let layer.plugins += ['Linfee/ultisnips-zh-doc']
+let layer.plugins += [['honza/vim-snippets', {
+      \ 'on_event': ['InsertEnter', 'CursorHold']}]]
+let layer.plugins += [['SirVer/ultisnips', {
+      \ 'on_event': ['InsertEnter', 'CursorHold'],
+      \ 'after': 'snippet#ultisnip_after'
+      \ }]]
 
 fu! snippet#ultisnip_after()
   " snippets files
