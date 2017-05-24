@@ -2,4 +2,10 @@ snippet ph "Thre visual placeholder" i
 \${${1:1}:${VISUAL:placeholder}}
 endsnippet
 
-# vim: set sw=4 ts=4 sts=4 et tw=80 fmr={,} fdm=marker nospell:
+snippet sn "Ultisnips snippet definition" b
+`!p snip.rv = "snippet"` ${1:Tab_trigger} "${2:Description}" ${3:b}
+${0:${VISUAL}}
+`!p snip.rv = "endsnippet"`
+endsnippet
+
+# vim:ft=snippets:
