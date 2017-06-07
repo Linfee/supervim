@@ -4,4 +4,4 @@ plugged
 __pycache__
 .netrwhist
 autoload/plug.vim
-plugs
+.repo

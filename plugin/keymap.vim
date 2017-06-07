@@ -9,8 +9,6 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
-let layer.dep = 'key'
-
 " use ; as mapleader
 let g:mapleader = ";"
 let g:maplocalleader = "\\"

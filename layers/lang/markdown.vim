@@ -1,10 +1,10 @@
 " Supervim.layer
 " For markdown
 let layer.plugins += [['godlygeek/tabular',
-      \ {'on_cmd': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}]]
+      \ {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}]]
 let layer.plugins += ['plasticboy/vim-markdown'] " no plugin dir, no need to lazyload
 let layer.plugins += [['iamcco/markdown-preview.vim',
-      \ {'on_ft': 'markdown', 'on_cmd': 'MarkdownPreview'}]]
+      \ {'for': 'markdown', 'on': 'MarkdownPreview'}]]
 
 " before
 let g:vim_markdown_folding_style_pythonic = 1

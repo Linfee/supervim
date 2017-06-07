@@ -5,16 +5,16 @@ let layer.plugins += ['Konfekt/FastFold']
 let layer.plugins += ['tpope/vim-repeat']
 
 let layer.plugins += ['tpope/vim-fugitive']
-let layer.plugins += [['gregsexton/gitv',   {'on_cmd': 'Gitv'}]]
-let layer.plugins += [['mbbill/undotree',   {'on_cmd': 'UndotreeToggle'}]]
-let layer.plugins += [['junegunn/goyo.vim', {'on_cmd': 'Goyo'}]]
+let layer.plugins += [['gregsexton/gitv',   {'on': 'Gitv'}]]
+let layer.plugins += [['mbbill/undotree',   {'on': 'UndotreeToggle'}]]
+let layer.plugins += [['junegunn/goyo.vim', {'on': 'Goyo'}]]
 
 let layer.plugins += [['majutsushi/tagbar',
-      \ {'on_cmd': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}]]
+      \ {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar']}]]
 " vim calendar
-let layer.plugins += [['itchyny/calendar.vim', {'on_cmd': 'Calendar'}]]
+let layer.plugins += [['itchyny/calendar.vim', {'on': 'Calendar'}]]
 " close anything
-let layer.plugins += [['mhinz/vim-sayonara', {'on_cmd': 'Sayonara'}]]
+let layer.plugins += [['mhinz/vim-sayonara', {'on': 'Sayonara'}]]
 
 let layer.sub_layers = 'nerdtree'
 

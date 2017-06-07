@@ -1,7 +1,7 @@
 " let layer.plugins += ['vimwiki/vimwiki']
 " make this work
-let layer.plugins += [['vimwiki/vimwiki', {'on_ft': 'wiki',
-      \ 'on_cmd': 'VimwikiTabIndex'
+let layer.plugins += [['vimwiki/vimwiki', {'for': 'wiki',
+      \ 'on': 'VimwikiTabIndex'
       \ }]]
 
 fu! vimwiki#after()

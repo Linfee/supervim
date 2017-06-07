@@ -2,7 +2,7 @@
 let layer.plugins += ['jistr/vim-nerdtree-tabs']
 let layer.plugins += ['Xuyuanp/nerdtree-git-plugin']
 let layer.plugins += [['scrooloose/nerdtree',
-      \ {'on_cmd': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTreeTabsToggle']}]]
+      \ {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTreeTabsToggle']}]]
 
 " before
 let g:NERDTreeDirArrowExpandable = '+'

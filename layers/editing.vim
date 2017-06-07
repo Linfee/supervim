@@ -1,5 +1,5 @@
 " Editing enhancement
-let layer.plugins += [['scrooloose/nerdcommenter', {'on_map': [
+let layer.plugins += [['scrooloose/nerdcommenter', {'on': [
       \ 'n<Plug>NERDCommenterAltDelims', 'x<Plug>NERDCommenterUncomment',
       \ 'n<Plug>NERDCommenterUncomment', 'x<Plug>NERDCommenterAlignBoth',
       \ 'n<Plug>NERDCommenterAlignBoth', 'x<Plug>NERDCommenterAlignLeft',
@@ -15,7 +15,7 @@ let layer.plugins += [['scrooloose/nerdcommenter', {'on_map': [
       \ ], 'on_event': 'InsertEnter'}]]
 let layer.plugins += [['jiangmiao/auto-pairs', {'on_event': 'InsertEnter', 'after': 'AutoPairsTryInit'}]]
 
-let layer.plugins += [['tpope/vim-surround', {'on_map': [
+let layer.plugins += [['tpope/vim-surround', {'on': [
       \ '<Plug>Dsurround', '<Plug>Csurround', '<Plug>CSurround',
       \ '<Plug>Ysurround', '<Plug>YSurround', '<Plug>Yssurround',
       \ '<Plug>YSsurround', '<Plug>YSsurround', '<Plug>VSurround',
@@ -24,16 +24,16 @@ let layer.plugins += [['tpope/vim-surround', {'on_map': [
       \ ]}]]
 " find and replace
 let layer.plugins += [['osyo-manga/vim-over',
-      \ {'on_cmd': 'OverCommandLine'}]]
+      \ {'on': 'OverCommandLine'}]]
 " expand region
 let layer.plugins += [['terryma/vim-expand-region',
-      \ {'on_map': ['v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)' ]}]]
+      \ {'on': ['v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)' ]}]]
 " align
 let layer.plugins += [['junegunn/vim-easy-align',
-      \ {'on_map': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}]]
+      \ {'on': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}]]
 " file format
 let layer.plugins += [['sbdchd/neoformat',
-      \ {'on_cmd': 'Neoformat'}]]
+      \ {'on': 'Neoformat'}]]
 let layer.plugins += [['easymotion/vim-easymotion']]
 " multiple cursors
 let layer.plugins += ['terryma/vim-multiple-cursors']

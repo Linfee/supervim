@@ -15,9 +15,9 @@ let g:is_osx = has('macunix')
 let g:is_nvim = has('nvim')
 let g:is_gui = !has('nvim') && has('gui_running')
 
-let &rtp = expand('~/.vim,').&rtp
+" set main config dir
+let g:config_home = expand('~/.nvim')
 
-let g:layers = 'default'
+let &rtp = expand(g:config_home . ',') . &rtp . expand(',' . g:config_home . '/after')
 
-call layers#init()
-
+source config.vim

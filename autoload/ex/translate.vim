@@ -1,12 +1,12 @@
 " 提供翻译支持
-" nnoremap <space>t :set operatorfunc=translate#translate<cr>g@
-" vnoremap <space>t :<c-u>call translate#translate(visualmode())<cr>
-" command! -nargs=+ Trans call translate#ts(<f-args>)
+" nnoremap <space>t :set operatorfunc=ex#translate#translate<cr>g@
+" vnoremap <space>t :<c-u>call ex#translate#translate(visualmode())<cr>
+" command! -nargs=+ Trans call ex#translate#ts(<f-args>)
 
 py3 import translate
 
 " Operator function
-func! translate#translate(type)
+fu! ex#translate#translate(type)
 
     let saved_unnamed_register = @@
 
@@ -27,7 +27,7 @@ func! translate#translate(type)
 endf
 
 " translate
-func! translate#ts(...)
+fu! ex#translate#ts(...)
     for i in a:000
         py3 print(translate.query(vim.eval('i')))
     endfor

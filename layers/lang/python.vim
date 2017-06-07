@@ -2,7 +2,7 @@
 " for python completion
 
 let layer.plugins += [['davidhalter/jedi-vim',
-      \ {'on_event': 'InsertEnter', 'on_if': '&ft=="python"'}]]
+      \ {'on_event': 'InsertEnter if &ft="python"'}]]
 
 fu! python#after()
   " for jedi

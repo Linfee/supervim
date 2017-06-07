@@ -2,7 +2,7 @@
 
 let layer.condition = 'executable("javac")'
 let layer.plugins += [['artur-shaik/vim-javacomplete2',
-      \ {'on_ft': 'java', 'on_event': 'InsertEnter'}]]
+      \ {'for': 'java', 'on_event': 'InsertEnter'}]]
 
 
 fu! javacomplete2#after()

@@ -1,10 +1,10 @@
 " Layer: front_end
 
 " hilight html tag
-let layer.plugins += [['Valloric/MatchTagAlways', {'on_ft': ['html', 'xml', 'xhtml', 'jsp']}]]
-let layer.plugins += [['pangloss/vim-javascript', {'on_ft': 'javascript'}]]
-let layer.plugins += [['elzr/vim-json',           {'on_ft': 'json'}]]
-let layer.plugins += [['hail2u/vim-css3-syntax',  {'on_ft': 'css'}]]
+let layer.plugins += [['Valloric/MatchTagAlways', {'for': ['html', 'xml', 'xhtml', 'jsp']}]]
+let layer.plugins += [['pangloss/vim-javascript', {'for': 'javascript'}]]
+let layer.plugins += [['elzr/vim-json',           {'for': 'json'}]]
+let layer.plugins += [['hail2u/vim-css3-syntax',  {'for': 'css'}]]
 
 fu! front_end#after()
   " for MatchTagAlways

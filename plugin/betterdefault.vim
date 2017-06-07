@@ -9,14 +9,9 @@
 " REPO:   https://github.com/Linfee/supervim
 " Layer: BetterDefault
 
-if $LANG =~ 'zh_CN'
-  let layer.sub_layers = ['encodingforzh']
-en
-
 " --------------------------------------
 " better default
 " --------------------------------------
-
 scriptencoding utf-8
 
 if !has('nvim')
@@ -26,7 +21,6 @@ filetype plugin indent on        " 自动指定文件类型、缩进
 syntax on                        " 开启语法高亮
 
 set encoding=utf8
-
 set number                       " 显示绝对行号
 set relativenumber               " 显示相对行号
 set mouse=a                      " 允许使用鼠标

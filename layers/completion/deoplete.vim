@@ -6,10 +6,8 @@ let layer.condition = 'has("nvim")'
 
 let layer.sub_layers = ['deoplete_jedi', 'javacomplete2', 'snippet']
 
-let layer.plugins += [['Shougo/neco-vim', {'on_event': 'InsertEnter',
-      \ 'on_if': '&ft=="vim"'}]]
-let layer.plugins += [['Shougo/echodoc.vim', {'on_event': 'InsertEnter',
-      \ 'on_if': '&ft=="vim"||&ft=="ruby"'}]]
+let layer.plugins += [['Shougo/neco-vim', {'on_event': 'InsertEnter if &ft=="vim"'}]]
+let layer.plugins += [['Shougo/echodoc.vim', {'on_event': 'InsertEnter if &ft=="vim"||&ft=="ruby"'}]]
 let layer.plugins += [['Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
       \ 'on_event': 'InsertEnter', 'after': 'deoplete#deoplete_after'}]]
 

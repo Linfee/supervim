@@ -2,7 +2,7 @@
 let layer.condition = 'has("nvim")'
 let layer.plugins += [['Shougo/denite.nvim',
       \ {'do': ':UpdateRemotePlugins', 'after': 'denite#denite_after'}]]
-let layer.plugins += [['Shougo/neomru.vim',  {'on_cmd':
+let layer.plugins += [['Shougo/neomru.vim',  {'on':
       \ ['NeoMRUReload', 'NeoMRUSave', 'NeoMRUImportFile', 'NeoMRUImportDirectory']}]]
 " deol, shell in vim
 let layer.plugins += ['Shougo/deol.nvim']

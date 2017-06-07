@@ -1,9 +1,8 @@
 " 执行 vimscript
-"
-" nnoremap <space>e :set operatorfunc=vimscript#execute<cr>g@
-" vnoremap <space>e :<c-u>call vimscript#execute(visualmode())<cr>
+" nnoremap <space>e :set operatorfunc=ex#vimscript#execute<cr>g@
+" vnoremap <space>e :<c-u>call ex#vimscript#execute(visualmode())<cr>
 
-func! vimscript#execute(type)
+fu! ex#vimscript#execute(type)
 
     let saved_unnamed_register = @@
 
@@ -15,7 +14,7 @@ func! vimscript#execute(type)
         return
     endif
 
-    @@
+    @*
 
-    let @@ = saved_unnamed_register
+    let @* = saved_unnamed_register
 endf

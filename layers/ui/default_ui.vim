@@ -3,7 +3,7 @@ let layer.plugins += ['mhinz/vim-startify']
 let layer.plugins += ['luochen1990/rainbow']
 " show diff
 let layer.plugins += [['mhinz/vim-signify',
-      \ {'on_cmd': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh', 'SignifyEnable'],
+      \ {'on': ['SignifyToggle', 'SignifyToggleHighlight', 'SignifyRefresh', 'SignifyEnable'],
       \ 'on_event': 'InsertEnter'}]]
 
 let layer.sub_layers = ['base_ui', 'themes', 'devicon']
