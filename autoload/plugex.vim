@@ -118,20 +118,21 @@ fu! plugex#end() " {{{
       if !l:plug.enable | continue | en
       if l:plug.is_lazy
         call s:setup_lazy_load(name, l:plug)
-        exe 'au VimEnter * if !s:plugs['.l:name.'].in_rtp | call s:add2rtp(s:plugs['.l:name.']) | en'
+        exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call s:plugs["'.l:name.'"].add2rtp() | en'
         call l:plug.load_ftdetect()
       else
         call l:plug.call_before()
         call l:plug.add2rtp()
-        exe 'au VimEnter * if !has_key(s:plugs['.l:name.'], "after_loaded") | '.
-              \ 'call s:call_after(s:plugs['.l:name.']) | '.
-              \ 'let s:plugs['.l:name.'].loaded = 1 | '.
+        exe 'au VimEnter * if !has_key(s:plugs["'.l:name.'"], "after_loaded") | '.
+              \ 'call s:plugs["'.l:name.'"].call_after() | '.
+              \ 'let s:plugs["'.l:name.'"].loaded = 1 | '.
               \ 'en'
       en
     endfor
   aug END
   filetype plugin indent on
-  syntax enbale
+  syntax enable
+  let g:plugexs = s:plugs
 endf " }}}
 
 fu! s:def_cmd() " {{{
@@ -153,16 +154,16 @@ endf " }}}
 
 fu! s:def_class() " {{{
   let s:plug = {}
+  " properties
   let s:plug_attrs = ['name', 'path', 'branch', 'tag', 'commit']
   let s:plug_attrs += ['enable', 'frozen', 'rtp', 'deps']
   let s:plug_attrs += ['before', 'after', 'do'] " funcref/function name
   let s:plug_attrs += ['for', 'on', 'on_event', 'on_func'] " lazy
-  let s:plug.remote_type = 1
-  let s:plug.local_type = 0
-
   " other properties
   " dir, type, as, uri, loaded, in_rtp
   " is_lazy, before_loaded, after_loaded
+  let s:plug.remote_type = 1
+  let s:plug.local_type = 0
   fu! s:plug.new(repo, config) " {{{2
     let l:plug = copy(s:plug)
     " check param
@@ -275,7 +276,7 @@ fu! s:def_class() " {{{
 
     " call before, add2rtp, load, after
     call self.call_before()
-    call self.call_add2rtp()
+    call self.add2rtp()
     let l:r = s:source(self.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
     if self.has('rtp')
       for l:rtp in self.rtp
@@ -283,8 +284,8 @@ fu! s:def_class() " {{{
         let l:r += s:source(l:sub, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
       endfor
     en
-    let self..loaded = 1
-    call self.after()
+    let self.loaded = 1
+    call self.call_after()
     return l:r
   endf " 2}}}
   fu! s:plug.load_ftdetect() dict " {{{2
@@ -342,13 +343,11 @@ fu! s:def_class() " {{{
     return 1
   endf " 2}}}
   fu! s:plug.call_before() dict " {{{2
-    if has_key(a:plug, 'before')
-      if self.has('before')
-        if type(self.before) == s:type.funcref || exists('*'.self.before)
-          call call(self.before, [])
-        else
-          call s:err('Specified before function for plugin ['.self.name.'] does not exists')
-        en
+    if self.has('before')
+      if type(self.before) == s:type.funcref || exists('*'.self.before)
+        call call(self.before, [])
+      else
+        call s:err('Specified before function for plugin ['.self.name.'] does not exists')
       en
     en
   endf " 2}}}
@@ -412,7 +411,7 @@ fu! s:setup_lazy_load(name, plug) " {{{
   " for
   if has_key(a:plug, 'for')
     let l:ft = join(s:plugs[a:name].for, ',')
-    exe 'au FileType '.l:ft.' call s:load_plug(s:plugs['.a:name.'])'
+    exe 'au FileType '.l:ft.' call s:plugs["'.a:name.'"].load()'
   en
   " on
   if has_key(a:plug, 'on')
@@ -452,13 +451,13 @@ fu! s:setup_lazy_load(name, plug) " {{{
       let l:ec = split(l:e . ' if 1', ' if ')
       let l:event = l:ec[0]
       let l:condition = '('.a:plug.on_event[-1][3:].') && ('.l:ec[1].')'
-      exe 'au '.l:event.' *  if '.l:condition.' | call s:load_plug(s:plugs['.a:name.']) | en'
+      exe 'au '.l:event.' *  if '.l:condition.' | call s:plugs["'.a:name.'"].load() | en'
     endfor
   en
   " on_func
   if has_key(a:plug, 'on_func')
     let l:func_pat = join(s:plugs[a:name].on_func, ',')
-    exe 'au FuncUndefined '.l:func_pat.' call s:load_plug(s:plugs['.a:name.'])'
+    exe 'au FuncUndefined '.l:func_pat.' call s:plugs["'.a:name.'"].load()'
   en
 endf " }}}
 
@@ -482,13 +481,26 @@ fu! plugex#pluginfo(...) " {{{
   " for PlugInfo command
   let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
   tabnew
-  setl nolist nospell wfh bt=nofile bh=unload fdm=indent
+  setl nolist nospell wfh bt=nofile bh=unload fdm=indent wrap
   call setline(1, repeat('-', 40))
   call append(line('$'), repeat(' ', 13).'PlugInfo')
   call append(line('$'), repeat('-', 40))
+  let l:loaded = []
+  let l:non_loaded = []
   for l:p in values(l:plugs)
     call append(line('$'), split(l:p.to_str(), '\n'))
+    if l:p.loaded
+      call add(l:loaded, l:p.name)
+    else
+      call add(l:non_loaded, l:p.name)
+    en
   endfor
+  call append(3, '')
+  call append(4, len(l:loaded).' plugins are loaded.')
+  call append(5, '  '.string(l:loaded))
+  call append(6, len(l:non_loaded).' plugins are not loaded.')
+  call append(7, '  '.string(l:non_loaded))
+  call append(8, '')
 endf " }}}
 fu! plugex#install(...) " {{{
   " create plug_home if not exists
@@ -508,8 +520,8 @@ fu! plugex#install(...) " {{{
   PlugInstall
   let &rtp = l:old_rtp
   for l:p in l:plugs
-    call s:load_ftdetect(l:p)
-    call s:load_plug(l:p)
+    call l:p.load_ftdetect()
+    call l:p.load()
   endfor
 endf " }}}
 fu! plugex#update(...) " {{{
@@ -561,12 +573,12 @@ endf " }}}
 
 " private functions
 fu! s:fake_cmd(cmd, bang, l1, l2, args, plug) " {{{
-  if !s:load_plug(a:plug) | return | en
+  if !a:plug.load() | return | en
   exe printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
 endf " }}}
 fu! s:fake_map(the_map, with_prefix, prefix, plug) " {{{
   " https://github.com/junegunn/vim-plug/blob/master/plug.vim
-  if !s:load_plug(a:plug) | return | en
+  if !a:plug.load() | return | en
   let extra = ''
   while 1
     let c = getchar(0)
@@ -635,7 +647,7 @@ fu! s:init_plug(plugs) " {{{
   call s:check_plug()
   call plug#begin(s:plug_home)
   for l:p in a:plugs
-    call plug#(l:p.repo, s:plug_config(l:p))
+    call plug#(l:p.repo, l:p.get_plug_config())
   endfor
   call plug#end()
 endf " }}}
