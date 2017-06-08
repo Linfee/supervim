@@ -52,7 +52,7 @@ com! -nargs=0 ToTab setl noet | ret!
 
 " hex edit mode
 com! -nargs=0 ToggleHex call s:hex_toggle()
-fun s:hex_toggle()
+fu! s:hex_toggle()
   if &bin " from hex
     set nobin
     exe 'set display='. b:option_display
@@ -64,6 +64,25 @@ fun s:hex_toggle()
     exe 'silent%!xxd'
   en
 endf
+
+" <alt-=> Expression register
+Noremap i <a-=> <c-r>=
+Noremap c <a-=> <c-r>=
+
+" complate
+Noremap i <a-p> <c-n>
+
+" <a-d> delete word backward
+Noremap i <a-d> <c-w>
+Noremap c <a-d> <c-w>
+
+" alt-s switch to cmd-line mode
+Noremap n <a-s> :
+Noremap i <a-s> <c-o>:
+Noremap v <a-s> :
+
+" use alt+. to repeat last macro
+Noremap n <a-.> @@
 
 " Fold {{2
 " switch fold
@@ -179,6 +198,14 @@ nnoremap <tab>t :tabonly<cr>
 " Horizontal scrolling
 nnoremap zl zL
 nnoremap zh zH
+
+" alt+n switch tab
+Noremap n <a-1> 1gt
+Noremap n <a-2> 2gt
+Noremap n <a-3> 3gt
+Noremap n <a-4> 4gt
+Noremap n <a-5> 5gt
+Noremap n <a-6> 6gt
 " }}
 
 " Movement {{1
@@ -229,61 +256,31 @@ vnoremap <silent> <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
 vnoremap <silent> 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
 vnoremap <silent> <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
 vnoremap <silent> ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
+
+Noremap i <a-j> <down>
+Noremap i <a-k> <up>
+Noremap i <a-h> <left>
+Noremap i <a-l> <right>
+Noremap i <a-N> <s-left>
+Noremap i <a-m> <s-right>
+Noremap i <a-o> <end>
+Noremap i <a-I> <home>
+
+Noremap n <a-j> 10gj
+Noremap n <a-k> 10gk
+Noremap v <a-j> 10gj
+Noremap v <a-k> 10gk
+
+Noremap c <a-j> <down>
+Noremap c <a-k> <up>
+Noremap c <a-h> <left>
+Noremap c <a-l> <right>
+Noremap c <a-m> <s-right>
+Noremap c <a-N> <s-left>
+Noremap c <a-o> <end>
+Noremap c <a-I> <home>
 " 1}}
 
 " Other {{1
 Noremap c <a-p> <c-r>=substitute(@*.'', '\n', '', 'g')<cr>
 " 1}}
-
-fu! keymap#after() " {{1
-  " alt+n switch tab
-  Noremap n <a-1> 1gt
-  Noremap n <a-2> 2gt
-  Noremap n <a-3> 3gt
-  Noremap n <a-4> 4gt
-  Noremap n <a-5> 5gt
-  Noremap n <a-6> 6gt
-
-  " Movement
-  Noremap i <a-j> <down>
-  Noremap i <a-k> <up>
-  Noremap i <a-h> <left>
-  Noremap i <a-l> <right>
-  Noremap i <a-N> <s-left>
-  Noremap i <a-m> <s-right>
-  Noremap i <a-o> <end>
-  Noremap i <a-I> <home>
-
-  Noremap n <a-j> 10gj
-  Noremap n <a-k> 10gk
-  Noremap v <a-j> 10gj
-  Noremap v <a-k> 10gk
-
-  Noremap c <a-j> <down>
-  Noremap c <a-k> <up>
-  Noremap c <a-h> <left>
-  Noremap c <a-l> <right>
-  Noremap c <a-m> <s-right>
-  Noremap c <a-N> <s-left>
-  Noremap c <a-o> <end>
-  Noremap c <a-I> <home>
-
-  " <alt-=> Expression register
-  Noremap i <a-=> <c-r>=
-  Noremap c <a-=> <c-r>=
-
-  " complate
-  Noremap i <a-p> <c-n>
-
-  " <a-d> delete word backward
-  Noremap i <a-d> <c-w>
-  Noremap c <a-d> <c-w>
-
-  " alt-s switch to cmd-line mode
-  Noremap n <a-s> :
-  Noremap i <a-s> <c-o>:
-  Noremap v <a-s> :
-
-  " use alt+. to repeat last macro
-  Noremap n <a-.> @@
-endf " }}

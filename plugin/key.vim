@@ -39,7 +39,7 @@ com! -nargs=+ -bang Map call s:do_map(0, <bang>0, [<f-args>])
 fu! s:do_map(nore, bang, args)
   if index(s:cmds, a:args[0]) == -1
     echo 'Map and Noremap: first argument only support '.string(s:cmds).'. Use _ mean map and noremap.'
-    retu
+    return
   en
   let cmd = a:args[0].(a:nore?'nore':'').'map'.(a:bang ? '!' : '')
   if cmd[0] == '_'
@@ -51,7 +51,7 @@ fu! s:do_map(nore, bang, args)
   while i < len(a:args) && index(s:map_args, a:args[i]) != -1
     let map_args = map_args.' '.a:args[i]
     let i += 1
-  endw
+  endwhile
   let cmd = cmd.map_args
 
   let lhs = ''
@@ -86,25 +86,25 @@ fu! s:wrap_lhs(lhs)
       break
     en
     let m = match(lhs, '<a-.>')
-  endw
-  retu lhs
+  endwhile
+  return lhs
 endf
 
 if g:is_osx
   fu! s:do_wrap(lhs, char)
-    retu substitute(a:lhs, '<a-' . a:char . '>', tr(a:char, s:keys, s:alt_keys), '')
+    return substitute(a:lhs, '<a-' . a:char . '>', tr(a:char, s:keys, s:alt_keys), '')
   endf
 elsei g:is_nvim
   fu! s:do_wrap(lhs, char)
-    retu a:lhs
+    return a:lhs
   endf
 elseif g:is_linux && !g:is_gui
   fu! s:do_wrap(lhs, char)
-    retu substitute(a:lhs, '<a-' . a:char . '>', '' . a:char, '')
+    return substitute(a:lhs, '<a-' . a:char . '>', '' . a:char, '')
   endf
-el
+else
   fu! s:do_wrap(lhs, char)
-    retu a:lhs
+    return a:lhs
   endf
 en
 
