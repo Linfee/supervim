@@ -109,19 +109,29 @@ fu! plugex#begin(...) " {{{
 endf " }}}
 
 fu! plugex#end() " {{{
-  let g:ap = s:plugs
-  let g:apo = s:plugs_order
-
-  " if !exists('s:plugs') | return s:err('Call plugex#begin() first') | en
-  "
-  " " del autocmd and autogroup
-  " if exists('#PlugLOD') | aug PlugLOD | au! | aug END | aug! PlugLOD | en
-  "
-  " for name in s:plugs_order
-  "   if !has_key(s:plugs, name) | continue | en
-  " endfor
-  "
-  " let plug = s:plugs[name]
+  if !exists('s:plugs') | return s:err('Call plugex#begin() first') | en
+  filetype off
+  aug PlugEx
+    au!
+    for l:name in s:plugs_order
+      let l:plug = s:plugs[l:name]
+      if !l:plug.enable | continue | en
+      if l:plug.is_lazy
+        call s:setup_lazy_load(name, l:plug)
+        exe 'au VimEnter * if !s:plugs['.l:name.'].in_rtp | call s:add2rtp(s:plugs['.l:name.']) | en'
+        call l:plug.load_ftdetect()
+      else
+        call l:plug.call_before()
+        call l:plug.add2rtp()
+        exe 'au VimEnter * if !has_key(s:plugs['.l:name.'], "after_loaded") | '.
+              \ 'call s:call_after(s:plugs['.l:name.']) | '.
+              \ 'let s:plugs['.l:name.'].loaded = 1 | '.
+              \ 'en'
+      en
+    endfor
+  aug END
+  filetype plugin indent on
+  syntax enbale
 endf " }}}
 
 fu! s:def_cmd() " {{{
@@ -398,6 +408,60 @@ fu! s:def_class() " {{{
   endf "2}}}
 endf " }}}
 
+fu! s:setup_lazy_load(name, plug) " {{{
+  " for
+  if has_key(a:plug, 'for')
+    let l:ft = join(s:plugs[a:name].for, ',')
+    exe 'au FileType '.l:ft.' call s:load_plug(s:plugs['.a:name.'])'
+  en
+  " on
+  if has_key(a:plug, 'on')
+    for l:on in a:plug.on
+      if l:on =~? '<plu.*$' " on_map
+        if l:on[0] == 'n'
+          let [l:mode, l:map_prefix, l:key_prefix] = ['n', '', '']
+        elseif l:on[0] == 'i'
+          let [l:mode, l:map_prefix, l:key_prefix] = ['i', '<C-O>', '']
+        elseif l:on[0] == 'v'
+          let [l:mode, l:map_prefix, l:key_prefix] = ['v', '', 'gv']
+        elseif l:on[0] == 'o'
+          let [l:mode, l:map_prefix, l:key_prefix] = ['o', '', '']
+        elseif l:on[0] == 'x'
+          let [l:mode, l:map_prefix, l:key_prefix] = ['x', '', '']
+        else
+          let [l:mode, l:map_prefix, l:key_prefix] = ['n', '', '']
+        endif
+        let l:m = matchstr(l:on, '<Plu.*$')
+        exe printf(
+              \ '%snoremap <silent> %s %s:<C-U>call <SID>fake_map(%s, %s, "%s", %s)<CR>',
+              \ l:mode, l:m, l:map_prefix, string(l:m), l:mode != 'i', l:key_prefix,
+              \ string(a:plug))
+      el " on_cmd
+        exe "com! -nargs=* -range -bang -complete=file " .
+              \ l:on . ' call s:fake_cmd(' .
+              \ "'" . l:on . "'" .
+              \ ', "<bang>", <line1>, <line2>, <q-args>,'.
+              \ string(a:plug)
+              \ ')'
+      en
+    endfor
+  en
+  " on_event
+  if has_key(a:plug, 'on_event')
+    for l:e in a:plug.on_event[:-2]
+      let l:ec = split(l:e . ' if 1', ' if ')
+      let l:event = l:ec[0]
+      let l:condition = '('.a:plug.on_event[-1][3:].') && ('.l:ec[1].')'
+      exe 'au '.l:event.' *  if '.l:condition.' | call s:load_plug(s:plugs['.a:name.']) | en'
+    endfor
+  en
+  " on_func
+  if has_key(a:plug, 'on_func')
+    let l:func_pat = join(s:plugs[a:name].on_func, ',')
+    exe 'au FuncUndefined '.l:func_pat.' call s:load_plug(s:plugs['.a:name.'])'
+  en
+endf " }}}
+
 " functions for command
 fu! plugex#add(repo, ...) " {{{
   " for Plug command
@@ -432,7 +496,7 @@ fu! plugex#install(...) " {{{
     call mkdir(s:plug_home, 'p')
   en
   " for PlugExInstall command
-  let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
+  let l:plugs = a:0 == 0 ? values(s:plugs) : s:pick_plugs(a:000)
   if &ft == 'startify'
     tabnew
     exe "normal! i\<esc>"
@@ -454,7 +518,7 @@ fu! plugex#update(...) " {{{
   if !isdirectory(s:plug_home)
     call mkdir(s:plug_home, 'p')
   en
-  let l:plugs = a:0 == 0 ? s:pick_plug(s:plugs_order) : s:pick_plugs(a:000)
+  let l:plugs = a:0 == 0 ? values(s:plugs) : s:pick_plugs(a:000)
   if &ft == 'startify'
     tabnew
     exe "normal! i\<esc>"
@@ -469,7 +533,7 @@ endf " }}}
 fu! plugex#clean(bang) " {{{
   " for PlugExClean
   let l:old_rtp = &rtp
-  call s:init_plug(g:plugexs)
+  call s:init_plug(values(s:plugs))
   if a:bang
     PlugClean!
   el
@@ -480,7 +544,7 @@ endf " }}}
 fu! plugex#status() " {{{
   " for PlugExStatus
   let l:old_rtp = &rtp
-  call s:init_plug(s:pick_plug(s:plugs_order))
+  call s:init_plug(values(s:plugs))
   PlugStatus
   let &rtp = l:old_rtp
 endf " }}}
