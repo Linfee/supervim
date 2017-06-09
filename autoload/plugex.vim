@@ -99,6 +99,7 @@ fu! plugex#begin(...) " {{{
   en
   let s:plugs = {}
   let s:plugs_order = []
+  let s:vimenter_plugs = []
   let s:first_rtp = s:rstrip_slash(s:split_rtp()[0])
   let s:is_win = has('win32') || has('win64')
   let g:plugex_param_check = get(g:, 'plugex_param_check', 0)
@@ -115,30 +116,29 @@ fu! plugex#end() " {{{
     au!
     for l:name in s:plugs_order
       let l:plug = s:plugs[l:name]
-      if !l:plug.enable | continue | en
-      if l:plug.is_lazy
-        call s:setup_lazy_load(name, l:plug)
-        exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call s:plugs["'.l:name.'"].add2rtp() | en'
-        call l:plug.load_ftdetect()
+      if l:plug.has('plugs')
+        for l:p in l:plug.plugs
+          call s:handle_plug(l:p)
+        endfor
       else
-        call l:plug.call_before()
-        call l:plug.add2rtp()
-        exe 'au VimEnter * if !has_key(s:plugs["'.l:name.'"], "after_loaded") | '.
-              \ 'call s:plugs["'.l:name.'"].call_after() | '.
-              \ 'let s:plugs["'.l:name.'"].loaded = 1 | '.
-              \ 'en'
+        call s:handle_plug(l:plug)
       en
     endfor
   aug END
   filetype plugin indent on
   syntax enable
+  " on vimenter
+  aug PLugExVimEnter
+    au!
+    au VimEnter * call timer_start(10, function('s:load_vimenter_plugs'))
+  aug END
   let g:plugexs = s:plugs
 endf " }}}
 
 fu! s:def_cmd() " {{{
   com! -nargs=+ -bar                                  PlugEx
         \ call plugex#add(<args>)
-  com! -nargs=+ -bar                                  PlugExGroup
+  com! -nargs=+                                       PlugExGroup
         \ call plugex#add_group(<args>)
   com! -nargs=* -complete=customlist,s:complete_plugs PlugExInstall
         \ call plugex#install(<f-args>)
@@ -159,11 +159,13 @@ fu! s:def_class() " {{{
   let s:plug_attrs += ['enable', 'frozen', 'rtp', 'deps']
   let s:plug_attrs += ['before', 'after', 'do'] " funcref/function name
   let s:plug_attrs += ['for', 'on', 'on_event', 'on_func'] " lazy
+  let s:plug_attrs += ['plugs']
   " other properties
   " dir, type, as, uri, loaded, in_rtp
   " is_lazy, before_loaded, after_loaded
-  let s:plug.remote_type = 1
-  let s:plug.local_type = 0
+  let s:plug.local_type = 'local'
+  let s:plug.remote_type = 'remote'
+  let s:plug.group_type = 'plug group'
   fu! s:plug.new(repo, config) " {{{2
     let l:plug = copy(s:plug)
     " check param
@@ -226,14 +228,28 @@ fu! s:def_class() " {{{
     en
 
     " set name path, repo uri type dir
-    if has_key(l:plug, 'name') | let l:plug.as = l:plug.name | en
-    if has_key(l:plug, 'path') | let l:plug.dir = l:plug.path | en
-    let l:plug.repo = a:repo
-    if !l:plug.set_repo_info() | return | en
+    if l:plug.has('plugs')
+      "  for plugin group
+      " {'name': 'groupName', 'on_event': 'VimEnter', 'plugs': [['abc/def', {}], ['foo/bar', {}], ['baz']]}
+      let l:plug.in_rtp = 1
+      let l:plug.type = s:plug.group_type
+      let l:plug.repo = l:plug.name
+      for i in range(len(l:plug.plugs))
+        let l:p = call(s:plug.new, l:plug.plugs[i])
+        let l:plug.plugs[i] = l:p
+        let s:plugs[l:p.name] = l:p
+      endfor
+    else
+      " for normal plugin
+      if has_key(l:plug, 'name') | let l:plug.as = l:plug.name | en
+      if has_key(l:plug, 'path') | let l:plug.dir = l:plug.path | en
+      let l:plug.repo = a:repo
+      if !l:plug.set_repo_info() | return | en
+      let l:plug.in_rtp = 0
+    en
 
-    " set loaded in_rtp
+    " set loaded
     let l:plug.loaded = 0
-    let l:plug.in_rtp = 0
 
     " set l:plug.is_lazy
     let l:plug.is_lazy = has_key(l:plug, 'for') || has_key(l:plug, 'on') ||
@@ -368,32 +384,38 @@ fu! s:def_class() " {{{
     endfor
     return 1
   endf " 2}}}
-  fu! s:plug.to_str() dict " {{{2
+  fu! s:plug.to_str(...) dict " {{{2
     let l:a  = a:0 == 0 ? '' : repeat(' ', a:1 * 4)
     let l:b = l:a . '    '
-    let l:r = l:a . printf("[ %s ]\n", self.name)
+    let l:r = l:a . printf("  [ %s ] %s\n", self.name, self.has('plugs') ? 'Group' : '')
     let l:r .= l:b . printf("name          : %s\n", self.name)
-    let l:r .= l:b . printf("path          : %s\n", self.path)
-    let l:r .= l:b . printf("branch        : %s\n", has_key(self, 'branch') ? self.branch : 'master')
-    let l:r .= l:b . printf("tag           : %s\n", has_key(self, 'tag') ? self.tag : '---')
-    let l:r .= l:b . printf("commit        : %s\n", has_key(self, 'commit') ? self.commit : '---')
+    let l:r .= l:b . printf("path          : %s\n", get(self, 'path', '---'))
+    let l:r .= l:b . printf("branch        : %s\n", get(self, 'branch', '---'))
+    let l:r .= l:b . printf("tag           : %s\n", get(self, 'tag', '---'))
+    let l:r .= l:b . printf("commit        : %s\n", get(self, 'commit', '---'))
     let l:r .= l:b . printf("repo          : %s\n", self.repo)
-    let l:r .= l:b . printf("uri           : %s\n", self.uri)
-    let l:r .= l:b . printf("type          : %s\n", self.type == self.remote_type ? 'remote' : 'local')
+    let l:r .= l:b . printf("uri           : %s\n", get(self, 'uri', '---'))
+    let l:r .= l:b . printf("type          : %s\n", self.type)
     let l:r .= l:b . printf("loaded        : %s\n", self.loaded)
     let l:r .= l:b . printf("in_rtp        : %s\n", self.in_rtp)
     let l:r .= l:b . printf("enable        : %s\n", self.enable)
-    let l:r .= l:b . printf("frozen        : %s\n", has_key(self, 'frozen') ? self.frozen : 0)
-    let l:r .= l:b . printf("rtp           : %s\n", has_key(self, 'rtp') ? string(self.rtp) : '---')
-    let l:r .= l:b . printf("dep           : %s\n", has_key(self, 'dep') ? string(self.dep) : '---')
-    let l:r .= l:b . printf("before        : %s\n", has_key(self, 'before') ? string(self.before) . (has_key(self, 'before_loaded')? ', loaded': ', not loaded') : '---')
-    let l:r .= l:b . printf("after         : %s\n", has_key(self, 'after') ? string(self.after) . (has_key(self, 'after_loaded')? ', loaded': ', not loaded') : '---')
-    let l:r .= l:b . printf("do            : %s\n", has_key(self, 'do') ? self.do : '---')
-    let l:r .= l:b . printf("[lazy-load]   : %s\n", has_key(self, 'is_lazy') ? self.is_lazy : 0)
-    let l:r .= l:b . printf("  |- for      : %s\n", has_key(self, 'for') ? string(self.for) : '---')
-    let l:r .= l:b . printf("  |- on       : %s\n", has_key(self, 'on') ? string(self.on) : '---')
-    let l:r .= l:b . printf("  |- on_event : %s\n", has_key(self, 'on_event') ? string(self.on_event) : '---')
-    let l:r .= l:b . printf("  |- on_func  : %s\n", has_key(self, 'on_func') ? string(self.on_func) : '---')
+    let l:r .= l:b . printf("frozen        : %s\n", get(self, 'frozen', 0))
+    let l:r .= l:b . printf("rtp           : %s\n", get(self, 'rtp', '---'))
+    let l:r .= l:b . printf("dep           : %s\n", get(self, 'dep', '---'))
+    let l:r .= l:b . printf("before        : %s\n", string(get(self, 'before'.(has_key(self, 'before')? ', loaded': ', not loaded'), '---')))
+    let l:r .= l:b . printf("after         : %s\n", string(get(self, 'after'.(has_key(self, 'after_loaded')? ', loaded': ', not loaded'), '---')))
+    let l:r .= l:b . printf("do            : %s\n", get(self, 'do', '---'))
+    let l:r .= l:b . printf("[lazy-load]   : %s\n", get(self, 'is_lazy', 0))
+    let l:r .= l:b . printf("  |- for      : %s\n", string(get(self, 'for', '---')))
+    let l:r .= l:b . printf("  |- on       : %s\n", string(get(self, 'on', '---')))
+    let l:r .= l:b . printf("  |- on_event : %s\n", string(get(self, 'on_event', '---')))
+    let l:r .= l:b . printf("  |- on_func  : %s\n", string(get(self, 'on_func', '---')))
+    if self.has('plugs')
+      let l:r .= l:b . "[plugs]   : %s\n"
+      for l:p in self.plugs
+        let l:r .= l:p.to_str(len(l:a) / 4 + 1)
+      endfor
+    en
     return l:r
   endf " 2}}}
   fu! s:plug.get_plug_config() dict "{{{2
@@ -434,13 +456,13 @@ fu! s:setup_lazy_load(name, plug) " {{{
         exe printf(
               \ '%snoremap <silent> %s %s:<C-U>call <SID>fake_map(%s, %s, "%s", %s)<CR>',
               \ l:mode, l:m, l:map_prefix, string(l:m), l:mode != 'i', l:key_prefix,
-              \ string(a:plug))
+              \ string(a:plug.name))
       el " on_cmd
         exe "com! -nargs=* -range -bang -complete=file " .
               \ l:on . ' call s:fake_cmd(' .
               \ "'" . l:on . "'" .
               \ ', "<bang>", <line1>, <line2>, <q-args>,'.
-              \ string(a:plug)
+              \ string(a:plug.name)
               \ ')'
       en
     endfor
@@ -451,7 +473,11 @@ fu! s:setup_lazy_load(name, plug) " {{{
       let l:ec = split(l:e . ' if 1', ' if ')
       let l:event = l:ec[0]
       let l:condition = '('.a:plug.on_event[-1][3:].') && ('.l:ec[1].')'
-      exe 'au '.l:event.' *  if '.l:condition.' | call s:plugs["'.a:name.'"].load() | en'
+      if l:event == 'VimEnter'
+        call add(s:vimenter_plugs, [l:condition, a:plug])
+      else
+        exe 'au '.l:event.' *  if '.l:condition.' | call s:plugs["'.a:name.'"].load() | en'
+      en
     endfor
   en
   " on_func
@@ -461,9 +487,47 @@ fu! s:setup_lazy_load(name, plug) " {{{
   en
 endf " }}}
 
+fu! s:handle_plug(plug) " {{{
+  let l:name = a:plug.name
+  if !a:plug.enable | continue | en
+  if a:plug.is_lazy
+    call s:setup_lazy_load(name, a:plug)
+    exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call s:plugs["'.l:name.'"].add2rtp() | en'
+    call a:plug.load_ftdetect()
+  else
+    call a:plug.call_before()
+    call a:plug.add2rtp()
+    exe 'au VimEnter * if !has_key(s:plugs["'.l:name.'"], "after_loaded") | '.
+          \ 'call s:plugs["'.l:name.'"].call_after() | '.
+          \ 'let s:plugs["'.l:name.'"].loaded = 1 | '.
+          \ 'en'
+  en
+endf " }}}
+
+fu! s:load_vimenter_plugs(tid) " {{{
+  " load 10 plugin each time
+  for i in range(len(s:vimenter_plugs) > 5 ? 5 : len(s:vimenter_plugs))
+    let l:p = remove(s:vimenter_plugs, 0)
+    if eval(l:p[0])
+      call l:p[1].load()
+    en
+  endfor
+  if len(s:vimenter_plugs) > 0
+    call timer_start(10, function('s:load_vimenter_plugs'))
+  else
+    aug PLugExVimEnter | 
+      au!
+    aug END
+    aug! PLugExVimEnter
+    do BufWinEnter
+    do BufEnter
+    do VimEnter
+  en
+endf " }}}
+
 " functions for command
 fu! plugex#add(repo, ...) " {{{
-  " for Plug command
+  " for PlugEx command
   if a:0 == 0
     let l:plug = s:plug.new(a:repo, {})
   elseif a:0 == 1
@@ -476,6 +540,27 @@ fu! plugex#add(repo, ...) " {{{
   call add(s:plugs_order, l:name)
 endf " }}}
 fu! plugex#add_group(name, ...) " {{{
+  " for PlugExGroup command
+  if a:0 == 0 | return s:err('['.a:name.'] A plug group shoud have one plugin at least.') | en
+  if type(a:000[-1]) == s:type.dict
+    let l:plugs = a:000[0:-2]
+    let l:config = a:000[-1]
+  else
+    let l:plugs = a:000
+    let l:config = {}
+  en
+  if len(l:plugs) == 0 | return s:err('['.a:name.'] A plug group shoud have one plugin at least.') | en
+  for i in range(len(l:plugs))
+    if type(l:plugs[i]) == s:type.string
+      let l:plugs[i] = [l:plugs[i], {}]
+    elseif type(l:plugs[i]) != s:type.list
+      return s:err('['.a:name.'] Plugin in plug group must be a list or string')
+    en
+  endfor
+  let l:config.plugs = l:plugs
+  let l:config.name = a:name
+
+  call plugex#add(a:name, l:config)
 endf " }}}
 fu! plugex#pluginfo(...) " {{{
   " for PlugInfo command
@@ -486,23 +571,26 @@ fu! plugex#pluginfo(...) " {{{
   call append(line('$'), repeat(' ', 13).'PlugInfo')
   call append(line('$'), repeat('-', 40))
   let l:loaded = []
-  let l:non_loaded = []
-  for l:p in values(l:plugs)
+  let l:lazy_num = 0
+  for l:pn in s:plugs_order
+    let l:p = s:plugs[l:pn]
     call append(line('$'), split(l:p.to_str(), '\n'))
     if l:p.loaded
       call add(l:loaded, l:p.name)
-    else
-      call add(l:non_loaded, l:p.name)
+    en
+    if l:p.is_lazy
+      let l:lazy_num += 1
     en
   endfor
   call append(3, '')
-  call append(4, len(l:loaded).' plugins are loaded.')
-  call append(5, '  '.string(l:loaded))
-  call append(6, len(l:non_loaded).' plugins are not loaded.')
-  call append(7, '  '.string(l:non_loaded))
-  call append(8, '')
+  call append(3, 'Total: '.len(s:plugs))
+  call append(4, 'Loaded: '.len(l:loaded))
+  call append(5, 'Lazy load: '.l:lazy_num)
+  call append(6, 'These plugins have been loades: ')
+  call append(7, '  '.string(l:loaded))
 endf " }}}
 fu! plugex#install(...) " {{{
+  " for PlugExInstall command
   " create plug_home if not exists
   if !isdirectory(s:plug_home)
     call mkdir(s:plug_home, 'p')
@@ -572,13 +660,13 @@ fu! s:complete_plugs(a, l, p) " {{{
 endf " }}}
 
 " private functions
-fu! s:fake_cmd(cmd, bang, l1, l2, args, plug) " {{{
-  if !a:plug.load() | return | en
+fu! s:fake_cmd(cmd, bang, l1, l2, args, name) " {{{
+  if !s:plugs[a:name].load() | return | en
   exe printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
 endf " }}}
-fu! s:fake_map(the_map, with_prefix, prefix, plug) " {{{
+fu! s:fake_map(the_map, with_prefix, prefix, name) " {{{
   " https://github.com/junegunn/vim-plug/blob/master/plug.vim
-  if !a:plug.load() | return | en
+  if !s:plugs[a:name].load() | return | en
   let extra = ''
   while 1
     let c = getchar(0)
