@@ -224,13 +224,13 @@ fu! s:handle_plug(plug) " {{{
   if !a:plug.enable | continue | en
   if a:plug.is_lazy
     call s:setup_lazy_load(name, a:plug)
-    exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call s:add2rtp(s:plugs["'.l:name.'"]) | en'
+    exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call plugex#add2rtp(s:plugs["'.l:name.'"]) | en'
     call s:load_ftdetect(a:plug)
   else
-    call s:call_before(a:plug)
-    call s:add2rtp(a:plug)
+    call plugex#call_before(a:plug)
+    call plugexplugex#dd2rtp(a:plug)
     exe 'au VimEnter * if !has_key(s:plugs["'.l:name.'"], "after_loaded") | '.
-          \ 'call s:call_after(s:plugs["'.l:name.'"]) | '.
+          \ 'call plugex#call_after(s:plugs["'.l:name.'"]) | '.
           \ 'let s:plugs["'.l:name.'"].loaded = 1 | '.
           \ 'en'
   en
@@ -286,7 +286,7 @@ fu! s:fake_map(the_map, with_prefix, prefix, name) " {{{
   call feedkeys(substitute(a:the_map, '^<Plug>', "\<Plug>", '') . extra)
 endf " }}}
 " functions for s:handle_plug for plugex#end
-fu! s:call_before(plug) " for plug obj {{{
+fu! plugex#call_before(plug) " for plug obj {{{
   " call plug's before
   if has_key(a:plug, 'before')
     if type(a:plug.before) == s:type.funcref || exists('*'.a:plug.before)
@@ -296,7 +296,7 @@ fu! s:call_before(plug) " for plug obj {{{
     en
   en
 endf " }}}
-fu! s:call_after(a:plug) " for plug obj {{{
+fu! plugex#call_after(plug) " for plug obj {{{
   " call plug's after
   if has_key(a:plug, 'after')
     if type(a:plug.after) == s:type.funcref || exists('*'.a:plug.after)
@@ -306,7 +306,7 @@ fu! s:call_after(a:plug) " for plug obj {{{
     en
   en
 endf " }}}
-fu! s:add2rtp(plug) " for plug obj {{{
+fu! plugex#add2rtp(plug) " for plug obj {{{
   if a:plug.in_rtp | return | en
   if !isdirectory(a:plug.path) | return | en
   let l:rtp = s:split_rtp()
@@ -338,75 +338,13 @@ fu! s:load_ftdetect(plug) " for plug obj {{{
   en
 endf " }}}
 
-  fu! s:plug.new(repo, config) " {{{
-    let l:plug = copy(s:plug)
-    " check param
-    call s:check_param(a:repo, a:config)
-
-    " string to list
-    for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
-      if has_key(a:config, l:attr) && type(a:config[l:attr]) == s:type.string
-        let a:config[l:attr] = [a:config[l:attr]]
-      en
-    endfor
-
-    let l:plug.enable = 1
-
-    " apply config
-    let l:plug.repo = s:trim_repo(a:repo)
-    for k in keys(a:config)
-      if index(s:plug_attrs, k) != -1
-        let l:plug[k] = a:config[k]
-      else
-        call s:err('Unsupported attribute: ' . k . ' for repo ' . a:repo)
-      en
-    endfor
-
-    " make sure the last item of on_event is a condition
-    if has_key(l:plug, 'on_event')
-      if l:plug.on_event[-1][:2] != 'if '
-        call add(l:plug.on_event, 'if 1')
-      en
-    en
-
-    " set name path, repo uri type dir
-    if has_key(l:plug, 'plugs')
-      "  for plugin group
-      " {'name': 'groupName', 'on_event': 'VimEnter', 'plugs': [['abc/def', {}], ['foo/bar', {}], ['baz']]}
-      let l:plug.in_rtp = 1
-      let l:plug.type = s:plug.group_type
-      let l:plug.repo = l:plug.name
-      for i in range(len(l:plug.plugs))
-        let l:p = call(s:plug.new, l:plug.plugs[i])
-        let l:plug.plugs[i] = l:p
-        let s:plugs[l:p.name] = l:p
-      endfor
-    else
-      " for normal plugin
-      if has_key(l:plug, 'name') | let l:plug.as = l:plug.name | en
-      if has_key(l:plug, 'path') | let l:plug.dir = l:plug.path | en
-      let l:plug.repo = a:repo
-      if !s:.set_plug_repo_info(l:plug) | return | en
-      let l:plug.in_rtp = 0
-    en
-
-    " set loaded
-    let l:plug.loaded = 0
-
-    " set l:plug.is_lazy
-    let l:plug.is_lazy = has_key(l:plug, 'for') || has_key(l:plug, 'on') ||
-          \ has_key(l:plug, 'on_event') || has_key(l:plug, 'on_func')
-
-    return l:plug
-  endf " }}}
-
 " functions for command
 fu! plugex#add(repo, ...) " {{{
   " for PlugEx command
   if a:0 == 0
-    let l:plug = s:plug.new(a:repo, {})
+    let l:plug = s:new_plug(a:repo, {})
   elseif a:0 == 1
-    let l:plug = s:plug.new(a:repo, a:1)
+    let l:plug = s:new_plug(a:repo, a:1)
   el
     return s:err('Too many arguments for Plug')
   en
@@ -439,6 +377,52 @@ fu! plugex#add_group(name, ...) " {{{
 endf " }}}
 " functions for s:new_plug
 fu! s:new_plug(repo, config) " for plug obj {{{
+  if g:plugex_param_check | call s:check_param(a:repo, a:config) | en
+
+  " string to list
+  for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
+    if has_key(a:config, l:attr) && type(a:config[l:attr]) == s:type.string
+      let a:config[l:attr] = [a:config[l:attr]]
+    en
+  endfor
+
+  let a:config.enable = 1
+  let a:config.repo = s:trim_repo(a:repo)
+  " make sure the last item of on_event is a condition
+  if has_key(a:config, 'on_event')
+    if a:config.on_event[-1][:2] != 'if '
+      call add(a:config.on_event, 'if 1')
+    en
+  en
+
+  " set name, path, uri, type, dir
+  if has_key(a:config, 'plugs')
+    " for plugin group
+    let a:config.in_rtp = 1
+    let a:config.type = s:plug.group_type
+    let a:config.repo = a:config.name
+    for i in range(len(a:config.plugs))
+      let l:p = call(s:plug.new, a:config.plugs[i])
+      let a:config.plugs[i] = l:p
+      let s:plugs[l:p.name] = l:p
+    endfor
+  else
+    " for normal plugin
+    if has_key(a:config, 'name') | let a:config.as = a:config.name | en
+    if has_key(a:config, 'path') | let a:config.dir = a:config.path | en
+    let a:config.repo = a:repo
+    if !s:set_plug_repo_info(a:config) | return | en
+    let a:config.in_rtp = 0
+  en
+
+  " set loaded
+  let a:config.loaded = 0
+
+  " set a:config.is_lazy
+  let a:config.is_lazy = has_key(a:config, 'for') || has_key(a:config, 'on') ||
+        \ has_key(a:config, 'on_event') || has_key(a:config, 'on_func')
+
+  return a:config
 endf " }}}
 fu! s:set_plug_repo_info(plug) " for plug obj {{{
   let a:plug.repo = s:trim_repo(a:plug.repo)

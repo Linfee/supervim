@@ -78,12 +78,12 @@ call plugex#begin(expand(g:config_home.'/.repo'))
 "
 "
 " " zh doc
-" PlugEx 'strom3xFeI/vimdoc-cn', {'on_event': 'VimEnter'}
+PlugEx 'strom3xFeI/vimdoc-cn', {'on_event': 'VimEnter'}
 
-PlugExGroup 'groupName',
-      \ ['strom3xFeI/vimdoc-cn', {'on_event': 'VimEnter'}],
-      \ ['mhinz/vim-sayonara', {'on': 'Sayonara'}],
-      \ 'scrooloose/nerdtree',
-      \ {'on_event': 'VimEnter'}
+" PlugExGroup 'groupName',
+"       \ ['strom3xFeI/vimdoc-cn', {'on_event': 'VimEnter'}],
+"       \ ['mhinz/vim-sayonara', {'on': 'Sayonara'}],
+"       \ 'scrooloose/nerdtree',
+"       \ {'on_event': 'VimEnter'}
 
 call plugex#end()

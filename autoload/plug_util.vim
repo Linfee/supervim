@@ -6,7 +6,7 @@ fu! plug_util#to_str(plug, ...) " {{{
   " obj plug to string
   let l:a  = a:0 == 0 ? '' : repeat(' ', a:1 * 4)
   let l:b = l:a . '    '
-  let l:r = l:a . printf("  [ %s ] %s\n", a:plug.name, a:plug.has('plugs') ? 'Group' : '')
+  let l:r = l:a . printf("  [ %s ] %s\n", a:plug.name, has_key(a:plug, 'plugs') ? 'Group' : '')
   let l:r .= l:b . printf("name          : %s\n", a:plug.name)
   let l:r .= l:b . printf("path          : %s\n", get(a:plug, 'path', '---'))
   let l:r .= l:b . printf("branch        : %s\n", get(a:plug, 'branch', '---'))
@@ -43,8 +43,8 @@ fu! plug_util#load(plug) " {{{
   " deps
   if has_key(a:plug, 'deps')
     for name in a:plug.deps
-      if has_key(plugex#plugs, name)
-        let plug = plugex#plugs[name]
+      if has_key(s:plugs, name)
+        let plug = s:plugs[name]
         if !plug.load()
           return s:err('When load ['.a:plug.name.'], dependency plugin '.plug.name.' load fail.')
         en
@@ -87,9 +87,9 @@ fu! plug_util#load(plug) " {{{
 endf " }}}
 
 " functions for command
-fu! plug_util#plug_info(...) " {{{
+fu! plug_util#pluginfo(...) " {{{
   " for PlugInfo command
-  let l:plugs = a:0 == 0 ? plugex#plugs : plugex#pick_plugs(a:000)
+  let l:plugs = a:0 == 0 ? s:plugs : plugex#pick_plugs(a:000)
   tabnew
   setl nolist nospell wfh bt=nofile bh=unload fdm=indent wrap
   call setline(1, repeat('-', 40))
@@ -97,8 +97,8 @@ fu! plug_util#plug_info(...) " {{{
   call append(line('$'), repeat('-', 40))
   let l:loaded = []
   let l:lazy_num = 0
-  for l:pn in plugex#plugs_order()
-    let l:p = plugex#plugs[l:pn]
+  for l:pn in s:plugs_order
+    let l:p = s:plugs[l:pn]
     call append(line('$'), split(plug_util#to_str(l:p), '\n'))
     if l:p.loaded
       call add(l:loaded, l:p.name)
@@ -108,7 +108,7 @@ fu! plug_util#plug_info(...) " {{{
     en
   endfor
   call append(3, '')
-  call append(3, 'Total: '.len(plugex#plugs))
+  call append(3, 'Total: '.len(s:plugs))
   call append(4, 'Loaded: '.len(l:loaded))
   call append(5, 'Lazy load: '.l:lazy_num)
   call append(6, 'These plugins have been loades: ')
