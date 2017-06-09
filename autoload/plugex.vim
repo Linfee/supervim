@@ -80,6 +80,7 @@ let s:type = {
       \ 'funcref': type(function('call')),
       \ }
 
+" functions for user
 fu! plugex#begin(...) " {{{
   if !executable('git')
     return s:err('Please make sure git int your path, plugex depends on that.')
@@ -87,7 +88,7 @@ fu! plugex#begin(...) " {{{
   let s:plug_path = exists('g:plug_path') ? g:plug_path :
         \ expand(s:rstrip_slash(s:split_rtp()[0]).'/autoload/plug.vim')
 
-  " s:plug_home
+  " Set s:plug_home
   if a:0 > 0
     let s:plug_home = s:rstrip_slash(expand(a:1))
   elseif exists('g:plug_home')
@@ -104,11 +105,36 @@ fu! plugex#begin(...) " {{{
   let s:is_win = has('win32') || has('win64')
   let g:plugex_param_check = get(g:, 'plugex_param_check', 0)
 
+  " Vars for plug obj
+  " properties
+  let s:plug_attrs = ['name', 'path', 'branch', 'tag', 'commit']
+  let s:plug_attrs += ['enable', 'frozen', 'rtp', 'deps']
+  let s:plug_attrs += ['before', 'after', 'do'] " funcref/function name
+  let s:plug_attrs += ['for', 'on', 'on_event', 'on_func'] " lazy
+  let s:plug_attrs += ['plugs']
+  " other properties
+  " dir, type, as, uri, loaded, in_rtp
+  " is_lazy, before_loaded, after_loaded
+  let s:plug_local_type = 'local'
+  let s:plug_remote_type = 'remote'
+  let s:plug_group_type = 'plug group'
 
-  call s:def_cmd()
-  call s:def_class()
+  " Def cmds
+  com! -nargs=+ -bar
+        \ PlugEx        call plugex#add(<args>)
+  com! -nargs=+
+        \ PlugExGroup   call plugex#add_group(<args>)
+  com! -nargs=* -complete=customlist,plug_util#complete_plugs
+        \ PlugExInstall call plug_util#install(<f-args>)
+  com! -nargs=* -complete=customlist,plug_util#complete_plugs
+        \ PlugExUpdate  call plug_util#update(<f-args>)
+  com! -nargs=0 -bang
+        \ PlugExClean   call plug_util#clean('<bang>'=='!')
+  com! -nargs=0
+        \ PlugExStatus  call plug_util#status()
+  com! -nargs=* -complete=customlist,plug_util#complete_plugs
+        \ PlugExInfo    call plug_util#pluginfo(<f-args>)
 endf " }}}
-
 fu! plugex#end() " {{{
   if !exists('s:plugs') | return s:err('Call plugex#begin() first') | en
   filetype off
@@ -116,7 +142,7 @@ fu! plugex#end() " {{{
     au!
     for l:name in s:plugs_order
       let l:plug = s:plugs[l:name]
-      if l:plug.has('plugs')
+      if has_key(l:plug, 'plugs')
         for l:p in l:plug.plugs
           call s:handle_plug(l:p)
         endfor
@@ -135,305 +161,12 @@ fu! plugex#end() " {{{
   let g:plugexs = s:plugs
 endf " }}}
 
-fu! s:def_cmd() " {{{
-  com! -nargs=+ -bar                                  PlugEx
-        \ call plugex#add(<args>)
-  com! -nargs=+                                       PlugExGroup
-        \ call plugex#add_group(<args>)
-  com! -nargs=* -complete=customlist,s:complete_plugs PlugExInstall
-        \ call plugex#install(<f-args>)
-  com! -nargs=* -complete=customlist,s:complete_plugs PlugExUpdate
-        \ call plugex#update(<f-args>)
-  com! -nargs=0 -bang                                 PlugExClean
-        \ call plugex#clean('<bang>'=='!')
-  com! -nargs=0                                       PlugExStatus
-        \ call plugex#status()
-  com! -nargs=* -complete=customlist,s:complete_plugs PlugExInfo
-        \ call plugex#pluginfo(<f-args>)
-endf " }}}
-
-fu! s:def_class() " {{{
-  let s:plug = {}
-  " properties
-  let s:plug_attrs = ['name', 'path', 'branch', 'tag', 'commit']
-  let s:plug_attrs += ['enable', 'frozen', 'rtp', 'deps']
-  let s:plug_attrs += ['before', 'after', 'do'] " funcref/function name
-  let s:plug_attrs += ['for', 'on', 'on_event', 'on_func'] " lazy
-  let s:plug_attrs += ['plugs']
-  " other properties
-  " dir, type, as, uri, loaded, in_rtp
-  " is_lazy, before_loaded, after_loaded
-  let s:plug.local_type = 'local'
-  let s:plug.remote_type = 'remote'
-  let s:plug.group_type = 'plug group'
-  fu! s:plug.new(repo, config) " {{{2
-    let l:plug = copy(s:plug)
-    " check param
-    if g:plugex_param_check
-      for l:attr in ['name', 'path', 'branch', 'tag', 'commit']
-        if has_key(a:config, l:attr)
-          if type(a:config[l:attr]) != s:type.string
-            call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string.')
-            unlet a:config[l:attr]
-          en
-        en
-      endfor
-      for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
-        if has_key(a:config, l:attr)
-          if type(a:config[l:attr]) == s:type.string || type(a:config[l:attr]) == s:type.list
-            if len(a:config[l:attr] == 0)
-              unlet a:config[l:attr]
-            en
-          else
-            call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string or list.')
-            unlet a:config[l:attr]
-          en
-        en
-      endfor
-      for l:attr in ['before', 'after', 'do']
-        if has_key(a:config, l:attr)
-          if type(a:config[l:attr]) != s:type.string &&
-                \ type(a:config[l:attr]) != s:type.funcref
-            call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string or funcref.')
-            unlet a:config[l:attr]
-          en
-        en
-      endfor
-    en
-
-    " string to list
-    for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
-      if has_key(a:config, l:attr)
-        let a:config[l:attr] = s:to_list(a:config[l:attr]) 
-      en
-    endfor
-
-    let l:plug.enable = 1
-
-    " apply config
-    let l:plug.repo = s:trim_repo(a:repo)
-    for k in keys(a:config)
-      if index(s:plug_attrs, k) != -1
-        let l:plug[k] = a:config[k]
-      else
-        call s:err('Unsupported attribute: ' . k . ' for repo ' . a:repo)
-      en
-    endfor
-
-    " make sure the last item of on_event is a condition
-    if has_key(l:plug, 'on_event')
-      if l:plug.on_event[-1][:2] != 'if '
-        call add(l:plug.on_event, 'if 1')
-      en
-    en
-
-    " set name path, repo uri type dir
-    if l:plug.has('plugs')
-      "  for plugin group
-      " {'name': 'groupName', 'on_event': 'VimEnter', 'plugs': [['abc/def', {}], ['foo/bar', {}], ['baz']]}
-      let l:plug.in_rtp = 1
-      let l:plug.type = s:plug.group_type
-      let l:plug.repo = l:plug.name
-      for i in range(len(l:plug.plugs))
-        let l:p = call(s:plug.new, l:plug.plugs[i])
-        let l:plug.plugs[i] = l:p
-        let s:plugs[l:p.name] = l:p
-      endfor
-    else
-      " for normal plugin
-      if has_key(l:plug, 'name') | let l:plug.as = l:plug.name | en
-      if has_key(l:plug, 'path') | let l:plug.dir = l:plug.path | en
-      let l:plug.repo = a:repo
-      if !l:plug.set_repo_info() | return | en
-      let l:plug.in_rtp = 0
-    en
-
-    " set loaded
-    let l:plug.loaded = 0
-
-    " set l:plug.is_lazy
-    let l:plug.is_lazy = has_key(l:plug, 'for') || has_key(l:plug, 'on') ||
-          \ has_key(l:plug, 'on_event') || has_key(l:plug, 'on_func')
-
-    return l:plug
-  endf " 2}}}
-  fu! s:plug.load() dict " {{{2
-    if !self.enable || self.loaded | return | en
-    " deps
-    if self.has('deps')
-      for name in self.deps
-        if has_key(s:plugs, name)
-          let plug = s:plugs[name]
-          if !plug.load()
-            return s:err('When load ['.self.name.'], dependency plugin '.plug.name.' load fail.')
-          en
-        else
-          return s:err('When load ['.self.name.'], can not found dependency plugin '.plug.name.'.')
-        end
-      endfor
-    en
-
-    " on
-    if self.has('on')
-      for l:on in self.on
-        if l:on =~? '<plug>' " on_map
-          let l:map = matchstr(l:on, '<plug.*$')
-          let l:mode = l:on[0]
-          if hasmapto(l:map, l:mode)
-            exe l:mode.'unmap '.l:map
-          en
-        el " on_cmd
-          if exists(':'.l:on)
-            exe 'delcommand '.l:on
-          en
-        en
-      endfor
-    en
-
-    " call before, add2rtp, load, after
-    call self.call_before()
-    call self.add2rtp()
-    let l:r = s:source(self.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
-    if self.has('rtp')
-      for l:rtp in self.rtp
-        let l:sub = expand(self.path . '/' . l:rtp)
-        let l:r += s:source(l:sub, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
-      endfor
-    en
-    let self.loaded = 1
-    call self.call_after()
-    return l:r
-  endf " 2}}}
-  fu! s:plug.load_ftdetect() dict " {{{2
-    if self.enable
-      let l:r = s:source(self.path, 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
-      " for vimscripts in plugin's subdirectory
-      if has_key(self, 'rtp')
-        for l:rtp in self.rtp
-          let l:sub = expand(self.path . '/' . l:rtp)
-          let l:r += s:source(l:sub, 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
-        endfor
-      en
-      return l:r
-    en
-  endf " 2}}}
-  fu! s:plug.add2rtp() dict " {{{2
-    if self.in_rtp | return | en
-    if !isdirectory(self.path) | return | en
-    let l:rtp = s:split_rtp()
-    call insert(l:rtp, self.path, 1)
-    let l:after = expand(self.path.'/after')
-    if isdirectory(l:after) | call add(l:rtp, l:after) | en
-    " for vimscripts in plugin's subdir
-    if self.has('rtp')
-      for l:r in self.rtp
-        let l:sub = expand(self.path . '/' . l:r)
-        let l:sub_after = expand(l:sub . '/after')
-        if isdirectory(l:sub) | call insert(l:rtp, l:sub, 1) | en
-        if isdirectory(l:sub_after) | call add(l:rtp, l:sub_after) | en
-      endfor
-    en
-    let &rtp = join(l:rtp, ',')
-  endf " 2}}}
-  fu! s:plug.set_repo_info() dict " {{{2
-    let self.repo = s:trim_repo(self.repo)
-    if s:is_local_plug(self) " local repo
-      if !self.has('name') | let self.name = fnamemodify(self.repo, ':t:s?\.git$??') | en
-      let self.type = self.local_type
-      let self.path = substitute(self.repo, '^file://', '', '')
-      if self.path[2] == ':'
-        let self.path = self.path[1:]
-      en
-      let self.uri = self.path
-    else " remote repo
-      if self.repo !~ '/'
-        return s:err(printf('Invalid argument: %s (implicit `vim-scripts'' expansion is deprecated)', self.repo))
-      en
-      let self.type = self.remote_type
-      let self.uri = stridx(self.repo, '/') == strridx(self.repo, '/') ?
-            \ 'https://github.com/' . self.repo . '.git' :
-            \ self.repo
-      if !self.has('name') | let self.name = fnamemodify(self.repo, ':t:s?\.git$??') | en
-      if !self.has('path') | let self.path = expand(s:plug_home.'/'.self.name) | en
-    en
-    return 1
-  endf " 2}}}
-  fu! s:plug.call_before() dict " {{{2
-    if self.has('before')
-      if type(self.before) == s:type.funcref || exists('*'.self.before)
-        call call(self.before, [])
-      else
-        call s:err('Specified before function for plugin ['.self.name.'] does not exists')
-      en
-    en
-  endf " 2}}}
-  fu! s:plug.call_after() dict " {{{2
-    if self.has('after')
-      if type(self.after) == s:type.funcref || exists('*'.self.after)
-        call call(self.after, [])
-      else
-        call s:err('Specified after function for plugin ['.self.name.'] does not exists')
-      en
-    en
-  endf " 2}}}
-  fu! s:plug.has(...) dict " {{{2
-    for p in a:000
-      if !has_key(self, p)
-        return 0
-      en
-    endfor
-    return 1
-  endf " 2}}}
-  fu! s:plug.to_str(...) dict " {{{2
-    let l:a  = a:0 == 0 ? '' : repeat(' ', a:1 * 4)
-    let l:b = l:a . '    '
-    let l:r = l:a . printf("  [ %s ] %s\n", self.name, self.has('plugs') ? 'Group' : '')
-    let l:r .= l:b . printf("name          : %s\n", self.name)
-    let l:r .= l:b . printf("path          : %s\n", get(self, 'path', '---'))
-    let l:r .= l:b . printf("branch        : %s\n", get(self, 'branch', '---'))
-    let l:r .= l:b . printf("tag           : %s\n", get(self, 'tag', '---'))
-    let l:r .= l:b . printf("commit        : %s\n", get(self, 'commit', '---'))
-    let l:r .= l:b . printf("repo          : %s\n", self.repo)
-    let l:r .= l:b . printf("uri           : %s\n", get(self, 'uri', '---'))
-    let l:r .= l:b . printf("type          : %s\n", self.type)
-    let l:r .= l:b . printf("loaded        : %s\n", self.loaded)
-    let l:r .= l:b . printf("in_rtp        : %s\n", self.in_rtp)
-    let l:r .= l:b . printf("enable        : %s\n", self.enable)
-    let l:r .= l:b . printf("frozen        : %s\n", get(self, 'frozen', 0))
-    let l:r .= l:b . printf("rtp           : %s\n", get(self, 'rtp', '---'))
-    let l:r .= l:b . printf("dep           : %s\n", get(self, 'dep', '---'))
-    let l:r .= l:b . printf("before        : %s\n", string(get(self, 'before'.(has_key(self, 'before')? ', loaded': ', not loaded'), '---')))
-    let l:r .= l:b . printf("after         : %s\n", string(get(self, 'after'.(has_key(self, 'after_loaded')? ', loaded': ', not loaded'), '---')))
-    let l:r .= l:b . printf("do            : %s\n", get(self, 'do', '---'))
-    let l:r .= l:b . printf("[lazy-load]   : %s\n", get(self, 'is_lazy', 0))
-    let l:r .= l:b . printf("  |- for      : %s\n", string(get(self, 'for', '---')))
-    let l:r .= l:b . printf("  |- on       : %s\n", string(get(self, 'on', '---')))
-    let l:r .= l:b . printf("  |- on_event : %s\n", string(get(self, 'on_event', '---')))
-    let l:r .= l:b . printf("  |- on_func  : %s\n", string(get(self, 'on_func', '---')))
-    if self.has('plugs')
-      let l:r .= l:b . "[plugs]   : %s\n"
-      for l:p in self.plugs
-        let l:r .= l:p.to_str(len(l:a) / 4 + 1)
-      endfor
-    en
-    return l:r
-  endf " 2}}}
-  fu! s:plug.get_plug_config() dict "{{{2
-    let l:r = {}
-    for l:attr in ['branch', 'tag', 'commmit', 'do', 'frozen', 'as', 'dir']
-      if has_key(self, l:attr)
-        let l:r[l:attr] = self[l:attr]
-      en
-    endfor
-    return l:r
-  endf "2}}}
-endf " }}}
-
+" functions for plugex#end()
 fu! s:setup_lazy_load(name, plug) " {{{
   " for
   if has_key(a:plug, 'for')
     let l:ft = join(s:plugs[a:name].for, ',')
-    exe 'au FileType '.l:ft.' call s:plugs["'.a:name.'"].load()'
+    exe 'au FileType '.l:ft.' call plug_util#load(s:plugs["'.a:name.'"])'
   en
   " on
   if has_key(a:plug, 'on')
@@ -476,40 +209,38 @@ fu! s:setup_lazy_load(name, plug) " {{{
       if l:event == 'VimEnter'
         call add(s:vimenter_plugs, [l:condition, a:plug])
       else
-        exe 'au '.l:event.' *  if '.l:condition.' | call s:plugs["'.a:name.'"].load() | en'
+        exe 'au '.l:event.' *  if '.l:condition.' | call plug_util#load(s:plugs["'.a:name.'"]) | en'
       en
     endfor
   en
   " on_func
   if has_key(a:plug, 'on_func')
     let l:func_pat = join(s:plugs[a:name].on_func, ',')
-    exe 'au FuncUndefined '.l:func_pat.' call s:plugs["'.a:name.'"].load()'
+    exe 'au FuncUndefined '.l:func_pat.' call plug_util#load(s:plugs["'.a:name.'"])'
   en
 endf " }}}
-
 fu! s:handle_plug(plug) " {{{
   let l:name = a:plug.name
   if !a:plug.enable | continue | en
   if a:plug.is_lazy
     call s:setup_lazy_load(name, a:plug)
-    exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call s:plugs["'.l:name.'"].add2rtp() | en'
-    call a:plug.load_ftdetect()
+    exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call s:add2rtp(s:plugs["'.l:name.'"]) | en'
+    call s:load_ftdetect(a:plug)
   else
-    call a:plug.call_before()
-    call a:plug.add2rtp()
+    call s:call_before(a:plug)
+    call s:add2rtp(a:plug)
     exe 'au VimEnter * if !has_key(s:plugs["'.l:name.'"], "after_loaded") | '.
-          \ 'call s:plugs["'.l:name.'"].call_after() | '.
+          \ 'call s:call_after(s:plugs["'.l:name.'"]) | '.
           \ 'let s:plugs["'.l:name.'"].loaded = 1 | '.
           \ 'en'
   en
 endf " }}}
-
 fu! s:load_vimenter_plugs(tid) " {{{
   " load 10 plugin each time
   for i in range(len(s:vimenter_plugs) > 5 ? 5 : len(s:vimenter_plugs))
     let l:p = remove(s:vimenter_plugs, 0)
     if eval(l:p[0])
-      call l:p[1].load()
+      call plug_util#load(l:p[1])
     en
   endfor
   if len(s:vimenter_plugs) > 0
@@ -524,6 +255,150 @@ fu! s:load_vimenter_plugs(tid) " {{{
     do VimEnter
   en
 endf " }}}
+" functions for s:setup_lazy_load
+fu! s:fake_cmd(cmd, bang, l1, l2, args, name) " {{{
+  if !plug_util#load(s:plugs[a:name]) | return | en
+  exe printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
+endf " }}}
+fu! s:fake_map(the_map, with_prefix, prefix, name) " {{{
+  " https://github.com/junegunn/vim-plug/blob/master/plug.vim
+  if !plug_util#load(s:plugs[a:name]) | return | en
+  let extra = ''
+  while 1
+    let c = getchar(0)
+    if c == 0
+      break
+    en
+    let extra .= nr2char(c)
+  endwhile
+
+  if a:with_prefix
+    let prefix = v:count ? v:count : ''
+    let prefix .= '"'.v:register.a:prefix
+    if mode(1) == 'no'
+      if v:operator == 'c'
+        let prefix = "\<esc>" . prefix
+      en
+      let prefix .= v:operator
+    en
+    call feedkeys(prefix, 'n')
+  en
+  call feedkeys(substitute(a:the_map, '^<Plug>', "\<Plug>", '') . extra)
+endf " }}}
+" functions for s:handle_plug for plugex#end
+fu! s:call_before(plug) " for plug obj {{{
+  " call plug's before
+  if has_key(a:plug, 'before')
+    if type(a:plug.before) == s:type.funcref || exists('*'.a:plug.before)
+      call call(a:plug.before, [])
+    else
+      call s:err('Specified after function for plugin ['.a:plug.name.'] does not exists')
+    en
+  en
+endf " }}}
+fu! s:call_after(a:plug) " for plug obj {{{
+  " call plug's after
+  if has_key(a:plug, 'after')
+    if type(a:plug.after) == s:type.funcref || exists('*'.a:plug.after)
+      call call(a:plug.after, [])
+    else
+      call s:err('Specified after function for plugin ['.a:plug.name.'] does not exists')
+    en
+  en
+endf " }}}
+fu! s:add2rtp(plug) " for plug obj {{{
+  if a:plug.in_rtp | return | en
+  if !isdirectory(a:plug.path) | return | en
+  let l:rtp = s:split_rtp()
+  call insert(l:rtp, a:plug.path, 1)
+  let l:after = expand(a:plug.path.'/after')
+  if isdirectory(l:after) | call add(l:rtp, l:after) | en
+  " for vimscripts in plugin's subdir
+  if has_key(a:plug, 'rtp')
+    for l:r in a:plug.rtp
+      let l:sub = expand(a:plug.path . '/' . l:r)
+      let l:sub_after = expand(l:sub . '/after')
+      if isdirectory(l:sub) | call insert(l:rtp, l:sub, 1) | en
+      if isdirectory(l:sub_after) | call add(l:rtp, l:sub_after) | en
+    endfor
+  en
+  let &rtp = join(l:rtp, ',')
+endf " }}}
+fu! s:load_ftdetect(plug) " for plug obj {{{
+  if a:plug.enable
+    let l:r = plugex#source(a:plug.path, 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
+    " for vimscripts in plugin's subdirectory
+    if has_key(a:plug, 'rtp')
+      for l:rtp in a:plug.rtp
+        let l:sub = expand(a:plug.path . '/' . l:rtp)
+        let l:r += plugex#source(l:sub, 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
+      endfor
+    en
+    return l:r
+  en
+endf " }}}
+
+  fu! s:plug.new(repo, config) " {{{
+    let l:plug = copy(s:plug)
+    " check param
+    call s:check_param(a:repo, a:config)
+
+    " string to list
+    for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
+      if has_key(a:config, l:attr) && type(a:config[l:attr]) == s:type.string
+        let a:config[l:attr] = [a:config[l:attr]]
+      en
+    endfor
+
+    let l:plug.enable = 1
+
+    " apply config
+    let l:plug.repo = s:trim_repo(a:repo)
+    for k in keys(a:config)
+      if index(s:plug_attrs, k) != -1
+        let l:plug[k] = a:config[k]
+      else
+        call s:err('Unsupported attribute: ' . k . ' for repo ' . a:repo)
+      en
+    endfor
+
+    " make sure the last item of on_event is a condition
+    if has_key(l:plug, 'on_event')
+      if l:plug.on_event[-1][:2] != 'if '
+        call add(l:plug.on_event, 'if 1')
+      en
+    en
+
+    " set name path, repo uri type dir
+    if has_key(l:plug, 'plugs')
+      "  for plugin group
+      " {'name': 'groupName', 'on_event': 'VimEnter', 'plugs': [['abc/def', {}], ['foo/bar', {}], ['baz']]}
+      let l:plug.in_rtp = 1
+      let l:plug.type = s:plug.group_type
+      let l:plug.repo = l:plug.name
+      for i in range(len(l:plug.plugs))
+        let l:p = call(s:plug.new, l:plug.plugs[i])
+        let l:plug.plugs[i] = l:p
+        let s:plugs[l:p.name] = l:p
+      endfor
+    else
+      " for normal plugin
+      if has_key(l:plug, 'name') | let l:plug.as = l:plug.name | en
+      if has_key(l:plug, 'path') | let l:plug.dir = l:plug.path | en
+      let l:plug.repo = a:repo
+      if !s:.set_plug_repo_info(l:plug) | return | en
+      let l:plug.in_rtp = 0
+    en
+
+    " set loaded
+    let l:plug.loaded = 0
+
+    " set l:plug.is_lazy
+    let l:plug.is_lazy = has_key(l:plug, 'for') || has_key(l:plug, 'on') ||
+          \ has_key(l:plug, 'on_event') || has_key(l:plug, 'on_func')
+
+    return l:plug
+  endf " }}}
 
 " functions for command
 fu! plugex#add(repo, ...) " {{{
@@ -562,199 +437,67 @@ fu! plugex#add_group(name, ...) " {{{
 
   call plugex#add(a:name, l:config)
 endf " }}}
-fu! plugex#pluginfo(...) " {{{
-  " for PlugInfo command
-  let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
-  tabnew
-  setl nolist nospell wfh bt=nofile bh=unload fdm=indent wrap
-  call setline(1, repeat('-', 40))
-  call append(line('$'), repeat(' ', 13).'PlugInfo')
-  call append(line('$'), repeat('-', 40))
-  let l:loaded = []
-  let l:lazy_num = 0
-  for l:pn in s:plugs_order
-    let l:p = s:plugs[l:pn]
-    call append(line('$'), split(l:p.to_str(), '\n'))
-    if l:p.loaded
-      call add(l:loaded, l:p.name)
+" functions for s:new_plug
+fu! s:new_plug(repo, config) " for plug obj {{{
+endf " }}}
+fu! s:set_plug_repo_info(plug) " for plug obj {{{
+  let a:plug.repo = s:trim_repo(a:plug.repo)
+  if a:plug.repo =~ '^\(\w:\|\~\)\?[\\\/]' " local repo
+    if !has_key(a:plug, 'name') | let a:plug.name = fnamemodify(a:plug.repo, ':t:s?\.git$??') | en
+    let a:plug.type = s:plug_local_type
+    let a:plug.path = substitute(a:plug.repo, '^file://', '', '')
+    if a:plug.path[2] == ':'
+      let a:plug.path = a:plug.path[1:]
     en
-    if l:p.is_lazy
-      let l:lazy_num += 1
+    let a:plug.uri = a:plug.path
+  else " remote repo
+    if a:plug.repo !~ '/'
+      return s:err(printf('Invalid argument: %s (implicit `vim-scripts'' expansion is deprecated)', a:plug.repo))
     en
-  endfor
-  call append(3, '')
-  call append(3, 'Total: '.len(s:plugs))
-  call append(4, 'Loaded: '.len(l:loaded))
-  call append(5, 'Lazy load: '.l:lazy_num)
-  call append(6, 'These plugins have been loades: ')
-  call append(7, '  '.string(l:loaded))
-endf " }}}
-fu! plugex#install(...) " {{{
-  " for PlugExInstall command
-  " create plug_home if not exists
-  if !isdirectory(s:plug_home)
-    call mkdir(s:plug_home, 'p')
+    let a:plug.type = s:plug_remote_type
+    let a:plug.uri = stridx(a:plug.repo, '/') == strridx(a:plug.repo, '/') ?
+          \ 'https://github.com/' . a:plug.repo . '.git' :
+          \ a:plug.repo
+    if !has_key(a:plug, 'name') | let a:plug.name = fnamemodify(a:plug.repo, ':t:s?\.git$??') | en
+    if !has_key(a:plug, 'path') | let a:plug.path = expand(s:plug_home.'/'.a:plug.name) | en
   en
-  " for PlugExInstall command
-  let l:plugs = a:0 == 0 ? values(s:plugs) : s:pick_plugs(a:000)
-  if &ft == 'startify'
-    tabnew
-    exe "normal! i\<esc>"
-  el
-    exe "normal! i\<esc>"
-  en
-  let l:old_rtp = &rtp
-  call s:init_plug(l:plugs)
-  PlugInstall
-  let &rtp = l:old_rtp
-  for l:p in l:plugs
-    call l:p.load_ftdetect()
-    call l:p.load()
-  endfor
+  return 1
 endf " }}}
-fu! plugex#update(...) " {{{
-  " for PlugExUpdate command
-  " create plug_home if not exists
-  if !isdirectory(s:plug_home)
-    call mkdir(s:plug_home, 'p')
-  en
-  let l:plugs = a:0 == 0 ? values(s:plugs) : s:pick_plugs(a:000)
-  if &ft == 'startify'
-    tabnew
-    exe "normal! i\<esc>"
-  el
-    exe "normal! i\<esc>"
-  en
-  let l:old_rtp = &rtp
-  call s:init_plug(l:plugs)
-  PlugUpdate
-  let &rtp = l:old_rtp
-endf " }}}
-fu! plugex#clean(bang) " {{{
-  " for PlugExClean
-  let l:old_rtp = &rtp
-  call s:init_plug(values(s:plugs))
-  if a:bang
-    PlugClean!
-  el
-    PlugClean
-  en
-  let &rtp = l:old_rtp
-endf " }}}
-fu! plugex#status() " {{{
-  " for PlugExStatus
-  let l:old_rtp = &rtp
-  call s:init_plug(values(s:plugs))
-  PlugStatus
-  let &rtp = l:old_rtp
-endf " }}}
-fu! s:complete_plugs(a, l, p) " {{{
-  " complete all plugin names
-  let r = []
-  for name in s:plugs_order
-    if niame =~? a:a
-      call add(r, name)
-    en
-  endfor
-  return r
-endf " }}}
-
-" private functions
-fu! s:fake_cmd(cmd, bang, l1, l2, args, name) " {{{
-  if !s:plugs[a:name].load() | return | en
-  exe printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
-endf " }}}
-fu! s:fake_map(the_map, with_prefix, prefix, name) " {{{
-  " https://github.com/junegunn/vim-plug/blob/master/plug.vim
-  if !s:plugs[a:name].load() | return | en
-  let extra = ''
-  while 1
-    let c = getchar(0)
-    if c == 0
-      break
-    en
-    let extra .= nr2char(c)
-  endwhile
-
-  if a:with_prefix
-    let prefix = v:count ? v:count : ''
-    let prefix .= '"'.v:register.a:prefix
-    if mode(1) == 'no'
-      if v:operator == 'c'
-        let prefix = "\<esc>" . prefix
+fu! s:check_param(repo, config) " for plug obj {{{
+  if g:plugex_param_check
+    for l:attr in ['name', 'path', 'branch', 'tag', 'commit']
+      if has_key(a:config, l:attr)
+        if type(a:config[l:attr]) != s:type.string
+          call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string.')
+          unlet a:config[l:attr]
+        en
       en
-      let prefix .= v:operator
-    en
-    call feedkeys(prefix, 'n')
-  en
-  call feedkeys(substitute(a:the_map, '^<Plug>', "\<Plug>", '') . extra)
-endf " }}}
-fu! s:update_plug(...) " {{{
-  " install/update plug.vim
-  let l:path = a:0 == 0 ? expand(s:first_rtp.'/autoload') : a:1
-  if !isdirectory(l:path)
-    call mkdir(l:path, "p")
-  en
-  let l:path = expand(l:path.'/plug.vim')
-  let l:url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  if s:is_win
-    let l:cmd = '@powershell -NoProfile -Command "((New-Object Net.WebClient)'.
-          \ ".DownloadFile('".l:url."', $ExecutionContext.SessionState.Path".
-          \ ".GetUnresolvedProviderPathFromPSPath('".l:path.''')))"'
-  el
-    let l:cmd = 'curl -fLo '.l:path.' --create-dirs '.l:url
-  en
-  if filereadable(l:path)
-    call delete(l:path)
-  en
-  call s:system_at('.', l:cmd)
-  if filereadable(l:path)
-    exe 'tabnew ' . l:path
-    exe "normal! gg/! s:source\<cr>4j0r\":w\<cr>:bd\<cr>"
-    return 1
-  en
-endf " }}}
-fu! s:source(dir, ...) " {{{
-  " source file from dir with patterns
-  let found = 0
-  for pattern in a:000
-    for script in split(globpath(a:dir, pattern))
-      execute 'source '. script
-      let found = 1
     endfor
-  endfor
-  return found
-endf " }}}
-fu! s:check_plug() " {{{
-  if !filereadable(s:plug_path)
-    echo 'can not found plug.vim, download now...'
-    call s:update_plug()
+    for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
+      if has_key(a:config, l:attr)
+        if type(a:config[l:attr]) == s:type.string || type(a:config[l:attr]) == s:type.list
+          if len(a:config[l:attr] == 0)
+            unlet a:config[l:attr]
+          en
+        else
+          call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string or list.')
+          unlet a:config[l:attr]
+        en
+      en
+    endfor
+    for l:attr in ['before', 'after', 'do']
+      if has_key(a:config, l:attr)
+        if type(a:config[l:attr]) != s:type.string &&
+              \ type(a:config[l:attr]) != s:type.funcref
+          call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string or funcref.')
+          unlet a:config[l:attr]
+        en
+      en
+    endfor
   en
 endf " }}}
-fu! s:init_plug(plugs) " {{{
-  call s:check_plug()
-  call plug#begin(s:plug_home)
-  for l:p in a:plugs
-    call plug#(l:p.repo, l:p.get_plug_config())
-  endfor
-  call plug#end()
-endf " }}}
-fu! s:system_at(path, cmd) abort " {{{
-  " cd to path, exe cmd, then cd back
-  let l:cd = getcwd()
-  exe 'cd ' . a:path
-  let l:r =  system(a:cmd)
-  exe 'cd ' . a:path
-  return r
-endf " }}}
-fu! s:pick_plugs(names) " {{{
-  " get plug obj list from s:plugs for each plug name in arg
-  let l:plugs = []
-  for name in a:names
-    call add(l:plugs, s:plugs[name])
-  endfor
-  return l:plugs
-endf " }}}
+
+" other functions
 fu! s:err(msg) " {{{
   " echo err
   echohl ErrorMsg
@@ -766,23 +509,36 @@ fu! s:split_rtp() " {{{
   let idx = stridx(&rtp, ',')
   return [&rtp[:idx-1], &rtp[idx+1:]]
 endf " }}}
-fu! s:to_list(v) " {{{
-  return type(a:v) == s:type.list ? a:v : [a:v]
-endf " }}}
-fu! s:is_local_plug(plug) " {{{
-  return a:plug.repo =~ '^\(\w:\|\~\)\?[\\\/]'
-endf " }}}
 fu! s:rstrip_slash(str) " {{{
   " foo/bar/\//\\ -> /foo/bar
   return substitute(a:str, '[\/\\]\+$', '', '')
 endf " }}}
-fu! s:lstrip_slash(str) " {{{
+fu! s:lstrip_slash(str) " unused {{{
   " /\//\\foo/bar -> foo/bar
   return substitute(a:str, '^[\/\\]\+', '', '')
 endf " }}}
 fu! s:trim_repo(str) " {{{
   " foo/bar[.git][/] -> foo/bar
   return substitute(a:str, '\(.git\)\=[\/]\=$', '', '')
+endf " }}}
+
+" api
+fu! plugex#plugs() " {{{
+  return s:plugs
+endf " }}}
+fu! plugex#plugs_order() " {{{
+  return s:plugs_order
+endf " }}}
+fu! plugex#source(dir, ...) " {{{
+  " source file from dir with patterns
+  let found = 0
+  for pattern in a:000
+    for script in split(globpath(a:dir, pattern))
+      execute 'source '. script
+      let found = 1
+    endfor
+  endfor
+  return found
 endf " }}}
 
 let &cpo = s:cpo_save
