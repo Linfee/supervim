@@ -228,7 +228,7 @@ fu! s:handle_plug(plug) " {{{
     call s:load_ftdetect(a:plug)
   else
     call plugex#call_before(a:plug)
-    call plugexplugex#dd2rtp(a:plug)
+    call plugex#add2rtp(a:plug)
     exe 'au VimEnter * if !has_key(s:plugs["'.l:name.'"], "after_loaded") | '.
           \ 'call plugex#call_after(s:plugs["'.l:name.'"]) | '.
           \ 'let s:plugs["'.l:name.'"].loaded = 1 | '.
