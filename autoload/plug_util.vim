@@ -28,7 +28,7 @@ fu! plug_util#to_str(plug, ...) " {{{
   let l:r .= l:b . printf("frozen        : %s\n", get(a:plug, 'frozen', 0))
   let l:r .= l:b . printf("rtp           : %s\n", get(a:plug, 'rtp', '---'))
   let l:r .= l:b . printf("dep           : %s\n", get(a:plug, 'dep', '---'))
-  let l:r .= l:b . printf("before        : %s\n", string(get(a:plug, 'before'.(has_key(a:plug, 'before')? ', loaded': ', not loaded'), '---')))
+  let l:r .= l:b . printf("before        : %s\n", string(get(a:plug, 'before'.(has_key(a:plug, 'before_loaded')? ', loaded': ', not loaded'), '---')))
   let l:r .= l:b . printf("after         : %s\n", string(get(a:plug, 'after'.(has_key(a:plug, 'after_loaded')? ', loaded': ', not loaded'), '---')))
   let l:r .= l:b . printf("do            : %s\n", get(a:plug, 'do', '---'))
   let l:r .= l:b . printf("[lazy-load]   : %s\n", get(a:plug, 'is_lazy', 0))
@@ -69,7 +69,7 @@ fu! plug_util#load(plug) " {{{
     endfor
   en
 
-  " on
+  " delete fake_cmd and fake_map
   if has_key(a:plug, 'on')
     for l:on in a:plug.on
       if l:on =~? '<plug>' " on_map
@@ -93,14 +93,16 @@ fu! plug_util#load(plug) " {{{
   if plugex#add2rtp(a:plug)
     call s:log('[ add2rtp ]', '[ lazy ]', a:plug.name)
   en
-  if !has_key(a:plug, 'plugs')
+  if !s:is_group(a:plug)
     " for normal plugin
-    call plugex#source(a:plug.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
-    if has_key(a:plug, 'rtp')
-      for l:rtp in a:plug.rtp
-        let l:sub = expand(a:plug.path . '/' . l:rtp)
-        call plugex#source(l:sub, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
-      endfor
+    if !get(a:plug, 'sourced')
+      call plugex#source(a:plug.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
+      if has_key(a:plug, 'rtp')
+        for l:rtp in a:plug.rtp
+          let l:sub = expand(a:plug.path . '/' . l:rtp)
+          call plugex#source(l:sub, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
+        endfor
+      en
     en
   else
     " for plugin group
@@ -312,6 +314,9 @@ fu! s:unpackage(plugs) " {{{
     en
   endfor
   return l:ps
+endf " }}}
+fu! s:is_group(plug) " {{{
+  return has_key(a:plug, 'plugs')
 endf " }}}
 fu! s:log(...) " {{{
   if get(g:, 'plugex_log', 0)
