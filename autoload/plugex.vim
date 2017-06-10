@@ -26,6 +26,7 @@
 "     on                   On-demand loading: Commands or <Plug>-mappings
 "     on_event             On-demand loading: When event occurs
 "     on_func              On-demand loading: When functions called
+"     lazy                 On-demand loading: When group loading or other plugin loading.
 " Global_options:
 "     g:plug_home           Specify a directory for plugins
 "     g:plug_path           Specify a path for plug.vim
@@ -61,6 +62,13 @@
 "                                        \ 'CorsurHold if &ft=="jsp"',
 "                                        \ 'if &ft=="java"||&ft=="jsp"']}
 "     PlugEx '~/my-plugin3', {'on_func': ['Test', 'Test2']}
+"
+"     PlugExGroup 'groupName',
+"           \ ['strom3xFeI/vimdoc-cn', {'lazy': 1, 'after': 'After2', 'before': 'Before2'}],
+"           \ ['mhinz/vim-sayonara', {'on': 'Sayonara'}],
+"           \ ['scrooloose/nerdtree', {'on': 'NERDTreeToggle'}],
+"           \ {'on_event': 'InsertEnter', 'after': 'After1', 'before': 'Before1'}
+"
 "     call plugex#end()
 " }}}
 
@@ -94,7 +102,7 @@ fu! plugex#begin(...) " {{{
   elseif exists('g:plug_home')
     let s:plug_home = s:rstrip_slash(expand(g:plug_home))
   elseif !empty(&rtp)
-    let s:plug_home = expand(s:rstrip_slash(split(&rtp, ',')[0]) . '/plugs')
+    let s:plug_home = expand(s:rstrip_slash(split(&rtp, ',')[0]) . '/.repo')
   el
     retu s:err('Unable to determine plugex home. Try calling plugex#begin() with a path argument.')
   en
@@ -110,7 +118,7 @@ fu! plugex#begin(...) " {{{
   let s:plug_attrs = ['name', 'path', 'branch', 'tag', 'commit']
   let s:plug_attrs += ['enable', 'frozen', 'rtp', 'deps']
   let s:plug_attrs += ['before', 'after', 'do'] " funcref/function name
-  let s:plug_attrs += ['for', 'on', 'on_event', 'on_func'] " lazy
+  let s:plug_attrs += ['for', 'on', 'on_event', 'on_func', 'lazy'] " lazy
   let s:plug_attrs += ['plugs']
   " other properties
   " dir, type, as, uri, loaded, in_rtp
@@ -142,12 +150,11 @@ fu! plugex#end() " {{{
     au!
     for l:name in s:plugs_order
       let l:plug = s:plugs[l:name]
+      call s:handle_plug(l:plug)
       if has_key(l:plug, 'plugs')
         for l:p in l:plug.plugs
           call s:handle_plug(l:p)
         endfor
-      else
-        call s:handle_plug(l:plug)
       en
     endfor
   aug END
@@ -221,11 +228,11 @@ fu! s:setup_lazy_load(name, plug) " {{{
 endf " }}}
 fu! s:handle_plug(plug) " {{{
   let l:name = a:plug.name
-  if !a:plug.enable | continue | en
+  if !a:plug.enable | return | en
   if a:plug.is_lazy
     call s:setup_lazy_load(name, a:plug)
     exe 'au VimEnter * if !s:plugs["'.l:name.'"].in_rtp | call plugex#add2rtp(s:plugs["'.l:name.'"]) | en'
-    call s:load_ftdetect(a:plug)
+    call plugex#load_ftdetect(a:plug)
   else
     call plugex#call_before(a:plug)
     call plugex#add2rtp(a:plug)
@@ -307,6 +314,7 @@ fu! plugex#call_after(plug) " for plug obj {{{
   en
 endf " }}}
 fu! plugex#add2rtp(plug) " for plug obj {{{
+  if has_key(a:plug, 'plugs') | return | en
   if a:plug.in_rtp | return | en
   if !isdirectory(a:plug.path) | return | en
   let l:rtp = s:split_rtp()
@@ -323,8 +331,10 @@ fu! plugex#add2rtp(plug) " for plug obj {{{
     endfor
   en
   let &rtp = join(l:rtp, ',')
+  let a:plug.in_rtp = 1
 endf " }}}
-fu! s:load_ftdetect(plug) " for plug obj {{{
+fu! plugex#load_ftdetect(plug) " for plug obj {{{
+  if has_key(a:plug, 'plugs') | return | en
   if a:plug.enable
     let l:r = plugex#source(a:plug.path, 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
     " for vimscripts in plugin's subdirectory
@@ -379,6 +389,14 @@ endf " }}}
 fu! s:new_plug(repo, config) " for plug obj {{{
   if g:plugex_param_check | call s:check_param(a:repo, a:config) | en
 
+  if has_key(a:config, 'dir') | unlet a:config.dir | en
+  if has_key(a:config, 'as') | unlet a:config.as | en
+  if has_key(a:config, 'uri') | unlet a:config.uri | en
+  if has_key(a:config, 'before_loaded') | unlet a:config.before_loaded | en
+  if has_key(a:config, 'after_loade') | unlet a:config.after_loaded | en
+
+  " dir, type, as, uri, loaded, in_rtp
+  " is_lazy, before_loaded, after_loaded
   " string to list
   for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
     if has_key(a:config, l:attr) && type(a:config[l:attr]) == s:type.string
@@ -386,7 +404,7 @@ fu! s:new_plug(repo, config) " for plug obj {{{
     en
   endfor
 
-  let a:config.enable = 1
+  let a:config.enable = get(a:config, 'enable', 1)
   let a:config.repo = s:trim_repo(a:repo)
   " make sure the last item of on_event is a condition
   if has_key(a:config, 'on_event')
@@ -398,11 +416,10 @@ fu! s:new_plug(repo, config) " for plug obj {{{
   " set name, path, uri, type, dir
   if has_key(a:config, 'plugs')
     " for plugin group
-    let a:config.in_rtp = 1
-    let a:config.type = s:plug.group_type
+    let a:config.type = s:plug_group_type
     let a:config.repo = a:config.name
     for i in range(len(a:config.plugs))
-      let l:p = call(s:plug.new, a:config.plugs[i])
+      let l:p = call(function('s:new_plug'), a:config.plugs[i])
       let a:config.plugs[i] = l:p
       let s:plugs[l:p.name] = l:p
     endfor
@@ -412,15 +429,16 @@ fu! s:new_plug(repo, config) " for plug obj {{{
     if has_key(a:config, 'path') | let a:config.dir = a:config.path | en
     let a:config.repo = a:repo
     if !s:set_plug_repo_info(a:config) | return | en
-    let a:config.in_rtp = 0
   en
 
   " set loaded
   let a:config.loaded = 0
+  let a:config.in_rtp = 0
 
   " set a:config.is_lazy
   let a:config.is_lazy = has_key(a:config, 'for') || has_key(a:config, 'on') ||
-        \ has_key(a:config, 'on_event') || has_key(a:config, 'on_func')
+        \ has_key(a:config, 'on_event') || has_key(a:config, 'on_func') ||
+        \ (has_key(a:config, 'lazy') && a:config.lazy == 1)
 
   return a:config
 endf " }}}
@@ -429,7 +447,7 @@ fu! s:set_plug_repo_info(plug) " for plug obj {{{
   if a:plug.repo =~ '^\(\w:\|\~\)\?[\\\/]' " local repo
     if !has_key(a:plug, 'name') | let a:plug.name = fnamemodify(a:plug.repo, ':t:s?\.git$??') | en
     let a:plug.type = s:plug_local_type
-    let a:plug.path = substitute(a:plug.repo, '^file://', '', '')
+    let a:plug.path = expand(substitute(a:plug.repo, '^file://', '', ''))
     if a:plug.path[2] == ':'
       let a:plug.path = a:plug.path[1:]
     en
@@ -443,7 +461,11 @@ fu! s:set_plug_repo_info(plug) " for plug obj {{{
           \ 'https://github.com/' . a:plug.repo . '.git' :
           \ a:plug.repo
     if !has_key(a:plug, 'name') | let a:plug.name = fnamemodify(a:plug.repo, ':t:s?\.git$??') | en
-    if !has_key(a:plug, 'path') | let a:plug.path = expand(s:plug_home.'/'.a:plug.name) | en
+    if !has_key(a:plug, 'path')
+      let a:plug.path = expand(s:plug_home.'/'.a:plug.name)
+    else
+      let a:plug.path = expand(a:plug.path)
+    en
   en
   return 1
 endf " }}}
@@ -507,11 +529,8 @@ fu! s:trim_repo(str) " {{{
 endf " }}}
 
 " api
-fu! plugex#plugs() " {{{
-  return s:plugs
-endf " }}}
-fu! plugex#plugs_order() " {{{
-  return s:plugs_order
+fu! plugex#vars() " {{{
+  return [s:plug_home, s:plug_path, s:plugs, s:plugs_order]
 endf " }}}
 fu! plugex#source(dir, ...) " {{{
   " source file from dir with patterns
@@ -523,6 +542,14 @@ fu! plugex#source(dir, ...) " {{{
     endfor
   endfor
   return found
+endf " }}}
+fu! plugex#is_loaded(...) " {{{
+  for l:n in a:000
+    if !has_key(s:plugs) || !s:plugs[l:n].loaded
+      return 0
+    en
+  endfor
+  return 1
 endf " }}}
 
 let &cpo = s:cpo_save
