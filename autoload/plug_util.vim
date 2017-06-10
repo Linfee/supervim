@@ -87,8 +87,12 @@ fu! plug_util#load(plug) " {{{
   en
 
   " call before, add2rtp, load, after
-  call plugex#call_before(a:plug)
-  call plugex#add2rtp(a:plug)
+  if plugex#call_before(a:plug)
+      call s:log('[ call_before ]', '[ lazy ]', a:plug.name)
+  en
+  if plugex#add2rtp(a:plug)
+    call s:log('[ add2rtp ]', '[ lazy ]', a:plug.name)
+  en
   if !has_key(a:plug, 'plugs')
     " for normal plugin
     call plugex#source(a:plug.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
@@ -109,7 +113,10 @@ fu! plug_util#load(plug) " {{{
     endfor
   en
   let a:plug.loaded = 1
-  call plugex#call_after(a:plug)
+  call s:log('[ loaded ]', '[ lazy ]', a:plug.name)
+  if plugex#call_after(a:plug)
+    call s:log('[ call_after ]', '[ lazy ]', a:plug.name)
+  en
   return 1
 endf " }}}
 
@@ -305,6 +312,11 @@ fu! s:unpackage(plugs) " {{{
     en
   endfor
   return l:ps
+endf " }}}
+fu! s:log(...) " {{{
+  if get(g:, 'plugex_log', 0)
+    cal add(g:plugs_log, join(a:000, ' '))
+  en
 endf " }}}
 
 " vim: fmr={{{,}}} fdm=marker:

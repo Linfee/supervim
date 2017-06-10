@@ -37,7 +37,7 @@ let g:rainbow_conf = {
       \       },
       \       'css': 0,
       \   }
-      \}
+      \ }
 let g:rainbow_active = 1
 
 " for vm-signify
