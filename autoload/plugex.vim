@@ -125,6 +125,7 @@ fu! plugex#begin(...) " {{{
   " other properties
   " dir, type, as, uri, loaded, in_rtp
   " is_lazy, before_loaded, after_loaded
+  " sourced
   let s:plug_local_type = 'local'
   let s:plug_remote_type = 'remote'
   let s:plug_group_type = 'plug group'
@@ -147,6 +148,8 @@ fu! plugex#begin(...) " {{{
 endf " }}}
 fu! plugex#end() " {{{
   if !exists('s:plugs') | return s:err('Call plugex#begin() first') | en
+  call s:log('')
+  call s:log('[ >>>>> plugex#end >>>>> ]')
   filetype off
   aug PlugEx
     au!
@@ -165,13 +168,32 @@ fu! plugex#end() " {{{
   " on vimenter
   aug PLugExVimEnter
     au!
-    au VimEnter * call s:on_vimenter() |
+    au VimEnter * call s:log("") |
+          \ call s:log("[ >>>>> handle VimEnter >>>>> ]") |
+          \ call s:handle_vimenter() |
+          \ call s:log('') |
+          \ call s:log("[ >>>>> Load plugins with  {'on_event': 'VimEnter'} >>>>> ]") |
           \ call timer_start(10, function('s:load_vimenter_plugs'))
   aug END
   let g:plugexs = s:plugs
 endf " }}}
 
 " functions for plugex#end()
+fu! s:handle_plug(plug) " {{{
+  let l:name = a:plug.name
+  if !a:plug.enable | return | en
+  if a:plug.is_lazy
+    call s:setup_lazy_load(name, a:plug)
+    call plugex#load_ftdetect(a:plug)
+  else
+    if plugex#call_before(a:plug)
+      call s:log('[ call_before ]', '[ non lazy ]', a:plug.name)
+    en
+    if plugex#add2rtp(a:plug)
+      call s:log('[ add2rtp ]', '[ non lazy ]', a:plug.name)
+    en
+  en
+endf " }}}
 fu! s:setup_lazy_load(name, plug) " {{{
   " for
   if has_key(a:plug, 'for')
@@ -229,55 +251,36 @@ fu! s:setup_lazy_load(name, plug) " {{{
     exe 'au FuncUndefined '.l:func_pat.' call plug_util#load(s:plugs["'.a:name.'"])'
   en
 endf " }}}
-fu! s:handle_plug(plug) " {{{
-  let l:name = a:plug.name
-  if !a:plug.enable | return | en
-  if a:plug.is_lazy
-    call s:setup_lazy_load(name, a:plug)
-    call plugex#load_ftdetect(a:plug)
-  else
-    if plugex#call_before(a:plug)
-      call s:log('[ call_before ]', '[ non lazy ]', a:plug.name)
-    en
-    if plugex#add2rtp(a:plug)
-      call s:log('[ add2rtp ]', '[ non lazy ]', a:plug.name)
-    en
-  en
-endf " }}}
-fu! s:on_vimenter() " {{{
+fu! s:handle_vimenter() " {{{
   for l:name in s:plugs_order
     let l:plug = s:plugs[l:name]
-    call s:handle_plug_on_vimenter(l:plug)
-    if has_key(l:plug, 'plugs')
-      for l:p in l:plug.plugs
-        call s:handle_plug_on_vimenter(l:p)
-      endfor
+    if !l:plug.enable | continue | en
+    if l:plug.is_lazy
+      " add2rtp for lazy
+      if plugex#add2rtp(l:plug)
+        call s:log('[ add2rtp ]', '[ lazy ]', l:plug.name)
+      en
+      if s:is_group(l:plug)
+        for l:p in l:plug.plugs
+          if !l:p.enable | continue | en
+          call s:log('[ add2rtp ]', '[ lazy ]', l:p.name)
+        endfor
+      en
+    else
+      let l:plug.sourced = 1
+      if s:is_group(l:plug)
+        " for non lazy group: load plugs and call after
+        call plug_util#load(l:plug)
+      else
+        " for non lazy plug: set loaded, log, call after
+        let l:plug.loaded = 1
+        call s:log('[ loaded ]', '[ non lazy ]', '[ plug ]', l:plug.name)
+        if plugex#call_after(a:plug)
+          call s:log('[ call_after ]', '[ non lazy ]', l:plug.name)
+        en
+      en
     en
   endfor
-endf " }}}
-fu! s:handle_plug_on_vimenter(plug) " {{{
-  let l:name = a:plug.name
-  if !a:plug.enable | return | en
-  if a:plug.is_lazy
-    if plugex#add2rtp(a:plug)
-      call s:log('[ add2rtp ]', '[ lazy ]', a:plug.name)
-    en
-  else
-    if has_key(a:plug, 'plugs') " for group
-      for l:p in a:plug.plugs
-        if has_key(l:p, 'lazy') && l:p.lazy == 1
-          if !plug_util#load(l:p)
-            call s:err('When load group ['.a:plug.name.'], load plugin ['.l:p.name.'] fail.')
-          en
-        en
-      endfor
-    en
-    let a:plug.loaded = 1
-    call s:log('[ loaded ]', '[ non lazy ]', a:plug.name)
-    if plugex#call_after(a:plug)
-      call s:log('[ call_after ]', '[ non lazy ]', a:plug.name)
-    en
-  en
 endf " }}}
 fu! s:load_vimenter_plugs(tid) " {{{
   " load 10 plugin each time
@@ -297,6 +300,9 @@ fu! s:load_vimenter_plugs(tid) " {{{
     do BufWinEnter
     do BufEnter
     do VimEnter
+    call s:log('')
+    call s:log("[ >>>>> vim runtime >>>>> ]")
+    echohl String | echom 'init finish' | echohl None
   en
 endf " }}}
 " functions for s:setup_lazy_load
@@ -329,6 +335,7 @@ fu! s:fake_map(the_map, with_prefix, prefix, name) " {{{
   en
   call feedkeys(substitute(a:the_map, '^<Plug>', "\<Plug>", '') . extra)
 endf " }}}
+"
 " functions for s:handle_plug for plugex#end
 fu! plugex#call_before(plug) " for plug obj {{{
   " call plug's before
@@ -389,43 +396,6 @@ fu! plugex#load_ftdetect(plug) " for plug obj {{{
   en
 endf " }}}
 
-" functions for command
-fu! plugex#add(repo, ...) " {{{
-  " for PlugEx command
-  if a:0 == 0
-    let l:plug = s:new_plug(a:repo, {})
-  elseif a:0 == 1
-    let l:plug = s:new_plug(a:repo, a:1)
-  el
-    return s:err('Too many arguments for Plug')
-  en
-  let l:name = l:plug.name
-  let s:plugs[l:name] = l:plug
-  call add(s:plugs_order, l:name)
-endf " }}}
-fu! plugex#add_group(name, ...) " {{{
-  " for PlugExGroup command
-  if a:0 == 0 | return s:err('['.a:name.'] A plug group shoud have one plugin at least.') | en
-  if type(a:000[-1]) == s:type.dict
-    let l:plugs = a:000[0:-2]
-    let l:config = a:000[-1]
-  else
-    let l:plugs = a:000
-    let l:config = {}
-  en
-  if len(l:plugs) == 0 | return s:err('['.a:name.'] A plug group shoud have one plugin at least.') | en
-  for i in range(len(l:plugs))
-    if type(l:plugs[i]) == s:type.string
-      let l:plugs[i] = [l:plugs[i], {}]
-    elseif type(l:plugs[i]) != s:type.list
-      return s:err('['.a:name.'] Plugin in plug group must be a list or string')
-    en
-  endfor
-  let l:config.plugs = l:plugs
-  let l:config.name = a:name
-
-  call plugex#add(a:name, l:config)
-endf " }}}
 " functions for s:new_plug
 fu! s:new_plug(repo, config) " for plug obj {{{
   if g:plugex_param_check | call s:check_param(a:repo, a:config) | en
@@ -547,6 +517,53 @@ fu! s:check_param(repo, config) " for plug obj {{{
   en
 endf " }}}
 
+" functions for command
+fu! plugex#add(repo, ...) " {{{
+  " for PlugEx command
+  if a:0 == 0
+    let l:plug = s:new_plug(a:repo, {})
+  elseif a:0 == 1
+    let l:plug = s:new_plug(a:repo, a:1)
+  el
+    return s:err('Too many arguments for Plug')
+  en
+  let l:name = l:plug.name
+  let s:plugs[l:name] = l:plug
+  call add(s:plugs_order, l:name)
+endf " }}}
+fu! plugex#add_group(name, ...) " {{{
+  " for PlugExGroup command
+  if a:0 == 0 | return s:err('['.a:name.'] A plug group shoud have one plugin at least.') | en
+  if type(a:000[-1]) == s:type.dict
+    let l:plugs = a:000[0:-2]
+    let l:config = a:000[-1]
+  else
+    let l:plugs = a:000
+    let l:config = {}
+  en
+  if len(l:plugs) == 0 | return s:err('['.a:name.'] A plug group shoud have one plugin at least.') | en
+  for i in range(len(l:plugs))
+    let l:p = l:plugs[i]
+    if type(l:p) == s:type.string
+      let l:plugs[i] = [l:p, {'lazy': 1}]
+    elseif type(l:p) == s:type.list
+      if len(l:p) == 1
+        let l:plugs[i] = [l:p[0], {'lazy': 1}]
+      elseif len(l:p) == 2
+        let l:plugs[i][1].lazy = get(l:plugs[i][1], 'lazy', 1)
+      else
+        return s:err('['.a:name.'] Format error: PlugExGroup '.a:name.', '.string(a:000)[1:-2])
+      en
+    else
+      return s:err('['.a:name.'] Plugin in plug group must be a list or string')
+    en
+  endfor
+  let l:config.plugs = l:plugs
+  let l:config.name = a:name
+
+  call plugex#add(a:name, l:config)
+endf " }}}
+
 " other functions
 fu! s:err(msg) " {{{
   " echo err
@@ -570,6 +587,9 @@ endf " }}}
 fu! s:trim_repo(str) " {{{
   " foo/bar[.git][/] -> foo/bar
   return substitute(a:str, '\(.git\)\=[\/]\=$', '', '')
+endf " }}}
+fu! s:is_group(plug) " {{{
+  return has_key(a:plug, 'plugs')
 endf " }}}
 fu! s:log(...) " {{{
   if get(g:, 'plugex_log', 0)

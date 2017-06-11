@@ -37,9 +37,9 @@ fu! config#devicon#after()
   augroup END
 
   if g:is_gui
-    if g:is_win()
+    if g:is_win
       set guifont=SauceCodePro\ NF:h9
-    elsei g:is_osx()
+    elsei g:is_osx
       set guifont=SauceCodePro\ NF:h11
     else
       set guifont=SauceCodePro\ NF\ 9

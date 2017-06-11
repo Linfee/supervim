@@ -1,3 +1,6 @@
+let s:cpo_save = &cpo
+set cpo&vim
+
 let [s:plug_home, s:plug_path, s:plugs, s:plugs_order] = plugex#vars()
 
 let s:type = {
@@ -86,12 +89,14 @@ fu! plug_util#load(plug) " {{{
     endfor
   en
 
+  let l:lazy = a:plug.is_lazy ? '[ lazy ]' : '[ non lazy ]'
+  let l:group = s:is_group(a:plug) ? '[ group ]' : '[ plug ]'
   " call before, add2rtp, load, after
   if plugex#call_before(a:plug)
-      call s:log('[ call_before ]', '[ lazy ]', a:plug.name)
+      call s:log('[ call_before ]', l:lazy, a:plug.name)
   en
   if plugex#add2rtp(a:plug)
-    call s:log('[ add2rtp ]', '[ lazy ]', a:plug.name)
+    call s:log('[ add2rtp ]',l:lazy, a:plug.name)
   en
   if !s:is_group(a:plug)
     " for normal plugin
@@ -115,9 +120,9 @@ fu! plug_util#load(plug) " {{{
     endfor
   en
   let a:plug.loaded = 1
-  call s:log('[ loaded ]', '[ lazy ]', a:plug.name)
+  call s:log('[ loaded ]', l:lazy, l:group, a:plug.name)
   if plugex#call_after(a:plug)
-    call s:log('[ call_after ]', '[ lazy ]', a:plug.name)
+    call s:log('[ call_after ]', l:lazy, a:plug.name)
   en
   return 1
 endf " }}}
@@ -324,4 +329,6 @@ fu! s:log(...) " {{{
   en
 endf " }}}
 
+let &cpo = s:cpo_save
+unlet s:cpo_save
 " vim: fmr={{{,}}} fdm=marker:
