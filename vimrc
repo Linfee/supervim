@@ -16,7 +16,7 @@ let g:is_nvim = has('nvim')
 let g:is_gui = !has('nvim') && has('gui_running')
 
 " set main config dir
-let g:config_home = expand('~/.nvim')
+let g:config_home = expand('~/.vim')
 
 let &rtp = expand(g:config_home . ',') . &rtp . expand(',' . g:config_home . '/after')
 
