@@ -79,7 +79,7 @@ PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
 PlugEx 'iamcco/markdown-preview.vim', {'for': 'markdown', 'on': 'MarkdownPreview'}
 
 " python
-PlugEx 'davidhalter/jedi-vim', {'on_event': 'InsertEnter if &ft=''python'''}
+PlugEx 'davidhalter/jedi-vim', {'on_event': 'InsertEnter if &ft==''python'''}
 
 " ruby
 PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
