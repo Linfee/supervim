@@ -20,4 +20,11 @@ let g:config_home = expand('~/.nvim')
 
 let &rtp = expand(g:config_home . ',') . &rtp . expand(',' . g:config_home . '/after')
 
-source config.vim
+source scripts/betterdefault.vim
+source scripts/encodingforzh.vim
+source scripts/key.vim
+source scripts/keymap.vim
+source scripts/ui.vim
+source scripts/config.vim
+source scripts/ex.vim
+source scripts/triggers.vim

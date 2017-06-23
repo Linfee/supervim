@@ -1,4 +1,4 @@
-fu! config#base_ui#before()
+fu! config#rainbow#before()
   let g:rainbow_conf = {
         \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
         \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
@@ -22,29 +22,8 @@ fu! config#base_ui#before()
         \   }
         \ }
   let g:rainbow_active = 1
-
-  " for vm-signify
-  let g:signify_vcs_list = ['git'] " only use git
-  let g:signify_vcs_cmds = {'git': 'git diff --no-color --no-ext-diff -U0 -- %f'}
-  let g:signify_cursorhold_normal     = 1
-  let g:signify_update_on_focusgained = 1
-  " let g:signify_disable_by_default = 1
 endf
 
-fu! config#base_ui#after()
-  " for rainbow
+fu! config#rainbow#after()
   nnoremap <leader>tr :RainbowToggle<cr>
-
-  " for vim-signify
-  nnoremap <leader>tg :SignifyToggle<cr>
-  nnoremap <leader>gh :SignifyToggleHighlight<cr>
-  nnoremap <leader>gr :SignifyRefresh<cr>
-  " hunk jumping
-  nmap <leader>gj <plug>(signify-next-hunk)
-  nmap <leader>gk <plug>(signify-prev-hunk)
-  " hunk text object
-  omap ic <plug>(signify-motion-inner-pending)
-  xmap ic <plug>(signify-motion-inner-visual)
-  omap ac <plug>(signify-motion-outer-pending)
-  xmap ac <plug>(signify-motion-outer-visual)
 endf

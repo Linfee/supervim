@@ -1,11 +1,4 @@
-" Layer: javacomplete2
-
-let layer.condition = 'executable("javac")'
-let layer.plugins += [['artur-shaik/vim-javacomplete2', {'for': 'java', 'on_event': 'InsertEnter'}]]
-
-
-fu! javacomplete2#after()
-
+fu! config#vim_javacomplete2#after()
   let g:JavaComplete_UseFQN = 1
   let g:JavaComplete_ServerAutoShutdownTime = 300
   let g:JavaComplete_MavenRepositoryDisable = 0

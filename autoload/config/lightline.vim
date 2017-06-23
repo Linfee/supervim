@@ -1,6 +1,6 @@
 scriptencoding utf8
 
-fu! config#lightline#after()
+fu! config#lightline#before()
   let g:lightline = {
         \ 'colorscheme': 'gruvbox',
         \ 'active': {
