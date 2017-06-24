@@ -33,8 +33,12 @@ fu! plugex#begin(...) " {{{
   let s:vimenter_plugs = [] " load after VimEnter
   let s:first_rtp = s:rstrip_slash(s:split_rtp()[0])
   let s:is_win = has('win32') || has('win64')
+  let s:is_win_unix = has('win32unix')
   let s:cache_dir = expand('~/.cache/'.(has('nvim') ? 'nvim' : 'vim'))
   let s:cache_file = expand(s:cache_dir.'/plugex')
+  if s:is_win_unix
+    let s:cache_file .= '.win_unix'
+  endif
   Log 'Use cache file', s:cache_file
 
   let s:plug_local_type = 'local'
