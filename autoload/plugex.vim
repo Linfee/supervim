@@ -63,6 +63,7 @@ fu! plugex#begin(...) " {{{
   com! -nargs=0 -bang
         \ PlugExClearCache call s:clear_cache('<bang>'=='!')
 
+  " load cache
   if g:plugex_use_cache
     if filereadable(s:cache_file)
       let [l:s1, l:s2] = readfile(s:cache_file)

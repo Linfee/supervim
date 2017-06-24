@@ -17,3 +17,5 @@ setl nowrap
 " 执行默认缓冲区内容
 " nnoremap <buffer> <space>e :@*<cr>
 
+nnoremap <buffer><silent> <cr>  :call lookup#lookup()<cr>
+nnoremap <buffer><silent> <bs>  :call lookup#pop()<cr>

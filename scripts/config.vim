@@ -1,7 +1,9 @@
 set cpo&vim
 scriptencoding utf-8
 
-" let g:plugex_use_log = 1
+let g:plugex_use_log = 0
+let g:plugex_use_cache = 1
+
 if plugex#begin()
 
   " ===========================================================================
@@ -15,7 +17,7 @@ if plugex#begin()
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')&&!g:is_win_unix}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
-  PlugEx 'luochen1990/rainbow', {'on_event': 'VimEnter'}
+  PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
 
@@ -67,9 +69,13 @@ if plugex#begin()
   PlugEx 'sbdchd/neoformat', {'on': 'Neoformat'}
   PlugEx 'junegunn/vim-easy-align', {'on': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}
   " movement
-  PlugEx 'easymotion/vim-easymotion', {'on': 'VimEnter'}
+  PlugEx 'easymotion/vim-easymotion', {'on_event': 'VimEnter'}
   " multiple cursors
-  PlugEx 'terryma/vim-multiple-cursors', {'on': 'VimEnter'}
+  PlugEx 'terryma/vim-multiple-cursors', {'on_event': 'VimEnter'}
+  " see content of register
+  PlugEx 'junegunn/vim-peekaboo', {'on_event': 'VimEnter'}
+
+  PlugEx 'tpope/tpope-vim-abolish', {'on_event': 'VimEnter'}
 
   " ===========================================================================
   " lang
@@ -92,7 +98,17 @@ if plugex#begin()
   PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
 
   " vimwiki
-  PlugEx 'imwiki/vimwiki', {'for': 'wiki', 'on': 'VimwikiTabIndex'}
+  PlugEx 'vimwiki/vimwiki', {'for': 'wiki', 'on': 'VimwikiTabIndex'}
+
+  " viml dev
+  " go to define
+  PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
+  " plugin for making plugin
+  PlugEx 'tpope/vim-scriptease', {'on_event': 'VimEnter if &ft==''vim'''}
+  " get the version of Vim and Neovim that introduced or removed features
+  PlugEx 'tweekmonster/helpful.vim', {'on': 'HelpfulVersion', 'for': 'help'}
+  " for test
+  PlugEx 'junegunn/vader.vim', {'on': 'Vader'}
 
   " ===========================================================================
   " tools
@@ -111,13 +127,21 @@ if plugex#begin()
   PlugEx 'tpope/vim-fugitive', {'on_event': 'VimEnter'}
   PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
   PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
-  PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
 
-  PlugEx 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar'], 'enable': executable('ctags')}
+  " help focus on writing in vim
+  PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
+  PlugEx 'junegunn/limelight.vim', {'on': 'Limelight'}
+
+  PlugEx 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar'],
+        \ 'enable': executable('ctags')}
   " vim calendar
   PlugEx 'itchyny/calendar.vim', {'on': 'Calendar'}
   " close anything
   PlugEx 'mhinz/vim-sayonara', {'on': 'Sayonara'}
+  " the interactive scratchpad for hackers
+  PlugEx 'metakirby5/codi.vim', {'on': 'Codi'}
+  "  tracing exceptions thrown by VimL scripts
+  PlugEx 'tweekmonster/exception.vim' " no plugin dir, no need to lazyload
 
   " ===========================================================================
   " other
@@ -188,5 +212,10 @@ nnoremap <tab>q :Sayonara<cr>
 " for calendar
 nnoremap <space>c :Calendar -view=year -split=horizontal -position=below -height=12<cr>
 
-" for rainbow
-nnoremap <leader>tr :RainbowToggle<cr>
+" for rainbow_parentheses.vim
+nnoremap <leader>tr :RainbowParentheses!!<cr>
+
+" for exception.vim
+com! -bar WTF call exception#trace()
+
+let g:foo_bar = 10
