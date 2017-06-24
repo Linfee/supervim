@@ -23,7 +23,3 @@ fu! config#rainbow#before()
         \ }
   let g:rainbow_active = 1
 endf
-
-fu! config#rainbow#after()
-  nnoremap <leader>tr :RainbowToggle<cr>
-endf

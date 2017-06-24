@@ -5,6 +5,21 @@ let g:plugex_log = 1
 call plugex#begin(expand(g:config_home.'/.repo'))
 
 " =============================================================================
+" ui
+" =============================================================================
+" colors
+PlugEx 'morhetz/gruvbox'
+PlugEx 'sickill/vim-monokai'
+PlugEx 'tomasr/molokai'
+
+PlugEx 'mhinz/vim-startify'
+PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')}
+PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
+PlugEx 'luochen1990/rainbow', {'on_event': 'VimEnter'}
+PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
+PlugEx 'itchyny/vim-cursorword'
+
+" =============================================================================
 " completion
 " =============================================================================
 if g:is_nvim
@@ -43,13 +58,7 @@ PlugEx 'roxma/nvim-completion-manager', {'on_event': 'VimEnter',
 " =============================================================================
 PlugEx 'scrooloose/nerdcommenter', {'on_event': 'VimEnter'}
 PlugEx 'jiangmiao/auto-pairs', {'on_event': 'InsertEnter', 'after': 'AutoPairsTryInit'}
-PlugEx 'tpope/vim-surround', {'on': [
-      \ '<Plug>Dsurround', '<Plug>Csurround', '<Plug>CSurround',
-      \ '<Plug>Ysurround', '<Plug>YSurround', '<Plug>Yssurround',
-      \ '<Plug>YSsurround', '<Plug>YSsurround', '<Plug>VSurround',
-      \ '<Plug>VgSurround', '<Plug>Isurround', '<Plug>Isurround',
-      \ '<Plug>ISurround'
-      \ ]}
+PlugEx 'tpope/vim-surround', {'on_event': 'VimEnter'}
 " find and replace
 PlugEx 'osyo-manga/vim-over', {'on': 'OverCommandLine'}
 " expand region
@@ -61,8 +70,6 @@ PlugEx 'junegunn/vim-easy-align', {'on': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlig
 PlugEx 'easymotion/vim-easymotion', {'on': 'VimEnter'}
 " multiple cursors
 PlugEx 'terryma/vim-multiple-cursors', {'on': 'VimEnter'}
-" underline cursorword
-PlugEx 'itchyny/vim-cursorword'
 
 " =============================================================================
 " lang
@@ -98,13 +105,13 @@ PlugEx 'scrooloose/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTre
 " syntastic
 PlugEx 'vim-syntastic/syntastic', {'on_event': 'InsertEnter'}
 
-PlugEx 'Konfekt/FastFold'
-PlugEx 'tpope/vim-repeat'
+PlugEx 'Konfekt/FastFold',   {'on_event': 'VimEnter'}
+PlugEx 'tpope/vim-repeat' " no plugin dir, no need to lazyload
 
-PlugEx 'tpope/vim-fugitive'
-PlugEx 'gregsexton/gitv',   {'on': 'Gitv'}
-PlugEx 'mbbill/undotree',   {'on': 'UndotreeToggle'}
-PlugEx 'junegunn/goyo.vim', {'on': 'Goyo'}
+PlugEx 'tpope/vim-fugitive', {'on_event': 'VimEnter'}
+PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
+PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
+PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
 
 PlugEx 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar'], 'enable': executable('ctags')}
 " vim calendar
@@ -113,19 +120,8 @@ PlugEx 'itchyny/calendar.vim', {'on': 'Calendar'}
 PlugEx 'mhinz/vim-sayonara', {'on': 'Sayonara'}
 
 " =============================================================================
-" ui
-" =============================================================================
-PlugEx 'morhetz/gruvbox'
-PlugEx 'sickill/vim-monokai'
-PlugEx 'tomasr/molokai'
-
-PlugEx 'mhinz/vim-startify'
-PlugEx 'luochen1990/rainbow', {'on_event': 'VimEnter'}
-PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
-PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
-PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')}
-
 " other
+" =============================================================================
 PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
 
 call plugex#end()
@@ -137,23 +133,7 @@ call config#theme#after()
 " triggers
 " =============================================================================
 " for vim-surround
-let g:surround_no_mappings = 1
 vmap Si S(i_<esc>f)
-nmap ds  <Plug>Dsurround
-nmap cs  <Plug>Csurround
-nmap cS  <Plug>CSurround
-nmap ys  <Plug>Ysurround
-nmap yS  <Plug>YSurround
-nmap yss <Plug>Yssurround
-nmap ySs <Plug>YSsurround
-nmap ySS <Plug>YSsurround
-xmap S   <Plug>VSurround
-xmap gS  <Plug>VgSurround
-if !hasmapto("<Plug>Isurround","i") && "" == mapcheck("<C-S>","i")
-  imap    <C-S> <Plug>Isurround
-endif
-imap      <C-G>s <Plug>Isurround
-imap      <C-G>S <Plug>ISurround
 
 
 " for vim-over
@@ -165,25 +145,17 @@ nnoremap <leader>rr :OverCommandLine<cr>%s/
 vmap v <Plug>(expand_region_expand)
 vmap V <Plug>(expand_region_shrink)
 let g:expand_region_text_objects = {
-      \ 'iw'  :0,
-      \ 'iW'  :0,
-      \ 'i"'  :0,
-      \ 'i''' :0,
-      \ 'i]'  :1,
-      \ 'ib'  :1,
-      \ 'iB'  :1,
-      \ 'il'  :1,
-      \ 'ii'  :1,
-      \ 'ip'  :0,
-      \ 'ie'  :0,
-      \ }
+      \ 'iw': 0, 'iW': 0, 'i"': 0, 'i''': 0, 'i]': 1, 'ib': 1,
+      \ 'iB': 1, 'il':1 , 'ii':1 , 'ip' : 0, 'ie': 0 }
 
 
 " for vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap <leader>a <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap <leader>a <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+vmap ga <Plug>(EasyAlign)
+nnoremap <leader>ga ga
 
 
 " for vim-multiple-cursors

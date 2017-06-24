@@ -8,7 +8,6 @@ set cpo&vim
 
 let s:status = {'ready': 0, 'in_rtp': 1, 'called_before': 2, 'loaded': 3, 'called_after': 4}
 let s:status_list = ['ready', 'in_rtp', 'called_before', 'loaded', 'called_after']
-let s:type = {'string': type(''), 'number': type(1), 'list': type([]), 'dict': type({}), 'funcref': type(function('call'))}
 
 " for user
 fu! plugex#begin(...) " {{{
@@ -68,7 +67,9 @@ endf " }}}
 fu! plugex#end() " {{{
   if !exists('s:plugs') | return s:err('Call plugex#begin() first') | endif
   Log '' | Log '>>> plugex#end >>>'
-  filetype off
+  if &compatible
+    set nocompatible
+  endif
   aug PlugEx
     au!
     call s:handle_plug()
@@ -305,25 +306,6 @@ fu! s:add2rtp(plug) " {{{
     return s:err('Plug should be ready before add2rtp')
   endif
 endf " }}}
-fu! s:call_before(plug) " {{{
-  if a:plug.status >= s:status.called_before
-    return
-  endif
-  if a:plug.status != s:status.in_rtp
-    return s:err('Plug status should be in_rtp when call_before, but it is '.a:plug.status.' for plug '.a:plug.name)
-  endif
-  let l:before = has_key(a:plug, 'before') ? a:plug.before : 'config#'.substitute(a:plug.name, '[.-]', '_', 'g').'#before'
-  try
-    call call(l:before, [])
-    let a:plug.called_before = l:before
-    Log 'Call before for plug', a:plug.name.',', l:before
-    return 1
-  catch /^Vim\%((\a\+)\)\=:E117/
-    Log 'Call before for', a:plug.name.',', 'can not found function', l:before
-  finally
-    let a:plug.status = s:status.called_before
-  endtry
-endf " }}}
 fu! s:load(plug) " {{{
   " deps
   if has_key(a:plug, 'deps')
@@ -375,12 +357,31 @@ fu! s:load(plug) " {{{
   call s:call_after(a:plug)
   return 1
 endf " }}}
+fu! s:call_before(plug) " {{{
+  if a:plug.status >= s:status.called_before
+    return
+  endif
+  if a:plug.status != s:status.in_rtp
+    return s:err('Plug status should be in_rtp when call_before, but it is '.s:status_list(a:plug.status).' for plug '.a:plug.name)
+  endif
+  let l:before = has_key(a:plug, 'before') ? a:plug.before : 'config#'.substitute(a:plug.name, '[.-]', '_', 'g').'#before'
+  try
+    call call(l:before, [])
+    let a:plug.called_before = l:before
+    Log 'Call before for plug', a:plug.name.',', l:before
+    return 1
+  catch /^Vim\%((\a\+)\)\=:E117/
+    Log 'Call before for', a:plug.name.',', 'can not found function', l:before
+  finally
+    let a:plug.status = s:status.called_before
+  endtry
+endf " }}}
 fu! s:call_after(plug) " {{{
   if a:plug.status == s:status.called_after
     return
   endif
   if a:plug.status != s:status.loaded
-    return s:err('Plug status should be loaded when call_after, but it is '.a:plug.status.' for plug '.a:plug.name)
+    return s:err('Plug status should be loaded when call_after, but it is '.s:status_list(a:plug.status).' for plug '.a:plug.name)
   endif
   let l:after = has_key(a:plug, 'after') ? a:plug.after : 'config#'.substitute(a:plug.name, '[.-]', '_', 'g').'#after'
   try
@@ -437,7 +438,7 @@ fu! s:pretreatment(repo, config) " for new_plug {{{
   " dir, type, as, uri
   " is_lazy
   for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
-    if has_key(a:config, l:attr) && type(a:config[l:attr]) == s:type.string
+    if has_key(a:config, l:attr) && type(a:config[l:attr]) == v:t_string
       let a:config[l:attr] = [a:config[l:attr]]
     endif
   endfor
@@ -453,7 +454,7 @@ fu! s:complete_plugs(a, l, p) " {{{
   " complete all plugin names
   let r = []
   for name in s:plugs_order
-    if niame =~? a:a
+    if name =~? a:a
       call add(r, name)
     endif
   endfor
@@ -470,8 +471,7 @@ fu! s:pluginfo(...) " {{{
   let l:loaded = []
   let l:lazy_num = 0
   let l:enable_num = 0
-  for l:pn in s:plugs_order
-    let l:p = s:plugs[l:pn]
+  for l:p in l:plugs
     call append(line('$'), split(s:to_str(l:p), '\n'))
     if l:p.status >= s:status.loaded
       call add(l:loaded, l:p.name)
@@ -479,15 +479,17 @@ fu! s:pluginfo(...) " {{{
     if l:p.is_lazy | let l:lazy_num += 1 | en
     if l:p.enable | let l:enable_num += 1 | en
   endfor
-  call append(3, '')
-  call append(3, 'Total: '.len(s:plugs))
-  call append(4, 'Enable: '.l:enable_num)
-  call append(5, 'Lazy: '.l:lazy_num)
-  call append(6, 'Loaded: '.len(l:loaded))
-  call append(7, 'These plugins have been loaded: ')
-  call append(8, '  '.string(l:loaded))
-  call append(9, 'Plugs order')
-  call append(10, '  '.string(s:plugs_order))
+  if a:0 == 0
+    call append(3, '')
+    call append(3, 'Total: '.len(s:plugs))
+    call append(4, 'Enable: '.l:enable_num)
+    call append(5, 'Lazy: '.l:lazy_num)
+    call append(6, 'Loaded: '.len(l:loaded))
+    call append(7, 'These plugins have been loaded: ')
+    call append(8, '  '.string(l:loaded))
+    call append(9, 'Plugs order')
+    call append(10, '  '.string(s:plugs_order))
+  endif
 endf " }}}
 fu! s:install(...) " {{{
   " for PlugExInstall command
@@ -579,7 +581,7 @@ fu! s:check_param(repo, config) " {{{
   if g:plugex_param_check
     for l:attr in ['name', 'path', 'branch', 'tag', 'commit']
       if has_key(a:config, l:attr)
-        if type(a:config[l:attr]) != s:type.string
+        if type(a:config[l:attr]) != v:t_string
           call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string.')
           unlet a:config[l:attr]
         endif
@@ -587,7 +589,7 @@ fu! s:check_param(repo, config) " {{{
     endfor
     for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
       if has_key(a:config, l:attr)
-        if type(a:config[l:attr]) == s:type.string || type(a:config[l:attr]) == s:type.list
+        if type(a:config[l:attr]) == v:t_string || type(a:config[l:attr]) == v:t_list
           if len(a:config[l:attr] == 0)
             unlet a:config[l:attr]
           endif
@@ -599,8 +601,8 @@ fu! s:check_param(repo, config) " {{{
     endfor
     for l:attr in ['before', 'after', 'do']
       if has_key(a:config, l:attr)
-        if type(a:config[l:attr]) != s:type.string &&
-              \ type(a:config[l:attr]) != s:type.funcref
+        if type(a:config[l:attr]) != v:t_string &&
+              \ type(a:config[l:attr]) != v:t_func
           call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string or funcref.')
           unlet a:config[l:attr]
         endif
@@ -676,24 +678,27 @@ fu! s:rstrip_slash(str) " {{{
   " foo/bar/\//\\ -> /foo/bar
   return substitute(a:str, '[\/\\]\+$', '', '')
 endf " }}}
-fu! s:lstrip_slash(str) " unused {{{
-  " /\//\\foo/bar -> foo/bar
-  return substitute(a:str, '^[\/\\]\+', '', '')
-endf " }}}
 fu! s:trim_repo(str) " {{{
   " foo/bar[.git][/] -> foo/bar
   return substitute(a:str, '\(.git\)\=[\/]\=$', '', '')
 endf " }}}
 fu! s:source(dir, ...) " {{{
   " source file from dir with patterns
-  let found = 0
+  let l:found = 0
   for pattern in a:000
     for script in split(globpath(a:dir, pattern))
       execute 'source '. script
-      let found = 1
+      let l:found = 1
     endfor
   endfor
-  return found
+  return l:found
+endf " }}}
+fu! s:pick_plugs(names) " {{{
+  let l:plugs = []
+  for l:name in a:names
+    call add(l:plugs, s:plugs[l:name])
+  endfor
+  return l:plugs
 endf " }}}
 fu! plugex#is_loaded(...) " {{{
   for l:n in a:000
@@ -705,21 +710,32 @@ fu! plugex#is_loaded(...) " {{{
 endf " }}}
 
 " log {{{
+let g:plugex_use_log = get(g:, 'plugex_use_log', 0)
 let s:plugs_log = []
 fu! s:log(...)
   let l:log = ''
   for l:a in a:000
-    let l:log .= ' '.(type(l:a) == s:type.string ? l:a : string(l:a))
+    let l:log .= ' '.(type(l:a) == v:t_string ? l:a : string(l:a))
   endfor
   call add(s:plugs_log, l:log)
 endf
-com! -nargs=+ -bar Log call s:log(<args>)
+if g:plugex_use_log
+  com! -nargs=+ -bar Log call s:log(<args>)
+else
+  fu! s:pass()
+  endf
+  com! -nargs=+ -bar Log call s:pass()
+endif
 com! -nargs=0 PlugExLog tabnew |
       \ setl bt=nofile bh=unload nowrap |
       \ call setline(1, '[ PlugExLog ]') |
+      \ if !g:plugex_use_log |
+      \ call append(line('$'), 'Note: set  g:plugex_use_log to 1 to enable log') |
+      \ else |
       \ for l in s:plugs_log |
       \ call append(line('$'), '  '.l) |
-      \ endfor
+      \ endfor |
+      \ en
 " }}}
 
 let &cpo = s:cpo_save

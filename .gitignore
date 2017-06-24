@@ -1,5 +1,4 @@
 *.sw*
-repos
 plugged
 __pycache__
 .netrwhist
