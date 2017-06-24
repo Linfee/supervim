@@ -85,3 +85,7 @@ fu! config#lightline_vim#before()
     call lightline#update()
   endf
 endf
+
+fu! config#lightline_vim#after()
+  call lightline#update()
+endf

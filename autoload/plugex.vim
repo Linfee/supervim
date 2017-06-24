@@ -26,47 +26,78 @@ fu! plugex#begin(...) " {{{
   elseif !empty(&rtp)
     let s:plug_home = expand(s:rstrip_slash(split(&rtp, ',')[0]) . '/.repo')
   el
-    retu s:err('Unable to determine plugex home. Try calling plugex#begin() with a path argument.')
+    return s:err('Unable to determine plugex home. Try calling plugex#begin() with a path argument.')
   endif
   let s:plugs = {}
   let s:plugs_order = []
   let s:vimenter_plugs = [] " load after VimEnter
   let s:first_rtp = s:rstrip_slash(s:split_rtp()[0])
   let s:is_win = has('win32') || has('win64')
-  let g:plugex_param_check = get(g:, 'plugex_param_check', 0)
+  let s:cache_dir = expand('~/.cache/'.(has('nvim') ? 'nvim' : 'vim'))
+  let s:cache_file = expand(s:cache_dir.'/plugex')
+  Log 'Use cache file', s:cache_file
 
-  " Vars for plug obj
-  " properties
-  let s:plug_attrs =  ['name', 'path', 'branch', 'tag', 'commit']
-  let s:plug_attrs += ['enable', 'frozen', 'rtp', 'deps']
-  let s:plug_attrs += ['before', 'after', 'do'] " funcref/function name
-  let s:plug_attrs += ['for', 'on', 'on_event', 'on_func'] " lazy
-  " other properties
-  " dir, type, as, uri
-  " is_lazy
-  " sourced
   let s:plug_local_type = 'local'
   let s:plug_remote_type = 'remote'
 
+  let g:plugex_param_check = get(g:, 'plugex_param_check', 0)
+  let g:plugex_use_cache = get(g:, 'plugex_use_cache', 1)
+
   " Def cmds
   com! -nargs=+ -bar
-        \ PlugEx        call plugex#new_plug(<args>)
+        \ PlugEx           call plugex#new_plug(<args>)
   com! -nargs=* -complete=customlist,s:complete_plugs
-        \ PlugExInstall call s:install(<f-args>)
+        \ PlugExInstall    call s:install(<f-args>)
   com! -nargs=* -complete=customlist,s:complete_plugs
-        \ PlugExUpdate  call s:update(<f-args>)
+        \ PlugExUpdate     call s:update(<f-args>)
   com! -nargs=0 -bang
-        \ PlugExClean   call s:clean('<bang>'=='!')
+        \ PlugExClean      call s:clean('<bang>'=='!')
   com! -nargs=0
-        \ PlugExStatus  call s:status()
+        \ PlugExStatus     call s:status()
   com! -nargs=* -complete=customlist,s:complete_plugs
-        \ PlugExInfo    call s:pluginfo(<f-args>)
+        \ PlugExInfo       call s:pluginfo(<f-args>)
+  com! -nargs=0 -bang
+        \ PlugExClearCache call s:clear_cache('<bang>'=='!')
+
+  if g:plugex_use_cache
+    if filereadable(s:cache_file)
+      let [l:s1, l:s2] = readfile(s:cache_file)
+      let [s:plugs, s:plugs_order] = [eval(l:s1), eval(l:s2)]
+      Log '' | Log '>>> plugex#begin finished with cache >>>' | Log ''
+      return 0
+    endif
+  endif
+
+  " Vars for plug obj
+  " properties
+  "   name, path, branch, tag, commit
+  "   enable, frozen, rtp, deps
+  "   before, after, do
+  "   for, on, on_event, on_func
+  " other properties
+  "   dir, type, as, uri
+  "   is_lazy
+  "   sourced
 
   Log '' | Log '>>> plugex#begin finished >>>' | Log ''
+  return 1
 endf " }}}
 fu! plugex#end() " {{{
   if !exists('s:plugs') | return s:err('Call plugex#begin() first') | endif
   Log '' | Log '>>> plugex#end >>>'
+
+  " save cache
+  if g:plugex_use_cache
+    if !filereadable(s:cache_file)
+      if !isdirectory(s:cache_dir)
+        call mkdir(s:cache_dir, 'p')
+      endif
+      if writefile([string(s:plugs), string(s:plugs_order)], s:cache_file)
+        call s:err('Write cache file '.s:cache_file.' fail.')
+      endif
+    endif
+  endif
+
   if &compatible
     set nocompatible
   endif
@@ -462,7 +493,7 @@ fu! s:complete_plugs(a, l, p) " {{{
 endf " }}}
 fu! s:pluginfo(...) " {{{
   " for PlugInfo command
-  let l:plugs = a:0 == 0 ? s:plugs : s:pick_plugs(a:000)
+  let l:plugs = a:0 == 0 ? values(s:plugs) : s:pick_plugs(a:000)
   tabnew
   setl nolist nospell wfh bt=nofile bh=unload fdm=indent wrap
   call setline(1, repeat('-', 40))
@@ -513,6 +544,7 @@ fu! s:install(...) " {{{
   "   call s:load_ftdetect(l:p)
   "   call s:load(l:p)
   " endfor
+  PlugExClearCache!
 endf " }}}
 fu! s:update(...) " {{{
   " for PlugExUpdate command
@@ -531,6 +563,7 @@ fu! s:update(...) " {{{
   call s:init_plug(l:plugs)
   PlugUpdate
   let &rtp = l:old_rtp
+  PlugExClearCache!
 endf " }}}
 fu! s:clean(bang) " {{{
   " for PlugExClean
@@ -542,6 +575,7 @@ fu! s:clean(bang) " {{{
     PlugClean
   endif
   let &rtp = l:old_rtp
+  PlugExClearCache!
 endf " }}}
 fu! s:status() " {{{
   " for PlugExStatus
@@ -549,6 +583,21 @@ fu! s:status() " {{{
   call s:init_plug(values(s:plugs))
   PlugStatus
   let &rtp = l:old_rtp
+endf " }}}
+fu! s:clear_cache(bang) " {{{
+  if a:bang
+    return delete(s:cache_file)
+  else
+    if !filereadable(s:cache_file)
+      return s:err('Cache file '.s:cache_file.' does not exists.')
+    endif
+    if delete(s:cache_file)
+      return s:err('Delete cache file '.s:cache_file.' fail.')
+    else
+      echom 'Delete cache file '.s:cache_file.' success.'
+      return 1
+    endif
+  endif
 endf " }}}
 fu! s:set_plug_repo_info(plug) " {{{
   let a:plug.repo = s:trim_repo(a:plug.repo)
