@@ -19,6 +19,7 @@ setl fileformat=unix
     " execfile(activate_this, dict(__file__=activate_this))
 " EOF
 
+setl omnifunc=jedi#completions
 
 if g:is_win
     if exists("g:s_py2")

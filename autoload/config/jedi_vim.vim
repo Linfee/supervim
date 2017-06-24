@@ -1,7 +1,7 @@
 fu! config#jedi_vim#before()
-  " for jedi
+  let g:jedi#auto_initialization = 1
   " jedi 补全快捷键, 有补全插件就不需要了
-  " let g:jedi#completions_command = "<c-n>"
+  let g:jedi#completions_command = "<c-n>"
   let g:jedi#goto_command = "<leader>d"
   let g:jedi#goto_assignments_command = "<leader>g"
   let g:jedi#documentation_command = "K"
@@ -30,4 +30,9 @@ fu! config#jedi_vim#before()
   let g:jedi#force_py_version = 3
   " 自动完成from .. import ..
   let g:jedi#smart_auto_mappings = 1
+endf
+
+
+fu! config#jedi_vim#after()
+  inoremap <silent> <buffer> <c-n> <c-x><c-o>
 endf

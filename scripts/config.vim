@@ -2,7 +2,7 @@ set cpo&vim
 scriptencoding utf-8
 
 let g:plugex_use_log = 0
-let g:plugex_use_cache = 1
+let g:plugex_use_cache = 0
 
 if plugex#begin()
 
@@ -44,8 +44,7 @@ if plugex#begin()
   " deoplete
   PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'VimEnter',
         \ 'enable': get(g:, 'use_deoplete')}
-  PlugEx 'zchee/deoplete-jedi', {'lazy': 1,
-        \ 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'VimEnter',
         \ 'enable': get(g:, 'use_neocomplete')}
@@ -104,7 +103,7 @@ if plugex#begin()
   " go to define
   PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
   " plugin for making plugin
-  PlugEx 'tpope/vim-scriptease', {'on_event': 'VimEnter if &ft==''vim'''}
+  PlugEx 'tpope/vim-scriptease', {'on_event': 'VimEnter'}
   " get the version of Vim and Neovim that introduced or removed features
   PlugEx 'tweekmonster/helpful.vim', {'on': 'HelpfulVersion', 'for': 'help'}
   " for test
