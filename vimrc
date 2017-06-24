@@ -18,9 +18,11 @@ let g:is_gui = !has('nvim') && has('gui_running')
 " set main config dir
 let g:config_home = expand('~/.vim')
 
-let &rtp = expand(g:config_home . ',') . &rtp . expand(',' . g:config_home . '/after')
+let &rtp = expand(g:config_home . ',') . &rtp 
 
 for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', 'ex']
   exe 'source '.g:config_home.'/scripts/'.s:s.'.vim'
 endfor
+
+let &rtp .=  expand(',' . g:config_home . '/after')
 
