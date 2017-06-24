@@ -24,7 +24,7 @@ fu! plugex#begin(...) " {{{
   elseif exists('g:plug_home')
     let s:plug_home = s:rstrip_slash(expand(g:plug_home))
   elseif !empty(&rtp)
-    let s:plug_home = expand(s:rstrip_slash(split(&rtp, ',')[0]) . '/.repo')
+    let s:plug_home = expand(s:rstrip_slash(split(&rtp, ',')[0]) . '/.repos')
   el
     return s:err('Unable to determine plugex home. Try calling plugex#begin() with a path argument.')
   endif
@@ -393,7 +393,7 @@ fu! s:call_before(plug) " {{{
     return
   endif
   if a:plug.status != s:status.in_rtp
-    return s:err('Plug status should be in_rtp when call_before, but it is '.s:status_list(a:plug.status).' for plug '.a:plug.name)
+    return s:err('Plug status should be in_rtp when call_before, but it is '.s:status_list[a:plug.status].' for plug '.a:plug.name)
   endif
   let l:before = has_key(a:plug, 'before') ? a:plug.before : 'config#'.substitute(a:plug.name, '[.-]', '_', 'g').'#before'
   try
@@ -412,7 +412,7 @@ fu! s:call_after(plug) " {{{
     return
   endif
   if a:plug.status != s:status.loaded
-    return s:err('Plug status should be loaded when call_after, but it is '.s:status_list(a:plug.status).' for plug '.a:plug.name)
+    return s:err('Plug status should be loaded when call_after, but it is '.s:status_list[a:plug.status].' for plug '.a:plug.name)
   endif
   let l:after = has_key(a:plug, 'after') ? a:plug.after : 'config#'.substitute(a:plug.name, '[.-]', '_', 'g').'#after'
   try

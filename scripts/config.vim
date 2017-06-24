@@ -2,7 +2,7 @@ set cpo&vim
 scriptencoding utf-8
 
 " let g:plugex_use_log = 1
-if plugex#begin(expand(g:config_home.'/.repo'))
+if plugex#begin()
 
   " ===========================================================================
   " ui
@@ -13,7 +13,7 @@ if plugex#begin(expand(g:config_home.'/.repo'))
   PlugEx 'tomasr/molokai'
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
-  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')}
+  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')&&!g:is_win_unix}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
   PlugEx 'luochen1990/rainbow', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
