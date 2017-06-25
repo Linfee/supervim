@@ -60,8 +60,6 @@ if plugex#begin()
   PlugEx 'scrooloose/nerdcommenter', {'on_event': 'VimEnter'}
   PlugEx 'jiangmiao/auto-pairs', {'on_event': 'InsertEnter', 'after': 'AutoPairsTryInit'}
   PlugEx 'tpope/vim-surround', {'on_event': 'VimEnter'}
-  " find and replace
-  PlugEx 'osyo-manga/vim-over', {'on': 'OverCommandLine'}
   " expand region
   PlugEx 'terryma/vim-expand-region', {'on': ['v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)']}
   " format and align
@@ -117,6 +115,9 @@ if plugex#begin()
   PlugEx 'Xuyuanp/nerdtree-git-plugin'
   PlugEx 'scrooloose/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTreeTabsToggle']}
 
+  " undotree
+  PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
+
   " syntastic
   PlugEx 'vim-syntastic/syntastic', {'on_event': 'InsertEnter'}
 
@@ -128,7 +129,11 @@ if plugex#begin()
   PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
   PlugEx 'cohama/agit.vim', {'on': ['Agit', 'AgitFile']}
 
-  PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
+  " search
+  PlugEx 'osyo-manga/vim-over', {'on': 'OverCommandLine'}
+  PlugEx 'dyng/ctrlsf.vim', {'on': ['CtrlSF', 'CtrlSFOpen', 'CtrlSFUpdate',
+        \ 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle', 'CtrlSFQuickfix']}
+
 
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
@@ -222,3 +227,7 @@ nnoremap <silent> <space>K :<C-U>exe 'help '.scriptease#helptopic()<CR>
 " for nerdcommenter
 Map n <a-/> <Plug>NERDCommenterToggle
 Map v <a-/> <Plug>NERDCommenterToggle
+
+" for ctrlsf.vim
+nnoremap <space>s :set operatorfunc=config#ctrlsf_vim#ctrlsf_search<cr>g@
+vnoremap <space>s :<c-u>call config#ctrlsf_vim#ctrlsf_search(visualmode())<cr>
