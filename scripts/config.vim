@@ -132,8 +132,9 @@ if plugex#begin()
   " search
   PlugEx 'osyo-manga/vim-over', {'on': 'OverCommandLine'}
   PlugEx 'dyng/ctrlsf.vim', {'on': ['CtrlSF', 'CtrlSFOpen', 'CtrlSFUpdate',
-        \ 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle', 'CtrlSFQuickfix']}
-
+        \ 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle', 'CtrlSFQuickfix',
+        \ '<Plug>CtrlSFPrompt', '<Plug>CtrlSFVwordPath', '<Plug>CtrlSFVwordExec',
+        \ '<Plug>CtrlSFCwordPath', '<Plug>CtrlSFPwordPath']}
 
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
@@ -231,3 +232,11 @@ Map v <a-/> <Plug>NERDCommenterToggle
 " for ctrlsf.vim
 nnoremap <space>s :set operatorfunc=config#ctrlsf_vim#ctrlsf_search<cr>g@
 vnoremap <space>s :<c-u>call config#ctrlsf_vim#ctrlsf_search(visualmode())<cr>
+nmap     <c-s>f <Plug>CtrlSFPrompt
+vmap     <c-s>f <Plug>CtrlSFVwordPath
+vmap     <c-s>F <Plug>CtrlSFVwordExec
+nmap     <c-s>n <Plug>CtrlSFCwordPath
+nmap     <c-s>p <Plug>CtrlSFPwordPath
+nnoremap <c-s>o :CtrlSFOpen<CR>
+nnoremap <c-s>t :CtrlSFToggle<CR>
+inoremap <c-s>t <Esc>:CtrlSFToggle<CR>
