@@ -158,11 +158,9 @@ call config#theme#after()
 " for vim-surround
 vmap Si S(i_<esc>f)
 
-
 " for vim-over
 " <leader>rr快速执行替换预览
 nnoremap <leader>rr :OverCommandLine<cr>%s/
-
 
 " for vim-expand-region
 vmap v <Plug>(expand_region_expand)
@@ -171,7 +169,6 @@ let g:expand_region_text_objects = {
       \ 'iw': 0, 'iW': 0, 'i"': 0, 'i''': 0, 'i]': 1, 'ib': 1,
       \ 'iB': 1, 'il':1 , 'ii':1 , 'ip' : 0, 'ie': 0 }
 
-
 " for vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -179,7 +176,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 vmap ga <Plug>(EasyAlign)
 nnoremap <leader>ga ga
-
 
 " for vim-multiple-cursors
 nnoremap <silent> <c-c> :call multiple_cursors#quit()<CR>
@@ -217,4 +213,5 @@ nnoremap <leader>tr :RainbowParentheses!!<cr>
 " for exception.vim
 com! -bar WTF call exception#trace()
 
-let g:foo_bar = 10
+" for vim-scriptease
+nnoremap <silent> K :<C-U>exe 'help '.scriptease#helptopic()<CR>
