@@ -215,3 +215,7 @@ com! -bar WTF call exception#trace()
 
 " for vim-scriptease
 nnoremap <silent> K :<C-U>exe 'help '.scriptease#helptopic()<CR>
+
+" for nerdcommenter
+Map n <a-/> <Plug>NERDCommenterToggle
+Map v <a-/> <Plug>NERDCommenterToggle
