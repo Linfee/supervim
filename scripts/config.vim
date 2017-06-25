@@ -123,8 +123,11 @@ if plugex#begin()
   PlugEx 'Konfekt/FastFold',   {'on_event': 'VimEnter'}
   PlugEx 'tpope/vim-repeat' " no plugin dir, no need to lazyload
 
+  " git
   PlugEx 'tpope/vim-fugitive', {'on_event': 'VimEnter'}
   PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
+  PlugEx 'cohama/agit.vim',    {'on': 'Agit'}
+
   PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
 
   " help focus on writing in vim
@@ -214,7 +217,7 @@ nnoremap <leader>tr :RainbowParentheses!!<cr>
 com! -bar WTF call exception#trace()
 
 " for vim-scriptease
-nnoremap <silent> K :<C-U>exe 'help '.scriptease#helptopic()<CR>
+nnoremap <silent> <space>K :<C-U>exe 'help '.scriptease#helptopic()<CR>
 
 " for nerdcommenter
 Map n <a-/> <Plug>NERDCommenterToggle
