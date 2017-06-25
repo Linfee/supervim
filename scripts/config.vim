@@ -126,7 +126,7 @@ if plugex#begin()
   " git
   PlugEx 'tpope/vim-fugitive', {'on_event': 'VimEnter'}
   PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
-  PlugEx 'cohama/agit.vim',    {'on': 'Agit'}
+  PlugEx 'cohama/agit.vim', {'on': ['Agit', 'AgitFile']}
 
   PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
 
