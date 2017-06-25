@@ -109,8 +109,6 @@ fu! config#neocomplete_vim#after()
     endif
   endfunction
 
-  imap <expr> <Tab> CleverTab()
-
   " 回车插入补全并保存缩进，或者展开snippet
   " imap <expr> <CR> CleverCr()
   " <C-h>,<BS> 关闭预览窗口并删除补全预览
