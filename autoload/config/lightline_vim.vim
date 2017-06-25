@@ -25,6 +25,10 @@ fu! config#lightline_vim#before()
         \ },
         \ }
 
+  if g:is_win_unix
+    unlet g:lightline.colorscheme
+  endif
+
   fu! LightlineModified()
     retu &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
   endf

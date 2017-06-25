@@ -15,7 +15,7 @@ if plugex#begin()
   PlugEx 'tomasr/molokai'
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
-  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')&&!g:is_win_unix}
+  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': !exists('g:gui_oni')}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
