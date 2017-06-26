@@ -48,7 +48,7 @@ endf
 " use ctrlsf in nerdtree menu
 fu! config#nerdtree#after()
   call NERDTreeAddMenuItem({
-        \ 'text': '(s)earch files.',
+        \ 'text': '(s)earch files by CtrlSF',
         \ 'shortcut': 's',
         \ 'callback': 'NERDTreeAck' })
 
@@ -56,14 +56,15 @@ fu! config#nerdtree#after()
     " get the current dir from NERDTree
     let l:cd = g:NERDTreeDirNode.GetSelected().path.str()
     " get the pattern
-    let pattern = input("Enter the pattern: ")
+    let pattern = input("CtrlSF: ")
     if pattern == ''
       echo 'Maybe another time...'
       return
     endif
-    let l:ctrlsf_open_left = g:ctrlsf_open_left
+    let l:tmp = get(g:, 'ctrlsf_open_left')
     let g:ctrlsf_open_left = 0
     exe "CtrlSF '".pattern."' '".l:cd."'"
-    let g:ctrlsf_open_left = l:ctrlsf_open_left
+    let g:ctrlsf_open_left = l:tmp
+    NERDTreeClose
   endf
 endf
