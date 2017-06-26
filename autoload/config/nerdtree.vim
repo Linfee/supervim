@@ -54,7 +54,7 @@ fu! config#nerdtree#after()
   call NERDTreeAddKeyMap({
         \ 'key': '<c-s>',
         \ 'callback': 'NERDTreeSearchByCtrlSF',
-        \ 'quickhelpText': 'Search by CtrlSF.',
+        \ 'quickhelpText': 'Search by CtrlSF',
         \ 'scope': 'Node' })
   function! NERDTreeSearchByCtrlSF(...)
     " get the current dir from NERDTree

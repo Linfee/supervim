@@ -5,3 +5,4 @@ __pycache__
 autoload/plug.vim
 .repos
 log
+.DS_Store

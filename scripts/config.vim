@@ -111,9 +111,10 @@ if plugex#begin()
   " tools
   " ===========================================================================
   " nerdtree
-  PlugEx 'jistr/vim-nerdtree-tabs'
-  PlugEx 'Xuyuanp/nerdtree-git-plugin'
   PlugEx 'scrooloose/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind', 'NERDTreeTabsToggle']}
+  PlugEx 'jistr/vim-nerdtree-tabs', {'lazy': 1}
+  PlugEx 'Xuyuanp/nerdtree-git-plugin', {'lazy': 1}
+  PlugEx 'Linfee/nerdtree-open', {'lazy': 1}
 
   " undotree
   PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
