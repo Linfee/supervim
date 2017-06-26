@@ -1,3 +1,88 @@
+" pluxex: a vim plugin manager
+" ============================
+" Doc: {{{
+" Plugex is a vim plugin manager
+" Plugex uses vim-plug to download/update plugins
+" Plugex manages runtimepath and plugin loading itself
+"
+" Version: 0.1.0
+" Author:  Linfee
+" Email:   linfee@hotmail.com
+"
+" Plugex_options:
+"     name                 Use a different name for the plugin (string)
+"     path                 Custom directory for the plugin (string)
+"     branch/tag/commit    Branch/tag/commit of the repository to use (string)
+"
+"     enable               Enable or not (0 or 1)
+"     frozen               Do not update unless explicitly specified (0 or 1)
+"     rtp                  Subdirectory that contains Vim plugin (string or list)
+"     deps                 Dependent plugins (string or list)
+"     before               Call this functions before load current plugin. (string) default: 'config#{plug_name}#before'
+"     after                Call this functions after load current plugin. (string) default: 'config#{plug_name}#after'
+"                          Note: You won't get any message if 'before' or 'after' function doesn't exists, you can check
+"                          it by :PlugExLog
+"
+"     for                  Lazy load: When set filetype (string or list)
+"     on                   Lazy load: When Commands or <Plug>-mappings triggered (string or list)
+"     on_event             Lazy load: When event occurs (string or list)
+"     on_func              Lazy load: When functions called (string or list)
+"
+"     do                   Post-update hook (string or funcref)
+"
+" Global_options:
+"     g:plug_home           Specify a directory for plugins
+"     g:plug_path           Specify a path for plug.vim
+"                           Default as the first runtimepath autoload/plug.vim
+"     g:plugex_param_check  Check param for PlugEx or not, default 0
+"     g:plugex_use_cache    Use cache can launch faster, set to 1 to enable cache
+"                           When you add change plugin config you should exe :PlugExClearCache
+"     g:plugex_use_log      Set to 1 to enable log, then use PlugExLog to see all log
+"
+" Functions:
+"     plugex#begin({plug home}) : Call this first then use PlugEx to define plugins
+"     plugex#end()              : After define all plugins, call this function
+"
+"     plugex#new_plug(repo, config : PlugEx command call this function, repo is the plugin repo in string, config is a
+"                                    dict with Plugex_options as key
+"     plugex#is_loaded(...)        : Return 1 if all given plugins are loaded, accept string
+" Commands:
+"     PlugEx {plug repo}[, {options}] Add a plugin, {options} is a dict with Plugex_options as key
+"     PlugExInstall [name ...]   Install plugins
+"     PlugExUpdate [name ...]    Install or update plugins
+"     PlugExClean[!]             Remove unused directories (bang version will clean without prompt)
+"     PlugExStatus               Check the status of plugins
+"     PlugExinfo [name ...]      Check the status of plugins in plugex way
+"
+"     PlugExLog                  Show the log, don't add any parameter, that will add a log
+"     PlugExClearCache[!]        Clear all cache, use [!] will not get error message whether it exists or not
+" Eg:
+"     let g:plugex_use_log = 0
+"     let g:plugex_use_cache = 1
+"
+"     if plugex#begin()
+"       PlugEx 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
+"       PlugEx 'junegunn/goyo.vim', {'before': function('Before'), 'after': 'After', 'on': 'Goyo', 'deps': ['nerdtree']}
+"       PlugEx 'terryma/vim-expand-region', {'on': ['v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)']}
+"       PlugEx 'junegunn/vim-easy-align', {'on': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}
+"       PlugEx 'junegunn/vim-easy-align'
+"       PlugEx 'https://github.com/junegunn/vim-github-dashboard.git'
+"       PlugEx 'SirVer/ultisnips' | PlugEx 'honza/vim-snippets'
+"       PlugEx 'Valloric/MatchTagAlways', {'for': ['html', 'xml', 'xhtml', 'jsp']}
+"       PlugEx 'rdnetto/YCM-Generator', {'branch': 'stable'}
+"       PlugEx 'fatih/vim-go', {'tag': '*'}
+"       PlugEx 'nsf/gocode', {'tag': 'v.20150303', 'rtp': 'vim'}
+"       PlugEx 'junegunn/fzf', {'path': '~/.fzf', 'do': './install --all'}
+"
+"       PlugEx '~/my-plugin', {'on_event': ['InsertEnter', 'CorsurHold', 'if &ft=="java"']}
+"       PlugEx '~/my-plugin2', {'on_event': ['InsertEnter if &ft=="java"',
+"                                          \ 'CorsurHold if &ft=="jsp"',
+"                                          \ 'if &ft=="java"||&ft=="jsp"']}
+"       PlugEx '~/my-plugin3', {'on_func': ['Test', 'Test2']}
+"     endif
+"     call plugex#end()
+" }}}
+
 if exists('g:loaded_plugex')
   finish
 endif
@@ -11,7 +96,7 @@ let s:status_list = ['ready', 'in_rtp', 'called_before', 'loaded', 'called_after
 
 " for user
 fu! plugex#begin(...) " {{{
-  Log '>>> plugex#begin >>>'
+  PlugExLog '>>> plugex#begin >>>'
   if !executable('git')
     return s:err('Please make sure git in your path, plugex depends on that.')
   endif
@@ -39,7 +124,7 @@ fu! plugex#begin(...) " {{{
   if s:is_win_unix
     let s:cache_file .= '.win_unix'
   endif
-  Log 'Use cache file', s:cache_file
+  PlugExLog 'Use cache file', s:cache_file
 
   let s:plug_local_type = 'local'
   let s:plug_remote_type = 'remote'
@@ -68,7 +153,7 @@ fu! plugex#begin(...) " {{{
     if filereadable(s:cache_file)
       let [l:s1, l:s2] = readfile(s:cache_file)
       let [s:plugs, s:plugs_order] = [eval(l:s1), eval(l:s2)]
-      Log '' | Log '>>> plugex#begin finished with cache >>>' | Log ''
+      PlugExLog '' | PlugExLog '>>> plugex#begin finished with cache >>>' | PlugExLog ''
       return 0
     endif
   endif
@@ -84,12 +169,12 @@ fu! plugex#begin(...) " {{{
   "   is_lazy
   "   sourced
 
-  Log '' | Log '>>> plugex#begin finished >>>' | Log ''
+  PlugExLog '' | PlugExLog '>>> plugex#begin finished >>>' | PlugExLog ''
   return 1
 endf " }}}
 fu! plugex#end() " {{{
   if !exists('s:plugs') | return s:err('Call plugex#begin() first') | endif
-  Log '' | Log '>>> plugex#end >>>'
+  PlugExLog '' | PlugExLog '>>> plugex#end >>>'
 
   " save cache
   if g:plugex_use_cache
@@ -116,12 +201,12 @@ fu! plugex#end() " {{{
   " on vimenter
   aug PlugExVimEnter
     au!
-    au VimEnter * Log '' | Log '>>> Handle vimenter >>>' |
+    au VimEnter * PlugExLog '' | PlugExLog '>>> Handle vimenter >>>' |
           \ call s:handle_vimenter() |
-          \ Log '' | Log '>>> Load plugin with {''on_event'': ''VimEnter''} >>>' |
+          \ PlugExLog '' | PlugExLog '>>> Load plugin with {''on_event'': ''VimEnter''} >>>' |
           \ call timer_start(10, function('s:load_vimenter_plugs'))
   aug END
-  Log '>>> plugex#end finished >>>'
+  PlugExLog '>>> plugex#end finished >>>'
 endf " }}}
 
 " for plugex#end
@@ -308,7 +393,7 @@ fu! s:load_ftdetect(plug) " {{{
       let l:r += s:source(l:sub, 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
     endfor
   endif
-  Log 'Load ftdetect for plug:', a:plug.name, '[ finish ]', l:r, 'files.'
+  PlugExLog 'Load ftdetect for plug:', a:plug.name, '[ finish ]', l:r, 'files.'
   return l:r
 endf " }}}
 fu! s:add2rtp(plug) " {{{
@@ -336,7 +421,7 @@ fu! s:add2rtp(plug) " {{{
     endif
     let &rtp = join(l:rtp, ',')
     let a:plug.status = s:status.in_rtp
-    Log 'Add2rtp for', a:plug.is_lazy ? 'lazy' : 'non lazy' , 'plug:', a:plug.name, '[ finish ]'
+    PlugExLog 'Add2rtp for', a:plug.is_lazy ? 'lazy' : 'non lazy' , 'plug:', a:plug.name, '[ finish ]'
     return 1
   else
     return s:err('Plug should be ready before add2rtp')
@@ -389,7 +474,7 @@ fu! s:load(plug) " {{{
     endif
   endif
   let a:plug.status = s:status.loaded
-  Log 'Loaded', l:lazy, 'plug', a:plug.name
+  PlugExLog 'Loaded', l:lazy, 'plug', a:plug.name
   call s:call_after(a:plug)
   return 1
 endf " }}}
@@ -404,10 +489,10 @@ fu! s:call_before(plug) " {{{
   try
     call call(l:before, [])
     let a:plug.called_before = l:before
-    Log 'Call before for plug', a:plug.name.',', l:before
+    PlugExLog 'Call before for plug', a:plug.name.',', l:before
     return 1
   catch /^Vim\%((\a\+)\)\=:E117/
-    Log 'Call before for', a:plug.name.',', 'can not found function', l:before
+    PlugExLog 'Call before for', a:plug.name.',', 'can not found function', l:before
   finally
     let a:plug.status = s:status.called_before
   endtry
@@ -423,10 +508,10 @@ fu! s:call_after(plug) " {{{
   try
     call call(l:after, [])
     let a:plug.called_after = l:after
-    Log 'Call after for plug', a:plug.name.',', l:after
+    PlugExLog 'Call after for plug', a:plug.name.',', l:after
     return 1
   catch /^Vim\%((\a\+)\)\=:E117/
-    Log 'Call after for plug', a:plug.name.',', 'can not found function', l:after
+    PlugExLog 'Call after for plug', a:plug.name.',', 'can not found function', l:after
   finally
     let a:plug.status = s:status.called_after
   endtry
@@ -458,7 +543,7 @@ fu! plugex#new_plug(repo, ...) " {{{
   let s:plugs[l:config.name] = l:config
   call add(s:plugs_order, l:config.name)
 
-  Log 'New plug', l:config.name, string(l:config)
+  PlugExLog 'New plug', l:config.name, string(l:config)
   return l:config
 endf " }}}
 fu! s:pretreatment(repo, config) " for new_plug {{{
@@ -721,7 +806,7 @@ fu! s:err(msg) " {{{
   echohl ErrorMsg
   echom '[plugex] ' . a:msg
   echohl None
-  Log '[plugex]', a:msg
+  PlugExLog '[plugex]', a:msg
 endf " }}}
 fu! s:split_rtp() " {{{
   " &rtp -> [first, rest]
@@ -766,30 +851,31 @@ endf " }}}
 " log {{{
 let g:plugex_use_log = get(g:, 'plugex_use_log', 0)
 let s:plugs_log = []
-fu! s:log(...)
-  let l:log = ''
-  for l:a in a:000
-    let l:log .= ' '.(type(l:a) == v:t_string ? l:a : string(l:a))
-  endfor
-  call add(s:plugs_log, l:log)
-endf
 if g:plugex_use_log
-  com! -nargs=+ -bar Log call s:log(<args>)
-else
-  fu! s:pass()
+  fu! s:log(...)
+    if a:0 == 0
+      tabnew
+      setl bt=nofile bh=unload nowrap
+      call setline(1, '[ PlugExLog ]')
+      for l in s:plugs_log
+        call append(line('$'), '  '.l)
+      endfor |
+    else
+      let l:log = ''
+      for l:a in a:000
+        let l:log .= ' '.(type(l:a) == v:t_string ? l:a : string(l:a))
+      endfor
+      call add(s:plugs_log, l:log)
+    endif
   endf
-  com! -nargs=+ -bar Log call s:pass()
+else
+  fu! s:log(...)
+    if a:0 == 0
+      call s:err('Note: let g:plugex_use_log = 1 to enable log')
+    endif
+  endf
 endif
-com! -nargs=0 PlugExLog tabnew |
-      \ setl bt=nofile bh=unload nowrap |
-      \ call setline(1, '[ PlugExLog ]') |
-      \ if !g:plugex_use_log |
-      \ call append(line('$'), 'Note: set  g:plugex_use_log to 1 to enable log') |
-      \ else |
-      \ for l in s:plugs_log |
-      \ call append(line('$'), '  '.l) |
-      \ endfor |
-      \ en
+com! -nargs=* -bar PlugExLog call s:log(<args>)
 " }}}
 
 let &cpo = s:cpo_save
