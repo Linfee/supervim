@@ -45,14 +45,18 @@ fu! config#nerdtree#before()
 endf
 
 
-" use ctrlsf in nerdtree menu
 fu! config#nerdtree#after()
+  " use ctrlsf in nerdtree menu
   call NERDTreeAddMenuItem({
         \ 'text': '(s)earch files by CtrlSF',
         \ 'shortcut': 's',
-        \ 'callback': 'NERDTreeAck' })
-
-  fu! NERDTreeAck()
+        \ 'callback': 'NERDTreeSearchByCtrlSF' })
+  call NERDTreeAddKeyMap({
+        \ 'key': '<c-s>',
+        \ 'callback': 'NERDTreeSearchByCtrlSF',
+        \ 'quickhelpText': 'Search by CtrlSF.',
+        \ 'scope': 'Node' })
+  function! NERDTreeSearchByCtrlSF(...)
     " get the current dir from NERDTree
     let l:cd = g:NERDTreeDirNode.GetSelected().path.str()
     " get the pattern
@@ -65,6 +69,6 @@ fu! config#nerdtree#after()
     let g:ctrlsf_open_left = 0
     exe "CtrlSF '".pattern."' '".l:cd."'"
     let g:ctrlsf_open_left = l:tmp
-    NERDTreeClose
-  endf
+    " NERDTreeClose
+  endfunction
 endf
