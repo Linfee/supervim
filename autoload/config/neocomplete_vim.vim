@@ -15,6 +15,9 @@ fu! config#neocomplete_vim#before()
 endf
 
 fu! config#neocomplete_vim#after()
+  " init neocomplete
+  call neocomplete#init#enable()
+
   " Define keyword.
   if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}

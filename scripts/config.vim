@@ -1,7 +1,7 @@
 set cpo&vim
 scriptencoding utf-8
 
-let g:plugex_use_log = 0
+let g:plugex_use_log = 1
 let g:plugex_use_cache = 0
 
 if plugex#begin()
@@ -25,7 +25,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    let g:use_deoplete = 1
+    " let g:use_deoplete = 1
+    let g:use_ncm_for_nvim = 1
   elseif has('lua')
     let g:use_neocomplete = 1
   else
@@ -38,21 +39,25 @@ if plugex#begin()
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
 
   " completion for viml and show function params for viml and ruby
-  PlugEx 'Shougo/neco-vim', {'on_event': 'VimEnter'}
+  PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter'}
   PlugEx 'Shougo/echodoc.vim', {'on_event': 'InsertEnter', 'after': 'echodoc#enable'}
+  PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter'} " for syntax
+  PlugEx 'roxma/ncm-rct-complete', {'on_event': 'InsertEnter',
+        \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim'))} " for ruby
 
   " deoplete
-  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'VimEnter',
+  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter',
         \ 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   " neocomplete
-  PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'VimEnter',
+  PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter',
         \ 'enable': get(g:, 'use_neocomplete')}
   " ncm
   PlugEx 'roxma/vim-hug-neovim-rpc', {'lazy': 1,
         \ 'enable': get(g:, 'use_ncm_for_vim8')}
-  PlugEx 'roxma/nvim-completion-manager', {'on_event': 'VimEnter',
-        \ 'enable': get(g:, 'use_ncm_for_vim8')}
+  PlugEx 'roxma/nvim-completion-manager', {'on_event': 'InsertEnter',
+        \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim')),
+        \ 'do': 'pip3 install --user neovim jedi mistune psutil setproctitle'}
 
   " ===========================================================================
   " editing
@@ -156,6 +161,8 @@ if plugex#begin()
   " other
   " ===========================================================================
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
+
+  PlugEx '~/tmp/vim/vim-finder'
 endif
 call plugex#end()
 
