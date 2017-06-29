@@ -404,7 +404,12 @@ fu! s:add2rtp(plug) " {{{
   if a:plug.status == s:status.ready
     if !isdirectory(a:plug.path)
       let a:plug.enable = 0
-      return s:err('Can not found dir ['.a:plug.path.'] for plug ['.a:plug.name.']. use :PlugExInstall install it first')
+      if a:plug.type == s:plug_remote_type
+        return s:err('Can not found dir ['.a:plug.path.'] for plug ['.a:plug.name.']. use :PlugExInstall install it first')
+      else
+        call timer_start(1000, {-> s:err('Can not found local plug: '.a:plug.repo)})
+        return
+      endif
     endif
     let l:rtp = s:split_rtp()
     call insert(l:rtp, a:plug.path, 1)
