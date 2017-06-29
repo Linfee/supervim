@@ -1,8 +1,11 @@
 set cpo&vim
 scriptencoding utf-8
 
-let g:plugex_use_log = 1
-let g:plugex_use_cache = 0
+let g:plugex_use_log = 0
+let g:plugex_use_cache = 1
+if !g:is_nvim
+  com UpdateRemotePlugins echo ''
+en
 
 if plugex#begin()
 
@@ -20,6 +23,7 @@ if plugex#begin()
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
+  PlugEx 't9md/vim-choosewin', {'on': '<plug>(choosewin)'}
 
   " ===========================================================================
   " completion
@@ -37,6 +41,7 @@ if plugex#begin()
   PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
+  PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
 
   " completion for viml and show function params for viml and ruby
   PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter'}
@@ -46,8 +51,8 @@ if plugex#begin()
         \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim'))} " for ruby
 
   " deoplete
-  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter',
-        \ 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins',
+        \ 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter',
@@ -79,6 +84,14 @@ if plugex#begin()
 
   PlugEx 'tpope/tpope-vim-abolish', {'on_event': 'VimEnter'}
 
+  " textobj
+  PlugEx 'kana/vim-textobj-user', {'lazy': 1}
+  PlugEx 'kana/vim-textobj-indent', {'on_event': 'VimEnter'}
+  PlugEx 'kana/vim-textobj-line', {'on_event': 'VimEnter'}
+  PlugEx 'kana/vim-textobj-entire', {'on_event': 'VimEnter'}
+  PlugEx 'kana/vim-textobj-syntax', {'on_event': 'VimEnter'}
+  PlugEx 'kana/vim-textobj-lastpat', {'on_event': 'VimEnter'}
+
   " ===========================================================================
   " lang
   " ===========================================================================
@@ -87,11 +100,16 @@ if plugex#begin()
   PlugEx 'pangloss/vim-javascript', {'for': 'javascript'}
   PlugEx 'elzr/vim-json',           {'for': 'json'}
   PlugEx 'hail2u/vim-css3-syntax',  {'for': 'css'}
+  PlugEx 'othree/html5.vim',        {'for': 'html'}
 
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
   PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
-  PlugEx 'iamcco/markdown-preview.vim', {'for': 'markdown', 'on': 'MarkdownPreview'}
+  PlugEx 'iamcco/markdown-preview.vim', {'on': 'MarkdownPreview'}
+  PlugEx 'mzlogin/vim-markdown-toc', {'on_event': 'VimEnter if &ft==''markdown'''}
+
+  " javascript
+  PlugEx 'othree/javascript-libraries-syntax.vim' " no plugin dir, no need to lazyload
 
   " python
   PlugEx 'davidhalter/jedi-vim', {'on_event': 'InsertEnter if &ft==''python'''}
@@ -99,14 +117,23 @@ if plugex#begin()
   " ruby
   PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
 
+  " kotlin
+  PlugEx 'udalov/kotlin-vim' " no plugin dir, no need to lazyload
+
+  " scala
+  PlugEx 'derekwyatt/vim-scala', {'for': 'scala'}
+
   " vimwiki
   PlugEx 'vimwiki/vimwiki', {'for': 'wiki', 'on': 'VimwikiTabIndex'}
+
+  " xml
+  PlugEx 'sukima/xmledit' " no plugin dir, no need to lazyload
 
   " viml dev
   " go to define
   PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
   " plugin for making plugin
-  PlugEx 'tpope/vim-scriptease', {'on_event': 'VimEnter'}
+  PlugEx 'tpope/vim-scriptease', {'on_func': 'scriptease#helptopic'}
   " get the version of Vim and Neovim that introduced or removed features
   PlugEx 'tweekmonster/helpful.vim', {'on': 'HelpfulVersion', 'for': 'help'}
   " for test
@@ -133,7 +160,9 @@ if plugex#begin()
   " git
   PlugEx 'tpope/vim-fugitive', {'on_event': 'VimEnter'}
   PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
-  PlugEx 'cohama/agit.vim', {'on': ['Agit', 'AgitFile']}
+  PlugEx 'junegunn/gv.vim',    {'on': 'GV'}
+  PlugEx 'cohama/agit.vim',    {'on': ['Agit', 'AgitFile']}
+  PlugEx 'lambdalisue/gina.vim', {'on': 'Gina'}
 
   " search
   PlugEx 'osyo-manga/vim-over', {'on': 'OverCommandLine'}
@@ -141,6 +170,29 @@ if plugex#begin()
         \ 'CtrlSFClose', 'CtrlSFClearHL', 'CtrlSFToggle', 'CtrlSFQuickfix',
         \ '<Plug>CtrlSFPrompt', '<Plug>CtrlSFVwordPath', '<Plug>CtrlSFVwordExec',
         \ '<Plug>CtrlSFCwordPath', '<Plug>CtrlSFPwordPath']}
+  PlugEx 'mhinz/vim-grepper', {'on': ['Grepper', 'GrepperAg', 'GrepperGit',
+        \ 'GrepperGrep', '<plug>(GrepperOperator)']}
+  " incsearch
+  PlugEx 'haya14busa/incsearch.vim', {'on': ['<Plug>(incsearch-forward)',
+        \ '<Plug>(incsearch-backward)', '<Plug>(incsearch-stay)']}
+  PlugEx 'haya14busa/incsearch-fuzzy.vim', {'deps': 'incsearch.vim',
+        \ 'on': ['<Plug>(incsearch-fuzzy-/)', '<Plug>(incsearch-fuzzy-?)',
+        \ '<Plug>(incsearch-fuzzy-stay)']}
+  PlugEx 'haya14busa/vim-asterisk', {'deps': 'incsearch.vim', 'on': [
+        \ '<Plug>(asterisk-*)', '<Plug>(asterisk-#)', '<Plug>(asterisk-g*)',
+        \ '<Plug>(asterisk-g#)', '<Plug>(asterisk-z*)', '<Plug>(asterisk-gz*)',
+        \ '<Plug>(asterisk-z#)', '<Plug>(asterisk-gz#)']} " *-Improved
+  PlugEx 'haya14busa/incsearch-easymotion.vim', {'deps':
+        \ ['incsearch.vim', 'vim-easymotion'],
+        \ 'on': ['<Plug>(incsearch-easymotion-/)',
+        \ '<Plug>(incsearch-easymotion-?)', '<Plug>(incsearch-easymotion-stay)']}
+
+  " denite
+  let g:use_denite = (g:is_nvim || v:version>=800) && has('python3')
+  PlugEx 'Shougo/denite.nvim', {'do': 'UpdateRemotePlugins',
+        \ 'enable': g:use_denite, 'on': 'Denite', 'on_event': 'CursorHold'}
+  PlugEx 'Shougo/neomru.vim',  {'on': ['NeoMRUReload', 'NeoMRUSave',
+        \ 'NeoMRUImportFile', 'NeoMRUImportDirectory']}
 
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
@@ -207,11 +259,11 @@ nnoremap <leader>n :NERDTreeTabsToggle<cr>
 nnoremap <leader>e :NERDTreeFind<CR>
 
 " for Goyo
-nnoremap <space>g :Goyo<cr>
+nnoremap <leader>tg :Goyo<cr>
 
 " for tagbar
 if executable('ctags')
-  nnoremap <leader>t :TagbarToggle<cr>
+  nnoremap <leader>tt :TagbarToggle<cr>
 endif
 
 " for undotree
@@ -231,7 +283,7 @@ nnoremap <leader>tr :RainbowParentheses!!<cr>
 com! -bar WTF call exception#trace()
 
 " for vim-scriptease
-nnoremap <silent> <space>K :<C-U>exe 'help '.scriptease#helptopic()<CR>
+nnoremap <silent> K :<C-U>exe 'help '.scriptease#helptopic()<CR>
 
 " for nerdcommenter
 Map n <a-/> <Plug>NERDCommenterToggle
@@ -248,3 +300,74 @@ nmap     <c-s>p <Plug>CtrlSFPwordPath
 nnoremap <c-s>o :CtrlSFOpen<CR>
 nnoremap <c-s>t :CtrlSFToggle<CR>
 inoremap <c-s>t <Esc>:CtrlSFToggle<CR>
+
+
+" completion
+" omni 补全配置
+augroup omnif
+  autocmd!
+  autocmd Filetype *
+        \if &omnifunc == "" |
+        \setlocal omnifunc=syntaxcomplete#Complete |
+        \endif
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType java setlocal omnifunc=javacomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  " python使用jedi
+  autocmd FileType python setlocal omnifunc=jedi#completions
+  autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+augroup END
+
+
+" for Gina
+nnoremap <silent> <space>gd :Gina diff<CR>
+nnoremap <silent> <space>gs :Gina status<CR>
+nnoremap <silent> <space>gc :Gina commit<CR>
+nnoremap <silent> <space>gb :Gina blame :<CR>
+nnoremap <silent> <space>gp :Gina push<CR>
+nnoremap <silent> <space>ga :Gina add %<CR>
+nnoremap <silent> <space>gA :Gina add .<CR>
+
+" for incsearch.vim
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+" incsearch-fuzzy.vim
+map z/ <Plug>(incsearch-fuzzy-/)
+map z? <Plug>(incsearch-fuzzy-?)
+map zg/ <Plug>(incsearch-fuzzy-stay)
+" vim-asterisk
+map *   <Plug>(asterisk-*)
+map #   <Plug>(asterisk-#)
+map g*  <Plug>(asterisk-g*)
+map g#  <Plug>(asterisk-g#)
+map z*  <Plug>(asterisk-z*)
+map gz* <Plug>(asterisk-gz*)
+map z#  <Plug>(asterisk-z#)
+map gz# <Plug>(asterisk-gz#)
+" for incsearch-easymotion.vim
+map <leader>/ <Plug>(incsearch-easymotion-/)
+map <leader>? <Plug>(incsearch-easymotion-?)
+map <leader>g/ <Plug>(incsearch-easymotion-stay)
+function! s:config_easyfuzzymotion(...) abort
+  return extend(copy({
+        \   'converters': [incsearch#config#fuzzy#converter()],
+        \   'modules': [incsearch#config#easymotion#module()],
+        \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+        \   'is_expr': 0,
+        \   'is_stay': 1
+        \ }), get(a:, 1, {}))
+endfunction
+noremap <silent><expr> <leader>/ incsearch#go(<SID>config_easyfuzzymotion())
+
+" vim-choosewin
+nmap <tab><tab> <plug>(choosewin)
+
+" vim-grepper
+nnoremap <leader>ff :Grepper
+
+" for denitep
+" mapping
+nnoremap <space>o :Denite file_rec<cr>

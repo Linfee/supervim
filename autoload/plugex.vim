@@ -124,7 +124,8 @@ fu! plugex#begin(...) " {{{
   if s:is_win_unix
     let s:cache_file .= '.win_unix'
   endif
-  PlugExLog 'Use cache file', s:cache_file
+  PlugExLog '  Use cache_dir', s:cache_dir
+  PlugExLog '  Use cache_file', s:cache_file
 
   let s:plug_local_type = 'local'
   let s:plug_remote_type = 'remote'
@@ -184,6 +185,8 @@ fu! plugex#end() " {{{
       endif
       if writefile([string(s:plugs), string(s:plugs_order)], s:cache_file)
         call s:err('Write cache file '.s:cache_file.' fail.')
+      else
+        PlugExLog 'Write cache file', s:cache_file
       endif
     endif
   endif
@@ -435,6 +438,9 @@ fu! s:add2rtp(plug) " {{{
   endif
 endf " }}}
 fu! s:load(plug) " {{{
+  if a:plug.status >= s:status.loaded
+    return
+  endif
   " deps
   if has_key(a:plug, 'deps')
     for name in a:plug.deps
