@@ -60,11 +60,11 @@ endf
 " -------------------------------------
 
 fu! config#lightline_vim#readonly()
-  retu &ft !~? 'help' && &readonly ? '' : ''
+  return &ft !~? 'help' && &readonly ? '' : ''
 endf
 
 fu! config#lightline_vim#modified()
-  retu &ft =~ 'help' ? '' : &modified ? '✭' : &modifiable ? '' : ''
+  return &ft =~ 'help' ? '' : &modified ? '✭' : &modifiable ? '' : ''
 endf
 
 fu! config#lightline_vim#fugitive()
@@ -76,26 +76,34 @@ fu! config#lightline_vim#fugitive()
     en
   catch
   endtry
-  retu ''
+  return ''
 endf
 
 fu! config#lightline_vim#filename()
   let fname = expand('%:t')
-  retu fname == '__Tagbar__' ? g:lightline.fname :
+  return fname == '__Tagbar__' ? g:lightline.fname :
         \ fname =~ '__Gundo\|NERD_tree' ? '' :
         \ ('' != fname ? fname : '[No Name]')
 endf
 
 fu! config#lightline_vim#filetype()
-  retu winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+  if exists('*config#vim_devicons#filetype')
+    return config#vim_devicons#filetype()
+  else
+    return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+  en
 endf
 
 fu! config#lightline_vim#fileformat()
-  retu winwidth(0) > 70 ? &fileformat : ''
+  if exists('*config#vim_devicons#fileformat')
+    return config#vim_devicons#fileformat()
+  else
+    return winwidth(0) > 70 ? &fileformat : ''
+  endif
 endf
 
 fu! config#lightline_vim#file_encoding()
-  retu winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
+  return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
 endf
 
 fu! config#lightline_vim#mode()
@@ -113,5 +121,5 @@ endf
 
 fu! config#lightline_vim#tagbar_statusline(current, sort, fname, ...) abort
   let g:lightline.fname = a:fname
-  retu lightline#statusline(0)
+  return lightline#statusline(0)
 endf

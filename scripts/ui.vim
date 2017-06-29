@@ -25,8 +25,8 @@ try | set switchbuf=useopen,usetab,newtab | set stal=2 | catch | endtry
 " 设置 gui 与 cli
 if g:is_gui
   " 设置窗口位置和大小
-  winpos 685 20
-  set lines=44 columns=90
+  winpos 410 5
+  set lines=45 columns=135
   " 设置gui下标签内容
   set guitablabel=%M\ %t
   " 隐藏不需要的gui组件
@@ -37,12 +37,27 @@ if g:is_gui
   set guioptions-=b
   set guioptions-=e
   " 设置字体
-  if g:is_linux
-    set guifont=Source\ Code\ Pro\ 9
-  elseif g:is_win
-    set guifont=Source\ Code\ Pro:h9
-  endif
+  if g:is_win
+    set guifont=SauceCodePro\ NF:h9
+  elsei g:is_osx
+    set guifont=SauceCodePro\ NF:h11
+  else
+    set guifont=SauceCodePro\ NF\ 9
+  en
 endif
+
+if g:is_nvim
+  aug nvim_font
+    au!
+    au! VimEnter * call timer_start(10, 'Test')
+  aug END
+  fu! Test(...)
+    try
+      exe 'Guifont! SauceCodePro NF:h9'
+    catch
+    endtry
+  endf
+en
 
 set laststatus=2
 " Broken down into easily includeable segments
