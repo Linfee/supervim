@@ -215,8 +215,6 @@ if plugex#begin()
   " other
   " ===========================================================================
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
-
-  PlugEx '~/tmp/vim/vim-finder'
 endif
 call plugex#end()
 
