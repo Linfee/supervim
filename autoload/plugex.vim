@@ -222,8 +222,9 @@ fu! s:handle_plug() " {{{
       call s:setup_lazy_load(l:plug)
     else
       " non lazy plug
-      call s:add2rtp(l:plug)
-      call s:call_before(l:plug)
+      if s:add2rtp(l:plug)
+        call s:call_before(l:plug)
+      endif
       " will be loaded by vim
     endif
   endfor
@@ -402,7 +403,8 @@ fu! s:add2rtp(plug) " {{{
   endif
   if a:plug.status == s:status.ready
     if !isdirectory(a:plug.path)
-      return
+      let a:plug.enable = 0
+      return s:err('Can not found dir ['.a:plug.path.'] for plug ['.a:plug.name.']. use :PlugExInstall install it first')
     endif
     let l:rtp = s:split_rtp()
     call insert(l:rtp, a:plug.path, 1)
