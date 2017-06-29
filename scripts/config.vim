@@ -3,6 +3,9 @@ scriptencoding utf-8
 
 let g:plugex_use_log = 1
 let g:plugex_use_cache = 0
+if !g:is_nvim
+  com UpdateRemotePlugins echo ''
+en
 
 if plugex#begin()
 
@@ -48,8 +51,8 @@ if plugex#begin()
         \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim'))} " for ruby
 
   " deoplete
-  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter',
-        \ 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins',
+        \ 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter',
@@ -184,6 +187,13 @@ if plugex#begin()
         \ 'on': ['<Plug>(incsearch-easymotion-/)',
         \ '<Plug>(incsearch-easymotion-?)', '<Plug>(incsearch-easymotion-stay)']}
 
+  " denite
+  let g:use_denite = (g:is_nvim || v:version>=800) && has('python3')
+  PlugEx 'Shougo/denite.nvim', {'do': 'UpdateRemotePlugins',
+        \ 'enable': g:use_denite, 'on': 'Denite', 'on_event': 'CursorHold'}
+  PlugEx 'Shougo/neomru.vim',  {'on': ['NeoMRUReload', 'NeoMRUSave',
+        \ 'NeoMRUImportFile', 'NeoMRUImportDirectory']}
+
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
   PlugEx 'junegunn/limelight.vim', {'on': 'Limelight'}
@@ -205,9 +215,6 @@ if plugex#begin()
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
 
   PlugEx '~/tmp/vim/vim-finder'
-
-  " ctrlp
-  PlugEx 'ctrlpvim/ctrlp.vim'
 endif
 call plugex#end()
 
@@ -346,12 +353,12 @@ map <leader>? <Plug>(incsearch-easymotion-?)
 map <leader>g/ <Plug>(incsearch-easymotion-stay)
 function! s:config_easyfuzzymotion(...) abort
   return extend(copy({
-  \   'converters': [incsearch#config#fuzzy#converter()],
-  \   'modules': [incsearch#config#easymotion#module()],
-  \   'keymap': {"\<CR>": '<Over>(easymotion)'},
-  \   'is_expr': 0,
-  \   'is_stay': 1
-  \ }), get(a:, 1, {}))
+        \   'converters': [incsearch#config#fuzzy#converter()],
+        \   'modules': [incsearch#config#easymotion#module()],
+        \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+        \   'is_expr': 0,
+        \   'is_stay': 1
+        \ }), get(a:, 1, {}))
 endfunction
 noremap <silent><expr> <leader>/ incsearch#go(<SID>config_easyfuzzymotion())
 
@@ -360,3 +367,7 @@ nmap <tab><tab> <plug>(choosewin)
 
 " vim-grepper
 nnoremap <leader>ff :Grepper
+
+" for denitep
+" mapping
+nnoremap <space>o :Denite file_rec<cr>
