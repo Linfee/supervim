@@ -12,11 +12,6 @@ fu! config#neocomplete_vim#before()
         \ 'ruby' : '~/.vim/dict/ruby.dict',
         \ 'scala' : '~/.vim/dict/scala.dict',
         \ }
-endf
-
-fu! config#neocomplete_vim#after()
-  " init neocomplete
-  call neocomplete#init#enable()
 
   " Define keyword.
   if !exists('g:neocomplete#keyword_patterns')
@@ -34,7 +29,6 @@ fu! config#neocomplete_vim#after()
   " Set minimum syntax keyword length.
   let g:neocomplete#sources#syntax#min_keyword_length = 3
 
-
   " AutoComplPop like behavior.
   let g:neocomplete#enable_auto_select = 0
 
@@ -42,21 +36,6 @@ fu! config#neocomplete_vim#after()
     let g:neocomplete#force_omni_input_patterns = {}
   endif
 
-  " omni 补全配置
-  augroup omnif
-    autocmd!
-    autocmd Filetype *
-          \if &omnifunc == "" |
-          \setlocal omnifunc=syntaxcomplete#Complete |
-          \endif
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    " python使用jedi
-    autocmd FileType python setlocal omnifunc=jedi#completions
-    autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-  augroup END
   " Enable heavy omni completion.
   if !exists('g:neocomplete#sources#omni#input_patterns')
     let g:neocomplete#sources#omni#input_patterns = {}
@@ -68,6 +47,12 @@ fu! config#neocomplete_vim#after()
   let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
   let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
   let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+
+endf
+
+fu! config#neocomplete_vim#after()
+  " init neocomplete
+  call neocomplete#init#enable()
 
   " 自动打开关闭弹出式的预览窗口
   augroup AutoPopMenu
@@ -86,10 +71,10 @@ fu! config#neocomplete_vim#after()
 
   " <C-k> 补全snippet
   " <C-k> 下一个输入点
-  imap <silent><expr><C-k> neosnippet#expandable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
-        \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
-  smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
+  " imap <silent><expr><C-k> neosnippet#expandable() ?
+  "       \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
+  "       \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+  " smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
 
   inoremap <expr><C-g> neocomplete#undo_completion()
   inoremap <expr><C-l> neocomplete#complete_common_string()
@@ -125,5 +110,4 @@ fu! config#neocomplete_vim#after()
   inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
   inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
   " inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-
 endf
