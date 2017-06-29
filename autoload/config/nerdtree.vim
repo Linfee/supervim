@@ -71,4 +71,31 @@ fu! config#nerdtree#after()
     let g:ctrlsf_open_left = l:tmp
     " NERDTreeClose
   endfunction
+
+  " add key a and d
+  call NERDTreeAddKeyMap({
+        \ 'key': 'a',
+        \ 'callback': 'config#nerdtree#add_node',
+        \ 'quickhelpText': 'Add a child node',
+        \ 'scope': 'Node'})
+  call NERDTreeAddKeyMap({
+        \ 'key': 'd',
+        \ 'callback': 'config#nerdtree#delete_node',
+        \ 'quickhelpText': 'Delete current node',
+        \ 'scope': 'Node'})
+  call NERDTreeAddKeyMap({
+        \ 'key': 'b',
+        \ 'callback': 'config#nerdtree#add_bookmark',
+        \ 'quickhelpText': 'Add current node to bookmark list',
+        \ 'scope': 'Node'})
+endf
+
+fu! config#nerdtree#add_node(...)
+  call NERDTreeAddNode()
+endf
+fu! config#nerdtree#delete_node(...)
+  call NERDTreeDeleteNode()
+endf
+fu! config#nerdtree#add_bookmark(...)
+  Bookmark
 endf
