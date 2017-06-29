@@ -1,8 +1,8 @@
 set cpo&vim
 scriptencoding utf-8
 
-let g:plugex_use_log = 1
-let g:plugex_use_cache = 0
+let g:plugex_use_log = 0
+let g:plugex_use_cache = 1
 if !g:is_nvim
   com UpdateRemotePlugins echo ''
 en
