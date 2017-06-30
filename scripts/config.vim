@@ -162,11 +162,13 @@ if plugex#begin()
   PlugEx 'tpope/vim-repeat' " no plugin dir, no need to lazyload
 
   " git
-  PlugEx 'tpope/vim-fugitive', {'on_event': 'VimEnter'}
-  PlugEx 'gregsexton/gitv',    {'on': 'Gitv'}
-  PlugEx 'junegunn/gv.vim',    {'on': 'GV'}
-  PlugEx 'cohama/agit.vim',    {'on': ['Agit', 'AgitFile']}
+  PlugEx 'tpope/vim-fugitive',   {'on_event': 'VimEnter'}
+  PlugEx 'gregsexton/gitv',      {'on': 'Gitv'}
+  PlugEx 'junegunn/gv.vim',      {'on': 'GV'}
+  PlugEx 'cohama/agit.vim',      {'on': ['Agit', 'AgitFile']}
   PlugEx 'lambdalisue/gina.vim', {'on': 'Gina'}
+  PlugEx 'jreybert/vimagit',     {'on': ['Magit', 'MagitOnly']}
+  PlugEx 'rhysd/committia.vim',  {'for': 'gitcommit'}
 
   " search
   PlugEx 'osyo-manga/vim-over', {'on': 'OverCommandLine'}
