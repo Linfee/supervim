@@ -103,8 +103,8 @@ fu! config#neocomplete_vim#after()
   inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><C-y> neocomplete#smart_close_popup()
   " 使用tab补全
-  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+  " inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+  " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
   " 额外的快捷键
   inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
   inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"

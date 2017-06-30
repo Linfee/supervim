@@ -1,18 +1,23 @@
 fu! config#ultisnips#after()
   " snippets files
   let g:UltiSnipsSnippetsDir=expand('~/.vim/ultisnips')
-  let g:UltiSnipsSnippetDirectories=["ultisnips"]
+  let g:UltiSnipsSnippetDirectories=['ultisnips']
   " Trigger configuration.
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsListSnippets="<c-tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+  " let g:UltiSnipsExpandTrigger='<tab>'
+  " let g:UltiSnipsListSnippets='<c-tab>'
+  " let g:UltiSnipsJumpForwardTrigger='<c-j>'
+  " let g:UltiSnipsJumpBackwardTrigger='<c-k>'
   " If you want :UltiSnipsEdit to split your window.
-  let g:UltiSnipsEditSplit="vertical"
+  let g:UltiSnipsEditSplit='vertical'
 
   nnoremap <leader>ua :UltiSnipsAddFiletypes<space>
 
-  if &ft == 'snippets'
-    set ft=snippets
+  inoremap <silent> <tab> <c-r>=UltiSnips#ExpandSnippetOrJump()<cr>
+  inoremap <silent> <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
+
+  if &filetype ==# 'snippets'
+    set filetype=snippets
   endif
+
+  inoremap <c-x><c-k> <c-x><c-k>
 endf
