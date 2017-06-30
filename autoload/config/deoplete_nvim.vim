@@ -90,10 +90,10 @@ fu! config#deoplete_nvim#after()
   inoremap <expr><C-l> deoplete#refresh()
 
   " <CR>: close popup and save indent.
-  " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  " function! s:my_cr_function() abort
-  "   return deoplete#close_popup() . "\<CR>"
-  " endfunction
+  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  function! s:my_cr_function() abort
+    return deoplete#close_popup() . "\<CR>"
+  endfunction
 
   " manual  trigger
   inoremap <silent><expr> <TAB>

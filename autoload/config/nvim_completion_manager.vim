@@ -9,10 +9,10 @@ fu! config#nvim_completion_manager#after()
 
   " When use ctrl-c to exit insert mode, it will not trigger InsertLeave
   inoremap <c-c> <esc>
-  " inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+  inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 
   " Use tab to select the popup menu:
   " Not use this, use tab to trigger snippet
-  " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-  " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 endf
