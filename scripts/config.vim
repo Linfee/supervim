@@ -319,6 +319,9 @@ endif
 nnoremap <leader>u :UndotreeToggle<cr>
 let g:undotree_SetFocusWhenToggle=1
 
+" FOR: ale
+nnoremap <leader>ta :ALEToggle<cr>
+
 " FOR: Gina
 nnoremap <silent> <space>gd :Gina diff<CR>
 nnoremap <silent> <space>gs :Gina status<CR>
