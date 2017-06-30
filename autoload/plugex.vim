@@ -854,7 +854,7 @@ fu! s:pick_plugs(names) " {{{
 endf " }}}
 fu! plugex#is_loaded(...) " {{{
   for l:n in a:000
-    if !has_key(s:plugs) || s:plugs[l:n].status < loaded
+    if !has_key(s:plugs, l:n) || s:plugs[l:n].status < s:status.loaded
       return 0
     endif
   endfor

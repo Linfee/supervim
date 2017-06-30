@@ -157,8 +157,9 @@ if plugex#begin()
   " undotree
   PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
 
-  " syntastic
-  PlugEx 'vim-syntastic/syntastic', {'on_event': 'InsertEnter'}
+  " code check
+  PlugEx 'w0rp/ale', {'on_event': 'VimEnter',
+        \ 'do': 'pip3 install --user vim-vint autopep8, flake8, pylint'}
 
   PlugEx 'Konfekt/FastFold',   {'on_event': 'VimEnter'}
   PlugEx 'tpope/vim-repeat' " no plugin dir, no need to lazyload

@@ -5,11 +5,11 @@ fu! config#lightline_vim#before()
   let g:lightline.colorscheme = 'gruvbox'
 
   let g:lightline.active = {}
-  let g:lightline.active.left = [['mode', 'paste'], ['fugitive', 'readonly', 'filename', 'modified']]
-  let g:lightline.active.right = [['lineinfo'], ['fileformat', 'fileencoding', 'syntastic', 'percent']]
+  let g:lightline.active.left = [['mode', 'paste'], ['fugitive', 'readonly', 'filename', 'modified', 'ale']]
+  let g:lightline.active.right = [['lineinfo'], ['fileformat', 'fileencoding', 'percent']]
   let g:lightline.inactive = {}
   let g:lightline.inactive.left = [['fugitive', 'readonly', 'filename', 'modified']]
-  let g:lightline.inactive.right = [['lineinfo'], ['fileformat', 'fileencoding', 'syntastic', 'percent']]
+  let g:lightline.inactive.right = [['lineinfo'], ['fileformat', 'fileencoding', 'percent']]
   let g:lightline.tabline = {
         \ 'left': [['tabs']],
         \ 'right': [['filetype']]
@@ -27,12 +27,7 @@ fu! config#lightline_vim#before()
   let g:lightline.component_function.fileformat = 'config#lightline_vim#fileformat'
   let g:lightline.component_function.fileencoding = 'config#lightline_vim#file_encoding'
   let g:lightline.component_function.mode = 'config#lightline_vim#mode'
-
-  let g:lightline.component_expand = {}
-  let g:lightline.component_expand.syntastic = 'SyntasticStatuslineFlag'
-
-  let g:lightline.component_type = {}
-  let g:lightline.component_type.syntastic = 'error'
+  let g:lightline.component_function.ale = 'config#lightline_vim#ale'
 
   " statusline separator
   let g:lightline.separator = {'left':  '', 'right': ''}
@@ -117,6 +112,14 @@ fu! config#lightline_vim#mode()
         \ &ft == 'vimfiler' ? 'VimFiler' :
         \ &ft == 'vimshell' ? 'VimShell' :
         \ winwidth(0) > 60 ? lightline#mode() : ''
+endf
+
+fu! config#lightline_vim#ale()
+  if exists('*config#ale#statusline')
+    return config#ale#statusline()
+  else
+    return ''
+  endif
 endf
 
 fu! config#lightline_vim#tagbar_statusline(current, sort, fname, ...) abort
