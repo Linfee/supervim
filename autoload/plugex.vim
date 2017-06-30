@@ -832,7 +832,7 @@ fu! s:rstrip_slash(str) " {{{
 endf " }}}
 fu! s:trim_repo(str) " {{{
   " foo/bar[.git][/] -> foo/bar
-  return substitute(a:str, '\(.git\)\=[\/]\=$', '', '')
+  return substitute(a:str, '\(\.git\)\=[\/]\=$', '', '')
 endf " }}}
 fu! s:source(dir, ...) " {{{
   " source file from dir with patterns
