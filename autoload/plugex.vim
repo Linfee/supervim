@@ -439,7 +439,7 @@ fu! s:add2rtp(plug) " {{{
 endf " }}}
 fu! s:load(plug) " {{{
   if a:plug.status >= s:status.loaded
-    return
+    return 1
   endif
   " deps
   if has_key(a:plug, 'deps')
