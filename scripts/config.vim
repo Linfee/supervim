@@ -15,7 +15,7 @@ if plugex#begin()
   " colors
   PlugEx 'morhetz/gruvbox'
   PlugEx 'sickill/vim-monokai'
-  PlugEx 'tomasr/molokai'
+  PlugEx 'flazz/vim-colorschemes'
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'deps': 'lightline.vim'}
@@ -24,6 +24,8 @@ if plugex#begin()
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
   PlugEx 't9md/vim-choosewin', {'on': '<plug>(choosewin)'}
+  PlugEx 'Yggdroot/indentLine', {'on': ['IndentLinesEnable', 'IndentLinesDisable',
+        \ 'IndentLinesToggle']}
 
   " ===========================================================================
   " completion
@@ -234,6 +236,9 @@ nnoremap <leader>tr :RainbowParentheses!!<cr>
 
 " FOR: vim-choosewin
 nmap <tab><tab> <plug>(choosewin)
+
+" FOR: indentLine
+nnoremap <leader>ti :IndentLinesToggle<cr>
 
 "---------------------------------------
 " completion
