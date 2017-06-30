@@ -438,6 +438,9 @@ fu! s:add2rtp(plug) " {{{
   endif
 endf " }}}
 fu! s:load(plug) " {{{
+  if !a:plug.enable
+    return
+  endif
   if a:plug.status >= s:status.loaded
     return 1
   endif
