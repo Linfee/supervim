@@ -15,9 +15,5 @@ fu! config#ultisnips#after()
   inoremap <silent> <tab> <c-r>=UltiSnips#ExpandSnippetOrJump()<cr>
   inoremap <silent> <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
 
-  if &filetype ==# 'snippets'
-    set filetype=snippets
-  endif
-
   inoremap <c-x><c-k> <c-x><c-k>
 endf

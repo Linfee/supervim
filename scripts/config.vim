@@ -40,7 +40,8 @@ if plugex#begin()
   endif
 
   PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp']}
-  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold']}
+  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'],
+        \ 'for': 'snippets'}
   PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
@@ -126,7 +127,7 @@ if plugex#begin()
   PlugEx 'derekwyatt/vim-scala', {'for': 'scala'}
 
   " vimwiki
-  PlugEx 'vimwiki/vimwiki', {'for': 'wiki', 'on': 'VimwikiTabIndex'}
+  PlugEx 'vimwiki/vimwiki', {'for': 'vimwiki', 'on_event': 'VimEnter'}
 
   " xml
   PlugEx 'sukima/xmledit' " no plugin dir, no need to lazyload
