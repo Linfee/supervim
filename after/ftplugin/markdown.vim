@@ -12,6 +12,6 @@ setl nowrap
 inoremap <buffer> · `
 nmap <buffer> <cr> <Plug>Markdown_EditUrlUnderCursor
 
-nnoremap <buffer> <leader>t :Toc<cr>
+nnoremap <buffer> <localleader>t :Toc<cr>
 
-nnoremap <buffer> <space>r :MarkdownPreview<cr>
+nmap <buffer> <space>r <Plug>MarkdownPreview

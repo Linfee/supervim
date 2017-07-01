@@ -108,7 +108,7 @@ if plugex#begin()
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
   PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
-  PlugEx 'iamcco/markdown-preview.vim', {'on': 'MarkdownPreview'}
+  PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
   PlugEx 'mzlogin/vim-markdown-toc', {'on_event': 'VimEnter if &ft==''markdown'''}
 
   " javascript

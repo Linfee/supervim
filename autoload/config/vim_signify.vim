@@ -8,7 +8,7 @@ endf
 
 fu! config#vim_signify#after()
   " for vim-signify
-  nnoremap <leader>tg :SignifyToggle<cr>
+  nnoremap <leader>ts :SignifyToggle<cr>
   nnoremap <leader>gh :SignifyToggleHighlight<cr>
   nnoremap <leader>gr :SignifyRefresh<cr>
   " hunk jumping
