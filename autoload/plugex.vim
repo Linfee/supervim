@@ -408,9 +408,10 @@ fu! s:add2rtp(plug) " {{{
     if !isdirectory(a:plug.path)
       let a:plug.enable = 0
       if a:plug.type == s:plug_remote_type
-        return s:err('Can not found dir ['.a:plug.path.'] for plug ['.a:plug.name.']. use :PlugExInstall install it first')
+        call timer_start(500, {-> s:err('Can not found dir ['.a:plug.path.'] for plug ['.a:plug.name.']. use :PlugExInstall install it first')})
+        return
       else
-        call timer_start(1000, {-> s:err('Can not found local plug: '.a:plug.repo)})
+        call timer_start(500, {-> s:err('Can not found local plug: '.a:plug.repo)})
         return
       endif
     endif
@@ -483,21 +484,22 @@ fu! s:load(plug) " {{{
 
   " call before, add2rtp, load, after
   let l:lazy = a:plug.is_lazy ? 'lazy' : 'non lazy'
-  call s:add2rtp(a:plug)
-  call s:call_before(a:plug)
-  " for normal plugin
-  if !get(a:plug, 'sourced')
-    call s:source(a:plug.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
-    if has_key(a:plug, 'rtp')
-      for l:rtp in a:plug.rtp
-        let l:sub = expand(a:plug.path . '/' . l:rtp)
-        call s:source(l:sub, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
-      endfor
+  if s:add2rtp(a:plug)
+    call s:call_before(a:plug)
+    " for normal plugin
+    if !get(a:plug, 'sourced')
+      call s:source(a:plug.path, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
+      if has_key(a:plug, 'rtp')
+        for l:rtp in a:plug.rtp
+          let l:sub = expand(a:plug.path . '/' . l:rtp)
+          call s:source(l:sub, 'plugin/**/*.vim', 'after/plugin/**/*.vim')
+        endfor
+      endif
     endif
+    let a:plug.status = s:status.loaded
+    PlugExLog 'Loaded', l:lazy, 'plug', a:plug.name
+    call s:call_after(a:plug)
   endif
-  let a:plug.status = s:status.loaded
-  PlugExLog 'Loaded', l:lazy, 'plug', a:plug.name
-  call s:call_after(a:plug)
 
   " recover filetype if there it is
   if exists('l:ft')
