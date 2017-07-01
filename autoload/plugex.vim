@@ -250,7 +250,6 @@ fu! s:handle_vimenter() " {{{
   endfor
 endf " }}}
 fu! s:load_vimenter_plugs(tid) " {{{
-  " load 10 plugin each time
   for i in range(len(s:vimenter_plugs) > 5 ? 5 : len(s:vimenter_plugs))
     let l:p = remove(s:vimenter_plugs, 0)
     if eval(l:p[0])
@@ -260,7 +259,7 @@ fu! s:load_vimenter_plugs(tid) " {{{
   if len(s:vimenter_plugs) > 0
     call timer_start(10, function('s:load_vimenter_plugs'))
   else
-    aug PlugExVimEnter | 
+    aug PlugExVimEnter
       au!
     aug END
     aug! PlugExVimEnter
