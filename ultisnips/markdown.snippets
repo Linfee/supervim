@@ -12,8 +12,7 @@ endsnippet
 snippet "^h(\d)" "使用h1~h6快速插入标题" r
 `!p
 i = '#' * int(match.group(1))
-snip.rv=i` ${1:title} `!p
-snip.rv=i`
+snip.rv=i` ${1:title}
 $0
 endsnippet
 
