@@ -238,13 +238,14 @@ fu! s:handle_vimenter() " {{{
     if !l:plug.enable
       continue
     endif
-    if l:plug.is_lazy
-      " lazy plug
-      call s:add2rtp(l:plug)
-    else
+    if !l:plug.is_lazy
       " non lazy plug
       let l:plug.status = s:status.loaded
       call s:call_after(l:plug)
+    elseif get(l:plug, 'lazy', 0)
+      " lazy plug with lazy=1
+      call s:add2rtp(l:plug)
+      " nothing to do with lazy plug without lazy=1 here
     endif
   endfor
 endf " }}}
@@ -475,6 +476,12 @@ fu! s:load(plug) " {{{
     endfor
   endif
 
+  " del filetype if necessary
+  if !empty(&ft) && has_key(a:plug, 'for') && count(a:plug.for, &ft) == 1
+    let l:ft = &ft
+    set ft=
+  endif
+
   " call before, add2rtp, load, after
   let l:lazy = a:plug.is_lazy ? 'lazy' : 'non lazy'
   call s:add2rtp(a:plug)
@@ -492,6 +499,12 @@ fu! s:load(plug) " {{{
   let a:plug.status = s:status.loaded
   PlugExLog 'Loaded', l:lazy, 'plug', a:plug.name
   call s:call_after(a:plug)
+
+  " recover filetype if there it is
+  if exists('l:ft')
+    exe 'set ft='.l:ft
+  endif
+
   return 1
 endf " }}}
 fu! s:call_before(plug) " {{{

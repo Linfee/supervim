@@ -11,8 +11,4 @@ fu! config#committia_vim#after()
 
   endfunction
   call committia#open('git') 
-  aug gitcommit
-    au!
-    au! FileType gitcommit committia#open('git') 
-  aug END
 endf
