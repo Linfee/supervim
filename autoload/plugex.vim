@@ -219,9 +219,9 @@ fu! s:handle_plug() " {{{
     if !l:plug.enable
       continue
     endif
-    call s:load_ftdetect(l:plug)
     if l:plug.is_lazy
       " lazy plug
+      call s:load_ftdetect(l:plug)
       call s:setup_lazy_load(l:plug)
     else
       " non lazy plug
