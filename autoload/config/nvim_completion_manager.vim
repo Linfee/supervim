@@ -1,6 +1,5 @@
 fu! config#nvim_completion_manager#before()
   let g:cm_complete_delay = 50
-  set shortmess+=c
 endf
 
 fu! config#nvim_completion_manager#after()
