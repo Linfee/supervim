@@ -115,7 +115,7 @@ if plugex#begin()
   PlugEx 'othree/javascript-libraries-syntax.vim' " no plugin dir, no need to lazyload
 
   " python
-  PlugEx 'davidhalter/jedi-vim', {'on_event': ['CursorHold', 'InsertEnter if &ft==''python''']}
+  PlugEx 'davidhalter/jedi-vim', {'on_event': 'VimEnter if &ft==''python'''}
 
   " ruby
   PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
