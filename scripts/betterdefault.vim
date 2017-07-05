@@ -12,7 +12,6 @@
 " --------------------------------------
 " better default
 " --------------------------------------
-scriptencoding utf-8
 
 if !has('nvim')
   set nocompatible                 " 关闭vi兼容性
@@ -21,6 +20,7 @@ filetype plugin indent on        " 自动指定文件类型、缩进
 syntax on                        " 开启语法高亮
 
 set encoding=utf8
+scriptencoding utf-8
 set number                       " 显示绝对行号
 set relativenumber               " 显示相对行号
 set mouse=a                      " 允许使用鼠标
@@ -58,13 +58,13 @@ set splitbelow
 
 " 显示配对的括号，引号等，以及显示时光标的闪烁频率
 set showmatch
-set mat=2
+set matchtime=2
 
 " 关掉错误声音，这个设置仅仅对gui有效
 set noerrorbells
 set novisualbell
 set t_vb=
-set tm=500
+set timeoutlen=500
 
 " 命令行补全和忽略补全的文件类型
 set wildmenu
@@ -73,7 +73,7 @@ set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,.git\*,.hg\*,.svn\*
 set wildignore+=*.sw*
 " 防止连接命令时，在 '.'、'?' 和 '!' 之后插入两个空格。如果 'cpoptions'
 " set nojoinspaces
-set cpo&vim
+set cpoptions&vim
 
 
 " 让vim和系统共享默认剪切板
@@ -89,7 +89,7 @@ endif
 " format
 " --------------------------------------
 set nowrap                       " 不要软换行
-set fo-=t                        " 输入的时候不要自动软换行
+set formatoptions-=t             " 输入的时候不要自动软换行
 set autoindent                   " 自动缩进
 set expandtab                    " 将制表符扩展为空格
 set smarttab                     " 只能缩进
@@ -111,7 +111,7 @@ set hlsearch                     " 高亮显示搜索结果
 set incsearch                    " 使用增量查找
 set colorcolumn=80,120           " 80列和120列参考线
 highlight COlorColumn ctermbg=233
-set gcr=a:block-blinkon0         " 让gui光标不要闪
+set guicursor=a:block-blinkon0   " 让gui光标不要闪
 highlight clear SignColumn       " 高亮列要匹配背景色
 highlight clear LineNr           " 移除当前行号处的高亮色
 highlight clear CursorLineNr     " 删掉当前行号上的高亮
@@ -121,8 +121,7 @@ set listchars=tab:\|\ ,trail:.,nbsp:.,extends:#,precedes:#
 " set listchars=tab:\|\ ,trail:.,nbsp:.,extends:#,precedes:#,eol:$
 
 if !has('gui_running') && !has('win32unix') && !has('nvim')
-  set term=$TERM
-  if &term == 'xterm' || &term == 'screen'
+  if &term ==# 'xterm' || &term ==# 'screen'
     " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
     set t_Co=256
   endif
