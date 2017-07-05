@@ -41,7 +41,7 @@ fu! config#lightline_vim#before()
         \ 'tabline': 1
         \ }
 
-  if g:is_win_unix
+  if g:is_win_unix || (g:is_win && !g:is_gui)
     unlet g:lightline.colorscheme
   endif
 

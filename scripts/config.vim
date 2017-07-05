@@ -3,6 +3,7 @@ scriptencoding utf-8
 
 let g:plugex_use_log = 0
 let g:plugex_use_cache = 1
+let g:use_lightline = !(g:is_win && !g:is_gui)
 if !g:is_nvim
   com UpdateRemotePlugins echo ''
 en
@@ -18,8 +19,8 @@ if plugex#begin()
   PlugEx 'flazz/vim-colorschemes'
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
-  PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'deps': 'lightline.vim'}
-  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': ((g:is_win && !g:is_gui) ? 0 : 1)}
+  PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
+  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter'}
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
