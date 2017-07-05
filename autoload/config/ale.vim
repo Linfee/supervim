@@ -30,7 +30,7 @@ fu! config#ale#before()
 
   let g:ale_linters = {
         \ 'javascript': ['jshint'],
-        \ 'python': ['flake8']
+        \ 'python': ['flake8', 'autopep8']
         \ }
   let g:ale_python_flake8_options = '--max-line-length=84'
 

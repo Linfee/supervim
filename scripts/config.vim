@@ -110,13 +110,15 @@ if plugex#begin()
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
   PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
   PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
-  PlugEx 'mzlogin/vim-markdown-toc', {'on_event': 'VimEnter if &ft==''markdown'''}
+  PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter',
+        \ 'if &ft==''markdown''']}
 
   " javascript
   PlugEx 'othree/javascript-libraries-syntax.vim' " no plugin dir, no need to lazyload
 
   " python
-  PlugEx 'davidhalter/jedi-vim', {'on_event': 'VimEnter if &ft==''python'''}
+  PlugEx 'davidhalter/jedi-vim', {'on_event': ['VimEnter', 'InsertEnter',
+        \ 'if &ft==''python''']}
 
   " ruby
   PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
