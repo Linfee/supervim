@@ -19,7 +19,7 @@ if plugex#begin()
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'deps': 'lightline.vim'}
-  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter'}
+  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': ((g:is_win && !g:is_gui) ? 0 : 1)}
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
