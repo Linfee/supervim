@@ -6,7 +6,7 @@ fu! config#jedi_vim#before()
   let g:jedi#completions_command = '<c-n>'
   let g:jedi#goto_command = '<leader>d'
   let g:jedi#goto_assignments_command = '<leader>g'
-  let g:jedi#documentation_command = 'K'
+  " let g:jedi#documentation_command = 'K'
   let g:jedi#max_doc_height = 15
   let g:jedi#rename_command = '<leader>r'
   let g:jedi#usages_command = '<leader>n'

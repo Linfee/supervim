@@ -39,7 +39,7 @@ if plugex#begin()
     let g:use_ncm_for_vim8 = 1
   endif
 
-  PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp']}
+  " PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp'], 'enable': 0}
   PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'],
         \ 'for': 'snippets'}
   PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
@@ -115,7 +115,7 @@ if plugex#begin()
   PlugEx 'othree/javascript-libraries-syntax.vim' " no plugin dir, no need to lazyload
 
   " python
-  PlugEx 'davidhalter/jedi-vim', {'on_event': 'InsertEnter if &ft==''python'''}
+  PlugEx 'davidhalter/jedi-vim', {'on_event': ['CursorHold', 'InsertEnter if &ft==''python''']}
 
   " ruby
   PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
@@ -256,7 +256,7 @@ augroup omnif
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType java setlocal omnifunc=javacomplete#Complete
+  " autocmd FileType java setlocal omnifunc=javacomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
   " python使用jedi
   autocmd FileType python setlocal omnifunc=jedi#completions
@@ -303,7 +303,7 @@ nnoremap <leader>v :VimwikiTabIndex<cr>
 com! -bar WTF call exception#trace()
 
 " FOR: vim-scriptease
-nnoremap <silent> K :<C-U>exe 'help '.scriptease#helptopic()<CR>
+nnoremap <silent> <localleader>K :<C-U>exe 'help '.scriptease#helptopic()<CR>
 
 "---------------------------------------
 " tools

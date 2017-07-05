@@ -31,3 +31,5 @@ else
   nnoremap <buffer> <space>r :w<cr>:!chmod u+x % && ./%<cr>
 endif
 
+" show doc
+nnoremap <buffer> K :call jedi#show_documentation()<cr>
