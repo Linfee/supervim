@@ -65,6 +65,6 @@ if __name__ == '__main__':
         print(
             "Translation tool(En/Zh).\nUsage: translate.py [words or setences]")
     else:
-        wargs = sys.argv[1:]
+        args = sys.argv[1:]
         for arg in args:
             print(translate(arg))
