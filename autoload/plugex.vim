@@ -94,6 +94,8 @@ set cpo&vim
 let s:status = {'ready': 0, 'in_rtp': 1, 'called_before': 2, 'loaded': 3, 'called_after': 4}
 let s:status_list = ['ready', 'in_rtp', 'called_before', 'loaded', 'called_after']
 
+let s:type = {'string': type(''), 'list': type([]), 'func': type(function('call'))}
+
 " for user
 fu! plugex#begin(...) " {{{
   PlugExLog '>>> plugex#begin >>>'
@@ -589,7 +591,7 @@ fu! s:pretreatment(repo, config) " for new_plug {{{
   " dir, type, as, uri
   " is_lazy
   for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
-    if has_key(a:config, l:attr) && type(a:config[l:attr]) == v:t_string
+    if has_key(a:config, l:attr) && type(a:config[l:attr]) == s:type.string
       let a:config[l:attr] = [a:config[l:attr]]
     endif
   endfor
@@ -750,7 +752,7 @@ fu! s:check_param(repo, config) " {{{
   if g:plugex_param_check
     for l:attr in ['name', 'path', 'branch', 'tag', 'commit']
       if has_key(a:config, l:attr)
-        if type(a:config[l:attr]) != v:t_string
+        if type(a:config[l:attr]) != s:type.string
           call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string.')
           unlet a:config[l:attr]
         endif
@@ -758,7 +760,7 @@ fu! s:check_param(repo, config) " {{{
     endfor
     for l:attr in ['rtp', 'deps', 'for', 'on', 'on_event', 'on_func']
       if has_key(a:config, l:attr)
-        if type(a:config[l:attr]) == v:t_string || type(a:config[l:attr]) == v:t_list
+        if type(a:config[l:attr]) == s:type.string || type(a:config[l:attr]) == s:type.list
           if len(a:config[l:attr] == 0)
             unlet a:config[l:attr]
           endif
@@ -770,8 +772,8 @@ fu! s:check_param(repo, config) " {{{
     endfor
     for l:attr in ['before', 'after', 'do']
       if has_key(a:config, l:attr)
-        if type(a:config[l:attr]) != v:t_string &&
-              \ type(a:config[l:attr]) != v:t_func
+        if type(a:config[l:attr]) != s:type.string &&
+              \ type(a:config[l:attr]) != s:type.func
           call s:err('['.a:repo.'] Attribute '.l:attr.' can only be string or funcref.')
           unlet a:config[l:attr]
         endif
@@ -893,7 +895,7 @@ if g:plugex_use_log
     else
       let l:log = ''
       for l:a in a:000
-        let l:log .= ' '.(type(l:a) == v:t_string ? l:a : string(l:a))
+        let l:log .= ' '.(type(l:a) == s:type.string ? l:a : string(l:a))
       endfor
       call add(s:plugs_log, l:log)
     endif
