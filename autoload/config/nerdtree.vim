@@ -17,7 +17,7 @@ fu! config#nerdtree#before()
   let g:nerdtree_tabs_open_on_gui_startup=0
   let g:nerdtree_tabs_open_on_new_tab=1
 
-  if g:is_win
+  if g:no_nerd_font
     let g:NERDTreeIndicatorMapCustom = {
           \ "Modified"  : "M",
           \ "Staged"    : "S",

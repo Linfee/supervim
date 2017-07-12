@@ -7,6 +7,7 @@ let g:use_lightline = !(g:is_win && !g:is_gui)
 if !g:is_nvim
   com UpdateRemotePlugins echo ''
 en
+let g:no_nerd_font = get(g:, 'no_nerd_font')
 
 if plugex#begin()
 
@@ -19,7 +20,7 @@ if plugex#begin()
   PlugEx 'flazz/vim-colorschemes'
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
-  PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter'}
+  PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'enable': !g:no_nerd_font}
   PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter'}
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
