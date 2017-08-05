@@ -1,4 +1,4 @@
-if !$LANG =~ 'zh_CN'
+if !$LANG =~# 'zh_CN'
   finish
 en
 

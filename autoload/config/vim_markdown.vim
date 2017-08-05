@@ -1,11 +1,11 @@
 fu! config#vim_markdown#before()
   let g:vim_markdown_folding_style_pythonic = 1
-  let g:vim_markdown_toc_autofit = 1
+  " let g:vim_markdown_toc_autofit = 1
   let g:vim_markdown_emphasis_multiline = 0
 
   let g:vim_markdown_toc_autofit = 1
   let g:vim_markdown_emphasis_multiline = 0
-  " let g:vim_markdown_conceal = 0
+  let g:vim_markdown_conceal = 0
   let g:vim_markdown_fenced_languages = ['java=java', 'sh=sh', 'xml=xml', 'js=javascript']
 endf
 

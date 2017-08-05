@@ -9,6 +9,8 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
+scriptencoding utf-8
+
 " 设置补全菜单样式
 set completeopt=longest,menu,preview
 " 设置隐藏级别
@@ -21,7 +23,7 @@ if has('cmdline_info')
   set showcmd
 endif
 " behavior when swithc between buffers
-try | set switchbuf=useopen,usetab,newtab | set stal=2 | catch | endtry
+try | set switchbuf=useopen,usetab,newtab | set showtabline=2 | catch | endtry
 " 设置 gui 与 cli
 if g:is_gui
   " 设置窗口位置和大小

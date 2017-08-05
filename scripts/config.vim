@@ -1,4 +1,4 @@
-set cpo&vim
+set cpoptions&vim
 scriptencoding utf-8
 
 let g:plugex_use_log = 0

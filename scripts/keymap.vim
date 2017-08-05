@@ -9,8 +9,10 @@
 " REPO: https://github.com/Linfee/supervim
 "
 
+scriptencoding utf-8
+
 " use ; as mapleader
-let g:mapleader = ";"
+let g:mapleader = ';'
 let g:maplocalleader = "\\"
 " use alt-; as ;
 Noremap n <a-;> ;
@@ -53,13 +55,13 @@ com! -nargs=0 ToTab setl noet | ret!
 " hex edit mode
 com! -nargs=0 ToggleHex call s:hex_toggle()
 fu! s:hex_toggle()
-  if &bin " from hex
-    set nobin
+  if &binary " from hex
+    set nobinary
     exe 'set display='. b:option_display
     exe 'silent%!xxd -r'
   el
     let b:option_display = &display
-    set bin
+    set binary
     set display=uhex
     exe 'silent%!xxd'
   en
@@ -118,20 +120,20 @@ function! s:replace(confirm, wholeword, replace) " {{2 replace function
   "   wholeword：whether match whole world
   "   replace：replace with this string
   wa
-  let flag = ''
+  let l:flag = ''
   if a:confirm
-    let flag .= 'gec'
+    let l:flag .= 'gec'
   else
-    let flag .= 'ge'
+    let l:flag .= 'ge'
   endif
-  let search = ''
+  let l:search = ''
   if a:wholeword
-    let search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
+    let l:search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
   else
-    let search .= expand('<cword>')
+    let l:search .= expand('<cword>')
   endif
-  let replace = escape(a:replace, '/\&~')
-  execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
+  let l:replace = escape(a:replace, '/\&~')
+  execute 'argdo %s/' . l:search . '/' . l:replace . '/' . l:flag . '| update'
 endfunction " }}2
 
 " search and replace all
@@ -211,15 +213,15 @@ Noremap n <a-6> 6gt
 " Movement {{1
 fu! s:visual_selection(direction, extra_filter) range " {{2
   let l:saved_reg = @"
-  execute "normal! vgvy"
+  execute 'normal! vgvy'
 
   let l:pattern = escape(@", '\\/.*$^~[]')
-  let l:pattern = substitute(l:pattern, "\n$", "", "")
+  let l:pattern = substitute(l:pattern, "\n$", '', '')
 
-  if a:direction == 'gv'
+  if a:direction ==# 'gv'
     call CmdLine("Ag \"" . l:pattern . "\" " )
-  elseif a:direction == 'replace'
-    call CmdLine("%s" . '/'. l:pattern . '/')
+  elseif a:direction ==# 'replace'
+    call CmdLine('%s' . '/'. l:pattern . '/')
   endif
 
   let @/ = l:pattern
@@ -228,14 +230,14 @@ endf " }}2
 
 " get better experience when use soft swap
 function! WrapRelativeMotion(key, ...)
-  let vis_sel=""
+  let l:vis_sel=''
   if a:0
-    let vis_sel="gv"
+    let l:vis_sel='gv'
   endif
   if &wrap
-    execute "normal!" vis_sel . "g" . a:key
+    execute 'normal!' l:vis_sel . 'g' . a:key
   else
-    execute "normal!" vis_sel . a:key
+    execute 'normal!' l:vis_sel . a:key
   endif
 endfunction
 
