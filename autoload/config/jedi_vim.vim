@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 fu! config#jedi_vim#before()
-  let g:jedi#auto_initialization = 1
+  " let g:jedi#auto_initialization = 1
   " jedi 补全快捷键, 有补全插件就不需要了
   let g:jedi#completions_command = '<c-n>'
   let g:jedi#goto_command = '<leader>d'
@@ -11,9 +11,8 @@ fu! config#jedi_vim#before()
   let g:jedi#rename_command = '<leader>r'
   let g:jedi#usages_command = '<leader>n'
   " 在vim中打开模块(源码) :Pyimport
-  let g:jedi#auto_initialization = 1
-  " 关掉jedi的补全样式，使用自定义的
-  " let g:jedi#auto_vim_configuration = 0
+  " 使用jedi的补全样式
+  let g:jedi#auto_vim_configuration = 1
   " 输入点的时候自动补全
   let g:jedi#popup_on_dot = 1
   " 自动选中第一个
@@ -23,7 +22,7 @@ fu! config#jedi_vim#before()
   " 显示参数列表
   let g:jedi#show_call_signatures = 1
   " 延迟多久显示参数列表
-  let g:jedi#show_call_signatures_delay = 300
+  let g:jedi#show_call_signatures_delay = 200
   " 使用go to的时候使用tab而不是buffer
   let g:jedi#use_tabs_not_buffers = 1
   " 指定使用go to使用split的方式，并指定split位置
