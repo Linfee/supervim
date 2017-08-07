@@ -121,7 +121,15 @@ fu! plugex#begin(...) " {{{
   let s:first_rtp = s:rstrip_slash(s:split_rtp()[0])
   let s:is_win = has('win32') || has('win64')
   let s:is_win_unix = has('win32unix')
-  let s:cache_dir = expand('~/.cache/'.(has('nvim') ? 'nvim' : 'vim'))
+
+  if exists('g:nyaovim_version')
+    let l:dir = 'nyaovim'
+  elseif has('nvim')
+    let l:dir = 'nvim'
+  else
+    let l:dir = 'vim'
+  endif
+  let s:cache_dir = expand('~/.cache/'.l:dir)
   let s:cache_file = expand(s:cache_dir.'/plugex')
   if s:is_win_unix
     let s:cache_file .= '.win_unix'
@@ -659,7 +667,9 @@ fu! s:install(...) " {{{
     exe "normal! i\<esc>"
   endif
   let l:old_rtp = &rtp
-  call s:init_plug(l:plugs)
+  if !s:init_plug(l:plugs)
+    return
+  endif
   PlugInstall
   let &rtp = l:old_rtp
   " for l:p in l:plugs
@@ -682,7 +692,9 @@ fu! s:update(...) " {{{
     exe "normal! i\<esc>"
   endif
   let l:old_rtp = &rtp
-  call s:init_plug(l:plugs)
+  if !s:init_plug(l:plugs)
+    return
+  endif
   PlugUpdate
   let &rtp = l:old_rtp
   PlugExClearCache!
@@ -690,7 +702,9 @@ endf " }}}
 fu! s:clean(bang) " {{{
   " for PlugExClean
   let l:old_rtp = &rtp
-  call s:init_plug(values(s:plugs))
+  if !s:init_plug(values(s:plugs))
+    return
+  endif
   if a:bang
     PlugClean!
   el
@@ -702,7 +716,9 @@ endf " }}}
 fu! s:status() " {{{
   " for PlugExStatus
   let l:old_rtp = &rtp
-  call s:init_plug(values(s:plugs))
+  if s:init_plug(values(s:plugs))
+    return
+  endif
   PlugStatus
   let &rtp = l:old_rtp
 endf " }}}
@@ -785,12 +801,15 @@ endf " }}}
 " other functions
 fu! s:init_plug(plugs) " {{{
   let l:plugs = a:plugs
-  call s:check_plug()
+  if !s:check_plug()
+    return 0
+  endif
   call plug#begin(s:plug_home)
   for l:p in l:plugs
     call plug#(l:p.repo, s:get_plug_config(l:p))
   endfor
   call plug#end()
+  return 1
 endf " }}}
 fu! s:get_plug_config(plug) " {{{
   " get config for plug.vim
@@ -803,10 +822,12 @@ fu! s:get_plug_config(plug) " {{{
   return l:r
 endf " }}}
 fu! s:check_plug() " {{{
+  " check if plug.ex exists, install it if necessary
   if !filereadable(s:plug_path)
     echo 'can not found plug.vim, download now...'
-    call s:update_plug()
+    return s:update_plug()
   en
+  return 1
 endf " }}}
 fu! s:update_plug(...) " {{{
   " install/update plug.vim
@@ -821,6 +842,9 @@ fu! s:update_plug(...) " {{{
           \ ".DownloadFile('".l:url."', $ExecutionContext.SessionState.Path".
           \ ".GetUnresolvedProviderPathFromPSPath('".l:path.''')))"'
   el
+    if !executable('curl')
+      return s:err('You need install curl first to download plug.vim')
+    endif
     let l:cmd = 'curl -fLo '.l:path.' --create-dirs '.l:url
   en
   if filereadable(l:path)
@@ -829,7 +853,7 @@ fu! s:update_plug(...) " {{{
   call s:system_at('.', l:cmd)
   if filereadable(l:path)
     exe 'tabnew ' . l:path
-    exe "normal! gg/! plugex#source\<cr>4j0r\":w\<cr>:bd\<cr>"
+    exe "normal! gg/! s:source\<cr>4j0r\":w\<cr>:bd\<cr>"
     return 1
   en
 endf " }}}
@@ -870,6 +894,14 @@ fu! s:pick_plugs(names) " {{{
     call add(l:plugs, s:plugs[l:name])
   endfor
   return l:plugs
+endf " }}}
+fu! s:system_at(path, cmd) abort " {{{
+  " cd to path, exe cmd, then cd back
+  let l:cd = getcwd()
+  exe 'cd ' . a:path
+  let l:r =  system(a:cmd)
+  exe 'cd ' . a:path
+  return r
 endf " }}}
 fu! plugex#is_loaded(...) " {{{
   for l:n in a:000
@@ -913,3 +945,4 @@ com! -nargs=* -bar PlugExLog call s:log(<args>)
 let &cpo = s:cpo_save
 unlet s:cpo_save
 " vim: fmr={{{,}}} fdm=marker:
+

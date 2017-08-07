@@ -4,10 +4,12 @@ scriptencoding utf-8
 let g:plugex_use_log = 0
 let g:plugex_use_cache = 1
 let g:use_lightline = !(g:is_win && !g:is_gui)
+let g:no_nerd_font = get(g:, 'no_nerd_font')
+let g:is_nyaovim = exists('g:nyaovim_version')
+
 if !g:is_nvim
   com UpdateRemotePlugins echo ''
 en
-let g:no_nerd_font = get(g:, 'no_nerd_font')
 
 if plugex#begin()
 
@@ -225,6 +227,13 @@ if plugex#begin()
   " other
   " ===========================================================================
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
+
+  if g:is_nyaovim
+  PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
+  PlugEx 'rhysd/nyaovim-markdown-preview', {'on': 'VimEnter'}
+  PlugEx 'rhysd/nyaovim-mini-browser', {'on': 'VimEnter'}
+  PlugEx 'rhysd/nyaovim-tree-view', {'on': 'VimEnter'}
+  endif
 endif
 call plugex#end()
 
