@@ -9,5 +9,5 @@ setl softtabstop=2
 
 setl nowrap
 
-nnoremap <buffer> <space>r :w<cr>:GoRun<cr>
+nnoremap <buffer> <space>r :w<cr>:GoRun<cr><esc>
 nnoremap <buffer> <space>= :GoFmt<cr>
