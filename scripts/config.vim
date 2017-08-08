@@ -132,6 +132,9 @@ if plugex#begin()
   " scala
   PlugEx 'derekwyatt/vim-scala', {'for': 'scala'}
 
+  " go
+  PlugEx 'fatih/vim-go', {'for': 'go'}
+
   " vimwiki
   PlugEx 'vimwiki/vimwiki', {'for': 'vimwiki', 'on_event': 'VimEnter'}
 
