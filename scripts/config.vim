@@ -19,7 +19,8 @@ if plugex#begin()
   " colors
   PlugEx 'morhetz/gruvbox'
   PlugEx 'sickill/vim-monokai'
-  PlugEx 'flazz/vim-colorschemes'
+  PlugEx 'altercation/vim-colors-solarized'
+  PlugEx 'joshdick/onedark.vim'
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'enable': !g:no_nerd_font}
@@ -230,6 +231,7 @@ if plugex#begin()
   " other
   " ===========================================================================
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
+  PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
 
   if g:is_nyaovim
   PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}

@@ -18,5 +18,5 @@ snippet "(^.*)[.。]h(\d)" "使用.h1~h6快速插入标题" r
 `!p
 title = match.group(1)
 i = '#' * int(match.group(2))
-snip.rv = ' '.join((i, title, i))`
+snip.rv = ' '.join((i, title))`
 endsnippet
