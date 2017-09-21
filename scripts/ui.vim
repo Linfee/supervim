@@ -55,8 +55,8 @@ if g:is_nvim
   aug END
   fu! Test(...)
     try
-      " exe 'Guifont! SauceCodePro NF:h9'
-      exe 'Guifont! Monaco:h9'
+      exe 'Guifont! SauceCodePro NF:h9'
+      " exe 'Guifont! Monaco:h9'
     catch
     endtry
   endf

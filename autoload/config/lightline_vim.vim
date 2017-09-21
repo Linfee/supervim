@@ -2,7 +2,7 @@ scriptencoding utf8
 
 fu! config#lightline_vim#before()
   let g:lightline = {}
-  let g:lightline.colorscheme = 'gruvbox'
+  let g:lightline.colorscheme = 'onedark'
 
   let g:lightline.active = {}
   let g:lightline.active.left = [['mode', 'paste'], ['fugitive', 'readonly', 'filename', 'modified', 'ale']]
