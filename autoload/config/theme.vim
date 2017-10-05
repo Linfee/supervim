@@ -12,7 +12,7 @@ fu! config#theme#after()
       let g:gruvbox_contrast_light = 'medium'
       " let g:gruvbox_hls_cursor = 'purple'
       " let g:gruvbox_italicize_string = 1
-      colorscheme onedark
+      colorscheme gruvbox
     en
   catch
   endtry
