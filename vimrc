@@ -25,4 +25,3 @@ for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', '
 endfor
 
 let &runtimepath .=  expand(',' . g:config_home . '/after')
-

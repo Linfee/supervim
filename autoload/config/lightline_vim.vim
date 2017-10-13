@@ -31,10 +31,8 @@ fu! config#lightline_vim#before()
 
   " statusline separator
   if g:no_nerd_font
-    " let g:lightline.separator = {'left':  '|', 'right': '|'}
-    " let g:lightline.subseparator = {'left': '|', 'right': '|'}
     let g:lightline.separator = {'left':  '', 'right': ''}
-    let g:lightline.subseparator = {'left': '', 'right': ''}
+    let g:lightline.subseparator = {'left': '|', 'right': '|'}
     " tabline separator
     let g:lightline.tabline_separator = g:lightline.separator
     let g:lightline.tabline_subseparator = g:lightline.subseparator

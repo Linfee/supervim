@@ -286,3 +286,20 @@ Noremap c <a-I> <home>
 " Other {{1
 Noremap c <a-p> <c-r>=substitute(@*.'', '\n', '', 'g')<cr>
 " 1}}
+
+" term {{1
+try
+  " use jk to exit insert mode for terminal
+  tnoremap jk <C-\><C-n>
+catch
+endtry
+if exists('##TermOpen')
+  fu s:term_setup()
+    setlocal statusline=%{b:term_title}
+  endf
+  aug vim_term
+    au!
+    au TermOpen * :call s:term_setup()
+  aug END
+en
+" 1}}

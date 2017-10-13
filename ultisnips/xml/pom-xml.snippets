@@ -22,6 +22,24 @@ snippet pom "pom模板" b
 </project>
 endsnippet
 
+snippet repo "ali repo"
+<!-- ali repo -->
+<repositories>
+	<repository>
+		<id>ali-maven</id>
+		<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+		<releases>
+			<enabled>true</enabled>
+		</releases>
+		<snapshots>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+			<checksumPolicy>fail</checksumPolicy>
+		</snapshots>
+	</repository>
+</repositories>
+endsnippet
+
 snippet parent "parent标签" b
 <parent>
 	<groupId>${1:groupId}</groupId>
@@ -47,6 +65,26 @@ snippet plugins "plugins标签" b
 <plugins>
 	${0:<!-- plugins -->}
 </plugins>
+endsnippet
+
+snippet plug-jetty "jetty plugin"
+<plugin>
+	<groupId>org.eclipse.jetty</groupId>
+	<artifactId>jetty-maven-plugin</artifactId>
+	<version>9.4.7.v20170914</version>
+	<configuration>
+		<stopKey>stop</stopKey>
+		<stopPort>5599</stopPort>
+		<webApp>
+			<contextPath>/</contextPath>
+		</webApp>
+		<httpConnector>
+			<port>80</port>
+			<idleTimeout>60000</idleTimeout>
+		</httpConnector>
+		<scanIntervalSeconds>5</scanIntervalSeconds>
+	</configuration>
+</plugin>
 endsnippet
 
 snippet build-full "完整buile模板" b
