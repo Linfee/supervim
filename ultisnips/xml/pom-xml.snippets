@@ -100,6 +100,7 @@ snippet build-full "完整buile模板" b
 			<source>1.8</source>
 			<target>1.8</target>
 			<encoding>UTF-8</encoding>
+			<!--<compilerArgument>-parameters</compilerArgument>-->
 			</configuration>
 		</plugin>
 		<!-- 配置Tomcat插件 -->
@@ -143,6 +144,7 @@ snippet plug-compiler "java编译插件" b
 	<source>1.8</source>
 	<target>1.8</target>
 	<encoding>UTF-8</encoding>
+	<!--<compilerArgument>-parameters</compilerArgument>-->
 	</configuration>
 </plugin>
 endsnippet
@@ -474,5 +476,26 @@ snippet dep-lombok "The lombok dependency" b
 	<artifactId>lombok</artifactId>
 	<version>1.16.18</version>
 	<scope>provided</scope>
+</dependency>
+endsnippet
+snippet dep-jodd-all "jodd-all"
+<dependency>
+	<groupId>org.jodd</groupId>
+	<artifactId>jodd-xxx</artifactId>
+	<version>3.9.1</version>
+</dependency>
+endsnippet
+snippet dep-joor "joor"
+<dependency>
+	<groupId>org.jooq</groupId>
+	<artifactId>joor</artifactId>
+	<version>0.9.6</version>
+</dependency>
+endsnippet
+snippet dep-cglib "cglib"
+<dependency>
+	<groupId>cglib</groupId>
+	<artifactId>cglib</artifactId>
+	<version>3.2.5</version>
 </dependency>
 endsnippet
