@@ -6,10 +6,16 @@ jdbc.password=${3:root}$0
 endsnippet
 
 snippet db "数据库驱动properties模板" b
-jdbc.driver=${1:com.mysql.jdbc.Driver}
-jdbc.url=${2:jdbc:mysql://localhost:3306/test?characterEncoding=utf8}
-jdbc.username=${3:root}
-jdbc.password=${4:root}$0
+# for mysql
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/test?characterEncoding=utf8
+
+# for oracle
+# jdbc.driver=oracle.jdbc.driver.OracleDriver
+# jdbc.url=jdbc:oracle:thin:@db.info:32769:XE
+
+jdbc.username=${1:root}
+jdbc.password=${2:root}$0
 endsnippet
 
 snippet log4j "log4j的properties配置模板" b

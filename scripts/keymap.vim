@@ -303,3 +303,25 @@ if exists('##TermOpen')
   aug END
 en
 " 1}}
+
+noremap ， ,<space>
+noremap 。 .<space>
+noremap ： :<space>
+noremap ； ;<space>
+noremap “ "<space>
+noremap ‘ '<space>
+noremap ？ ?<space>
+noremap 、 \<space>
+noremap 《 <<space>
+noremap 》 ><space>
+
+inoremap ， ,<space>
+inoremap 。 .<space>
+inoremap ： :<space>
+inoremap ； ;<space>
+inoremap “ "<space>
+inoremap ‘ '<space>
+inoremap ？ ?<space>
+inoremap 、 \<space>
+inoremap 《 <<space>
+inoremap 》 ><space>

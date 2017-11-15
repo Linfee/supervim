@@ -11,6 +11,14 @@ if !g:is_nvim
   com UpdateRemotePlugins echo ''
 en
 
+fu! BuildComposer(info)
+  if has('nvim')
+    !cargo build --release
+  else
+    !cargo build --release --no-default-features --features json-rpc
+  endif
+endf
+
 if plugex#begin()
 
   " ===========================================================================
@@ -114,6 +122,7 @@ if plugex#begin()
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
   PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
   PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
+  " PlugEx 'euclio/vim-markdown-composer', {'do': ':call BuildComposer'}
   PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter',
         \ 'if &ft==''markdown''']}
 
