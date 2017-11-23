@@ -15,8 +15,9 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 
 <configuration>
 
-<!--<settings>-->
-<!--</settings>-->
+<settings>
+	<setting name="mapUnderscoreToCamelCase" value="true"/>
+</settings>
 
 <typeAliases>
 	<package name="${1}" />
@@ -45,6 +46,10 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 
 <configuration>
 	<properties resource="db.properties"/>
+
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
 
 	<typeAliases>
 		$1
@@ -247,9 +252,9 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 <servlet-mapping>
 	<!--
 	1. *.action  处理以 .action 结尾的请求
-	2. /    处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
+	2. /	处理所有请求, 这里也包括的静态文件, 使用此种方法可以实现 RESUful 风格
 	3. /x/* /x下的全部
-	4. /*   这样配置不对, 会导致 jsp 也有 DispatcherServlet 解析, 会报错
+	4. /*	这样配置不对, 会导致 jsp 也有 DispatcherServlet 解析, 会报错
 	-->
 	<servlet-name>spring-mvc</servlet-name>
 	<url-pattern>*.do</url-pattern>

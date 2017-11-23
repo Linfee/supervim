@@ -1,6 +1,6 @@
 snippet mysql "mysql数据库配置properties模板" b
 jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://${5:localhost}:${6:3306}/${1:test}?characterEncoding=${4:utf-8}
+jdbc.url=jdbc:mysql://${5:localhost}:${6:3306}/${1:test}?characterEncoding=${4:utf-8}&useServerPrepStmts=true
 jdbc.username=${2:root}
 jdbc.password=${3:root}$0
 endsnippet
@@ -8,7 +8,7 @@ endsnippet
 snippet db "数据库驱动properties模板" b
 # for mysql
 jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/test?characterEncoding=utf8
+jdbc.url=jdbc:mysql://localhost:3306/test?characterEncoding=utf8&useServerPrepStmts=true
 
 # for oracle
 # jdbc.driver=oracle.jdbc.driver.OracleDriver
@@ -19,24 +19,37 @@ jdbc.password=${2:root}$0
 endsnippet
 
 snippet log4j "log4j的properties配置模板" b
-# log4j.rootLogger=DEBUG, stdout, R
-# log4j.rootLogger=DEBUG, R
-log4j.rootLogger=DEBUG, stdout
-log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-# Pattern to output the caller's file name and line number.
-#log4j.appender.stdout.layout.ConversionPattern=%5p [%t] (%F:%L) - %m%n
-# Print the date in ISO 8601 format
+### set log levels ###
+# log4j.rootLogger = debug, stdout, D, E
+log4j.rootLogger = debug ,  stdout
+
+### to console ###
+log4j.appender.stdout = org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target = System.out
+log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
+# log4j.appender.stdout.layout.ConversionPattern =  %d{ABSOLUTE} %5p %c{ 1 }:%L - %m%n
 log4j.appender.stdout.layout.ConversionPattern=[%p] [%-d{yyyy/MM/dd HH:mm:ss,SSS}] [%t] [%c]\n    %m%n
-log4j.appender.R=org.apache.log4j.RollingFileAppender
-log4j.appender.R.File=log.log
-log4j.appender.R.MaxFileSize=100KB
-# Keep one backup file
-log4j.appender.R.MaxBackupIndex=1
-log4j.appender.R.layout=org.apache.log4j.PatternLayout
-log4j.appender.R.layout.ConversionPattern=[%p] [%-d{yyyy/MM/dd HH:mm:ss,SSS}] [%t] [%c]\n    %m%n
-# Print only messages of level WARN or above in the package com.foo.
-# 指定特定包下的日志的输入级别
-log4j.logger.com.foo=WARN
+
+### to file ###
+log4j.appender.D = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.D.File = /var/log/tomcat/debug.log
+log4j.appender.D.Append = true
+log4j.appender.D.Threshold = DEBUG
+log4j.appender.D.layout = org.apache.log4j.PatternLayout
+log4j.appender.D.layout.ConversionPattern=[%p] [%-d{yyyy/MM/dd HH:mm:ss,SSS}] [%t] [%c]\n    %m%n
+# log4j.appender.D.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - [ %p ]  %m%n
+# log4j.appender.D.MaxFileSize=100KB
+
+### to file ###
+log4j.appender.E = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.E.File = /var/log/tomcat/error.log
+log4j.appender.E.Append = true
+log4j.appender.E.Threshold = ERROR
+log4j.appender.E.layout = org.apache.log4j.PatternLayout
+log4j.appender.E.layout.ConversionPattern=[%p] [%-d{yyyy/MM/dd HH:mm:ss,SSS}] [%t] [%c]\n    %m%n
+# log4j.appender.E.layout.ConversionPattern = %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - [ %p ]  %m%n
+# log4j.appender.E.MaxFileSize=100KB
+
+# log4j.logger.com.foo=WARN
 $0
 endsnippet

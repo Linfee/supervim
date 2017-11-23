@@ -314,6 +314,10 @@ noremap ？ ?<space>
 noremap 、 \<space>
 noremap 《 <<space>
 noremap 》 ><space>
+noremap （ (<space>
+noremap ） )<space>
+noremap —— _<space>
+
 
 inoremap ， ,<space>
 inoremap 。 .<space>
@@ -325,3 +329,6 @@ inoremap ？ ?<space>
 inoremap 、 \<space>
 inoremap 《 <<space>
 inoremap 》 ><space>
+inoremap （ (<space>
+inoremap ） )<space>
+inoremap —— _<space>
