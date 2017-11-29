@@ -312,11 +312,11 @@ noremap “ "<space>
 noremap ‘ '<space>
 noremap ？ ?<space>
 noremap 、 \<space>
-noremap 《 <<space>
-noremap 》 ><space>
-noremap （ (<space>
-noremap ） )<space>
-noremap —— _<space>
+noremap 《 <
+noremap 》 >
+noremap （ (
+noremap ） )
+noremap —— _
 
 
 inoremap ， ,<space>
@@ -327,8 +327,8 @@ inoremap “ "<space>
 inoremap ‘ '<space>
 inoremap ？ ?<space>
 inoremap 、 \<space>
-inoremap 《 <<space>
-inoremap 》 ><space>
-inoremap （ (<space>
-inoremap ） )<space>
-inoremap —— _<space>
+inoremap 《 <
+inoremap 》 >
+inoremap （ (
+inoremap ） )
+inoremap —— _

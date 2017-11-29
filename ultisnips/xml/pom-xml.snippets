@@ -87,6 +87,22 @@ snippet plug-jetty "jetty plugin"
 </plugin>
 endsnippet
 
+snippet plug-gmaven "the maven plugin for groovy"
+<plugin>
+	<groupId>org.codehaus.gmavenplus</groupId>
+	<artifactId>gmavenplus-plugin</artifactId>
+	<version>1.6</version>
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.4.4</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+	</plugin>
+endsnippet
+
 snippet build-full "完整buile模板" b
 <build>
 	<finalName>${1:artifactId}</finalName>
@@ -254,22 +270,22 @@ snippet dep-mybatis "The mybatis dependency" b
 <dependency>
 	<groupId>org.mybatis</groupId>
 	<artifactId>mybatis</artifactId>
-	<version>${mybatis.version}</version>
+	<version>3.4.5</version>
 </dependency>
 <dependency>
 	<groupId>org.mybatis</groupId>
 	<artifactId>mybatis-spring</artifactId>
-	<version>${mybatis.spring.version}</version>
+	<version>1.3.1</version>
 </dependency>
 <dependency>
 	<groupId>com.github.pagehelper</groupId>
 	<artifactId>pagehelper</artifactId>
-	<version>4.1.6</version>
+	<version>5.1.2</version>
 </dependency>
 <dependency>
-	<groupId>com.github.abel533</groupId>
+	<groupId>tk.mybatis</groupId>
 	<artifactId>mapper</artifactId>
-	<version>3.0.1</version>
+	<version>3.4.5</version>
 </dependency>
 endsnippet
 
@@ -549,5 +565,13 @@ snippet dep-log4j2 "log4j2"
 	<groupId>org.apache.logging.log4j</groupId>
 	<artifactId>log4j-core</artifactId>
 	<version>2.9.1</version>
+</dependency>
+endsnippet
+snippet dep-groovy "the groovy-all"
+<dependency>
+	<groupId>org.codehaus.groovy</groupId>
+	<artifactId>groovy-all</artifactId>
+	<version>2.4.4</version>
+	<scope>test</scope>
 </dependency>
 endsnippet
