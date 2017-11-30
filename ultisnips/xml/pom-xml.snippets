@@ -262,6 +262,7 @@ snippet dep-mysql "The mysql dependency" b
 	<groupId>mysql</groupId>
 	<artifactId>mysql-connector-java</artifactId>
 	<version>${1:5.1.2}</version>
+	<!-- <version>6.0.6</version> -->
 </dependency>
 $0
 endsnippet
@@ -298,11 +299,19 @@ snippet dep-log4j "The log4j dependency" b
 $0
 endsnippet
 
+snippet dep-log4j-core "The log4j core dependency" b
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-core</artifactId>
+	<version>2.10.0</version>
+</dependency>
+endsnippet
+
 snippet dep-commons-lang3 "The commons-lang3 dependency" b
 <dependency>
 	<groupId>org.apache.commons</groupId>
 	<artifactId>commons-lang3</artifactId>
-	<version>3.4</version>
+	<version>3.7</version>
 </dependency>
 endsnippet
 
@@ -314,11 +323,19 @@ snippet dep-commons-collections "The commons-collections dependency" b
 </dependency>
 endsnippet
 
+snippet dep-commons-collections4 "The commons-collections4 dependency" b
+<dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-collections4</artifactId>
+	<version>4.1</version>
+</dependency>
+endsnippet
+
 snippet dep-commons-io "The commons-io dependency" b
 <dependency>
 	<groupId>commons-io</groupId>
 	<artifactId>commons-io</artifactId>
-	<version>2.5</version>
+	<version>2.6</version>
 </dependency>
 endsnippet
 
@@ -334,7 +351,7 @@ snippet dep-commons-codec "The commons-codec dependency" b
 <dependency>
 	<groupId>commons-codec</groupId>
 	<artifactId>commons-codec</artifactId>
-	<version>1.10</version>
+	<version>1.11</version>
 </dependency>
 endsnippet
 
@@ -342,7 +359,7 @@ snippet dep-commons-beanutil "The common-beanutils dependency" b
 <dependency>
 	<groupId>commons-beanutils</groupId>
 	<artifactId>commons-beanutils</artifactId>
-	<version>1.9.2</version>
+	<version>1.9.3</version>
 </dependency>
 endsnippet
 
@@ -350,7 +367,7 @@ snippet dep-commons-cli "The commons-cli dependency" b
 <dependency>
 	<groupId>commons-cli</groupId>
 	<artifactId>commons-cli</artifactId>
-	<version>1.3.1</version>
+	<version>1.4</version>
 </dependency>
 endsnippet
 
@@ -358,7 +375,7 @@ snippet dep-commons-fileupload "The commons-fileuplocad dependency" b
 <dependency>
 	<groupId>commons-fileupload</groupId>
 	<artifactId>commons-fileupload</artifactId>
-	<version>1.3.2</version>
+	<version>1.3.3</version>
 </dependency>
 endsnippet
 
@@ -374,7 +391,7 @@ snippet dep-commons-net "The commons-net dependency" b
 <dependency>
 	<groupId>commons-net</groupId>
 	<artifactId>commons-net</artifactId>
-	<version>3.5</version>
+	<version>3.6</version>
 </dependency>
 endsnippet
 
@@ -382,7 +399,7 @@ snippet dep-alibaba-druid "The alibaba-druid 数据库连接池 dependency" b
 <dependency>
 	<groupId>com.alibaba</groupId>
 	<artifactId>druid</artifactId>
-	<version>1.0.25</version>
+	<version>1.1.5</version>
 </dependency>
 endsnippet
 
@@ -398,7 +415,7 @@ snippet dep-joda-time "The joda-time dependency" b
 <dependency>
 	<groupId>joda-time</groupId>
 	<artifactId>joda-time</artifactId>
-	<version>2.9.4</version>
+	<version>2.9.9</version>
 </dependency>
 endsnippet
 
@@ -406,7 +423,7 @@ snippet dep-httpclient "The httpclient dependency" b
 <dependency>
 	<groupId>org.apache.httpcomponents</groupId>
 	<artifactId>httpclient</artifactId>
-	<version>4.5.2</version>
+	<version>4.5.3</version>
 </dependency>
 endsnippet
 
@@ -414,7 +431,7 @@ snippet dep-jackson "The jackson dependency" b
 <dependency>
 	<groupId>com.fasterxml.jackson.core</groupId>
 	<artifactId>jackson-databind</artifactId>
-	<version>2.8.1</version>
+	<version>2.9.2</version>
 </dependency>
 endsnippet
 
@@ -423,6 +440,7 @@ snippet dep-spring "The spring dependencies" b
 	<groupId>org.springframework</groupId>
 	<artifactId>spring-context</artifactId>
 	<version>4.3.2.RELEASE</version>
+	<!-- <version>5.0.2.RELEASE</version> -->
 </dependency>
 <dependency>
 	<groupId>org.springframework</groupId>
@@ -463,12 +481,12 @@ snippet dep-slf4j-log4j "The slf4j and log4j dependency" b
 <dependency>
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-api</artifactId>
-	<version>1.7.21</version>
+	<version>1.7.25</version>
 </dependency>
 <dependency>
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-log4j12</artifactId>
-	<version>1.7.21</version>
+	<version>1.7.25</version>
 </dependency>
 endsnippet
 
@@ -476,7 +494,7 @@ snippet dep-shiro-core "The shiro core dependency" b
 <dependency>
 	<groupId>org.apache.shiro</groupId>
 	<artifactId>shiro-core</artifactId>
-	<version>1.3.0</version>
+	<version>1.4.0</version>
 </dependency>
 endsnippet
 
@@ -484,7 +502,7 @@ snippet dep-mongodb "The mongodb driver dependency" b
 <dependency>
 	<groupId>org.mongodb</groupId>
 	<artifactId>mongo-java-driver</artifactId>
-	<version>3.3.0</version>
+	<version>3.5.0</version>
 </dependency>
 endsnippet
 
@@ -496,19 +514,11 @@ snippet dep-dom4j "The dom4j dependency" b
 </dependency>
 endsnippet
 
-snippet dep-cglib "The cglib dependency" b
-<dependency>
-	<groupId>cglib</groupId>
-	<artifactId>cglib</artifactId>
-	<version>3.2.4</version>
-</dependency>
-endsnippet
-
 snippet dep-json "The json dependency" b
 <dependency>
 	<groupId>org.json</groupId>
 	<artifactId>json</artifactId>
-	<version>20160810</version>
+	<version>20171018</version>
 </dependency>
 endsnippet
 
@@ -516,7 +526,7 @@ snippet dep-guava "The google guava dependency" b
 <dependency>
 	<groupId>com.google.guava</groupId>
 	<artifactId>guava</artifactId>
-	<version>20.0-rc1</version>
+	<version>23.5-jre</version>
 </dependency>
 endsnippet
 snippet dep-lombok "The lombok dependency" b
