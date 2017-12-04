@@ -271,7 +271,7 @@ endsnippet
 snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
 <!--解决post乱码-->
 <filter>
-	<filter-name>ChatacterEncodingFilter</filter-name>
+	<filter-name>CharacterEncodingFilter</filter-name>
 	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 	<init-param>
 		<param-name>encoding</param-name>
@@ -279,7 +279,7 @@ snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
 	</init-param>
 </filter>
 <filter-mapping>
-	<filter-name>ChatacterEncodingFilter</filter-name>
+	<filter-name>CharacterEncodingFilter</filter-name>
 	<servlet-name>spring-mvc</servlet-name>
 </filter-mapping>
 endsnippet
