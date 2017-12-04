@@ -50,6 +50,7 @@
 "     PlugEx {plug repo}[, {options}] Add a plugin, {options} is a dict with Plugex_options as key
 "     PlugExInstall [name ...]   Install plugins
 "     PlugExUpdate [name ...]    Install or update plugins
+"     PlugExRemove [name ...]    Remove few plugins(only the dir of plugin)
 "     PlugExClean[!]             Remove unused directories (bang version will clean without prompt)
 "     PlugExStatus               Check the status of plugins
 "     PlugExinfo [name ...]      Check the status of plugins in plugex way
@@ -148,6 +149,8 @@ fu! plugex#begin(...) " {{{
         \ PlugEx           call plugex#new_plug(<args>)
   com! -nargs=* -complete=customlist,s:complete_plugs
         \ PlugExInstall    call s:install(<f-args>)
+  com! -nargs=+ -complete=customlist,s:complete_plugs
+        \ PlugExRemove     call s:remove(<f-args>)
   com! -nargs=* -complete=customlist,s:complete_plugs
         \ PlugExUpdate     call s:update(<f-args>)
   com! -nargs=0 -bang
@@ -678,6 +681,25 @@ fu! s:install(...) " {{{
   " endfor
   PlugExClearCache!
 endf " }}}
+fu! s:remove(...)
+  let l:plugs = s:pick_plugs(a:000)
+  let l:sum = 0
+  for l:plug in l:plugs
+    if l:plug.type == s:plug_local_type &&
+          \ input('PlugExRemove: remove local plugin ['.l:plug.name.'](y/n)? ') != 'y'
+      continue
+    endif
+    echo "\n"
+    let l:r = delete(l:plug.path, 'rf')
+    if l:r == -1
+      call s:err('PlugExRemove: remove plugin ['.l:plug.name.'] fail.')
+    el
+      echom 'PlugExRemove: remove plugin ['.l:plug.name.'] success.'
+      let l:sum += 1
+    endif
+  endfor
+  echom 'PlugExRemove: remove '.l:sum.'/'.len(a:000).' plugins.'
+endf
 fu! s:update(...) " {{{
   " for PlugExUpdate command
   " create plug_home if not exists
