@@ -25,11 +25,11 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 
 <!--配置pageHelper插件 -->
 <plugins>
-	<plugin interceptor="com.github.pagehelper.PageHelper">
+	<plugin interceptor="com.github.pagehelper.PageInterceptor">
 		<property name="dialect" value="mysql"/>
 		<!--使用RowBounds分页会进行count查询-->
 		<property name="rowBoundsWithCount" value="true"/>
-		<!--为true时，当pageSize-0或RowBounds.limit=0会查出全部结果-->
+		<!--为true时，当pageSize=0或RowBounds.limit=0会查出全部结果-->
 		<property name="pageSizeZero" value="true"/>
 		<!--参数合理化，默认禁用，启用时，页码不在返回会查询第一页或最后一页，禁用时，页码不在返回返回空数据-->
 		<property name="reasonable" value="true"/>
@@ -74,22 +74,6 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 		<property name="dialect" value="mysql"/>
 		<!--使用RowBounds分页会进行count查询-->
 		<property name="rowBoundsWithCount" value="true"/>
-	</plugin>
-	<!--配置通用mapper-->
-	<plugin interceptor="com.github.abel533.mapperhelper.MapperInterceptor">
-		<!--UUID生成策略-->
-		<!--配置UUID生成策略需要使用OGNL表达式-->
-		<!--默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")-->
-		<!--<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>-->
-		<!--主键自增回写方法,默认值MYSQL,详细说明请看文档-->
-		<property name="IDENTITY" value="MYSQL"/>
-		<!--序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle-->
-		<!--可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName,PropertyName-->
-		<!--<property name="seqFormat" value="{0}.nextval"/>-->
-		<!--主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)-->
-		<!--<property name="ORDER" value="AFTER"/>-->
-		<!--通用Mapper接口，多个通用接口用逗号隔开-->
-		<property name="mappers" value="com.github.abel533.mapper.Mapper"/>
 	</plugin>
 </plugins>
 
@@ -146,6 +130,133 @@ PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 
 </context>
 </generatorConfiguration>
+endsnippet
+
+snippet ssm-mybatis-generator-config-mapper "xml:mybatis-generator整合通用mapper用来生成java代码的xml配置模板" b
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE generatorConfiguration PUBLIC
+	"-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+
+<!--该配置需要配合maven使用-->
+<generatorConfiguration>
+	<!--这里配置properties, 其中配置了jdbc配置-->
+	<properties resource="${1:your_properties}"/>
+
+	<context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+	<property name="beginningDelimiter" value="`"/>
+	<property name="endingDelimiter" value="`"/>
+
+	<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+		<!--1.使用默认的Mapper, 生成的Mapper继承该Mapper-->
+		<!--<property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>-->
+		<!--2.这里使用自定义BaseMapper，让生成的mapper继承BaseMapper接口-->
+		<property name="mappers" value="com.cfbb.cbem.util.BaseMapper"/>
+		<property name="caseSensitive" value="true"/>
+	</plugin>
+
+	<jdbcConnection driverClass="${jdbc.driver}"
+		connectionURL="${jdbc.url}"
+		userId="${jdbc.username}"
+		password="${jdbc.password}">
+	</jdbcConnection>
+
+	<javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}"/>
+
+	<sqlMapGenerator targetPackage="${targetXMLPackage}" targetProject="${targetResourcesProject}"/>
+
+	<javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER"/>
+
+	<table tableName="%">
+		<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+	</table>
+
+	</context>
+</generatorConfiguration>
+endsnippet
+
+snippet ssm-pom-config-of-mapper "description"
+
+<properties>
+	<!--generator-->
+	<targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+	<targetMapperPackage>com.foo.bar.mapper.generator</targetMapperPackage>
+	<targetModelPackage>com.foo.bar.pojo.generator</targetModelPackage>
+	<targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
+	<targetXMLPackage>mapper/generator</targetXMLPackage>
+
+	<!-- other properties -->
+</properties>
+
+<!-- Mybatis Generator -->
+<dependencies>
+	<!--mybatis-->
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis</artifactId>
+		<version>${mybatis.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis-spring</artifactId>
+		<version>${mybatis.spring.version}</version>
+	</dependency>
+	<!-- 分页插件 -->
+	<dependency>
+		<groupId>com.github.pagehelper</groupId>
+		<artifactId>pagehelper</artifactId>
+		<version>${pagehelper.version}</version>
+	</dependency>
+	<!-- 通用mapper -->
+	<dependency>
+		<groupId>tk.mybatis</groupId>
+		<artifactId>mapper</artifactId>
+		<version>${mybatis.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.mybatis.generator</groupId>
+		<artifactId>mybatis-generator-core</artifactId>
+		<version>${mybatis.generator.version}</version>
+		<scope>compile</scope>
+		<optional>true</optional>
+	</dependency>
+	<!-- other dependency -->
+</dependencies>
+
+</build>
+	</plugins>
+	<!--mybatis-generator-->
+		<plugin>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-maven-plugin</artifactId>
+			<version>1.3.2</version>
+
+			<configuration>
+				<configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml
+				</configurationFile>
+				<overwrite>true</overwrite>
+				<verbose>true</verbose>
+			</configuration>
+
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>${mysql.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>tk.mybatis</groupId>
+					<artifactId>mapper</artifactId>
+					<version>${mybatis.version}</version>
+				</dependency>
+			</dependencies>
+		</plugin>
+	</plugins>
+</build>
+
 endsnippet
 
 snippet ssm-custom-converter "xml:自定义类型转换器配置" b
@@ -217,6 +328,18 @@ snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的
 
 <!--自动扫描mapper-->
 <mybatis:scan base-package="com.linfee.st.mr.mapper" factory-ref="sqlSessionFactory"/>
+<!--上面的配置用于给idea扫描, 下面的配置为了加上通用mapper插件, 其实是重复的-->
+<!--通用mapper不在mybatis的plugin里面配置, 而是在这里-->
+<!--通用mapper可以配合专用的mybatis-generator配置,生成专用的mapper接口和xml和pojo-->
+<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property name="basePackage" value="com.cfbb.cbem.mapper"/>
+	<!--1.如果使用自定义通用mapper-->
+	<property name="markerInterface" value="com.cfbb.cbem.util.BaseMapper"/>
+	<!--2.如果没有使用自定义通用Mapper,使用默认的-->
+	<!--<property name="properties">-->
+	<!--<value>mappers=tk.mybatis.mapper.common.Mapper</value>-->
+	<!--</property>-->
+</bean>
 endsnippet
 
 snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
@@ -494,3 +617,131 @@ snippet ssm-mapper "The mapper.xml template" b
 $0
 </mapper>
 endsnippet
+
+snippet ssm-base-mapper "BaseMapper" b
+import tk.mybatis.mapper.common.ConditionMapper;
+import tk.mybatis.mapper.common.IdsMapper;
+import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.MySqlMapper;
+
+public interface BaseMapper<T> extends Mapper<T>, IdsMapper<T>, ConditionMapper<T>, MySqlMapper<T> {
+}
+endsnippet
+	
+snippet ssm-base-service "description"
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public abstract class BaseService<T> {
+
+	@Autowired
+	private BaseMapper<T> mapper;
+
+	private BaseMapper<T> getMapper() {
+		return this.mapper;
+	}
+
+	public T queryById(Long id) {
+		return getMapper().selectByPrimaryKey(id);
+	}
+
+	public List<T> queryList(T t) {
+		return getMapper().select(t);
+	}
+
+	List<T> list = this.queryList(t);
+		return new PageInfo<T>(list);
+	}
+
+	public Integer queryCount(T t) {
+		return getMapper().selectCount(t);
+	}
+
+	public Integer save(T t) {
+		return getMapper().insert(t);
+	}
+
+	public Integer saveSelective(T t) {
+		return getMapper().insertSelective(t);
+	}
+
+	public Integer update(T t) {
+		return getMapper().updateByPrimaryKey(t);
+	}
+
+	public Integer updateSelective(T t) {
+		return getMapper().updateByPrimaryKeySelective(t);
+	}
+
+	public Integer deleteById(Long id) {
+		return getMapper().deleteByPrimaryKey(id);
+	}
+
+	public Integer deleteByIds(String ids) {
+		return getMapper().deleteByIds(ids);
+	}
+
+	public List<T> selectByIds(String ids) {
+		return getMapper().selectByIds(ids);
+	}
+
+	public List<T> queryAll() {
+		return getMapper().selectAll();
+	}
+
+	public int addUseGeneratedKeys(T t) {
+		return mapper.insertUseGeneratedKeys(t);
+	}
+
+	public int addAll(List<T> list) {
+		return mapper.insertList(list);
+	}
+}
+endsnippet
+
+snippet ssm-pom-properties "mvn properties"
+<properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<jdk.version>1.8</jdk.version>
+	<port>8080</port>
+
+	<!--generator-->
+	<targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+	<targetMapperPackage>com.cfbb.cbem.mapper.generator</targetMapperPackage>
+	<targetModelPackage>com.cfbb.cbem.pojo.generator</targetModelPackage>
+	<targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
+	<targetXMLPackage>mapper/generator</targetXMLPackage>
+
+	<servlet.version>3.1.0</servlet.version>
+	<jstl.version>1.2</jstl.version>
+
+	<spring.version>4.3.2.RELEASE</spring.version>
+	<mybatis.version>3.4.5</mybatis.version>
+	<mybatis.spring.version>1.3.1</mybatis.spring.version>
+	<pagehelper.version>5.1.2</pagehelper.version>
+	<mybatis.generator.version>1.3.2</mybatis.generator.version>
+
+	<commons.lang3.version>3.4</commons.lang3.version>
+	<commons.io.version>2.5</commons.io.version>
+	<commons.fileupload.version>1.3.2</commons.fileupload.version>
+	<commons.httpclient.version>3.1</commons.httpclient.version>
+	<commons.logging.version>1.2</commons.logging.version>
+	<jackson.version>2.9.2</jackson.version>
+
+	<mysql.version>5.1.2</mysql.version>
+	<druid.version>1.1.6</druid.version>
+
+	<log4j.version>1.2.17</log4j.version>
+	<slf4j.version>1.7.25</slf4j.version>
+
+	<lombok.version>1.16.18</lombok.version>
+	<junit.version>4.12</junit.version>
+
+	<plugin.compile.version>3.5.1</plugin.compile.version>
+	<plugin.tomcat.version>2.2</plugin.tomcat.version>
+	<plugin.jetty.version>9.4.7.v20170914</plugin.jetty.version>
+</properties>
+endsnippet
+	
