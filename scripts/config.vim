@@ -25,6 +25,7 @@ if plugex#begin()
   " ui
   " ===========================================================================
   " colors
+  PlugEx 'junegunn/seoul256.vim'
   PlugEx 'morhetz/gruvbox'
   PlugEx 'sickill/vim-monokai'
   PlugEx 'altercation/vim-colors-solarized'
@@ -244,10 +245,10 @@ if plugex#begin()
   PlugEx '~/tmp/vim/vlib'
 
   if g:is_nyaovim
-  PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
-  PlugEx 'rhysd/nyaovim-markdown-preview', {'on': 'VimEnter'}
-  PlugEx 'rhysd/nyaovim-mini-browser', {'on': 'VimEnter'}
-  PlugEx 'rhysd/nyaovim-tree-view', {'on': 'VimEnter'}
+    PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
+    PlugEx 'rhysd/nyaovim-markdown-preview', {'on': 'VimEnter'}
+    PlugEx 'rhysd/nyaovim-mini-browser', {'on': 'VimEnter'}
+    PlugEx 'rhysd/nyaovim-tree-view', {'on': 'VimEnter'}
   endif
 endif
 call plugex#end()

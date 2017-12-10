@@ -21,3 +21,6 @@ command! -nargs=+ Trans call ex#translate#ts(<f-args>)
 nnoremap <space>e<cr> :@*<cr>
 nnoremap <space>e :set operatorfunc=ex#vimscript#execute<cr>g@
 vnoremap <space>e :<c-u>call ex#vimscript#execute(visualmode())<cr>
+
+" run shell command
+command! -complete=file -nargs=+ Shell call util#shell_run(<q-args>)
