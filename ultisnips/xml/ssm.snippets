@@ -275,7 +275,7 @@ endsnippet
 
 snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 <!--开启组件扫描-->
-<context:component-scan base-package="com.babsport" use-default-filters="false">
+<context:component-scan base-package="com.foo" use-default-filters="false">
 	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 </context:component-scan>
 
@@ -324,11 +324,12 @@ snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	<property name="dataSource" ref="dataSource"/>
 	<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+	<property name="mapperLocations" value="classpath:mapper/*.xml"/>
 </bean>
 
 <!--自动扫描mapper-->
-<mybatis:scan base-package="com.linfee.st.mr.mapper" factory-ref="sqlSessionFactory"/>
-<!--上面的配置用于给idea扫描, 下面的配置为了加上通用mapper插件, 其实是重复的-->
+<mybatis:scan base-package="com.foo.mapper" factory-ref="sqlSessionFactory"/>
+<!--上面的配置用于给idea扫描, 下面的配置为了加上通用mapper插件-->
 <!--通用mapper不在mybatis的plugin里面配置, 而是在这里-->
 <!--通用mapper可以配合专用的mybatis-generator配置,生成专用的mapper接口和xml和pojo-->
 <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -410,8 +411,14 @@ endsnippet
 snippet ssm-page-helper "mybatis pageHelper插件配置模板" b
 <!--配置pageHelper插件-->
 <plugins>
-	<plugin interceptor="com.github.pagehelper.PageHelper">
-		<property name="dialect" value="mysql"/>
+	<plugin interceptor="com.github.pagehelper.PageInterceptor">
+		<!--<property name="dialect" value="mysql"/>-->
+		<!--使用RowBounds分页会进行count查询-->
+		<property name="rowBoundsWithCount" value="true"/>
+		<!--为true时，当pageSize=0或RowBounds.limit=0会查出全部结果-->
+		<property name="pageSizeZero" value="true"/>
+		<!--参数合理化，默认禁用，启用时，页码不在返回会查询第一页或最后一页，禁用时，页码不在返回返回空数据-->
+		<property name="reasonable" value="true"/>
 	</plugin>
 </plugins>
 endsnippet
@@ -557,7 +564,7 @@ snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
 endsnippet
 
 snippet ssm-service "xml:springmvc配置模板" b
-<context:component-scan base-package="com.linfee">
+<context:component-scan base-package="com.foo">
 	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 </context:component-scan>
 endsnippet
@@ -598,14 +605,14 @@ snippet ssm-mybatis-without-SqlMapConfig "Description" b
 <!--配置sqlSessionFactory -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	<property name="dataSource" ref="dataSource" />
-	<property name="mapperLocations" value="classpath:com/babsport/mapper.xml"/>
-	<property name="typeAliasesPackage" value="com.babsport.pojo"/>
+	<property name="mapperLocations" value="classpath:com/foo/mapper.xml"/>
+	<property name="typeAliasesPackage" value="com.foo.pojo"/>
 </bean>
 endsnippet
 
 snippet ssm-mapper-scan "Mybatis mapper scan" b
 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-	<property name="basePackage" value="com.babsport.mapper"/>
+	<property name="basePackage" value="com.foo.mapper"/>
 </bean>
 endsnippet
 
@@ -613,7 +620,7 @@ snippet ssm-mapper "The mapper.xml template" b
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.linfee.st.mapper.UserMapper">
+<mapper namespace="com.foo.mapper.UserMapper">
 $0
 </mapper>
 endsnippet
