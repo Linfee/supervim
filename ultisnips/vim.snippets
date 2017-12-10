@@ -24,3 +24,25 @@ fu! $1.new(${2:args})
 	return obj
 endf
 endsnippet
+
+snippet viml "description"
+let s:save_cpo = &cpo
+set cpo&vim
+
+$0
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+" vim:set et ts=2 sts=2 sw=2 tw=0:
+endsnippet
+
+snippet cpo "description"
+let s:save_cpo = &cpo
+set cpo&vim
+
+$0
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+" vim:set et ts=2 sts=2 sw=2 tw=0:
+endsnippet
