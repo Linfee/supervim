@@ -53,19 +53,7 @@ com! -nargs=0 ToSpace setl et | ret
 com! -nargs=0 ToTab setl noet | ret!
 
 " hex edit mode
-com! -nargs=0 ToggleHex call s:hex_toggle()
-fu! s:hex_toggle()
-  if &binary " from hex
-    set nobinary
-    exe 'set display='. b:option_display
-    exe 'silent%!xxd -r'
-  el
-    let b:option_display = &display
-    set binary
-    set display=uhex
-    exe 'silent%!xxd'
-  en
-endf
+com! -nargs=0 ToggleHex call util#hex_toggle()
 
 " <alt-=> Expression register
 Noremap i <a-=> <c-r>=
@@ -112,40 +100,16 @@ noremap <leader>s? z=
 
 " 1}}
 
-" Find and replace {{1
-
-function! s:replace(confirm, wholeword, replace) " {{2 replace function
-  " Param:
-  "   confirm：whether confirm for each one
-  "   wholeword：whether match whole world
-  "   replace：replace with this string
-  wa
-  let l:flag = ''
-  if a:confirm
-    let l:flag .= 'gec'
-  else
-    let l:flag .= 'ge'
-  endif
-  let l:search = ''
-  if a:wholeword
-    let l:search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
-  else
-    let l:search .= expand('<cword>')
-  endif
-  let l:replace = escape(a:replace, '/\&~')
-  execute 'argdo %s/' . l:search . '/' . l:replace . '/' . l:flag . '| update'
-endfunction " }}2
-
 " search and replace all
-nnoremap <leader>r :call VisualSelection('replace', '')<cr>
+nnoremap <leader>r :call util#visual_selection('replace', '')<cr>
 " non whole world
-nnoremap gR :call s:replace(0, 0, input('Replace '.expand('<cword>').' with: '))<cr>
+nnoremap gR :call util#replace(0, 0, input('Replace '.expand('<cword>').' with: '))<cr>
 " whole world
-nnoremap grw :call s:replace(0, 1, input('Replace '.expand('<cword>').' with: '))<cr>
+nnoremap grw :call util#replace(0, 1, input('Replace '.expand('<cword>').' with: '))<cr>
 " confirm, non whole word
-nnoremap grc :call s:replace(1, 0, input('Replace '.expand('<cword>').' with: '))<cr>
+nnoremap grc :call util#replace(1, 0, input('Replace '.expand('<cword>').' with: '))<cr>
 " confirm, non whole word
-nnoremap grwc :call s:replace(1, 1, input('Replace '.expand('<cword>').' with: '))<cr>
+nnoremap grwc :call util#replace(1, 1, input('Replace '.expand('<cword>').' with: '))<cr>
 
 " Find and merge conflicts
 nnoremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
@@ -157,9 +121,8 @@ nnoremap <leader>fw [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\
 nnoremap <space><cr> :nohlsearch<cr>
 
 " use * and # to search selected content in visual mode
-vnoremap <silent> * :<C-u>call s:visual_selection('', '')<CR>/<C-R>=@/<CR><CR>
-vnoremap <silent> # :<C-u>call s:visual_selection('', '')<CR>?<C-R>=@/<CR><CR>
-" 1}}
+vnoremap <silent> * :<C-u>call util#visual_selection('', '')<CR>/<C-R>=@/<CR><CR>
+vnoremap <silent> # :<C-u>call util#visual_selection('', '')<CR>?<C-R>=@/<CR><CR>
 
 " buffer, window and tab {{
 " buffer and window
@@ -210,54 +173,23 @@ Noremap n <a-5> 5gt
 Noremap n <a-6> 6gt
 " }}
 
-" Movement {{1
-fu! s:visual_selection(direction, extra_filter) range " {{2
-  let l:saved_reg = @"
-  execute 'normal! vgvy'
-
-  let l:pattern = escape(@", '\\/.*$^~[]')
-  let l:pattern = substitute(l:pattern, "\n$", '', '')
-
-  if a:direction ==# 'gv'
-    call CmdLine("Ag \"" . l:pattern . "\" " )
-  elseif a:direction ==# 'replace'
-    call CmdLine('%s' . '/'. l:pattern . '/')
-  endif
-
-  let @/ = l:pattern
-  let @" = l:saved_reg
-endf " }}2
-
-" get better experience when use soft swap
-function! WrapRelativeMotion(key, ...)
-  let l:vis_sel=''
-  if a:0
-    let l:vis_sel='gv'
-  endif
-  if &wrap
-    execute 'normal!' l:vis_sel . 'g' . a:key
-  else
-    execute 'normal!' l:vis_sel . a:key
-  endif
-endfunction
-
 " Map g* keys in Normal, Operator-pending, and Visual+select
-noremap <silent> $ :call WrapRelativeMotion("$")<CR>
-noremap <silent> <End> :call WrapRelativeMotion("$")<CR>
-noremap <silent> 0 :call WrapRelativeMotion("0")<CR>
-noremap <silent> <Home> :call WrapRelativeMotion("0")<CR>
-noremap <silent> ^ :call WrapRelativeMotion("^")<CR>
+noremap <silent> $ :call util#wrap_relative_motion("$")<CR>
+noremap <silent> <End> :call util#wrap_relative_motion("$")<CR>
+noremap <silent> 0 :call util#wrap_relative_motion("0")<CR>
+noremap <silent> <Home> :call util#wrap_relative_motion("0")<CR>
+noremap <silent> ^ :call util#wrap_relative_motion("^")<CR>
 " Overwrite the operator pending $/<End> mappings from above
 " to force inclusive motion with :execute normal!
-onoremap <silent> $ v:call WrapRelativeMotion("$")<CR>
-onoremap <silent> <End> v:call WrapRelativeMotion("$")<CR>
+onoremap <silent> $ v:call util#wrap_relative_motion("$")<CR>
+onoremap <silent> <End> v:call util#wrap_relative_motion("$")<CR>
 " Overwrite the Visual+select mode mappings from above
 " to ensure the correct vis_sel flag is passed to function
-vnoremap <silent> $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
-vnoremap <silent> <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
-vnoremap <silent> 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
-vnoremap <silent> <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
-vnoremap <silent> ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
+vnoremap <silent> $ :<C-U>call util#wrap_relative_motion("$", 1)<CR>
+vnoremap <silent> <End> :<C-U>call util#wrap_relative_motion("$", 1)<CR>
+vnoremap <silent> 0 :<C-U>call util#wrap_relative_motion("0", 1)<CR>
+vnoremap <silent> <Home> :<C-U>call util#wrap_relative_motion("0", 1)<CR>
+vnoremap <silent> ^ :<C-U>call util#wrap_relative_motion("^", 1)<CR>
 
 Noremap i <a-j> <down>
 Noremap i <a-k> <up>
@@ -294,7 +226,7 @@ try
 catch
 endtry
 if exists('##TermOpen')
-  fu s:term_setup()
+  fu! s:term_setup()
     setlocal statusline=%{b:term_title}
   endf
   aug vim_term
