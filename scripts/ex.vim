@@ -24,3 +24,11 @@ vnoremap <space>e :<c-u>call ex#vimscript#execute(visualmode())<cr>
 
 " run shell command
 command! -complete=file -nargs=+ Shell call util#shell_run(<q-args>)
+
+" change font size int gui quickly
+if g:is_gui
+  if !g:is_nvim
+    command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+    command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
+  endif
+endif

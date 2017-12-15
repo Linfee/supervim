@@ -6,3 +6,4 @@ autoload/plug.vim
 .repos
 log
 .DS_Store
+spell

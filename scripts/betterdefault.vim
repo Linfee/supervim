@@ -48,6 +48,7 @@ set cursorline                   " 高亮显示当前行
 " set cmdheight=2                  " 命令行高度
 set fileformats=unix             " 文件类型(使用的结尾符号)
 " set confirm                      " 退出需要确认
+set synmaxcol=200
 
 set list
 set magic
