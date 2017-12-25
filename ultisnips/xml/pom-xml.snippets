@@ -128,16 +128,9 @@ snippet mvn-spring-parent "spring-parent"
 	<version>1.5.8.RELEASE</version>
 </parent>
 endsnippet
-snippet mvn-spring-boot-dep "spring boot dependency"
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-web</artifactId>
-	<version>1.5.8.RELEASE</version>
-</dependency>
-endsnippet
 
 ########################################
-#				plugs   			   #
+#                plugs                 #
 ########################################
 snippet mvn-plug-jetty "jetty plugin"
 <plugin>
@@ -231,9 +224,33 @@ snippet mvn-plug-spring-boot "spring boot plugin"
 	<!--<version>1.5.9.RELEASE</version>-->
 </plugin>
 endsnippet
+snippet mvn-plug-mybatis-generator "mybatis generator plugin" b
+<plugin>
+	<groupId>org.mybatis.generator</groupId>
+	<artifactId>mybatis-generator-maven-plugin</artifactId>
+	<version>1.3.2</version>
+	<configuration>
+		<configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+		<overwrite>true</overwrite>
+		<verbose>true</verbose>
+	</configuration>
+	<dependencies>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+	</dependencies>
+</plugin>
+endsnippet
 
 ########################################
-#			 dependencies			   #
+#            dependencies              #
 ########################################
 snippet dep-junit "The junit4 dependency" b
 <dependency>
@@ -574,3 +591,73 @@ snippet dep-groovy "the groovy-all"
 	<scope>test</scope>
 </dependency>
 endsnippet
+
+########################################
+#             spring boot              #
+########################################
+snippet dep-spring-boot-processor "Description" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-configuration-processor</artifactId>
+	<optional>true</optional>
+</dependency>
+endsnippet
+snippet dep-starter-web "spring boot webapp starter"
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-jdbc "spring boot jdbc starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-aop "spring boot aop starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-freemarker "spring boot freemarker starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-freemarker</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-test "spring boot test starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-test</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-mybatis "spring boot mybatis starter" b
+<dependency>
+	<groupId>org.mybatis.spring.boot</groupId>
+	<artifactId>mybatis-spring-boot-starter</artifactId>
+	<version>RELEASE</version>
+</dependency>
+endsnippet
+snippet dep-starter-mybatis-mapper "spring boot mybatis mapper starter" b
+<dependency>
+	<groupId>tk.mybatis</groupId>
+	<artifactId>mapper-spring-boot-starter</artifactId>
+	<version>RELEASE</version>
+</dependency>
+endsnippet
+snippet dep-starter-mybatis-pagehelper "spring boot mybatis pagehelper starter" b
+<dependency>
+	<groupId>com.github.pagehelper</groupId>
+	<artifactId>pagehelper-spring-boot-starter</artifactId>
+	<version>RELEASE</version>
+</dependency>
+endsnippet
+snippet dep-starter-druid "spring boot druid starter" b
+<dependency>
+	<groupId>com.alibaba</groupId>
+	<artifactId>druid-spring-boot-starter</artifactId>
+	<version>1.1.0</version>
+</dependency>
+endsnippet
+
