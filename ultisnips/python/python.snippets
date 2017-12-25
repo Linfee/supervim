@@ -21,23 +21,19 @@ snippet #!3 "pyhton3文件模板" b
 
 $0
 endsnippet
-
 snippet main "main" b
 if __name__ == '__main__':
 	$0
 endsnippet
-
 snippet doctest "doctest" b
 import doctest
 doctest.testmod()$0
 endsnippet
-
 snippet  traceback "traceback" b
 Traceback (most recent call last):
 ...
 $0
 endsnippet
-
 snippet decorator1 "Simple decorator" b
 def ${1:name}(func):
 	@functools.wraps(func)
@@ -48,7 +44,6 @@ def ${1:name}(func):
 
 $0
 endsnippet
-
 snippet decorator2 "Complicated decorator" b
 def ${1:name}(${2:args}):
 	def decorator(func):
@@ -61,11 +56,9 @@ def ${1:name}(${2:args}):
 
 $0
 endsnippet
-
 snippet partial "建立偏函数" b
 functools.partial(${1:func}, ${2:*args and **kw})
 endsnippet
-
 snippet class1 "class without docstring" b
 class ${1:MyClass}(${2:object}):
 
@@ -74,12 +67,10 @@ class ${1:MyClass}(${2:object}):
 
 $0
 endsnippet
-
 snippet raise "raise" b
 raise ${1:BasicException}($2)
 $0
 endsnippet
-
 snippet metaclass "metaclass" b
 class ${1:Demo}Metaclass(type):
 
@@ -148,12 +139,10 @@ snippet __ge__ "__ge__() for <=" b
 def __ge__(self, other):
 	${1:pass}
 endsnippet
-
 snippet __hash__ "__hash__ for hash()" b
 def __hash__(self):
 	${1:pass}
 endsnippet
-
 snippet __bool__ "__bool__() for bool()" b
 def __bool__(self):
 	${1:pass}
@@ -181,7 +170,6 @@ snippet __dir__ "__dir__() for dir()" b
 def __dir__(self):
 	${1:pass}
 endsnippet
-
 snippet __get__ "__get__()" b
 def __get__(self, instance, owner):
 	${1:pass}
@@ -194,12 +182,10 @@ snippet __delete__ "__delete__()" b
 def __delete__(self, instance, owner):
 	${1:pass}
 endsnippet
-
 snippet __slots__ "__slots__" b
 __slots__ = ($1)
 $0
 endsnippet
-
 snippet __instanceheck__ "__instanceheck__() for isinstance()" b
 def __instanceheck__(self, instance):
 	${1:pass}
@@ -208,7 +194,6 @@ snippet __subclasscheck__ "__subclasscheck__() for issubclass()" b
 def __subclasscheck__(self, subclass):
 	${1:pass}
 endsnippet
-
 snippet __call__ "__call__ for callable" b
 def __call__(self${1:args}):
 	${2:pass}
@@ -245,17 +230,14 @@ snippet __iter__ "__iter__() for 'for..in..' to get an iterator" b
 def __ietr__(self):
 	${1:pass}
 endsnippet
-
 snippet __reversed__ "__reversed__() for reversed()" b
 def __reversed__(self):
 	${1:pass}
 endsnippet
-
 snippet __contains__ "__contains__() for 'in'" b
 def __contains__(self, item):
 	${1:pass}
 endsnippet
-
 snippet __next__ "__next__() for 'for..in..' raise StopIteration finally" b
 def __next__(self):
 	${1:pass}

@@ -3,19 +3,21 @@ fu! ${1:func_name}(${2:args})
 	${3:do_something}
 endf
 endsnippet
-
 snippet fud "function! dict"
 fu! ${1:func_name}(${2:args}) dict
 	${3:do_something}
 endf
 endsnippet
-
+snippet fua "function! abort"
+fu! ${1:func_name}(${2:args}) dict
+	${3:do_something}
+endf
+endsnippet
 snippet fua "function!"
 fu! ${1:func_name}(${2:args}) abort
 	${3:do_something}
 endf
 endsnippet
-
 snippet class "A viml class"
 let ${1:class_name} = {}
 fu! $1.new(${2:args})
@@ -24,7 +26,6 @@ fu! $1.new(${2:args})
 	return obj
 endf
 endsnippet
-
 snippet viml "description"
 let s:save_cpo = &cpo
 set cpo&vim
@@ -35,7 +36,6 @@ let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim:set et ts=2 sts=2 sw=2 tw=0:
 endsnippet
-
 snippet cpo "description"
 let s:save_cpo = &cpo
 set cpo&vim

@@ -1,4 +1,4 @@
-snippet pom "pom模板" b
+snippet mvn-pom "pom模板" b
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,8 +21,16 @@ snippet pom "pom模板" b
 	${0:dependencies}
 </project>
 endsnippet
-
-snippet repo "ali repo"
+snippet mvn-setting-repo "ali repo for settings.xml" b
+<mirror>
+	<id>${1:ali-maven}</id>
+	<name>${2:ali-maven}</name>
+	<url>${3:http://maven.aliyun.com/nexus/content/groups/public}</url>
+	<mirrorOf>${4:central}<mirrorOf>
+</mirror>
+$0
+endsnippet
+snippet mvn-pom-repo "ali repo" b
 <!-- ali repo -->
 <repositories>
 	<repository>
@@ -39,71 +47,28 @@ snippet repo "ali repo"
 	</repository>
 </repositories>
 endsnippet
-
-snippet parent "parent标签" b
+snippet mvn-parent "parent标签" b
 <parent>
 	<groupId>${1:groupId}</groupId>
 	<artifactId>${2:artifactId}</artifactId>
 	<version>${3:version}</version>
 </parent>
 endsnippet
-
-snippet dependencies "dependencies标签" b
+snippet mvn-dep "dependencies标签" b
 <dependencies>
 	${0:<!-- dependency -->}
 </dependencies>
 endsnippet
-
-snippet build "build标签" b
+snippet mvn-build "build标签" b
 <build>
 	<finalName>${1:finalName}</finalName>
+	<plugins>
+		${0:<!-- plugins -->}
+	</plugins>
 	$0
 </build>
 endsnippet
-
-snippet plugins "plugins标签" b
-<plugins>
-	${0:<!-- plugins -->}
-</plugins>
-endsnippet
-
-snippet plug-jetty "jetty plugin"
-<plugin>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-maven-plugin</artifactId>
-	<version>9.4.7.v20170914</version>
-	<configuration>
-		<stopKey>stop</stopKey>
-		<stopPort>5599</stopPort>
-		<webApp>
-			<contextPath>/</contextPath>
-		</webApp>
-		<httpConnector>
-			<port>80</port>
-			<idleTimeout>60000</idleTimeout>
-		</httpConnector>
-		<scanIntervalSeconds>5</scanIntervalSeconds>
-	</configuration>
-</plugin>
-endsnippet
-
-snippet plug-gmaven "the maven plugin for groovy"
-<plugin>
-	<groupId>org.codehaus.gmavenplus</groupId>
-	<artifactId>gmavenplus-plugin</artifactId>
-	<version>1.6</version>
-	<dependencies>
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>2.4.4</version>
-			<scope>runtime</scope>
-		</dependency>
-	</dependencies>
-	</plugin>
-endsnippet
-
-snippet build-full "完整buile模板" b
+snippet mvn-build-full "完整buile模板" b
 <build>
 	<finalName>${1:artifactId}</finalName>
 	<plugins>
@@ -137,8 +102,78 @@ snippet build-full "完整buile模板" b
 	</plugins>
 </build>
 endsnippet
+snippet mvn-server "指定项目发布到的仓库, 以及其发布的用户名和密码" b
+<server>
+	<id>${1:mirror_id}</id>
+	<username>${2:username}</username>
+	<password>${3:password}</password>
+</server>
+endsnippet
+snippet mvn-distribution "加到pom中指定项目发布到哪个仓库" b
+<distributionManagement>
+	<repository>
+		<id>${1:id}</id>
+		<name>${2:name}</name>
+		<url>${3:url}</url>
+	</repository>
+</distributionManagement>
+endsnippet
+snippet mvn-prop-encoding "设置编码属性" b
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+endsnippet
+snippet mvn-spring-parent "spring-parent"
+<parent>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-parent</artifactId>
+	<version>1.5.8.RELEASE</version>
+</parent>
+endsnippet
+snippet mvn-spring-boot-dep "spring boot dependency"
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+	<version>1.5.8.RELEASE</version>
+</dependency>
+endsnippet
 
-snippet plug-resources "资源文件拷贝插件" b
+########################################
+#				plugs   			   #
+########################################
+snippet mvn-plug-jetty "jetty plugin"
+<plugin>
+	<groupId>org.eclipse.jetty</groupId>
+	<artifactId>jetty-maven-plugin</artifactId>
+	<version>9.4.7.v20170914</version>
+	<configuration>
+		<stopKey>stop</stopKey>
+		<stopPort>5599</stopPort>
+		<webApp>
+			<contextPath>/</contextPath>
+		</webApp>
+		<httpConnector>
+			<port>80</port>
+			<idleTimeout>60000</idleTimeout>
+		</httpConnector>
+		<scanIntervalSeconds>5</scanIntervalSeconds>
+	</configuration>
+</plugin>
+endsnippet
+snippet mvn-plug-gmaven "the maven plugin for groovy"
+<plugin>
+	<groupId>org.codehaus.gmavenplus</groupId>
+	<artifactId>gmavenplus-plugin</artifactId>
+	<version>1.6</version>
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.4.4</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+	</plugin>
+endsnippet
+snippet mvn-plug-resources "资源文件拷贝插件" b
 <!-- 资源文件拷贝插件 -->
 <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
@@ -149,8 +184,17 @@ snippet plug-resources "资源文件拷贝插件" b
 	</configuration>
 </plugin>
 endsnippet
-
-snippet plug-compiler "java编译插件" b
+snippet mvn-plug-surefire "mvn surefire plugin, and skip test b"
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.20.1</version>
+	<configuration>
+		<skipTests>true</skipTests>
+	</configuration>
+</plugin>
+endsnippet
+snippet mvn-plug-compiler "java编译插件" b
 <!-- java编译插件 -->
 <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
@@ -164,8 +208,7 @@ snippet plug-compiler "java编译插件" b
 	</configuration>
 </plugin>
 endsnippet
-
-snippet plug-tomcat7 "tomcat7插件" b
+snippet mvn-plug-tomcat7 "tomcat7插件" b
 <plugin>
 	<groupId>org.apache.tomcat.maven</groupId>
 	<artifactId>tomcat7-maven-plugin</artifactId>
@@ -181,40 +224,17 @@ snippet plug-tomcat7 "tomcat7插件" b
 	</configuration>
 </plugin>
 endsnippet
-
-snippet plug-spring-boot "spring boot plugin"
+snippet mvn-plug-spring-boot "spring boot plugin"
 <plugin>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
+	<!--<version>1.5.9.RELEASE</version>-->
 </plugin>
 endsnippet
-	
-
-snippet prop-encoding "设置编码属性" b
-<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-endsnippet
-
-
-snippet spring-parent "spring-parent"
-<parent>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>1.5.8.RELEASE</version>
-</parent>
-endsnippet
-
-snippet spring-boot-dep "spring boot dependency"
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-web</artifactId>
-	<version>1.5.8.RELEASE</version>
-</dependency>
-endsnippet
 
 ########################################
-#			 常见依赖的模板			   #
+#			 dependencies			   #
 ########################################
-
 snippet dep-junit "The junit4 dependency" b
 <dependency>
 	<groupId>junit</groupId>
@@ -224,7 +244,6 @@ snippet dep-junit "The junit4 dependency" b
 </dependency>
 $0
 endsnippet
-
 snippet dep-servlet "The servlet dependency" b
 <dependency>
 	<groupId>javax.servlet</groupId>
@@ -234,7 +253,6 @@ snippet dep-servlet "The servlet dependency" b
 </dependency>
 $0
 endsnippet
-
 snippet dep-jstl "The jstl dependency" b
 <dependency>
 	<groupId>javax.servlet</groupId>
@@ -243,7 +261,6 @@ snippet dep-jstl "The jstl dependency" b
 </dependency>
 $0
 endsnippet
-
 snippet dep-freemarker "The freemarker dependency" b
 <dependency>
 	<groupId>org.freemarker</groupId>
@@ -256,7 +273,6 @@ snippet dep-freemarker "The freemarker dependency" b
 	<version>4.3.2.RELEASE</version>
 </dependency>
 endsnippet
-
 snippet dep-mysql "The mysql dependency" b
 <dependency>
 	<groupId>mysql</groupId>
@@ -266,7 +282,6 @@ snippet dep-mysql "The mysql dependency" b
 </dependency>
 $0
 endsnippet
-
 snippet dep-mybatis "The mybatis dependency" b
 <dependency>
 	<groupId>org.mybatis</groupId>
@@ -289,7 +304,6 @@ snippet dep-mybatis "The mybatis dependency" b
 	<version>3.4.5</version>
 </dependency>
 endsnippet
-
 snippet dep-log4j "The log4j dependency" b
 <dependency>
 	<groupId>log4j</groupId>
@@ -298,7 +312,6 @@ snippet dep-log4j "The log4j dependency" b
 </dependency>
 $0
 endsnippet
-
 snippet dep-log4j-core "The log4j core dependency" b
 <dependency>
 	<groupId>org.apache.logging.log4j</groupId>
@@ -306,7 +319,6 @@ snippet dep-log4j-core "The log4j core dependency" b
 	<version>2.10.0</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-lang3 "The commons-lang3 dependency" b
 <dependency>
 	<groupId>org.apache.commons</groupId>
@@ -314,7 +326,6 @@ snippet dep-commons-lang3 "The commons-lang3 dependency" b
 	<version>3.7</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-collections "The commons-collections dependency" b
 <dependency>
 	<groupId>commons-collections</groupId>
@@ -322,7 +333,6 @@ snippet dep-commons-collections "The commons-collections dependency" b
 	<version>3.2.2</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-collections4 "The commons-collections4 dependency" b
 <dependency>
 	<groupId>org.apache.commons</groupId>
@@ -330,7 +340,6 @@ snippet dep-commons-collections4 "The commons-collections4 dependency" b
 	<version>4.1</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-io "The commons-io dependency" b
 <dependency>
 	<groupId>commons-io</groupId>
@@ -338,7 +347,6 @@ snippet dep-commons-io "The commons-io dependency" b
 	<version>2.6</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-logging "The common-logging dependency" b
 <dependency>
 	<groupId>commons-logging</groupId>
@@ -346,7 +354,6 @@ snippet dep-commons-logging "The common-logging dependency" b
 	<version>1.2</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-codec "The commons-codec dependency" b
 <dependency>
 	<groupId>commons-codec</groupId>
@@ -354,7 +361,6 @@ snippet dep-commons-codec "The commons-codec dependency" b
 	<version>1.11</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-beanutil "The common-beanutils dependency" b
 <dependency>
 	<groupId>commons-beanutils</groupId>
@@ -362,7 +368,6 @@ snippet dep-commons-beanutil "The common-beanutils dependency" b
 	<version>1.9.3</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-cli "The commons-cli dependency" b
 <dependency>
 	<groupId>commons-cli</groupId>
@@ -370,7 +375,6 @@ snippet dep-commons-cli "The commons-cli dependency" b
 	<version>1.4</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-fileupload "The commons-fileuplocad dependency" b
 <dependency>
 	<groupId>commons-fileupload</groupId>
@@ -378,7 +382,6 @@ snippet dep-commons-fileupload "The commons-fileuplocad dependency" b
 	<version>1.3.3</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-math "The commons-math dependency" b
 <dependency>
 	<groupId>org.apache.commons</groupId>
@@ -386,7 +389,6 @@ snippet dep-commons-math "The commons-math dependency" b
 	<version>3.6.1</version>
 </dependency>
 endsnippet
-
 snippet dep-commons-net "The commons-net dependency" b
 <dependency>
 	<groupId>commons-net</groupId>
@@ -394,7 +396,6 @@ snippet dep-commons-net "The commons-net dependency" b
 	<version>3.6</version>
 </dependency>
 endsnippet
-
 snippet dep-alibaba-druid "The alibaba-druid 数据库连接池 dependency" b
 <dependency>
 	<groupId>com.alibaba</groupId>
@@ -402,7 +403,6 @@ snippet dep-alibaba-druid "The alibaba-druid 数据库连接池 dependency" b
 	<version>1.1.5</version>
 </dependency>
 endsnippet
-
 snippet dep-c3p0 "The C3P0 datasource" b
 <dependency>
 	<groupId>com.mchange</groupId>
@@ -410,7 +410,6 @@ snippet dep-c3p0 "The C3P0 datasource" b
 	<version>0.9.5.2</version>
 </dependency>
 endsnippet
-
 snippet dep-joda-time "The joda-time dependency" b
 <dependency>
 	<groupId>joda-time</groupId>
@@ -418,7 +417,6 @@ snippet dep-joda-time "The joda-time dependency" b
 	<version>2.9.9</version>
 </dependency>
 endsnippet
-
 snippet dep-httpclient "The httpclient dependency" b
 <dependency>
 	<groupId>org.apache.httpcomponents</groupId>
@@ -426,7 +424,6 @@ snippet dep-httpclient "The httpclient dependency" b
 	<version>4.5.3</version>
 </dependency>
 endsnippet
-
 snippet dep-jackson "The jackson dependency" b
 <dependency>
 	<groupId>com.fasterxml.jackson.core</groupId>
@@ -434,7 +431,6 @@ snippet dep-jackson "The jackson dependency" b
 	<version>2.9.2</version>
 </dependency>
 endsnippet
-
 snippet dep-spring "The spring dependencies" b
 <dependency>
 	<groupId>org.springframework</groupId>
@@ -468,7 +464,6 @@ snippet dep-spring "The spring dependencies" b
 	<version>4.3.2.RELEASE</version>
 </dependency>
 endsnippet
-
 snippet dep-spring-boot "spring boot dependency"
 <dependency>
 	<groupId>org.springframework.boot</groupId>
@@ -476,7 +471,6 @@ snippet dep-spring-boot "spring boot dependency"
 	<version>1.5.8.RELEASE</version>
 </dependency>
 endsnippet
-
 snippet dep-slf4j-log4j "The slf4j and log4j dependency" b
 <dependency>
 	<groupId>org.slf4j</groupId>
@@ -489,7 +483,6 @@ snippet dep-slf4j-log4j "The slf4j and log4j dependency" b
 	<version>1.7.25</version>
 </dependency>
 endsnippet
-
 snippet dep-shiro-core "The shiro core dependency" b
 <dependency>
 	<groupId>org.apache.shiro</groupId>
@@ -497,7 +490,6 @@ snippet dep-shiro-core "The shiro core dependency" b
 	<version>1.4.0</version>
 </dependency>
 endsnippet
-
 snippet dep-mongodb "The mongodb driver dependency" b
 <dependency>
 	<groupId>org.mongodb</groupId>
@@ -505,7 +497,6 @@ snippet dep-mongodb "The mongodb driver dependency" b
 	<version>3.5.0</version>
 </dependency>
 endsnippet
-
 snippet dep-dom4j "The dom4j dependency" b
 <dependency>
 	<groupId>dom4j</groupId>
@@ -513,7 +504,6 @@ snippet dep-dom4j "The dom4j dependency" b
 	<version>1.6.1</version>
 </dependency>
 endsnippet
-
 snippet dep-json "The json dependency" b
 <dependency>
 	<groupId>org.json</groupId>
@@ -521,12 +511,11 @@ snippet dep-json "The json dependency" b
 	<version>20171018</version>
 </dependency>
 endsnippet
-
 snippet dep-guava "The google guava dependency" b
 <dependency>
-	<groupId>com.google.guava</groupId>
-	<artifactId>guava</artifactId>
-	<version>23.5-jre</version>
+<groupId>com.google.guava</groupId>
+<artifactId>guava</artifactId>
+<version>23.5-jre</version>
 </dependency>
 endsnippet
 snippet dep-lombok "The lombok dependency" b

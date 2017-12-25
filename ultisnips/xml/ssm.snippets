@@ -7,7 +7,6 @@ snippet ssm-file-upload-config "xml:spring-mvc上传解析器配置" b
 </bean>
 $0
 endsnippet
-
 snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
@@ -38,7 +37,6 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 
 </configuration>
 endsnippet
-
 snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
@@ -83,7 +81,6 @@ snippet ssm-SqlMapConfig-full "xml:完整的mybatis配置模板" b
 
 </configuration>
 endsnippet
-
 snippet ssm-mybatis-generator-config "xml:mybatis-generator用来生成java代码的xml配置模板" b
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
@@ -131,7 +128,6 @@ PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 </context>
 </generatorConfiguration>
 endsnippet
-
 snippet ssm-mybatis-generator-config-mapper "xml:mybatis-generator整合通用mapper用来生成java代码的xml配置模板" b
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -176,7 +172,6 @@ snippet ssm-mybatis-generator-config-mapper "xml:mybatis-generator整合通用ma
 	</context>
 </generatorConfiguration>
 endsnippet
-
 snippet ssm-pom-config-of-mapper "description"
 
 <properties>
@@ -258,7 +253,6 @@ snippet ssm-pom-config-of-mapper "description"
 </build>
 
 endsnippet
-
 snippet ssm-custom-converter "xml:自定义类型转换器配置" b
 <!--使用注入了自定义类型转换器的转换服务-->
 <mvc:annotation-driven conversion-service="conversionService"/>
@@ -272,7 +266,6 @@ snippet ssm-custom-converter "xml:自定义类型转换器配置" b
 	</property>
 </bean>
 endsnippet
-
 snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 <!--开启组件扫描-->
 <context:component-scan base-package="com.foo" use-default-filters="false">
@@ -292,7 +285,6 @@ snippet ssm-springmvc-mini "xml:springmvc配置模板" b
 	<property name="suffix" value=".jsp"/>
 </bean>
 endsnippet
-
 snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的Datasource" b
 <!--加载数据库配置文件，方式一-->
 <context:property-placeholder location="classpath:db.properties"/>
@@ -342,7 +334,6 @@ snippet ssm-mybatis "xml:Spring和mybatis整合的配置模板，使用spring的
 	<!--</property>-->
 </bean>
 endsnippet
-
 snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 <context-param>
 	<param-name>spring.profiles.active</param-name>
@@ -391,7 +382,6 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 	<welcome-file>index.ftl</welcome-file>
 </welcome-file-list>
 endsnippet
-
 snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
 <!--解决post乱码-->
 <filter>
@@ -407,7 +397,6 @@ snippet ssm-charset-encoder-filter "xml:spring乱码过滤器" b
 	<servlet-name>spring-mvc</servlet-name>
 </filter-mapping>
 endsnippet
-
 snippet ssm-page-helper "mybatis pageHelper插件配置模板" b
 <!--配置pageHelper插件-->
 <plugins>
@@ -422,7 +411,6 @@ snippet ssm-page-helper "mybatis pageHelper插件配置模板" b
 	</plugin>
 </plugins>
 endsnippet
-
 snippet ssm-jedis-config-full "带有jedisPoolConfig的jedis单机配置" b
 <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 	<!-- 最大连接数 -->
@@ -454,14 +442,12 @@ snippet ssm-jedis-config-full "带有jedisPoolConfig的jedis单机配置" b
 	<constructor-arg name="poolConfig" ref="jedisPoolConfig"/>
 </bean>
 endsnippet
-
 snippet ssm-jedis-config-min "推荐的，最简单的jedis单机配置" b
 <bean id="redisClient" class="redis.clients.jedis.JedisPool">
 	<constructor-arg name="host" value="your host"/>
 	<constructor-arg name="port" value="your port"/>
 </bean>
 endsnippet
-
 snippet ssm-jedisCluster-config-ful "带有JedisPoolConfig的jedis集群配置" b
 <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 	<!-- 最大连接数 -->
@@ -504,7 +490,6 @@ snippet ssm-jedisCluster-config-ful "带有JedisPoolConfig的jedis集群配置" 
 	</constructor-arg>
 </bean>
 endsnippet
-
 snippet ssm-jedisCluster-config-mini "推荐的，最简单的jedis集群配置" b
 <bean id="resisClient" class="redis.clients.jedis.JedisCluster">
 	<constructor-arg name="nodes">
@@ -526,7 +511,6 @@ snippet ssm-jedisCluster-config-mini "推荐的，最简单的jedis集群配置"
 	<constructor-arg name="poolConfig" value="jedisPoolConfig"/>
 </bean>
 endsnippet
-
 snippet ssm-freemarker-view-resolver "springmvc的freemarker配置" b
 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 	<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
@@ -538,7 +522,6 @@ snippet ssm-freemarker-view-resolver "springmvc的freemarker配置" b
 	<property name="contentType" value="text/html;charset=utf-8"/>
 </bean>
 endsnippet
-
 snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 	<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
@@ -562,13 +545,11 @@ snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
 	</property>
 </bean>
 endsnippet
-
 snippet ssm-service "xml:springmvc配置模板" b
 <context:component-scan base-package="com.foo">
 	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 </context:component-scan>
 endsnippet
-
 snippet ssm-datasource-c3p0 "The c3p0 datasource" b
 <!--配置数据源-->
 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
@@ -580,7 +561,6 @@ snippet ssm-datasource-c3p0 "The c3p0 datasource" b
 	<property name="minIdle" value="5"/>
 </bean>
 endsnippet
-
 snippet ssm-datasource-bonecp "The bonecp datasource" b
 <!--配置数据源-->
 <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
@@ -590,7 +570,6 @@ snippet ssm-datasource-bonecp "The bonecp datasource" b
 	<property name="password" value="${jdbc.password}"/>
 </bean>
 endsnippet
-
 snippet ssm-placeholder "The placeholder" b
 <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	<property name="locations">
@@ -600,7 +579,6 @@ snippet ssm-placeholder "The placeholder" b
 	</property>
 </bean>
 endsnippet
-
 snippet ssm-mybatis-without-SqlMapConfig "Description" b
 <!--配置sqlSessionFactory -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -609,13 +587,11 @@ snippet ssm-mybatis-without-SqlMapConfig "Description" b
 	<property name="typeAliasesPackage" value="com.foo.pojo"/>
 </bean>
 endsnippet
-
 snippet ssm-mapper-scan "Mybatis mapper scan" b
 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 	<property name="basePackage" value="com.foo.mapper"/>
 </bean>
 endsnippet
-
 snippet ssm-mapper "The mapper.xml template" b
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -624,7 +600,6 @@ snippet ssm-mapper "The mapper.xml template" b
 $0
 </mapper>
 endsnippet
-
 snippet ssm-base-mapper "BaseMapper" b
 import tk.mybatis.mapper.common.ConditionMapper;
 import tk.mybatis.mapper.common.IdsMapper;
@@ -634,7 +609,6 @@ import tk.mybatis.mapper.common.MySqlMapper;
 public interface BaseMapper<T> extends Mapper<T>, IdsMapper<T>, ConditionMapper<T>, MySqlMapper<T> {
 }
 endsnippet
-	
 snippet ssm-base-service "description"
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -707,7 +681,6 @@ public abstract class BaseService<T> {
 	}
 }
 endsnippet
-
 snippet ssm-pom-properties "mvn properties"
 <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -751,4 +724,5 @@ snippet ssm-pom-properties "mvn properties"
 	<plugin.jetty.version>9.4.7.v20170914</plugin.jetty.version>
 </properties>
 endsnippet
-	
+
+

@@ -1,40 +1,27 @@
 snippet mail " My hotmail"
 Mail: linfee@hotmail.com
 endsnippet
-
 snippet hotmail " My hotmail"
 Mail: ${VISUAL:default linfee@hotmail.com}Mail: ${VISUAL:default linfeee@gmail.com}
 endsnippet
-
 snippet t<tag>
 ${VISUAL:inside text/should/is/g}</tag>
 endsnippet
-
-# 在snippets中使用shell命令，使用反引号括起来
 snippet today
 Today is the `date +%d.%m.%y`.
 endsnippet
-
-# 在snippets中使用vim script，使用反引号括起来，并以 !v 开始
 snippet indent
 Indent is: `!v indent(".")`.
 endsnippet
-
-# 在snippets中使用python，使用反引号括起来，并以 !p 开始
 snippet wow
 ${1:Text}`!p snip.rv = (75-2*len(t[1]))*' '+t[1].upper()`
 endsnippet
-
-# 在snippets中使用 $0 $1 $2，来表示接下来要插入的内容，$0是最后位置
 snippet letter
 Dear $1,$0Yours sincerely,$2
 endsnippet
-
 snippet viminfo "The viminfo" b
 vim: ${1}:
 endsnippet
-
-# snippets 导入
 snippet "([a-zA-Z0-9.-_]+)\.import" "导入指定的snippets" r
 `!p
 c = match.group(1)
@@ -43,12 +30,9 @@ vim.command('echo "Done"')
 snip.rv = ''
 `
 endsnippet
-
-# 执行vim命令
 snippet "^(.+)\.cmd" "执行vim命令" r
 `!p
 r = vim.command(match.group(1))
 snip.rv = ''
 `
 endsnippet
-
