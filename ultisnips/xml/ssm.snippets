@@ -545,9 +545,10 @@ snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
 	</property>
 </bean>
 endsnippet
-snippet ssm-service "xml:springmvc配置模板" b
+snippet ssm-common "xml:spring-common配置模板" b
 <context:component-scan base-package="com.foo">
 	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	<context:property-placeholder location="classpath:common.properties"/>
 </context:component-scan>
 endsnippet
 snippet ssm-datasource-c3p0 "The c3p0 datasource" b
