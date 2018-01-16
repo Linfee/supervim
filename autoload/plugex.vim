@@ -681,7 +681,7 @@ fu! s:install(...) " {{{
   " endfor
   PlugExClearCache!
 endf " }}}
-fu! s:remove(...)
+fu! s:remove(...) " {{{
   let l:plugs = s:pick_plugs(a:000)
   let l:sum = 0
   for l:plug in l:plugs
@@ -699,7 +699,7 @@ fu! s:remove(...)
     endif
   endfor
   echom 'PlugExRemove: remove '.l:sum.'/'.len(a:000).' plugins.'
-endf
+endf " }}}
 fu! s:update(...) " {{{
   " for PlugExUpdate command
   " create plug_home if not exists

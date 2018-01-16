@@ -158,4 +158,12 @@ vnoremap . :normal! .<cr>
 nnoremap Q gqap
 vnoremap Q gq
 
+" quick set tab size
+com! -nargs=1 TabSize call s:tab_size(<args>)
+fu! s:tab_size(n) abort
+  exe 'setl shiftwidth=' . a:n
+  exe 'setl tabstop=' . a:n
+  exe 'setl softtabstop=' . a:n
+endf
+
 " vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:

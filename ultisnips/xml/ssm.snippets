@@ -25,7 +25,7 @@ snippet ssm-SqlMapConfig-mini "xml:整合spring后的mybatis配置模板" b
 <!--配置pageHelper插件 -->
 <plugins>
 	<plugin interceptor="com.github.pagehelper.PageInterceptor">
-		<property name="dialect" value="mysql"/>
+		<property name="helperDialect" value="mysql"/>
 		<!--使用RowBounds分页会进行count查询-->
 		<property name="rowBoundsWithCount" value="true"/>
 		<!--为true时，当pageSize=0或RowBounds.limit=0会查出全部结果-->
@@ -359,7 +359,7 @@ snippet ssm-web-xml "xml:springmvc的web.xml的配置模板" b
 		<param-value>classpath:spring/springmvc.xml</param-value>
 	</init-param>
 	<init-param>
-		<param-name>spring.profiles.defalut</param-name>
+		<param-name>spring.profiles.default</param-name>
 		<param-value>dev</param-value>
 	</init-param>
 	<load-on-startup>1</load-on-startup>
@@ -522,6 +522,23 @@ snippet ssm-freemarker-view-resolver "springmvc的freemarker配置" b
 	<property name="contentType" value="text/html;charset=utf-8"/>
 </bean>
 endsnippet
+snippet ssm-freemarker-view-resolver2 "springmvc的freemarker配置" b
+<bean id="xmlEscape" class="freemarker.template.utility.XmlEscape"/>
+<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	<property name="templateLoaderPath" value="/WEB-INF/views"/>
+	<property name="freemarkerVariables">
+		<map>
+			<entry key="xml_escape" value-ref="xmlEscape"/>
+		</map>
+	</property>
+	<property name="defaultEncoding" value="UTF-8"/>
+</bean>
+<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+	<property name="contentType" value="text/html;charset=utf-8"/>
+	<property name="suffix" value=".ftl"/>
+</bean>
+endsnippet
 snippet ssm-viewResolver "springmvc的viewResolver，使用freemarker和json" b
 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 	<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
@@ -619,7 +636,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class BaseService<T> {
 
 	@Autowired
-	private BaseMapper<T> mapper;
+		private BaseMapper<T> mapper;
 
 	private BaseMapper<T> getMapper() {
 		return this.mapper;
@@ -634,96 +651,97 @@ public abstract class BaseService<T> {
 	}
 
 	List<T> list = this.queryList(t);
-		return new PageInfo<T>(list);
-	}
+	return new PageInfo<T>(list);
+}
 
-	public Integer queryCount(T t) {
-		return getMapper().selectCount(t);
-	}
+public Integer queryCount(T t) {
+	return getMapper().selectCount(t);
+}
 
-	public Integer save(T t) {
-		return getMapper().insert(t);
-	}
+public Integer save(T t) {
+	return getMapper().insert(t);
+}
 
-	public Integer saveSelective(T t) {
-		return getMapper().insertSelective(t);
-	}
+public Integer saveSelective(T t) {
+	return getMapper().insertSelective(t);
+}
 
-	public Integer update(T t) {
-		return getMapper().updateByPrimaryKey(t);
-	}
+public Integer update(T t) {
+	return getMapper().updateByPrimaryKey(t);
+}
 
-	public Integer updateSelective(T t) {
-		return getMapper().updateByPrimaryKeySelective(t);
-	}
+public Integer updateSelective(T t) {
+	return getMapper().updateByPrimaryKeySelective(t);
+}
 
-	public Integer deleteById(Long id) {
-		return getMapper().deleteByPrimaryKey(id);
-	}
+public Integer deleteById(Long id) {
+	return getMapper().deleteByPrimaryKey(id);
+}
 
-	public Integer deleteByIds(String ids) {
-		return getMapper().deleteByIds(ids);
-	}
+public Integer deleteByIds(String ids) {
+	return getMapper().deleteByIds(ids);
+}
 
-	public List<T> selectByIds(String ids) {
-		return getMapper().selectByIds(ids);
-	}
+public List<T> selectByIds(String ids) {
+	return getMapper().selectByIds(ids);
+}
 
-	public List<T> queryAll() {
-		return getMapper().selectAll();
-	}
+public List<T> queryAll() {
+	return getMapper().selectAll();
+}
 
-	public int addUseGeneratedKeys(T t) {
-		return mapper.insertUseGeneratedKeys(t);
-	}
+public int addUseGeneratedKeys(T t) {
+	return mapper.insertUseGeneratedKeys(t);
+}
 
-	public int addAll(List<T> list) {
-		return mapper.insertList(list);
-	}
+public int addAll(List<T> list) {
+	return mapper.insertList(list);
+}
 }
 endsnippet
 snippet ssm-pom-properties "mvn properties"
 <properties>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<jdk.version>1.8</jdk.version>
-	<port>8080</port>
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<jdk.version>1.8</jdk.version>
+<port>8080</port>
 
-	<!--generator-->
-	<targetJavaProject>${basedir}/src/main/java</targetJavaProject>
-	<targetMapperPackage>com.cfbb.cbem.mapper.generator</targetMapperPackage>
-	<targetModelPackage>com.cfbb.cbem.pojo.generator</targetModelPackage>
-	<targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
-	<targetXMLPackage>mapper/generator</targetXMLPackage>
+<!--generator-->
+<targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+<targetMapperPackage>com.cfbb.cbem.mapper.generator</targetMapperPackage>
+<targetModelPackage>com.cfbb.cbem.pojo.generator</targetModelPackage>
+<targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
+<targetXMLPackage>mapper/generator</targetXMLPackage>
 
-	<servlet.version>3.1.0</servlet.version>
-	<jstl.version>1.2</jstl.version>
+<servlet.version>3.1.0</servlet.version>
+<jstl.version>1.2</jstl.version>
 
-	<spring.version>4.3.2.RELEASE</spring.version>
-	<mybatis.version>3.4.5</mybatis.version>
-	<mybatis.spring.version>1.3.1</mybatis.spring.version>
-	<pagehelper.version>5.1.2</pagehelper.version>
-	<mybatis.generator.version>1.3.2</mybatis.generator.version>
+<spring.version>4.3.2.RELEASE</spring.version>
+<mybatis.version>3.4.5</mybatis.version>
+<mybatis.spring.version>1.3.1</mybatis.spring.version>
+<pagehelper.version>5.1.2</pagehelper.version>
+<mybatis.generator.version>1.3.2</mybatis.generator.version>
 
-	<commons.lang3.version>3.4</commons.lang3.version>
-	<commons.io.version>2.5</commons.io.version>
-	<commons.fileupload.version>1.3.2</commons.fileupload.version>
-	<commons.httpclient.version>3.1</commons.httpclient.version>
-	<commons.logging.version>1.2</commons.logging.version>
-	<jackson.version>2.9.2</jackson.version>
+<commons.lang3.version>3.4</commons.lang3.version>
+<commons.io.version>2.5</commons.io.version>
+<commons.fileupload.version>1.3.2</commons.fileupload.version>
+<commons.httpclient.version>3.1</commons.httpclient.version>
+<commons.logging.version>1.2</commons.logging.version>
+<jackson.version>2.9.2</jackson.version>
 
-	<mysql.version>5.1.2</mysql.version>
-	<druid.version>1.1.6</druid.version>
+<mysql.version>5.1.2</mysql.version>
+<druid.version>1.1.6</druid.version>
 
-	<log4j.version>1.2.17</log4j.version>
-	<slf4j.version>1.7.25</slf4j.version>
+<log4j.version>1.2.17</log4j.version>
+<slf4j.version>1.7.25</slf4j.version>
 
-	<lombok.version>1.16.18</lombok.version>
-	<junit.version>4.12</junit.version>
+<lombok.version>1.16.18</lombok.version>
+<junit.version>4.12</junit.version>
 
-	<plugin.compile.version>3.5.1</plugin.compile.version>
-	<plugin.tomcat.version>2.2</plugin.tomcat.version>
-	<plugin.jetty.version>9.4.7.v20170914</plugin.jetty.version>
+<plugin.compile.version>3.5.1</plugin.compile.version>
+<plugin.tomcat.version>2.2</plugin.tomcat.version>
+<plugin.jetty.version>9.4.7.v20170914</plugin.jetty.version>
 </properties>
 endsnippet
-
-
+snippet ssm-task "sprint task enable" b
+<task:annotation-driven />
+endsnippet

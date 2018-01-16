@@ -251,16 +251,16 @@ noremap ） )
 noremap —— _
 
 
-inoremap ， ,<space>
-inoremap 。 .<space>
-inoremap ： :<space>
-inoremap ； ;<space>
-inoremap “ "<space>
-inoremap ‘ '<space>
-inoremap ？ ?<space>
-inoremap 、 \<space>
-inoremap 《 <
-inoremap 》 >
-inoremap （ (
-inoremap ） )
-inoremap —— _
+" inoremap ， ,<space>
+" inoremap 。 .<space>
+" inoremap ： :<space>
+" inoremap ； ;<space>
+" inoremap “ "<space>
+" inoremap ‘ '<space>
+" inoremap ？ ?<space>
+" inoremap 、 \<space>
+" inoremap 《 <
+" inoremap 》 >
+" inoremap （ (
+" inoremap ） )
+" inoremap —— _

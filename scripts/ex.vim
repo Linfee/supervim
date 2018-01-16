@@ -32,3 +32,4 @@ if g:is_gui
     command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
   endif
 endif
+

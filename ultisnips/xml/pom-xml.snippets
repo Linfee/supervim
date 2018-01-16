@@ -26,7 +26,7 @@ snippet mvn-setting-repo "ali repo for settings.xml" b
 	<id>${1:ali-maven}</id>
 	<name>${2:ali-maven}</name>
 	<url>${3:http://maven.aliyun.com/nexus/content/groups/public}</url>
-	<mirrorOf>${4:central}<mirrorOf>
+	<mirrorOf>${4:central}</mirrorOf>
 </mirror>
 $0
 endsnippet
@@ -121,12 +121,25 @@ endsnippet
 snippet mvn-prop-encoding "设置编码属性" b
 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 endsnippet
-snippet mvn-spring-parent "spring-parent"
+snippet mvn-spring-boot "spring boot parent" b
 <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
 	<version>1.5.8.RELEASE</version>
 </parent>
+endsnippet
+snippet mvn-spring-boot "spring boot dependencyManagement" b
+<dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-dependencies</artifactId>
+			<version>1.5.9.RELEASE</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
 endsnippet
 
 ########################################
@@ -481,13 +494,6 @@ snippet dep-spring "The spring dependencies" b
 	<version>4.3.2.RELEASE</version>
 </dependency>
 endsnippet
-snippet dep-spring-boot "spring boot dependency"
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-web</artifactId>
-	<version>1.5.8.RELEASE</version>
-</dependency>
-endsnippet
 snippet dep-slf4j-log4j "The slf4j and log4j dependency" b
 <dependency>
 	<groupId>org.slf4j</groupId>
@@ -610,10 +616,30 @@ snippet dep-zookeeper "the zookeeper dependency" b
 	<version>0.10</version>
 </dependency>
 endsnippet
+snippet dep-jedis "the redis client dependency" b
+<dependency>
+	<groupId>redis.clients</groupId>
+	<artifactId>jedis</artifactId>
+	<version>2.9.0</version>
+</dependency>
+endsnippet
 
 ########################################
 #             spring boot              #
 ########################################
+snippet dep-starter-actuator "spring boot actuator starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+endsnippet
+snippet dep-devtools "spring boot devtools" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>
+endsnippet
 snippet dep-spring-boot-processor "Description" b
 <dependency>
 	<groupId>org.springframework.boot</groupId>
@@ -621,7 +647,7 @@ snippet dep-spring-boot-processor "Description" b
 	<optional>true</optional>
 </dependency>
 endsnippet
-snippet dep-starter-web "spring boot webapp starter"
+snippet dep-starter-web "spring boot webapp starter" b
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-web</artifactId>
@@ -657,15 +683,11 @@ snippet dep-starter-mybatis "spring boot mybatis starter" b
 	<artifactId>mybatis-spring-boot-starter</artifactId>
 	<version>1.3.1</version>
 </dependency>
-endsnippet
-snippet dep-starter-mybatis-mapper "spring boot mybatis mapper starter" b
 <dependency>
 	<groupId>tk.mybatis</groupId>
 	<artifactId>mapper-spring-boot-starter</artifactId>
 	<version>1.1.7</version>
 </dependency>
-endsnippet
-snippet dep-starter-mybatis-pagehelper "spring boot mybatis pagehelper starter" b
 <dependency>
 	<groupId>com.github.pagehelper</groupId>
 	<artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -679,4 +701,46 @@ snippet dep-starter-druid "spring boot druid starter" b
 	<version>1.1.1</version>
 </dependency>
 endsnippet
-
+snippet dep-starter-security "spring boot security starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-data-jpa "spring boot spring data jpa starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-tomcat "spring boot tomcat starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-tomcat</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-jdbc "spring boot jdbc starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-jetty "spring boot jetty starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-thymeleaf "spring boot thymeleaf starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+endsnippet
+snippet dep-spring-boot-jsp "spring boot jsp dependency" b
+<dependency>
+	<groupId>org.apache.tomcat.embed</groupId>
+	<artifactId>tomcat-embed-jasper</artifactId>
+	<scope>provided</scope>
+</dependency>
+endsnippet

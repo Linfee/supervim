@@ -7,6 +7,7 @@ snippet spring-template "spring配置文件模板，包括所有命名空间" b
 	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
@@ -14,11 +15,16 @@ snippet spring-template "spring配置文件模板，包括所有命名空间" b
 	http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 ">
 
 </beans>
 endsnippet
 snippet spring-tx "applicationContext-tx的配置模板，配置事务的" b
+
+<!--指定使用哪种动态代理: true: 使用cglib动态代理(dubbo使用)，false: 使用jdk动态代理-->
+<aop:aspectj-autoproxy proxy-target-class="true"/>
+
 <!--事务管理器-->
 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	<property name="dataSource" ref="dataSource"/>

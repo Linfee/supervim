@@ -1,46 +1,36 @@
 snippet dubbo-provider "the dubbo provider config" b
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<dubbo:provider timeout="10000"/>
 
-	<!--1.dubbo项目名称-->
-	<dubbo:application name="dubbo-provider"  />
+	<!-- 1.dubbo项目名称 -->
+	<dubbo:application name="ego-manager-dubbo"/>
 
-	<!--2.registry-->
-	<dubbo:registry protocol="zookeeper" address="192.168.129.10:1281,192.168.129.10:1282,192.168.129.10:1283" />
+	<!-- 2.指定注册中心 -->
+	<dubbo:registry protocol="zookeeper" address="${zookeeper.url}"/>
 
-	<!--3.暴漏的协议, 端口-->
-	<dubbo:protocol name="dubbo" port="20880" />
+	<!-- 3.指定暴露接口、协议 -->
+	<dubbo:protocol name="dubbo" port="${dubbo.port}"/>
 
+	<!-- 4.发布服务 -->
 
-	<!--使用注解, 在service中使用dubbo的Service注解-->
-	<dubbo:annotation package="foo.bar"/>
+	<!-- 方式一, 注入bean再发布接口 -->
+	<!--<bean id="demoService" class="com.linfee.ego.manager.service.impl.DemoServiceImpl"/>-->
+	<!--<dubbo:service interface="com.linfee.ego.manager.service.DemoService" ref="demoService"/>-->
 
-	<!--使用配置, 需要逐个配置, 推荐使用注解-->
-	<!--4.注入bean-->
-	<bean id="demoServiceLocal" class="foo.bar.impl.DemoServiceImpl"/>
-	<!--5.发布服务-->
-	<dubbo:service interface="foo.bar.DemoService" ref="demoServiceLocal"/>
-</beans>
+	<!-- 方式二, 启用dubbo注解, 推荐 -->
+	<dubbo:annotation package="com.linfee.ego.manager.service"/>
 endsnippet
-snippet dubbo-consumer "the dubbo provider config" b
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+snippet dubbo-consumer "the dubbo consumer config" b
+	<dubbo:consumer timeout="10000"/>
 
-	<!--1.dubbo项目名称-->
-	<dubbo:application name="dubbo-provider"  />
+	<!-- 1.dubbo项目名称 -->
+	<dubbo:application name="ego-manger-web"/>
 
-	<!--2.registry-->
-	<dubbo:registry protocol="zookeeper" address="192.168.129.10:1281,192.168.129.10:1282,192.168.129.10:1283" />
+	<!-- 2.指定注册中心 -->
+	<dubbo:registry protocol="zookeeper" address="${zookeeper.url}"/>
 
-	<!--3.引用Bean-->
-	<dubbo:reference interface="foo.bar.DemoService" id="demoService"/>
-</beans>
+	<!--3.引用服务-->
+	<!-- 方式一, 使用xml配置 -->
+	<!--<dubbo:reference interface="com.linfee.ego.manager.service.DemoService" id="demoService"/>-->
+	<!--方式二, 开启dubbo扫描, 推荐-->
+	<dubbo:annotation package="com.linfee.ego.manager.web.controller"/>
 endsnippet

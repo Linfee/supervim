@@ -1,7 +1,7 @@
 " filetype config for .md file
 
 setl smarttab
-" setl expandtab
+setl expandtab
 setl autoindent
 setl shiftwidth=2
 setl tabstop=2
