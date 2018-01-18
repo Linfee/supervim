@@ -22,7 +22,7 @@
 "       --> nnoremap <buffer> <silent> <leader>h :echo 'hello'<cr>
 "      Map nun Y
 "       --> unmap Y
-"
+
 scriptencoding utf-8
 let s:cpo_save = &cpo
 set cpo&vim

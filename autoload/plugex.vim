@@ -31,13 +31,14 @@
 "     do                   Post-update hook (string or funcref)
 "
 " Global_options:
-"     g:plug_home           Specify a directory for plugins
-"     g:plug_path           Specify a path for plug.vim
-"                           Default as the first runtimepath autoload/plug.vim
-"     g:plugex_param_check  Check param for PlugEx or not, default 0
-"     g:plugex_use_cache    Use cache can launch faster, set to 1 to enable cache
-"                           When you add change plugin config you should exe :PlugExClearCache
-"     g:plugex_use_log      Set to 1 to enable log, then use PlugExLog to see all log
+"     g:plug_home             Specify a directory for plugins
+"     g:plug_path             Specify a path for plug.vim
+"                             Default as the first runtimepath autoload/plug.vim
+"     g:plugex_param_check    Check param for PlugEx or not, default 0
+"     g:plugex_use_cache      Use cache can launch faster, set to 1 to enable cache
+"                             When you add change plugin config you should exe :PlugExClearCache
+"     g:plugex_use_log        Set to 1 to enable log, then use PlugExLog to see all log
+"     g:plugex_cache_dir_name The name of cache dir
 "
 " Functions:
 "     plugex#begin({plug home}) : Call this first then use PlugEx to define plugins
@@ -123,8 +124,8 @@ fu! plugex#begin(...) " {{{
   let s:is_win = has('win32') || has('win64')
   let s:is_win_unix = has('win32unix')
 
-  if exists('g:nyaovim_version')
-    let l:dir = 'nyaovim'
+  if exists('g:plugex_cache_dir_name')
+    let l:dir = g:plugex_cache_dir_name
   elseif has('nvim')
     let l:dir = 'nvim'
   else

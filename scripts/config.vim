@@ -3,9 +3,8 @@ scriptencoding utf-8
 
 let g:plugex_use_log = 0
 let g:plugex_use_cache = 1
-let g:use_lightline = !(g:is_win && !g:is_gui)
+let g:use_lightline = get(g:, 'use_lightline', 1)
 let g:no_nerd_font = get(g:, 'no_nerd_font')
-let g:is_nyaovim = exists('g:nyaovim_version')
 
 if !g:is_nvim
   com UpdateRemotePlugins echo ''
@@ -19,6 +18,7 @@ fu! BuildComposer(info)
   endif
 endf
 
+let g:plugex_cache_dir_name = g:_vim
 if plugex#begin()
 
   " ===========================================================================
@@ -33,7 +33,7 @@ if plugex#begin()
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'enable': !g:no_nerd_font}
-  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter'}
+  PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': g:use_lightline}
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'

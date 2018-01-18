@@ -7,7 +7,6 @@
 "
 " Author: Linfee
 " REPO: https://github.com/Linfee/supervim
-"
 
 scriptencoding utf-8
 
