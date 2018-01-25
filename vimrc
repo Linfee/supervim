@@ -16,21 +16,18 @@ let g:is_nvim = has('nvim')
 " Fixme: not work in nvim
 let g:is_gui = !has('nvim') && has('gui_running')
 
-let g:is_oni = get(g:, 'gui_oni')
 let g:is_nyaovim = exists('g:nyaovim_version')
 
 let g:_vim = 'vim'
 if g:is_win_unix | let g:_vim = 'winunixvim' | en
 if g:is_nvim     | let g:_vim = 'nvim'       | en
-if g:is_oni      | let g:_vim = 'oni'        | en
-if g:is_nyaovim  | let g:_vim = 'nyaovim'    | en
 
 " set main config dir
 let g:config_home = expand('~/.vim')
 
 let &runtimepath = expand(g:config_home . ',') . &runtimepath
 
-for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'compatible', 'config', 'ex']
+for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', 'ex']
   exe 'source '.g:config_home.'/scripts/'.s:s.'.vim'
 endfor
 
