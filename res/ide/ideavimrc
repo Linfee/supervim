@@ -10,109 +10,205 @@
 "
 " supervim for ideavim
 
+" --------------------------------------
+" Options
+" --------------------------------------
 set clipboard=unnamed
-" set relativenumber
-set smartcase
-set ignorecase
+set ignorecase smartcase
 set incsearch
 set hlsearch
-set history=1000
+set history=5000
+" set iskeyword=!-~,^*,^|,^",192-255
+set matchpairs=(:),{:},[:],<:>
+" set relativenumber
+
+set scroll=11
 set scrolljump=1
-set number
-set scrolloff=11
-" set timeoutlen=500
+set scrolloff=5
+" set showmode
+" set selection=incet usive
+
+set timeout
+set timeoutlen=500
 set matchpairs=(:),{:},[:],<:>
 
-" 让ideavim支持surround插件
+" surround support
 set surround
 
-" 快速关闭搜索高亮
+
+" --------------------------------------
+" Keymaps
+" --------------------------------------
+" 使用jk退出插入模式
+inoremap jk <esc>
+vnoremap jk <esc>
+" 让Y表示复制到行尾
+nnoremap Y y$
+
+" H, L移动到行首行尾
+map H ^
+map L $
+
+" vmode下能连续使用 < >
+vnoremap < <gv
+vnoremap > >gv
+
+" 允许使用 . 对选中的行执行上一个命令
+vnoremap . :normal .<cr>
+
+" switch case
+nnoremap <c-u> g~iw
+inoremap <c-u> <esc>g~iwea
+
+" use <a-;> as ;, use ; as leader key
+nnoremap <a-;> ;
+
+" quit all
+nnoremap <tab>Q :qa<cr>
+
+" visual selection
+nnoremap <space><space> V
+vnoremap <space><space> V
+
+
+" use alt+. to repeat last macro
+nnoremap <a-.> @@
+
+" no hlsearch
 nnoremap <space><cr> :nohl<cr>
 " 横向滚动
 map zl zL
 map zh zH
-" 快速切换拼写检查
-noremap <c-f11> :setlocal spell!<cr>
-" 使用jk退出插入模式
-inoremap jk <esc>
-inoremap jj <esc>
-" 将光标所在单词切换成大写/小写
-nnoremap <c-u> g~iw
-inoremap <c-u> <esc>g~iwea
-" 补全
-" inoremap π <c-n>
-" alt+d 删除词
-" inoremap ∂ <c-w>
-" cnoremap ∂ <c-w>
-" alt+= 使用表达式寄存器
-inoremap ≠ <c-r>=
-" leader q格式化
-nnoremap <space>q gwip
-" 开关折叠
-nnoremap - za
-nnoremap _ zf
-" 让Y表示复制到行尾巴
-nmap Y y$
-" [move] j/k可以移动到软换行上
-" nnoremap j gj
-" nnoremap k gk
-" 更快捷的移动命令
-nmap H ^
-nmap L $
-vmap H ^
-vmap L $
-omap H ^
-omap L $
-" vmode下能连续使用 < >
-vnoremap < <gv
-vnoremap > >gv
-" 允许使用 . 对选中的行执行上一个命令
-vnoremap . :normal .<cr>
-" 切换行可视模式
+" fold
+nnoremap - zc
+nnoremap _ zo
 
-nnoremap <space>j 10j
-nnoremap <space>k 10k
-vnoremap <space>j 10j
-vnoremap <space>k 10k
-vnoremap jk <esc>
 
-nnoremap <space><space> V
-vnoremap <space><space> V
+" Movement
+noremap <a-h> <left>
+noremap <a-l> <right>
+inoremap <a-j> <down>
+inoremap <a-k> <up>
+nnoremap <a-j> 10j
+nnoremap <a-k> 10k
+vnoremap <a-j> 10j
+vnoremap <a-k> 10k
+nnoremap <c-j> 10j
+nnoremap <c-k> 10k
+vnoremap <c-j> 10j
+vnoremap <c-k> 10k
+
+" tab, window and buffer
 nnoremap <tab><cr> <c-w>_
 nnoremap <tab>= <c-w>=
 nnoremap <tab>j <C-w>j
 nnoremap <tab>k <C-w>k
 nnoremap <tab>l <C-w>l
 nnoremap <tab>h <C-w>h
-nnoremap <tab><up> <C-w>-
-nnoremap <tab><down> <C-w>+
-nnoremap <tab><left> <C-w><
-nnoremap <tab><right> <C-w>>
-nnoremap <tab>i :tabprevious<cr>
-nnoremap <tab>o :tabnext<cr>
-nnoremap <tab>{ :tabfirst<cr>
-nnoremap <tab>} :tablast<cr>
-nnoremap <tab>n :tabnew<cr>
-nnoremap <tab>q :q<cr>
-
-nnoremap <tab>[ :bprevious<cr>
-nnoremap <tab>] :bnext<cr>
-nnoremap <tab>b :execute "ls"<cr>
+nnoremap <tab>i gt
+nnoremap <tab>o gT
 nnoremap <tab>- :split<cr>
 nnoremap <tab>\ :vsplit<cr>
+nnoremap <tab>q :action CloseContent<cr>
+nnoremap <space>q :action ReopenClosedTab<cr>
 
-nnoremap <tab>x :tabclose<cr>
-nnoremap <tab>c :close<cr>
-nnoremap <tab>s :tabs<cr>
-nnoremap <tab>f :tabfind<space>
-nnoremap <tab>m :tabmove<space>
-nnoremap <tab>m :tabmove
-nnoremap <tab>t :tabonly<cr> 
+nnoremap <tab>p :action ActivateProjectToolWindow<cr>
+nnoremap <tab>d :action ActivateDebugToolWindow<cr>
+nnoremap <tab>s :action ActivateStructureToolWindow<cr>
+nnoremap <tab>b :action ActivateDatabaseToolWindow<cr>
+nnoremap <tab>f :action ActivateFavoritesToolWindow<cr>
+nnoremap <tab>m :action ActivateMavenProjectsToolWindow<cr>
+nnoremap <tab>r :action ActivateRunToolWindow<cr>
+nnoremap <tab>t :action ActivateTerminalToolWindow<cr>
+nnoremap <tab>v :action ActivateVersionControlToolWindow<cr>
 
-" 在一个新的标签中打开当前buffer的文件
-map <tab>g :tabedit <c-r>=expand("%:p:h")<cr>/
+" Navigate
+nnoremap g/ :action Find<cr>
+nnoremap g? :action FindInPath<cr>
+nnoremap gr :action ReplaceInPath<cr>
+nnoremap gU :action FindUsages<cr>
+nnoremap gh :action HighlightUsagesInFile<cr>
+nnoremap g[ :action Back<cr>
+nnoremap g] :action Forward<cr>
+nnoremap gc :action GotoClass<cr>
+nnoremap gf :action GotoFile<cr>
+nnoremap gs :action GotoSymbol<cr>
 
-" 保存与退出
-nnoremap <space>q :q<cr>
+nnoremap gp :action SelectInProjectView<cr>
+nnoremap go :action SelectIn<cr>
+nnoremap gd :action GotoDeclaration<cr>
+nnoremap gt :action GotoTypeDeclaration<cr>
+nnoremap gi :action GotoImplementation<cr>
+
+nnoremap gT :action TypeHierarchy<cr>
+nnoremap gM :action MethodHierarchy<cr>
+nnoremap gC :action CallHierarchy<cr>
+
+nnoremap ge :action GotoNextError<cr>
+nnoremap gE :action GotoPreviousError<cr>
+
+nnoremap gn :action SelectNextOccurrence<cr>
+nnoremap gN :action UnselectPreviousOccurrence<cr>
+
+nnoremap [q :action PreviousOccurence<cr>
+nnoremap ]q :action NextOccurence<cr>
+nnoremap [m :action MethodUp<cr>
+nnoremap ]m :action MethodDown<cr>
+nnoremap [c :action VcsShowPrevChangeMarker<cr>
+nnoremap ]c :action VcsShowNextChangeMarker<cr>
+
+nnoremap ;d :action QuickImplementations<cr>
+nnoremap <a-q> :action QuickJavaDoc<cr>
+
+nnoremap <space>t :action FileStructurePopup<cr>
+nnoremap <space>p :action ShowFilePath<cr>
+nnoremap <space>= :action ReformatCode<cr>
+
+
+nnoremap <space>r :action RunClass<cr>
+nnoremap <space>d :action DebugClass<cr>
+nnoremap <space>gc :action RunCoverage<cr>
+nnoremap <space>gr :action RunConfiguration<cr>
+nnoremap <space>e :action Console.Jdbc.Execute<cr>
+vnoremap <space>e :action Console.Jdbc.Execute<cr>
+nnoremap <space>ge :action Console.Jdbc.ExplainPlan.Raw<cr>
+nnoremap <space>gE :action Console.Jdbc.ExplainPlan<cr>
+nnoremap <space>gt :action Terminal.OpenInTerminal<cr>
+
+nnoremap <space>ob :action OpenInBrowser<cr>
+
+
+nnoremap zec :action ExtractClass<cr>
+nnoremap zem :action ExtrExtractMethod<cr>
+nnoremap zei :action ExtrExtractInterface<cr>
+nnoremap zef :action ExtrExtractFunction<cr>
+nnoremap zep :action ExtrExtractInclude<cr>
+nnoremap zesc :action ExtrExtractSuperclass<cr>
+
+nnoremap zg :action Generate<cr>
+nnoremap zmo :action OverrideMethods<cr>
+nnoremap zmi :action ImplementMethods<cr>
+nnoremap zmd :action DelegateMethods<cr>
+
+nnoremap zss :action SurroundWith<cr>
+nnoremap zuw :action Unwrap<cr>
+nnoremap zsl :action SurroundWithLiveTemplate<cr>
+nnoremap zt :action InsertLiveTemplate<cr>
+
+nnoremap zz :action Refactorings.QuickListPopupAction<cr>
+nnoremap zr :action RenameElement<cr>
+nnoremap zv :action Move<cr>
+nnoremap zd :action SafeDelete<cr>
+nnoremap zms :action MakeStatic<cr>
+nnoremap zcd :action CompileDirty<cr>
+nnoremap zcc :action Compile<cr>
+nnoremap zuu :action javaee.UpdateRunningApplication<cr>
+
+nnoremap zb :action ToggleLineBreakpoint<cr>
+
+
+" save
 nnoremap <space>w :w<cr>
 
+
+nnoremap \\\ :source ~/.ideavimrc<cr>

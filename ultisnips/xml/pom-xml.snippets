@@ -739,8 +739,21 @@ snippet dep-starter-thymeleaf "spring boot thymeleaf starter" b
 endsnippet
 snippet dep-spring-boot-jsp "spring boot jsp dependency" b
 <dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-tomcat</artifactId>
+</dependency>
+<dependency>
 	<groupId>org.apache.tomcat.embed</groupId>
 	<artifactId>tomcat-embed-jasper</artifactId>
-	<scope>provided</scope>
 </dependency>
+<dependency>
+	<groupId>javax.servlet</groupId>
+	<artifactId>jstl</artifactId>
+	<version>${1:1.2}</version>
+</dependency>
+<!--
+	jsp目录: webapp/WEB-INF/views
+	spring.mvc.view.prefix=/WEB-INF/views/
+	spring.mvc.view.suffix=.jsp
+-->
 endsnippet
