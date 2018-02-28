@@ -91,7 +91,7 @@ if plugex#begin()
   PlugEx 'terryma/vim-expand-region', {'on': ['v<Plug>(expand_region_expand)', 'v<Plug>(expand_region_shrink)']}
   " format and align
   PlugEx 'sbdchd/neoformat', {'on': 'Neoformat'}
-  PlugEx 'junegunn/vim-easy-align', {'on': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)']}
+  PlugEx 'junegunn/vim-easy-align', {'on': ['<Plug>(EasyAlign)', 'x<Plug>(EasyAlign)'], 'on_event': 'CursorHold'}
   " movement
   PlugEx 'easymotion/vim-easymotion', {'on_event': 'VimEnter'}
   " multiple cursors
@@ -204,18 +204,17 @@ if plugex#begin()
         \ 'GrepperGrep', '<plug>(GrepperOperator)']}
   " incsearch
   PlugEx 'haya14busa/incsearch.vim', {'on': ['<Plug>(incsearch-forward)',
-        \ '<Plug>(incsearch-backward)', '<Plug>(incsearch-stay)']}
+        \ '<Plug>(incsearch-backward)', '<Plug>(incsearch-stay)'], 'on_event': 'CursorHold'}
   PlugEx 'haya14busa/incsearch-fuzzy.vim', {'deps': 'incsearch.vim',
         \ 'on': ['<Plug>(incsearch-fuzzy-/)', '<Plug>(incsearch-fuzzy-?)',
-        \ '<Plug>(incsearch-fuzzy-stay)']}
+        \ '<Plug>(incsearch-fuzzy-stay)'], 'on_event': 'CursorHold'}
   PlugEx 'haya14busa/vim-asterisk', {'deps': 'incsearch.vim', 'on': [
         \ '<Plug>(asterisk-*)', '<Plug>(asterisk-#)', '<Plug>(asterisk-g*)',
         \ '<Plug>(asterisk-g#)', '<Plug>(asterisk-z*)', '<Plug>(asterisk-gz*)',
-        \ '<Plug>(asterisk-z#)', '<Plug>(asterisk-gz#)']} " *-Improved
+        \ '<Plug>(asterisk-z#)', '<Plug>(asterisk-gz#)'], 'on_event': 'CursorHold'} " *-Improved
   PlugEx 'haya14busa/incsearch-easymotion.vim', {'deps':
-        \ ['incsearch.vim', 'vim-easymotion'],
-        \ 'on': ['<Plug>(incsearch-easymotion-/)',
-        \ '<Plug>(incsearch-easymotion-?)', '<Plug>(incsearch-easymotion-stay)']}
+        \ ['incsearch.vim', 'vim-easymotion'], 'on': ['<Plug>(incsearch-easymotion-/)',
+        \ '<Plug>(incsearch-easymotion-?)', '<Plug>(incsearch-easymotion-stay)'], 'on_event': 'CursorHold'}
 
   " denite
   let g:use_denite = (g:is_nvim || v:version>=800) && has('python3')

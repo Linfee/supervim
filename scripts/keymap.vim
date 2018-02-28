@@ -235,31 +235,64 @@ if exists('##TermOpen')
 en
 " 1}}
 
-noremap ， ,<space>
-noremap 。 .<space>
-noremap ： :<space>
-noremap ； ;<space>
-noremap “ "<space>
-noremap ‘ '<space>
-noremap ？ ?<space>
-noremap 、 \<space>
-noremap 《 <
-noremap 》 >
-noremap （ (
-noremap ） )
-noremap —— _
+fu! s:UseEnInterpunction() abort
+  noremap ， ,<space>
+  noremap 。 .<space>
+  noremap ： :<space>
+  noremap ； ;<space>
+  noremap “ "<space>
+  noremap ‘ '<space>
+  noremap ？ ?<space>
+  noremap 、 \<space>
+  noremap 《 <
+  noremap 》 >
+  noremap （ (
+  noremap ） )
+  noremap —— _
 
+  inoremap ， ,<space>
+  inoremap 。 .<space>
+  inoremap ： :<space>
+  inoremap ； ;<space>
+  inoremap “ "<space>
+  inoremap ‘ '<space>
+  inoremap ？ ?<space>
+  inoremap 、 \<space>
+  inoremap 《 <
+  inoremap 》 >
+  inoremap （ (
+  inoremap ） )
+  inoremap —— _
+endf
+fu! s:UseCnInterpunction() abort
+  unmap ，
+  unmap 。
+  unmap ：
+  unmap ；
+  unmap “
+  unmap ‘
+  unmap ？
+  unmap 、
+  unmap 《
+  unmap 》
+  unmap （
+  unmap ）
+  unmap ——
 
-" inoremap ， ,<space>
-" inoremap 。 .<space>
-" inoremap ： :<space>
-" inoremap ； ;<space>
-" inoremap “ "<space>
-" inoremap ‘ '<space>
-" inoremap ？ ?<space>
-" inoremap 、 \<space>
-" inoremap 《 <
-" inoremap 》 >
-" inoremap （ (
-" inoremap ） )
-" inoremap —— _
+  iunmap ，
+  iunmap 。
+  iunmap ：
+  iunmap ；
+  iunmap “
+  iunmap ‘
+  iunmap ？
+  iunmap 、
+  iunmap 《
+  iunmap 》
+  iunmap （
+  iunmap ）
+  iunmap ——
+endf
+com! -nargs=0 UseEnInterpunction call s:UseEnInterpunction()
+com! -nargs=0 UseCnInterpunction call s:UseCnInterpunction()
+call s:UseEnInterpunction()

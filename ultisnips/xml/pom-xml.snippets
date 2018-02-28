@@ -16,6 +16,8 @@ snippet mvn-pom "pom模板" b
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
 	</properties>
 
 	${0:dependencies}
@@ -120,6 +122,7 @@ snippet mvn-distribution "加到pom中指定项目发布到哪个仓库" b
 endsnippet
 snippet mvn-prop-encoding "设置编码属性" b
 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 endsnippet
 snippet mvn-spring-boot "spring boot parent" b
 <parent>
@@ -141,6 +144,54 @@ snippet mvn-spring-boot "spring boot dependencyManagement" b
 	</dependencies>
 </dependencyManagement>
 endsnippet
+snippet mvn-spring-cloud "spring cloud" b
+<parent>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-parent</artifactId>
+	<version>1.5.9.RELEASE</version>
+	<relativePath/> <!-- lookup parent from repository -->
+</parent>
+
+<properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<java.version>1.8</java.version>
+	<spring-cloud.version>Edgware.SR1</spring-cloud.version>
+</properties>
+
+<dependencies>
+
+	dep-
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-test</artifactId>
+		<scope>test</scope>
+	</dependency>
+</dependencies>
+
+<dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-dependencies</artifactId>
+			<version>${spring-cloud.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
+
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+	</plugins>
+</build>
+endsnippet
+
 
 ########################################
 #                plugs                 #
@@ -235,6 +286,13 @@ snippet mvn-plug-spring-boot "spring boot plugin"
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-maven-plugin</artifactId>
 	<!--<version>1.5.9.RELEASE</version>-->
+</plugin>
+<plugin>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<configuration>
+		<source>1.8</source>
+		<target>1.8</target>
+	</configuration>
 </plugin>
 endsnippet
 snippet mvn-plug-mybatis-generator "mybatis generator plugin" b
@@ -627,13 +685,7 @@ endsnippet
 ########################################
 #             spring boot              #
 ########################################
-snippet dep-starter-actuator "spring boot actuator starter" b
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-actuator</artifactId>
-</dependency>
-endsnippet
-snippet dep-devtools "spring boot devtools" b
+snippet dep-spring-boot-devtools "spring boot devtools" b
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-devtools</artifactId>
@@ -645,6 +697,12 @@ snippet dep-spring-boot-processor "Description" b
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-configuration-processor</artifactId>
 	<optional>true</optional>
+</dependency>
+endsnippet
+snippet dep-starter-actuator "spring boot actuator starter" b
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
 </dependency>
 endsnippet
 snippet dep-starter-web "spring boot webapp starter" b
@@ -756,4 +814,22 @@ snippet dep-spring-boot-jsp "spring boot jsp dependency" b
 	spring.mvc.view.prefix=/WEB-INF/views/
 	spring.mvc.view.suffix=.jsp
 -->
+endsnippet
+snippet dep-starter-cloud-eureka-server "spring boot eureka server(service register center)" b
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-eureka-server</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-cloud-eureka "spring boot eureka (service provider)" b
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-eureka</artifactId>
+</dependency>
+endsnippet
+snippet dep-starter-cloud-eureka-server "spring boot ribbon (load balanced)" b
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-ribbon</artifactId>
+</dependency>
 endsnippet

@@ -85,8 +85,8 @@ nnoremap _ zo
 
 
 " Movement
-noremap <a-h> <left>
-noremap <a-l> <right>
+inoremap <a-h> <left>
+inoremap <a-l> <right>
 inoremap <a-j> <down>
 inoremap <a-k> <up>
 nnoremap <a-j> 10j
@@ -126,7 +126,7 @@ nnoremap <tab>v :action ActivateVersionControlToolWindow<cr>
 nnoremap g/ :action Find<cr>
 nnoremap g? :action FindInPath<cr>
 nnoremap gr :action ReplaceInPath<cr>
-nnoremap gU :action FindUsages<cr>
+nnoremap ga :action FindUsages<cr>
 nnoremap gh :action HighlightUsagesInFile<cr>
 nnoremap g[ :action Back<cr>
 nnoremap g] :action Forward<cr>
