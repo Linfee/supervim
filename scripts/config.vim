@@ -147,7 +147,7 @@ if plugex#begin()
   PlugEx 'fatih/vim-go', {'for': 'go'}
 
   " vimwiki
-  PlugEx 'vimwiki/vimwiki', {'for': 'vimwiki', 'on_event': 'VimEnter'}
+  PlugEx 'vimwiki/vimwiki', {'for': 'vimwiki', 'on_event': 'CursorHold'}
 
   " xml
   PlugEx 'sukima/xmledit' " no plugin dir, no need to lazyload
