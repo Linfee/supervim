@@ -23,7 +23,7 @@ set encoding=utf8
 scriptencoding utf-8
 set number                       " 显示绝对行号
 set relativenumber               " 显示相对行号
-set mouse=a                      " 允许使用鼠标
+set mouse=                       " 允许使用鼠标
 set mousehide                    " 输入时隐藏鼠标
 set virtualedit=onemore          " 虚拟编辑意味着光标可以定位在没有实际字符的地方
 set history=1000                 " 设置命令行历史记录
