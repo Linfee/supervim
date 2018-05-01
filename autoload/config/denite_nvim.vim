@@ -1,5 +1,14 @@
 fu! config#denite_nvim#before()
-  let s:emoji = ['→_→ ', '(ง •̀_•́)ง', '(/= _ =)/~┴┴ ', '(＞﹏＜)']
+  if !g:is_osx
+    let s:emoji = ['→_→ ', '(ง •̀_•́)ง', '(/= _ =)/~┴┴ ', '(＞﹏＜)']
+  else
+    let s:emoji = [
+          \ emoji#for('punch'),
+          \ emoji#for('cherry_blossom'),
+          \ emoji#for('joy'),
+          \ emoji#for('smirk')
+          \ ]
+  endif
 
   " denite option
   let s:denite_options = {

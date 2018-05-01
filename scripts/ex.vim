@@ -43,3 +43,6 @@ if g:is_gui
   endif
 endif
 
+" replace :emoji_name: into Emojis
+command! -nargs=0 EmojiReplace exe '%s/:\([^:]\+\):/\=emoji#for(submatch(1), submatch(0))/g'
+command! -nargs=0 EmojiList for e in emoji#list() | call append(line('$'), printf('%s (%s)', emoji#for(e), e)) | endfor

@@ -66,16 +66,21 @@ endf
 fu! config#lightline_vim#readonly()
   if g:no_nerd_font
     return &ft !~? 'help' && &readonly ? 'RO' : ''
-  else
+  elseif !g:is_osx
     return &ft !~? 'help' && &readonly ? '' : ''
+  else
+    return &ft !~? 'help' && &readonly ? emoji#for('lock') : emoji#for('shamrock')
   endif
 endf
 
 fu! config#lightline_vim#modified()
   if g:no_nerd_font
     return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : ''
+  elseif !g:is_osx
+    return &ft =~ 'help' ? '' : &modified ? '✭' : &modifiable ? '' : ''
   else
-    return &ft =~ 'help' ? '' : &modified ? '✭' : &modifiable ? '' : ''
+    return &ft =~ 'help' ? '' : &modified ? emoji#for('small_orange_diamond')
+          \ : &modifiable ? emoji#for('diamonds') : emoji#for('lock')
   endif
 endf
 

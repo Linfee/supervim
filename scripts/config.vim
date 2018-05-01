@@ -35,6 +35,7 @@ if plugex#begin()
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'enable': !g:no_nerd_font}
   PlugEx 'itchyny/lightline.vim', {'on_event': 'VimEnter', 'enable': g:use_lightline}
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
+  PlugEx 'junegunn/vim-emoji'
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
   PlugEx 't9md/vim-choosewin', {'on': '<plug>(choosewin)'}
@@ -223,6 +224,14 @@ if plugex#begin()
   PlugEx 'Shougo/neomru.vim',  {'on': ['NeoMRUReload', 'NeoMRUSave',
         \ 'NeoMRUImportFile', 'NeoMRUImportDirectory']}
 
+  " fzf
+  PlugEx 'junegunn/fzf.vim', {'on': ['Files', 'GitFiles', 'GFiles', 'Buffers',
+        \ 'Lines', 'BLines', 'Colors', 'Locate', 'Ag', 'Tags', 'BTags',
+        \ 'Snippets', 'Commands', 'Marks', 'Helptags', 'Windows', 'Commits',
+        \ 'BCommits', 'Maps', 'Filetypes', 'History', 'FZF'], 'deps': 'fzf', 
+        \ 'on_event': 'CursorHold'}
+  PlugEx 'junegunn/fzf', {'on_event': 'CursorHold'}
+
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
   PlugEx 'junegunn/limelight.vim', {'on': 'Limelight'}
@@ -240,8 +249,8 @@ if plugex#begin()
   " other
   " ===========================================================================
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
-  PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
-  PlugEx '~/tmp/vim/vlib'
+  " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
+  " PlugEx '~/tmp/vim/vlib'
 
   if g:is_nyaovim
     PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
@@ -412,7 +421,55 @@ endfunction
 noremap <silent><expr> <leader>/ incsearch#go(<SID>config_easyfuzzymotion())
 
 " FOR: denite
-nnoremap <space>o :Denite file_rec<cr>
+nnoremap <space>O :Denite file_rec<cr>
+
+" FOR: fzf
+" files
+nnoremap <space>o :Files<cr>
+" git files
+nnoremap <space>fgl :GFiles<cr>
+" git status
+nnoremap <space>fgs :GFiles?<cr>
+" git commits (fugitive.vim)
+nnoremap <space>fgc :Commits<cr>
+" git commits for current buffer
+nnoremap <space>fgb :BCommits<cr>
+" open buffers
+nnoremap <space>b :Buffers<cr>
+" colorschemes
+nnoremap <space>fs :Colors<cr>
+" ag search result <a-a> to select all, <a-d> to deselect all
+nnoremap <space>fa :Ag<cr>
+" lines in loades buffers
+nnoremap <space>fl :Lines<cr>
+" linesin the current buffer
+nnoremap <space>fbl :BLines<cr>
+" tags in the project
+nnoremap <space>ft :Tags<cr>
+" tags in the current buffer
+nnoremap <space>fbl :BTags<cr>
+" marks
+nnoremap <space>fma :Marks<cr>
+" windows
+nnoremap <space>fw :Windows<cr>
+" windows
+nnoremap <space>fsl :Locate
+" v:oldfiles and open buffers
+nnoremap <space>fhh :History<cr>
+" command history
+nnoremap <space>fh: :History:<cr>
+" search history
+nnoremap <space>fh/ :History/<cr>
+" snippets (untisnip)
+nnoremap <space>fs :Snippets<cr>
+" commands
+nnoremap <space>fc :Commands<cr>
+" normal mode maps
+nnoremap <space>fmp :Maps<cr>
+" help tags
+nnoremap <space>fht :Helptags<cr>
+" file types
+nnoremap <space>fft :Filetypes<cr>
 
 " FOR: Goyo
 nnoremap <space>\ :Goyo<cr>

@@ -7,8 +7,13 @@ fu! config#ale#before()
     set statusline=%{config#ale#statusline()}
   en
 
-  let g:ale_echo_msg_error_str = 'error'
-  let g:ale_echo_msg_warning_str = 'warning'
+  if !g:is_osx
+    let g:ale_echo_msg_error_str = 'error'
+    let g:ale_echo_msg_warning_str = 'warning'
+  else
+    let g:ale_echo_msg_error_str = emoji#for('heavy_exclamation_mark')
+    let g:ale_echo_msg_warning_str = emoji#for('arrow_right')
+  endif
   let g:ale_echo_msg_format = '[%linter%] [%severity%] %s '
 
   " Disable linting for all minified js and css files.
@@ -22,11 +27,19 @@ fu! config#ale#before()
   let g:ale_maximum_file_size = 10485760
   " let g:ale_open_list = 1
 
-  let g:ale_sign_error = 'E>'
-  let g:ale_sign_warning = 'W>'
-  let g:ale_sign_info = 'I>'
-  let g:ale_sign_style_error = 'S>'
-  let g:ale_sign_style_warning = 's>'
+  if !g:is_osx
+    let g:ale_sign_error = 'E>'
+    let g:ale_sign_warning = 'W>'
+    let g:ale_sign_info = 'I>'
+    let g:ale_sign_style_error = 'S>'
+    let g:ale_sign_style_warning = 's>'
+  else
+    let g:ale_sign_error = emoji#for('heavy_exclamation_mark')
+    let g:ale_sign_warning = emoji#for('arrow_right')
+    let g:ale_sign_info = emoji#for('arrow_forward')
+    let g:ale_sign_style_error = emoji#for('-1')
+    let g:ale_sign_style_warning = emoji#for('face_with_rolling_eyes')
+  endif
 
   let g:ale_linters = {
         \ 'javascript': ['jshint'],
@@ -51,7 +64,7 @@ fu! config#ale#statusline() abort
   let l:all_non_errors = l:counts.total - l:all_errors
 
   return l:counts.total == 0 ? 'OK' : printf(
-        \   '%dW %dE',
+        \   'Warning:%d | Error:%d',
         \   l:all_non_errors,
         \   l:all_errors
         \)

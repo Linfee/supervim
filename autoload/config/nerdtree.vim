@@ -1,6 +1,13 @@
 fu! config#nerdtree#before()
-  let g:NERDTreeDirArrowExpandable = '+'
-  let g:NERDTreeDirArrowCollapsible = '-'
+
+  if !g:is_osx
+    let g:NERDTreeDirArrowExpandable = '+'
+    let g:NERDTreeDirArrowCollapsible = '-'
+  else
+    let g:NERDTreeDirArrowExpandable = emoji#for('file_folder')
+    let g:NERDTreeDirArrowCollapsible = emoji#for('open_file_folder')
+  endif
+
   let g:NERDTreeWinPos = "left"
   let g:NERDTreeWinSize = "35"
   let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
@@ -30,17 +37,31 @@ fu! config#nerdtree#before()
           \ "Unknown"   : "?"
           \ }
   else
-    let g:NERDTreeIndicatorMapCustom = {
-          \ "Modified"  : "✹",
-          \ "Staged"    : "✚",
-          \ "Untracked" : "✭",
-          \ "Renamed"   : "➜",
-          \ "Unmerged"  : "═",
-          \ "Deleted"   : "✖",
-          \ "Dirty"     : "✗",
-          \ "Clean"     : "✔︎",
-          \ "Unknown"   : "?"
-          \ }
+    if !g:is_osx
+      let g:NERDTreeIndicatorMapCustom = {
+            \ "Modified"  : "✹",
+            \ "Staged"    : "✚",
+            \ "Untracked" : "✭",
+            \ "Renamed"   : "➜",
+            \ "Unmerged"  : "═",
+            \ "Deleted"   : "✖",
+            \ "Dirty"     : "✗",
+            \ "Clean"     : "✔︎",
+            \ "Unknown"   : "?"
+            \ }
+    else
+      let g:NERDTreeIndicatorMapCustom = {
+            \ "Modified"  : emoji#for('small_orange_diamond'),
+            \ "Staged"    : emoji#for('white_check_mark'),
+            \ "Untracked" : emoji#for('small_blue_diamond'),
+            \ "Renamed"   : emoji#for('arrows_counterclockwise'),
+            \ "Unmerged"  : emoji#for('collision'),
+            \ "Deleted"   : emoji#for('heavy_multiplication_x'),
+            \ "Dirty"     : emoji#for('zap'),
+            \ "Clean"     : emoji#for('ok'),
+            \ "Unknown"   : emoji#for('grey_question')
+            \ }
+    endif
   endif
 endf
 
