@@ -90,6 +90,7 @@ fu! config#fzf_vim#after()
 
   fu! s:setup_fzf_ft()
     nnoremap <buffer> q :Sayonara<cr>
+    setl nonumber
   endf
 
   augroup fzf
