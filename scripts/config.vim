@@ -299,6 +299,7 @@ augroup omnif
   autocmd FileType python setlocal omnifunc=jedi#completions
   autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 augroup END
+set completefunc=emoji#complete
 
 "---------------------------------------
 " editing
