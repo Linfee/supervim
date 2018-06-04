@@ -291,3 +291,11 @@ snippet __exit__ "__exit__() for with statement" b
 def __exit__(self, exc_type, exc_value, traceback):
 	${1:pass}
 endsnippet
+
+
+snippet logger "get logger for current file" b
+LOG_FORMAT = '[%(asctime)s][%(levelname)s]' \
+			 '[%(threadName)s %(funcName)s]: %(message)s'
+logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
+log = logging.getLogger(__name__)
+endsnippet

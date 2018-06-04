@@ -1,7 +1,7 @@
 fu! config#vim_multiple_cursors#after()
   let g:multi_cursor_next_key='<C-n>'
   let g:multi_cursor_prev_key='<C-p>'
-  let g:multi_cursor_skip_key='<C-x>'
+  let g:multi_cursor_skip_key='<C-k>'
   let g:multi_cursor_quit_key='<c-[>'
   " 多光标时禁用补全插件
   " Called once right before you start selecting multiple cursors
