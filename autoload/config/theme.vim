@@ -15,10 +15,12 @@ fu! config#theme#after()
       " colorscheme gruvbox
 
       " for seoul256
-      let g:seoul256_srgb = 1
-      let g:seoul256_background = 236
-      let g:seoul256_light_background = 256
-      colorscheme seoul256
+      " let g:seoul256_srgb = 1
+      " let g:seoul256_background = 236
+      " let g:seoul256_light_background = 256
+      " colorscheme seoul256
+
+      colorscheme onedark
     en
   catch
   endtry

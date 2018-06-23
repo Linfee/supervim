@@ -1,0 +1,12 @@
+# useful code snippets
+snippet logger "get logger for current file" b
+LOG_FORMAT = '[%(asctime)s][%(levelname)s]' \
+			 '[%(threadName)s %(funcName)s]: %(message)s'
+logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
+log = logging.getLogger(__name__)
+endsnippet
+
+snippet proxy "the proxy config" b
+proxies = {'http': 'http://127.0.0.1:1081', 'https': 'http://127.0.0.1:1081'}$0
+endsnippet
+

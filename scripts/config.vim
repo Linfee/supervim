@@ -46,8 +46,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    let g:use_deoplete = 1
-    " let g:use_ncm_for_nvim = 1
+    " let g:use_deoplete = 1
+    let g:use_ncm_for_nvim = 1
   elseif has('lua')
     let g:use_neocomplete = 1
   else
@@ -78,9 +78,9 @@ if plugex#begin()
   " ncm
   PlugEx 'roxma/vim-hug-neovim-rpc', {'lazy': 1,
         \ 'enable': get(g:, 'use_ncm_for_vim8')}
-  " PlugEx 'roxma/nvim-completion-manager', {'on_event': 'InsertEnter',
-  "       \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim')),
-  "       \ 'do': 'pip3 install --user neovim jedi mistune psutil setproctitle'}
+  PlugEx 'roxma/nvim-completion-manager', {'on_event': 'InsertEnter',
+        \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim')),
+        \ 'do': 'pip3 install --user neovim jedi mistune psutil setproctitle'}
 
   " ===========================================================================
   " editing
@@ -305,8 +305,9 @@ set completefunc=emoji#complete
 " editing
 "---------------------------------------
 " FOR: nerdcommenter
-Map n <a-/> <Plug>NERDCommenterToggle
-Map v <a-/> <Plug>NERDCommenterToggle
+Map n <a-/> :call NERDComment("n", "Toggle")<CR>j
+Map v <a-/> :call NERDComment("n", "Toggle")<CR>j
+
 
 " FOR: vim-surround
 vmap Si S(i_<esc>f)
