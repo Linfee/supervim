@@ -46,8 +46,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    " let g:use_deoplete = 1
-    let g:use_ncm_for_nvim = 1
+    let g:use_deoplete = 1
+    " let g:use_ncm_for_nvim = 1
   elseif has('lua')
     let g:use_neocomplete = 1
   else
@@ -145,7 +145,7 @@ if plugex#begin()
   PlugEx 'derekwyatt/vim-scala', {'for': 'scala'}
 
   " go
-  PlugEx 'fatih/vim-go', {'for': 'go'}
+  PlugEx 'fatih/vim-go', {'for': 'go', 'do': ':GoUpdateBinaries'}
 
   " vimwiki
   PlugEx 'vimwiki/vimwiki', {'for': 'vimwiki', 'on_event': 'CursorHold'}
