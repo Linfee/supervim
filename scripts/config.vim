@@ -101,6 +101,7 @@ if plugex#begin()
   PlugEx 'junegunn/vim-peekaboo', {'on_event': 'VimEnter'}
 
   PlugEx 'tpope/tpope-vim-abolish', {'on_event': 'VimEnter'}
+  PlugEx 'tpope/vim-endwise', {'on_event': 'InsertEnter'}
 
   " textobj
   PlugEx 'kana/vim-textobj-user', {'lazy': 1}
@@ -119,6 +120,7 @@ if plugex#begin()
   PlugEx 'elzr/vim-json',           {'for': 'json'}
   PlugEx 'hail2u/vim-css3-syntax',  {'for': 'css'}
   PlugEx 'othree/html5.vim',        {'for': 'html'}
+  PlugEx 'dag/vim-fish',            {'for': 'fish'}
 
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
