@@ -91,14 +91,12 @@ fu! s:wrap_lhs(lhs)
 endf
 
 " use this if Item2 Profiles -> Keys -> left options keys is set to Normal
-" if g:is_osx
-"   fu! s:do_wrap(lhs, char)
-"     return substitute(a:lhs, '<a-' . a:char . '>', tr(a:char, s:keys, s:alt_keys), '')
-"   endf
-" endif
-
-" use this if Item2 Profiles -> Keys -> left options keys is set to Esc+
-if g:is_nvim
+if g:is_osx
+  fu! s:do_wrap(lhs, char)
+    return substitute(a:lhs, '<a-' . a:char . '>', tr(a:char, s:keys, s:alt_keys), '')
+  endf
+" use this if item2 profiles -> keys -> left options keys is set to esc+
+elseif g:is_nvim
   fu! s:do_wrap(lhs, char)
     return a:lhs
   endf
