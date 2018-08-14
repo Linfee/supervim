@@ -1,7 +1,7 @@
 " theme config
 fu! config#theme#after()
   try
-    set background=light
+    set background=dark
     " for themes
     if g:is_win_unix
       colorscheme monokai
@@ -20,7 +20,7 @@ fu! config#theme#after()
       " let g:seoul256_light_background = 256
       " colorscheme seoul256
 
-      colorscheme solarized
+      colorscheme onedark
     en
   catch
   endtry

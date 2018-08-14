@@ -46,12 +46,11 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    let g:use_deoplete = 1
-    " let g:use_ncm_for_nvim = 1
+    let g:use_deoplete = get(g:, 'use_deoplete', 1)
+    " let g:use_ncm = get(g:, 'use_ncm', 1)
+    " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
-    let g:use_neocomplete = 1
-  else
-    let g:use_ncm_for_vim8 = 1
+    let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
 
   " PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp'], 'enable': 0}
@@ -65,22 +64,45 @@ if plugex#begin()
   PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter'}
   PlugEx 'Shougo/echodoc.vim', {'on_event': 'InsertEnter', 'after': 'echodoc#enable'}
   PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter'} " for syntax
-  PlugEx 'roxma/ncm-rct-complete', {'on_event': 'InsertEnter',
-        \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim'))} " for ruby
 
   " deoplete
   PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
         \ 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
+
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter',
         \ 'enable': get(g:, 'use_neocomplete')}
+
   " ncm
-  PlugEx 'roxma/vim-hug-neovim-rpc', {'lazy': 1,
-        \ 'enable': get(g:, 'use_ncm_for_vim8')}
   PlugEx 'roxma/nvim-completion-manager', {'on_event': 'InsertEnter',
-        \ 'enable': or(get(g:, 'use_ncm_for_vim8'), get(g:, 'use_ncm_for_nvim')),
+        \ 'enable': get(g:, 'use_ncm'),
         \ 'do': 'pip3 install --user neovim jedi mistune psutil setproctitle'}
+  PlugEx 'roxma/ncm-rct-complete', {'on_event': 'InsertEnter',
+        \ 'enable': get(g:, 'use_ncm')} " for ruby
+
+  " ncm2
+  PlugEx 'ncm2/ncm2', {
+        \ 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
+  PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-github', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-tmux', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-tagprefix', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'jsfaint/gen_tags.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-syntax', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-cssomni', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-tern', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'mhartington/nvim-typescript', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-go', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-match-highlight', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
 
   " ===========================================================================
   " editing
@@ -396,10 +418,12 @@ inoremap <c-s>t <Esc>:CtrlSFToggle<CR>
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
+
 " FOR: incsearch-fuzzy.vim
 map z/ <Plug>(incsearch-fuzzy-/)
 map z? <Plug>(incsearch-fuzzy-?)
 map zg/ <Plug>(incsearch-fuzzy-stay)
+
 " FOR: vim-asterisk
 map *   <Plug>(asterisk-*)
 map #   <Plug>(asterisk-#)
@@ -409,6 +433,7 @@ map z*  <Plug>(asterisk-z*)
 map gz* <Plug>(asterisk-gz*)
 map z#  <Plug>(asterisk-z#)
 map gz# <Plug>(asterisk-gz#)
+
 " FOR: incsearch-easymotion.vim
 map <leader>/ <Plug>(incsearch-easymotion-/)
 map <leader>? <Plug>(incsearch-easymotion-?)
