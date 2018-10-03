@@ -159,11 +159,18 @@ snippet ssm-mybatis-generator-config-mapper "xml:mybatis-generator整合通用ma
 		password="${jdbc.password}">
 	</jdbcConnection>
 
-	<javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}"/>
+	<javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}">
+		<property name="enableSubPackages" value="true"/>
+		<property name="trimStrings" value="true"/>
+	</javaModelGenerator>
 
-	<sqlMapGenerator targetPackage="${targetXMLPackage}" targetProject="${targetResourcesProject}"/>
+	<sqlMapGenerator targetPackage="${targetXMLPackage}" targetProject="${targetResourcesProject}">
+		<property name="enableSubPackages" value="true"/>
+	</sqlMapGenerator>
 
-	<javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER"/>
+	<javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER">
+		<property name="enableSubPackages" value="true"/>
+	</javaClientGenerator>
 
 	<table tableName="%">
 		<generatedKey column="id" sqlStatement="Mysql" identity="true"/>

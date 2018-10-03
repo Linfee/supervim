@@ -35,7 +35,7 @@ vnoremap <space>e :<c-u>call ex#vimscript#execute(visualmode())<cr>
 " run shell command
 command! -complete=file -nargs=+ Shell call util#shell_run(<q-args>)
 
-" change font size int gui quickly
+" change font size in gui quickly
 if g:is_gui
   if !g:is_nvim
     command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
@@ -46,3 +46,7 @@ endif
 " replace :emoji_name: into Emojis
 command! -nargs=0 EmojiReplace exe '%s/:\([^:]\+\):/\=emoji#for(submatch(1), submatch(0))/g'
 command! -nargs=0 EmojiList for e in emoji#list() | call append(line('$'), printf('%s (%s)', emoji#for(e), e)) | endfor
+
+" diff split
+command! -nargs=1 VDiffSplit :vertical diffsplit <args>
+command! -nargs=1 VDiffSplitPatch :vertical diffpatch <args> diff
