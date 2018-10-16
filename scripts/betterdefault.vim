@@ -27,7 +27,7 @@ set mouse=                       " 允许使用鼠标
 set mousehide                    " 输入时隐藏鼠标
 set virtualedit=onemore          " 虚拟编辑意味着光标可以定位在没有实际字符的地方
 set history=1000                 " 设置命令行历史记录
-set shortmess+=cfilmnrxoOtT      " 避免一部分 hit enter 的提示
+set shortmess+=filmnrxoOtT      " 避免一部分 hit enter 的提示
 set noshowmode                   " 不显示模式，由插件显示模式
 " set noswapfile                 " 不要使用swp文件做备份
 set hidden                       " 隐藏缓冲区而不是卸载缓冲区
