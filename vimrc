@@ -27,8 +27,14 @@ let g:config_home = expand('~/.vim')
 
 let &runtimepath = expand(g:config_home . ',') . &runtimepath
 
-for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', 'ex']
-  exe 'source '.g:config_home.'/scripts/'.s:s.'.vim'
-endfor
+if g:is_nvim
+  for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', 'ex']
+    exe 'source '.g:config_home.'/scripts/'.s:s.'.vim'
+  endfor
+else
+  for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'ex']
+    exe 'source '.g:config_home.'/scripts/'.s:s.'.vim'
+  endfor
+endif
 
 let &runtimepath .=  expand(',' . g:config_home . '/after')
