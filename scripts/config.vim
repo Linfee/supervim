@@ -39,23 +39,20 @@ if plugex#begin()
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
   PlugEx 'itchyny/vim-cursorword'
   PlugEx 't9md/vim-choosewin', {'on': '<plug>(choosewin)'}
-  PlugEx 'Yggdroot/indentLine', {'on': ['IndentLinesEnable', 'IndentLinesDisable',
-        \ 'IndentLinesToggle']}
+  PlugEx 'Yggdroot/indentLine', {'on': ['IndentLinesEnable', 'IndentLinesDisable', 'IndentLinesToggle']}
 
   " ===========================================================================
   " completion
   " ===========================================================================
   if g:is_nvim
     let g:use_deoplete = get(g:, 'use_deoplete', 1)
-    " let g:use_ncm = get(g:, 'use_ncm', 1)
     " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
     let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
 
   " PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp'], 'enable': 0}
-  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'],
-        \ 'for': 'snippets'}
+  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets'}
   PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
@@ -66,24 +63,15 @@ if plugex#begin()
   PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter'} " for syntax
 
   " deoplete
-  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins',
-        \ 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
 
   " neocomplete
-  PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter',
-        \ 'enable': get(g:, 'use_neocomplete')}
-
-  " ncm
-  PlugEx 'roxma/nvim-completion-manager', {'on_event': 'InsertEnter',
-        \ 'enable': get(g:, 'use_ncm'),
-        \ 'do': 'pip3 install --user neovim jedi mistune psutil setproctitle'}
-  PlugEx 'roxma/ncm-rct-complete', {'on_event': 'InsertEnter',
-        \ 'enable': get(g:, 'use_ncm')} " for ruby
+  PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
 
   " ncm2
-  PlugEx 'ncm2/ncm2', {
-        \ 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
   PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
@@ -95,7 +83,6 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2-syntax', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-cssomni', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-tern', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'mhartington/nvim-typescript', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-go', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
@@ -149,15 +136,13 @@ if plugex#begin()
   PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
   PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
   " PlugEx 'euclio/vim-markdown-composer', {'do': ':call BuildComposer'}
-  PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter',
-        \ 'if &ft==''markdown''']}
+  PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter', 'if &ft==''markdown''']}
 
   " javascript
   PlugEx 'othree/javascript-libraries-syntax.vim' " no plugin dir, no need to lazyload
 
   " python
-  PlugEx 'davidhalter/jedi-vim', {'on_event': ['VimEnter', 'InsertEnter',
-        \ 'if &ft==''python''']}
+  PlugEx 'davidhalter/jedi-vim', {'on_event': ['VimEnter', 'InsertEnter', 'if &ft==''python''']}
 
   " ruby
   PlugEx 'vim-ruby/vim-ruby' " no plugin dir, no need to lazyload
@@ -197,15 +182,13 @@ if plugex#begin()
   PlugEx 'Linfee/nerdtree-open', {'lazy': 1}
 
   " tagbar
-  PlugEx 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar'],
-        \ 'enable': executable('ctags')}
+  PlugEx 'majutsushi/tagbar', {'on': ['TagbarToggle', 'TagbarOpen', 'Tagbar'], 'enable': executable('ctags')}
 
   " undotree
   PlugEx 'mbbill/undotree',    {'on': 'UndotreeToggle'}
 
   " code check
-  PlugEx 'w0rp/ale', {'on_event': 'VimEnter',
-        \ 'do': 'pip3 install --user vim-vint autopep8 flake8 pylint'}
+  PlugEx 'w0rp/ale', {'on_event': 'VimEnter', 'do': 'pip3 install --user vim-vint autopep8 flake8 pylint'}
 
   PlugEx 'Konfekt/FastFold',   {'on_event': 'VimEnter'}
   PlugEx 'tpope/vim-repeat' " no plugin dir, no need to lazyload
