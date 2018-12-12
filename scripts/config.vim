@@ -6,17 +6,7 @@ let g:plugex_use_cache = 1
 let g:use_lightline = get(g:, 'use_lightline', 1)
 let g:no_nerd_font = get(g:, 'no_nerd_font')
 
-if !g:is_nvim
-  com UpdateRemotePlugins echo ''
-en
-
-fu! BuildComposer(info)
-  if has('nvim')
-    !cargo build --release
-  else
-    !cargo build --release --no-default-features --features json-rpc
-  endif
-endf
+if !g:is_nvim | com UpdateRemotePlugins echo '' | en
 
 let g:plugex_cache_dir_name = g:_vim
 if plugex#begin()
@@ -142,7 +132,6 @@ if plugex#begin()
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
   PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
   PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
-  " PlugEx 'euclio/vim-markdown-composer', {'do': ':call BuildComposer'}
   PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter', 'if &ft==''markdown''']}
 
   " javascript
