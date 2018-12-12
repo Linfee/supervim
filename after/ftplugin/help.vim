@@ -3,5 +3,7 @@ nnoremap <buffer> <bs> <c-o>
 
 let b:helpful = 1
 
-call timer_start(80, {-> helpful#setup()})
+if !g:is_old_version
+  call timer_start(80, {-> helpful#setup()})
+en
 
