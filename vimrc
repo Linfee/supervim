@@ -22,12 +22,20 @@ let g:_vim = 'vim'
 if g:is_win_unix | let g:_vim = 'winunixvim' | en
 if g:is_nvim     | let g:_vim = 'nvim'       | en
 
+let g:is_old_version = !g:is_nvim && v:version < 800 ? 0 : 1
+
 " set main config dir
 let g:config_home = expand('~/.vim')
 
 let &runtimepath = expand(g:config_home . ',') . &runtimepath
 
-for s:s in ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', 'ex']
+if g:is_old_version
+  let s:scripts = ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'config', 'ex']
+else
+  let s:scripts = ['betterdefault', 'encodingforzh', 'key', 'keymap', 'ui', 'ex']
+en
+
+for s:s in s:scripts
   exe 'source '.g:config_home.'/scripts/'.s:s.'.vim'
 endfor
 
