@@ -45,8 +45,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    let g:use_deoplete = get(g:, 'use_deoplete', 1)
-    " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
+    " let g:use_deoplete = get(g:, 'use_deoplete', 1)
+    let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
     let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
@@ -57,14 +57,18 @@ if plugex#begin()
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
 
+  " deoplete
+  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'fszymanski/deoplete-emoji', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'zchee/deoplete-go', {
+        \ 'do': 'make && !go get -u github.com/mdempsky/gocode',
+        \ 'for': 'go', 'enable': get(g:, 'use_deoplete')}
+
   " completion for viml and show function params for viml and ruby
   PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter'}
   PlugEx 'Shougo/echodoc.vim', {'on_event': 'InsertEnter', 'after': 'echodoc#enable'}
   PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter'} " for syntax
-
-  " deoplete
-  PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
-  PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
 
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
@@ -88,8 +92,11 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-match-highlight', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'fgrsnau/ncm2-aspell', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'fgrsnau/ncm2-otherbuf', {'branch': 'ncm2', 'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
 
   " ===========================================================================
   " editing
