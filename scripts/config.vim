@@ -6,7 +6,9 @@ let g:plugex_use_cache = 1
 let g:use_lightline = get(g:, 'use_lightline', 1)
 let g:no_nerd_font = get(g:, 'no_nerd_font')
 
-if !g:is_nvim | com UpdateRemotePlugins echo '' | en
+if !g:is_nvim
+  com UpdateRemotePlugins echo ''
+en
 
 let g:plugex_cache_dir_name = g:_vim
 if plugex#begin()
