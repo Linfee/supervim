@@ -37,8 +37,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    " let g:use_deoplete = get(g:, 'use_deoplete', 1)
-    let g:use_ncm2 = get(g:, 'use_ncm2', 1)
+    let g:use_deoplete = get(g:, 'use_deoplete', 1)
+    " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
     let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
