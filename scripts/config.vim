@@ -67,7 +67,7 @@ if plugex#begin()
 
   " ncm2
   PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'roxma/nvim-yarp', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
   PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
