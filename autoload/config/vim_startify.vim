@@ -4,11 +4,11 @@ endf
 
 " copy from vim-startify/plugin/startify.vim
 function! s:genesis()
-  if !argc() && (line2byte('$') == -1)
+  if !argc() && line2byte('$') == -1
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
       source Session.vim
     elseif !get(g:, 'startify_disable_at_vimenter')
-      call startify#insane_in_the_membrane()
+      call startify#insane_in_the_membrane(1)
     endif
   endif
   if get(g:, 'startify_update_oldfiles')
