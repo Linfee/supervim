@@ -66,26 +66,26 @@ if plugex#begin()
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
 
   " ncm2
-  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
   PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-jedi', {'enable': get(g:, 'use_ncm2')} " python
-  PlugEx 'ncm2/ncm2-bufword', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-path', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
+  PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   " PlugEx 'ncm2/ncm2-github', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-tmux', {'enable': get(g:, 'use_ncm2') && executable('tmux')}
-  PlugEx 'ncm2/ncm2-tagprefix', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-tmux', {'lazy': 1, 'enable': get(g:, 'use_ncm2') && executable('tmux')}
+  PlugEx 'ncm2/ncm2-tagprefix', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'jsfaint/gen_tags.vim', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-syntax', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-cssomni', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-tern', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-vim', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-go', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'jsfaint/gen_tags.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-syntax', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-cssomni', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-tern', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-go', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-html-subscope', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-markdown-subscope', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-highprio-pop', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'yuki-ycino/ncm2-dictionary', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'fgrsnau/ncm2-aspell', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'fgrsnau/ncm2-otherbuf', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
