@@ -29,7 +29,7 @@ if plugex#begin()
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'junegunn/vim-emoji'
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
-  PlugEx 'itchyny/vim-cursorword'
+  PlugEx 'itchyny/vim-cursorword', {'on_event': 'VimEnter'}
   PlugEx 't9md/vim-choosewin', {'on': '<plug>(choosewin)'}
   PlugEx 'Yggdroot/indentLine', {'on': ['IndentLinesEnable', 'IndentLinesDisable', 'IndentLinesToggle']}
 
@@ -67,7 +67,7 @@ if plugex#begin()
 
   " ncm2
   PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2'), 'on_event': 'InsertEnter'}
   PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
   PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
@@ -132,7 +132,7 @@ if plugex#begin()
 
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
-  PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
+  PlugEx 'plasticboy/vim-markdown', {'for': 'markdown'}
   PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
   PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter', 'if &ft==''markdown''']}
 
