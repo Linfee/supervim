@@ -1,4 +1,4 @@
-fu! config#markdown_preview_vim#after()
+fu! config#markdown_preview_nvim#after()
   if g:is_osx
     let g:mkdp_path_to_chrome = "open -a Google\\ Chrome"
     " path to the chrome or the command to open chrome(or other modern browsers)

@@ -66,9 +66,6 @@ if plugex#begin()
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
 
   " ncm2
-  PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
-  " TODO: read ncm2 source, and add a 'on_event': 'InsertEnter' here
-  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
   PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
@@ -81,7 +78,7 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2-cssomni', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-tern', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-go', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-go', {'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
@@ -90,6 +87,9 @@ if plugex#begin()
   PlugEx 'fgrsnau/ncm2-aspell', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'fgrsnau/ncm2-otherbuf', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
+  PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
+  " TODO: read ncm2 source, and add a 'on_event': 'InsertEnter' here
+  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
 
   " ===========================================================================
   " editing
@@ -134,7 +134,7 @@ if plugex#begin()
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
   PlugEx 'plasticboy/vim-markdown', {'for': 'markdown'}
-  PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
+  PlugEx 'iamcco/markdown-preview.nvim', {'on': '<Plug>MarkdownPreview', 'do': 'call mkdp#util#install()'}
   PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter', 'if &ft==''markdown''']}
 
   " javascript
