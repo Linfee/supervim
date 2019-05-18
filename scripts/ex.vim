@@ -50,3 +50,7 @@ command! -nargs=0 EmojiList for e in emoji#list() | call append(line('$'), print
 " diff split
 command! -nargs=1 VDiffSplit :vertical diffsplit <args>
 command! -nargs=1 VDiffSplitPatch :vertical diffpatch <args> diff
+
+" upgrade supervim
+com! -nargs=0 SupervimUpgrade
+      \ :!cd ~/.vim && git fetch origin `git rev-parse --abbrev-ref HEAD`
