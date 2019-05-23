@@ -265,7 +265,6 @@ if plugex#begin()
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
   " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
   " PlugEx '~/tmp/vim/vlib'
-  " PlugEx '~/tmp/vim/foo', {'on_func': 'foo#foo'}
 
   if g:is_nyaovim
     PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
