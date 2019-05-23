@@ -2,7 +2,6 @@ fu! config#ncm2#before()
   aug NcmBefore
     au!
     au BufEnter * call ncm2#enable_for_buffer()
-    au TextChangedI * call ncm2#auto_trigger()
   aug END
 
   " wellle/tmux-complete.vim
@@ -11,6 +10,11 @@ fu! config#ncm2#before()
   " for ncm2-ultisnip
   let g:UltiSnipsExpandTrigger='<tab>'
 
+  " for ncm2-look.vim
+  let g:ncm2_look_enabled = 1
+  if g:is_osx
+    let g:ncm2_look_mark = '👀'
+  en
 endf
 
 fu! config#ncm2#after()

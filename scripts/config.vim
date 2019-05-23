@@ -66,27 +66,29 @@ if plugex#begin()
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
 
   " ncm2
-  PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
   PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  " PlugEx 'ncm2/ncm2-github', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-tmux', {'lazy': 1, 'enable': get(g:, 'use_ncm2') && executable('tmux')}
+  PlugEx 'wellle/tmux-complete.vim', {'on_event': 'VimEnter', 'enable': get(g:, 'use_ncm2') && executable('tmux')}
   PlugEx 'ncm2/ncm2-tagprefix', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-gtags', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'jsfaint/gen_tags.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-syntax', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'fgrsnau/ncm2-otherbuf', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+
+  PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+
+  PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
   PlugEx 'ncm2/ncm2-cssomni', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-tern', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-go', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'fgrsnau/ncm2-aspell', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'fgrsnau/ncm2-otherbuf', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
+
   PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
   " TODO: read ncm2 source, and add a 'on_event': 'InsertEnter' here
   PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
