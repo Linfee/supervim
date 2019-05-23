@@ -76,10 +76,10 @@
 "       PlugEx 'nsf/gocode', {'tag': 'v.20150303', 'rtp': 'vim'}
 "       PlugEx 'junegunn/fzf', {'path': '~/.fzf', 'do': './install --all'}
 "
-"       PlugEx '~/my-plugin', {'on_event': ['InsertEnter', 'CorsurHold', 'if &ft=="java"']}
-"       PlugEx '~/my-plugin2', {'on_event': ['InsertEnter if &ft=="java"',
-"                                          \ 'CorsurHold if &ft=="jsp"',
-"                                          \ 'if &ft=="java"||&ft=="jsp"']}
+"       PlugEx '~/my-plugin', {'on_event': ['InsertEnter', 'CorsurHold', 'if &ft==''java''']}
+"       PlugEx '~/my-plugin2', {'on_event': ['InsertEnter if &ft==''java''',
+"                                          \ 'CorsurHold if &ft==''jsp''',
+"                                          \ 'if &ft==''java''||&ft==''jsp''']}
 "       PlugEx '~/my-plugin3', {'on_func': ['Test', 'Test2']}
 "     endif
 "     call plugex#end()
