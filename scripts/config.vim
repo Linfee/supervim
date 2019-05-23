@@ -44,7 +44,7 @@ if plugex#begin()
   endif
 
   " PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp'], 'enable': 0}
-  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets'}
+  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets', 'on_func': 'UltiSnips#SnippetsInCurrentScope'}
   PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
@@ -58,9 +58,9 @@ if plugex#begin()
         \ 'for': 'go', 'enable': get(g:, 'use_deoplete')}
 
   " completion for viml and show function params for viml and ruby
-  PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter'}
+  PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter', 'on_func': 'necovim#get_complete_position'}
+  PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter', 'on_func': 'necosyntax#initialize'} " for syntax
   PlugEx 'Shougo/echodoc.vim', {'on_event': 'InsertEnter', 'after': 'echodoc#enable'}
-  PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter'} " for syntax
 
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
@@ -89,9 +89,15 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-go', {'enable': get(g:, 'use_ncm2')}
 
-  PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
-  " TODO: read ncm2 source, and add a 'on_event': 'InsertEnter' here
-  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2', {'on_func': 'ncm2#enable_for_buffer', 'deps': 'nvim-yarp', 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'roxma/nvim-yarp', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+
+  if g:use_ncm2
+    aug NcmBefore
+      au!
+      au BufEnter * au InsertEnter <buffer> call ncm2#enable_for_buffer()
+    aug END
+  en
 
   " ===========================================================================
   " editing
@@ -259,6 +265,7 @@ if plugex#begin()
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
   " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
   " PlugEx '~/tmp/vim/vlib'
+  " PlugEx '~/tmp/vim/foo', {'on_func': 'foo#foo'}
 
   if g:is_nyaovim
     PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
