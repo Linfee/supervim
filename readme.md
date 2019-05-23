@@ -35,8 +35,8 @@ For osx:
 
 ### 2.clone this repo
 
-- Clone `git clone --depth=1 https://github.com/Linfee/supervim.git ~/.vim`
-- Optional, switch to dev branch `cd .vim && git fetch --depth=1 origin dev:dev && git checkout dev && cd ..`
+- Clone `git clone https://github.com/Linfee/supervim.git ~/.vim`
+- Optional, switch to dev branch `cd .vim && git fetch origin dev:dev && git checkout dev && cd ..`
 - Let it work for neovim `mkdir -p ~/.config/nvim && echo 'source ~/.vim/vimrc' > ~/.config/nvim/init.vim`
 
 ### 3.launch nvim and install plugins
