@@ -266,12 +266,6 @@ if plugex#begin()
   " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
   " PlugEx '~/tmp/vim/vlib'
 
-  if g:is_nyaovim
-    PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
-    PlugEx 'rhysd/nyaovim-markdown-preview', {'on': 'VimEnter'}
-    PlugEx 'rhysd/nyaovim-mini-browser', {'on': 'VimEnter'}
-    PlugEx 'rhysd/nyaovim-tree-view', {'on': 'VimEnter'}
-  endif
 endif
 call plugex#end()
 
