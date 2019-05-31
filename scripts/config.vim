@@ -37,8 +37,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    " let g:use_deoplete = get(g:, 'use_deoplete', 1)
-    let g:use_ncm2 = get(g:, 'use_ncm2', 1)
+    let g:use_deoplete = get(g:, 'use_deoplete', 1)
+    " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
     let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
@@ -92,7 +92,7 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2', {'on_func': 'ncm2#enable_for_buffer', 'deps': 'nvim-yarp', 'enable': get(g:, 'use_ncm2')}
   PlugEx 'roxma/nvim-yarp', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
 
-  if g:use_ncm2
+  if get(g:, 'use_ncm2', 0) == 1
     aug NcmBefore
       au!
       au BufEnter * au InsertEnter <buffer> call ncm2#enable_for_buffer()
