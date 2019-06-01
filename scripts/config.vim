@@ -169,6 +169,8 @@ if plugex#begin()
   " xml
   PlugEx 'sukima/xmledit' " no plugin dir, no need to lazyload
 
+  PlugEx 'isobit/vim-caddyfile'
+
   " viml dev
   " go to define
   PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
