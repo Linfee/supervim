@@ -37,8 +37,8 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    let g:use_deoplete = get(g:, 'use_deoplete', 1)
-    " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
+    " let g:use_deoplete = get(g:, 'use_deoplete', 1)
+    let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
     let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
@@ -77,7 +77,7 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'fgrsnau/ncm2-otherbuf', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'fgrsnau/ncm2-otherbuf', {'branch': 'ncm2', 'lazy': 1, 'enable': get(g:, 'use_ncm2')}
 
   PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
