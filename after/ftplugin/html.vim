@@ -11,5 +11,5 @@ setl tabstop=2
 setl softtabstop=2
 
 if g:is_osx
-    nnoremap <buffer> <space>r :w<cr>:silent !open % &<cr>:redraw!<cr>
+  nnoremap <buffer> <space>r :w<cr>:silent !open % &<cr>:redraw!<cr>
 endif
