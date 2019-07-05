@@ -173,7 +173,7 @@ if plugex#begin()
 
   " viml dev
   " go to define
-  PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
+  " PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
   " plugin for making plugin
   PlugEx 'tpope/vim-scriptease', {'on_event': 'VimEnter'}
   " get the version of Vim and Neovim that introduced or removed features
@@ -267,6 +267,7 @@ if plugex#begin()
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
   " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
   " PlugEx '~/tmp/vim/vlib'
+  PlugEx '~/tmp/vim/vlang.vim'
 
 endif
 call plugex#end()

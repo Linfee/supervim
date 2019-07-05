@@ -22,7 +22,7 @@ nnoremap <c-u> g~iw
 inoremap <c-u> <esc>g~iwea
 
 " delete the windows' ^M
-nnoremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+nnoremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " switch vim to paste mode
 nnoremap <leader>tp :set paste!<cr>
