@@ -1,8 +1,5 @@
 " filetype config for .yaml file
 
-if &ft == 'yaml'
-  finish
-en
 setl smarttab
 setl expandtab
 setl autoindent
