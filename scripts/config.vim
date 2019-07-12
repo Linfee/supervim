@@ -70,7 +70,7 @@ if plugex#begin()
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'wellle/tmux-complete.vim', {'on_event': 'VimEnter', 'enable': get(g:, 'use_ncm2') && executable('tmux')}
   PlugEx 'ncm2/ncm2-tagprefix', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  " PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-gtags', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'jsfaint/gen_tags.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-syntax', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
