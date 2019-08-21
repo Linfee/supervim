@@ -269,7 +269,7 @@ if plugex#begin()
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
   " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
   " PlugEx '~/tmp/vim/vlib'
-  PlugEx '~/tmp/vim/vlang.vim'
+  " PlugEx '~/tmp/vim/vlang.vim'
 
 endif
 call plugex#end()
