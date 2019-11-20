@@ -127,6 +127,7 @@ if plugex#begin()
   PlugEx 'kana/vim-textobj-entire', {'on_event': 'VimEnter'}
   PlugEx 'kana/vim-textobj-syntax', {'on_event': 'VimEnter'}
   PlugEx 'kana/vim-textobj-lastpat', {'on_event': 'VimEnter'}
+  PlugEx 'wellle/targets.vim', {'on_event': 'VimEnter'}
 
   " ===========================================================================
   " lang
