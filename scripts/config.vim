@@ -53,9 +53,16 @@ if plugex#begin()
   PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   PlugEx 'fszymanski/deoplete-emoji', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
-  PlugEx 'zchee/deoplete-go', {
-        \ 'do': 'make && !go get -u github.com/mdempsky/gocode',
+  PlugEx 'zchee/deoplete-go', {'do': 'make && !go get -u github.com/mdempsky/gocode',
         \ 'for': 'go', 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'carlitux/deoplete-ternjs', {'do': 'npm install -g tern', 'for': 'javascript',
+        \ 'enable': get(g:, 'use_deoplete')}
+  if g:is_win
+    PlugEx 'tbodt/deoplete-tabnine', {'do': 'powershell.exe .\install.ps1', 'on_event': 'VimEnter'}
+  else
+    PlugEx 'tbodt/deoplete-tabnine', {'do': './install.sh', 'on_event': 'VimEnter'}
+  endif
+
 
   " completion for viml and show function params for viml and ruby
   PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter', 'on_func': 'necovim#get_complete_position'}
