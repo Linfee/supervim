@@ -27,10 +27,10 @@ nnoremap <space>t :set operatorfunc=ex#translate#translate<cr>g@
 vnoremap <space>t :<c-u>call ex#translate#translate(visualmode())<cr>
 command! -nargs=+ Trans call ex#translate#ts(<f-args>)
 
-" execute vimscript
+" execute script
 nnoremap <space>e<cr> :@*<cr>
-nnoremap <space>e :set operatorfunc=ex#vimscript#execute<cr>g@
-vnoremap <space>e :<c-u>call ex#vimscript#execute(visualmode())<cr>
+nnoremap <space>e :set operatorfunc=ex#script#execute<cr>g@
+vnoremap <space>e :<c-u>call ex#script#execute(visualmode())<cr>
 
 " run shell command
 command! -complete=file -nargs=+ Shell call util#shell_run(<q-args>)
