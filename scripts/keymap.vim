@@ -16,13 +16,13 @@ let g:maplocalleader = "\\"
 " use alt-; as ;
 Noremap n <a-;> ;
 
-" File and Editing {{1
+" File and Editing {{
 " switch cursor word case
 nnoremap <c-u> g~iw
 inoremap <c-u> <esc>g~iwea
 
 " delete the windows' ^M
-nnoremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+nnoremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " switch vim to paste mode
 nnoremap <leader>tp :set paste!<cr>
@@ -72,8 +72,9 @@ Noremap v <a-s> :
 
 " use alt+. to repeat last macro
 Noremap n <a-.> @@
+" }}
 
-" Fold {{2
+" Fold {{
 " switch fold
 nnoremap - za
 nnoremap _ zf
@@ -85,9 +86,9 @@ nnoremap <tab>3 :set foldlevel=3<cr>
 nnoremap <tab>4 :set foldlevel=4<cr>
 nnoremap <tab>5 :set foldlevel=5<cr>
 nnoremap <tab>6 :set foldlevel=6<cr>
-" 2}}
+" }}
 
-" Spell Check {{2
+" Spell Check {{
 " switch spell check
 noremap <c-f11> :setlocal spell!<cr>
 " spell check
@@ -95,10 +96,9 @@ noremap <leader>sn ]s
 noremap <leader>sp [s
 noremap <leader>sa zg
 noremap <leader>s? z=
-" 2}}
+" }}
 
-" 1}}
-
+" Search and Replace {{
 " search and replace all
 nnoremap <leader>r :call util#visual_selection('replace', '')<cr>
 " non whole world
@@ -122,6 +122,7 @@ nnoremap <space><cr> :nohlsearch<cr>
 " use * and # to search selected content in visual mode
 vnoremap <silent> * :<C-u>call util#visual_selection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call util#visual_selection('', '')<CR>?<C-R>=@/<CR><CR>
+" }}
 
 " buffer, window and tab {{
 " buffer and window
@@ -172,6 +173,7 @@ Noremap n <a-5> 5gt
 Noremap n <a-6> 6gt
 " }}
 
+" Movement {{
 " Map g* keys in Normal, Operator-pending, and Visual+select
 noremap <silent> $ :call util#wrap_relative_motion("$")<CR>
 noremap <silent> <End> :call util#wrap_relative_motion("$")<CR>
@@ -212,7 +214,7 @@ Noremap c <a-m> <s-right>
 Noremap c <a-N> <s-left>
 Noremap c <a-o> <end>
 Noremap c <a-I> <home>
-" 1}}
+" }}
 
 " Other {{1
 Noremap c <a-p> <c-r>=substitute(@*.'', '\n', '', 'g')<cr>
@@ -235,6 +237,7 @@ if exists('##TermOpen')
 en
 " 1}}
 
+" interpunction {{
 fu! s:UseEnInterpunction() abort
   noremap ， ,<space>
   noremap 。 .<space>
@@ -296,3 +299,4 @@ endf
 com! -nargs=0 UseEnInterpunction call s:UseEnInterpunction()
 com! -nargs=0 UseCnInterpunction call s:UseCnInterpunction()
 call s:UseEnInterpunction()
+" }}

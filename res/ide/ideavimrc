@@ -14,6 +14,7 @@
 " Options
 " --------------------------------------
 set clipboard=unnamed
+set clipboard+=ideaput
 set ignorecase smartcase
 set incsearch
 set hlsearch
@@ -93,10 +94,11 @@ nnoremap <a-j> 10j
 nnoremap <a-k> 10k
 vnoremap <a-j> 10j
 vnoremap <a-k> 10k
-nnoremap <c-j> 10j
-nnoremap <c-k> 10k
-vnoremap <c-j> 10j
-vnoremap <c-k> 10k
+
+nnoremap <down> 10j
+nnoremap <up> 10k
+vnoremap <down> 10j
+vnoremap <up> 10k
 
 " tab, window and buffer
 nnoremap <tab><cr> <c-w>_
@@ -123,10 +125,11 @@ nnoremap <tab>t :action ActivateTerminalToolWindow<cr>
 nnoremap <tab>v :action ActivateVersionControlToolWindow<cr>
 
 " Navigate
+nnoremap <a-s> :action SearchEverywhere<cr>
 nnoremap g/ :action Find<cr>
-nnoremap g? :action FindInPath<cr>
+nnoremap ga :action FindInPath<cr>
 nnoremap gr :action ReplaceInPath<cr>
-nnoremap ga :action FindUsages<cr>
+nnoremap gI :action FindUsages<cr>
 nnoremap gh :action HighlightUsagesInFile<cr>
 nnoremap g[ :action Back<cr>
 nnoremap g] :action Forward<cr>
@@ -176,14 +179,15 @@ nnoremap <space>gE :action Console.Jdbc.ExplainPlan<cr>
 nnoremap <space>gt :action Terminal.OpenInTerminal<cr>
 
 nnoremap <space>ob :action OpenInBrowser<cr>
+nnoremap <space>mp :action ManageRecentProjects<cr>
 
 
-nnoremap zec :action ExtractClass<cr>
-nnoremap zem :action ExtrExtractMethod<cr>
-nnoremap zei :action ExtrExtractInterface<cr>
-nnoremap zef :action ExtrExtractFunction<cr>
-nnoremap zep :action ExtrExtractInclude<cr>
-nnoremap zesc :action ExtrExtractSuperclass<cr>
+vnoremap zec :action ExtractClass<cr>
+vnoremap zem :action ExtrExtractMethod<cr>
+vnoremap zei :action ExtrExtractInterface<cr>
+vnoremap zef :action ExtrExtractFunction<cr>
+vnoremap zep :action ExtrExtractInclude<cr>
+vnoremap zesc :action ExtrExtractSuperclass<cr>
 
 nnoremap zg :action Generate<cr>
 nnoremap zmo :action OverrideMethods<cr>
@@ -212,3 +216,4 @@ nnoremap <space>w :w<cr>
 
 
 nnoremap \\\ :source ~/.ideavimrc<cr>
+set ideajoin

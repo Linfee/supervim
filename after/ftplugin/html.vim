@@ -10,6 +10,6 @@ setl shiftwidth=2
 setl tabstop=2
 setl softtabstop=2
 
-" if IsOSX()
-"     call DoMap('nnore', 'r', ':w<cr>:silent !open % &<cr>:redraw!<cr>', ['<buffer>'])
-" endif
+if g:is_osx
+  nnoremap <buffer> <space>r :w<cr>:silent !open % &<cr>:redraw!<cr>
+endif

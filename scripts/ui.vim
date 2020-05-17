@@ -12,7 +12,9 @@ scriptencoding utf-8
 
 " 设置补全菜单样式
 " set completeopt=longest,menu,preview
-set completeopt=noinsert,menuone,noselect
+if !g:is_old_version
+  set completeopt=noinsert,menuone,noselect
+endif
 " 设置隐藏级别
 set conceallevel=2
 "  设置状态行的样式

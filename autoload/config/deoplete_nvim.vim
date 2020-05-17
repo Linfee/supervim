@@ -33,6 +33,7 @@ fu! config#deoplete_nvim#before()
   call deoplete#custom#option('omni_patterns', {
         \ 'java': '[^. *\t]\.\w*',
         \ 'lua': '.',
+        \ 'go': '[^. *\t]\.\w*'
         \})
 
   " " set the source
@@ -56,6 +57,7 @@ fu! config#deoplete_nvim#before()
         \ 'java':       ['[^. \t0-9]\.\w*', '[^. \t0-9]\->\w*', '[^. \t0-9]\::\w*'],
         \ 'gitcommit':  ['[ ]#[ 0-9a-zA-Z]*'],
         \ 'javascript': '[^. *\t]\.\w*',
+        \ 'tabnine':    {'line_limit': 500, 'max_num_results': 20}
         \})
 
   " call deoplete#custom#set('emoji', 'filetypes', ['gitcommit', 'markdown'])

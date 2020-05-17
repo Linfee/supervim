@@ -20,7 +20,7 @@ fu! config#theme#after()
       " let g:seoul256_light_background = 256
       " colorscheme seoul256
 
-      colorscheme onedark
+      colorscheme gruvbox
     en
   catch
   endtry

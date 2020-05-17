@@ -1,7 +1,7 @@
 set cpoptions&vim
 scriptencoding utf-8
 
-let g:plugex_use_log = 0
+let g:plugex_use_log = 1
 let g:plugex_use_cache = 1
 let g:use_lightline = get(g:, 'use_lightline', 1)
 let g:no_nerd_font = get(g:, 'no_nerd_font')
@@ -29,7 +29,7 @@ if plugex#begin()
   PlugEx 'junegunn/rainbow_parentheses.vim', {'on_event': 'VimEnter'}
   PlugEx 'junegunn/vim-emoji'
   PlugEx 'mhinz/vim-signify', {'on_event': 'VimEnter'}
-  PlugEx 'itchyny/vim-cursorword'
+  PlugEx 'itchyny/vim-cursorword', {'on_event': 'VimEnter'}
   PlugEx 't9md/vim-choosewin', {'on': '<plug>(choosewin)'}
   PlugEx 'Yggdroot/indentLine', {'on': ['IndentLinesEnable', 'IndentLinesDisable', 'IndentLinesToggle']}
 
@@ -37,14 +37,14 @@ if plugex#begin()
   " completion
   " ===========================================================================
   if g:is_nvim
-    " let g:use_deoplete = get(g:, 'use_deoplete', 1)
-    let g:use_ncm2 = get(g:, 'use_ncm2', 1)
+    let g:use_deoplete = get(g:, 'use_deoplete', 1)
+    " let g:use_ncm2 = get(g:, 'use_ncm2', 1)
   elseif has('lua')
     let g:use_neocomplete = get(g:, 'use_neocomplete', 1)
   endif
 
   " PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp'], 'enable': 0}
-  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets'}
+  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets', 'on_func': 'UltiSnips#SnippetsInCurrentScope'}
   PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
   PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
@@ -53,42 +53,58 @@ if plugex#begin()
   PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   PlugEx 'fszymanski/deoplete-emoji', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
-  PlugEx 'zchee/deoplete-go', {
-        \ 'do': 'make && !go get -u github.com/mdempsky/gocode',
+  PlugEx 'zchee/deoplete-go', {'do': 'make && !go get -u github.com/mdempsky/gocode',
         \ 'for': 'go', 'enable': get(g:, 'use_deoplete')}
+  PlugEx 'carlitux/deoplete-ternjs', {'do': 'npm install -g tern', 'for': 'javascript',
+        \ 'enable': get(g:, 'use_deoplete')}
+  if g:is_win
+    PlugEx 'tbodt/deoplete-tabnine', {'do': 'powershell.exe .\install.ps1', 'on_event': 'VimEnter'}
+  else
+    PlugEx 'tbodt/deoplete-tabnine', {'do': './install.sh', 'on_event': 'VimEnter'}
+  endif
+
 
   " completion for viml and show function params for viml and ruby
-  PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter'}
+  PlugEx 'Shougo/neco-vim', {'on_event': 'InsertEnter', 'on_func': 'necovim#get_complete_position'}
+  PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter', 'on_func': 'necosyntax#initialize'} " for syntax
   PlugEx 'Shougo/echodoc.vim', {'on_event': 'InsertEnter', 'after': 'echodoc#enable'}
-  PlugEx 'Shougo/neco-syntax', {'on_event': 'InsertEnter'} " for syntax
 
   " neocomplete
   PlugEx 'Shougo/neocomplete.vim',  {'on_event': 'InsertEnter', 'enable': get(g:, 'use_neocomplete')}
 
   " ncm2
-  PlugEx 'ncm2/ncm2', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'roxma/nvim-yarp', {'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')} " python
   PlugEx 'ncm2/ncm2-bufword', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-path', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-github', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-tmux', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'wellle/tmux-complete.vim', {'on_event': 'VimEnter', 'enable': get(g:, 'use_ncm2') && executable('tmux')}
   PlugEx 'ncm2/ncm2-tagprefix', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  " PlugEx 'filipekiss/ncm2-look.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-gtags', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'jsfaint/gen_tags.vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-syntax', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'fgrsnau/ncm2-otherbuf', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+
+  PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+
+  PlugEx 'ncm2/ncm2-jedi', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
   PlugEx 'ncm2/ncm2-cssomni', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-tern', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
   PlugEx 'ncm2/ncm2-vim', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-go', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-ultisnips', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-html-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-markdown-subscope', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'ncm2/ncm2-highprio-pop', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'yuki-ycino/ncm2-dictionary', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'fgrsnau/ncm2-aspell', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'fgrsnau/ncm2-otherbuf', {'branch': 'ncm2', 'lazy': 1, 'enable': get(g:, 'use_ncm2')}
-  PlugEx 'gaalcaras/ncm-R', {'lazy': 1, 'enable': get(g:, 'use_ncm2'), 'for': 'r'}
+  PlugEx 'ncm2/ncm2-go', {'enable': get(g:, 'use_ncm2')}
+
+  PlugEx 'ncm2/ncm2', {'on_func': 'ncm2#enable_for_buffer', 'deps': 'nvim-yarp', 'enable': get(g:, 'use_ncm2')}
+  PlugEx 'roxma/nvim-yarp', {'lazy': 1, 'enable': get(g:, 'use_ncm2')}
+
+  if get(g:, 'use_ncm2', 0) == 1
+    aug NcmBefore
+      au!
+      au BufEnter * au InsertEnter <buffer> call ncm2#enable_for_buffer()
+    aug END
+  en
 
   " ===========================================================================
   " editing
@@ -118,6 +134,7 @@ if plugex#begin()
   PlugEx 'kana/vim-textobj-entire', {'on_event': 'VimEnter'}
   PlugEx 'kana/vim-textobj-syntax', {'on_event': 'VimEnter'}
   PlugEx 'kana/vim-textobj-lastpat', {'on_event': 'VimEnter'}
+  PlugEx 'wellle/targets.vim', {'on_event': 'VimEnter'}
 
   " ===========================================================================
   " lang
@@ -132,8 +149,8 @@ if plugex#begin()
 
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
-  PlugEx 'plasticboy/vim-markdown' " no plugin dir, no need to lazyload
-  PlugEx 'iamcco/markdown-preview.vim', {'on': '<Plug>MarkdownPreview'}
+  PlugEx 'plasticboy/vim-markdown', {'for': 'markdown'}
+  PlugEx 'iamcco/markdown-preview.nvim', {'on': '<Plug>MarkdownPreview', 'do': 'call mkdp#util#install()'}
   PlugEx 'mzlogin/vim-markdown-toc', {'on_event': ['VimEnter', 'InsertEnter', 'if &ft==''markdown''']}
 
   " javascript
@@ -160,15 +177,19 @@ if plugex#begin()
   " xml
   PlugEx 'sukima/xmledit' " no plugin dir, no need to lazyload
 
+  PlugEx 'isobit/vim-caddyfile'
+
   " viml dev
   " go to define
-  PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
+  " PlugEx 'mhinz/vim-lookup', {'on_func': ['lookup#lookup', 'lookup#pop']}
   " plugin for making plugin
   PlugEx 'tpope/vim-scriptease', {'on_event': 'VimEnter'}
   " get the version of Vim and Neovim that introduced or removed features
   PlugEx 'tweekmonster/helpful.vim', {'on': 'HelpfulVersion', 'for': 'help'}
   " for test
   PlugEx 'junegunn/vader.vim', {'on': 'Vader'}
+
+  PlugEx 'chr4/nginx.vim', {'for': 'nginx'}
 
   " ===========================================================================
   " tools
@@ -256,13 +277,8 @@ if plugex#begin()
   PlugEx 'strom3xFeI/vimdoc-cn', {'lazy': 1}
   " PlugEx '~/tmp/vim/vim-finder', {'on': 'VimEnter'}
   " PlugEx '~/tmp/vim/vlib'
+  " PlugEx '~/tmp/vim/vlang.vim'
 
-  if g:is_nyaovim
-    PlugEx 'rhysd/nyaovim-popup-tooltip', {'on': 'VimEnter'}
-    PlugEx 'rhysd/nyaovim-markdown-preview', {'on': 'VimEnter'}
-    PlugEx 'rhysd/nyaovim-mini-browser', {'on': 'VimEnter'}
-    PlugEx 'rhysd/nyaovim-tree-view', {'on': 'VimEnter'}
-  endif
 endif
 call plugex#end()
 

@@ -1,0 +1,28 @@
+snippet profiles "springboot profiles template" b
+spring:
+	profiles.active: @profiles.active@
+
+---
+
+spring:
+	profiles: dev
+
+server:
+	port: 8080
+
+---
+
+spring:
+	profiles: test
+
+server:
+	port: 8081
+
+---
+
+spring:
+	profiles: production
+
+server:
+	port: 8082
+endsnippet

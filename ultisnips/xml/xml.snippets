@@ -13,3 +13,32 @@ snippet tomcat-role "The tomcat roles and users" b
 <user username="admin" password="passwd" roles="admin-gui,admin-script,manager-gui,manager-script"/>
 <user username="" password="" roles="manager"/>
 endsnippet
+
+snippet assmbly "Description" b
+<assembly>
+	<id>assembly</id>
+	<formats>
+		<!--打包的文件格式,也可以有：war zip-->
+		<format>tar.gz</format>
+	</formats>
+	<!--tar.gz压缩包下是否生成和项目名相同的根目录-->
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<!--是否把本项目添加到依赖文件夹下-->
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>lib</outputDirectory>
+			<!--将scope为runtime的依赖包打包-->
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/bin</directory>
+			<outputDirectory>bin</outputDirectory>
+			<fileMode>0755</fileMode>
+			<lineEnding>unix</lineEnding>
+		</fileSet>
+	</fileSets>
+</assembly>
+endsnippet
