@@ -5,9 +5,8 @@
 This is a cool vim configuration, work on MacOS, Linux and Windows, thouth Windows
 is not recommended.
 
-In theory, it should work fine on both neovim(0.3+) and vim(8.0+), but recently,
-I use neovim most of my time, and supervim on vim is not fully tested. So,
-supervim on neovim is recommended.
+It should work fine on both neovim(0.3+) and vim(8.0+), but I use neovim most
+of my time, supervim on vim is not fully tested.
 
 ## Screenshots:
 
