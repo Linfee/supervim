@@ -146,6 +146,7 @@ if plugex#begin()
   PlugEx 'hail2u/vim-css3-syntax',  {'for': 'css'}
   PlugEx 'othree/html5.vim',        {'for': 'html'}
   PlugEx 'dag/vim-fish',            {'for': 'fish'}
+  PlugEx 'posva/vim-vue',           {'for': 'vue'}
 
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
