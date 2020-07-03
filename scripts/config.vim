@@ -2,7 +2,7 @@ set cpoptions&vim
 scriptencoding utf-8
 
 let g:plugex_use_log = 1
-let g:plugex_use_cache = 0
+let g:plugex_use_cache = 1
 let g:use_lightline = get(g:, 'use_lightline', 1)
 let g:no_nerd_font = get(g:, 'no_nerd_font')
 
@@ -146,6 +146,7 @@ if plugex#begin()
   PlugEx 'hail2u/vim-css3-syntax',  {'for': 'css'}
   PlugEx 'othree/html5.vim',        {'for': 'html'}
   PlugEx 'dag/vim-fish',            {'for': 'fish'}
+  PlugEx 'posva/vim-vue',           {'for': 'vue'}
 
   " markdown
   PlugEx 'godlygeek/tabular', {'on': ['Tabularize', 'AddTabularPattern', 'AddTabularPipeline']}
