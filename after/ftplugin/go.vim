@@ -11,3 +11,4 @@ setl nowrap
 
 nnoremap <buffer> <space>r :w<cr>:GoRun<cr><esc>
 nnoremap <buffer> <space>= :GoFmt<cr>
+nnoremap <buffer> <space>u :GoTestFun<cr>
