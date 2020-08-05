@@ -107,8 +107,8 @@ nnoremap <tab>j <C-w>j
 nnoremap <tab>k <C-w>k
 nnoremap <tab>l <C-w>l
 nnoremap <tab>h <C-w>h
-nnoremap <tab>i gt
-nnoremap <tab>o gT
+nnoremap <tab>i gT
+nnoremap <tab>o gt
 nnoremap <tab>- :split<cr>
 nnoremap <tab>\ :vsplit<cr>
 nnoremap <tab>q :action CloseContent<cr>
