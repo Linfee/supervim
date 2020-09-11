@@ -51,3 +51,5 @@ command! -nargs=0 EmojiList for e in emoji#list() | call append(line('$'), print
 command! -nargs=1 VDiffSplit :vertical diffsplit <args>
 command! -nargs=1 VDiffSplitPatch :vertical diffpatch <args> diff
 
+" leader gg
+nnoremap <leader>gl :call feedkeys((':g/' . @/ . '/'))<cr>
