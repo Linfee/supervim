@@ -33,6 +33,7 @@ set timeout
 set timeoutlen=500
 set matchpairs=(:),{:},[:],<:>
 
+let mapleader=","
 " plugins
 set surround
 set easymotion
@@ -144,6 +145,7 @@ nnoremap gh :action HighlightUsagesInFile<cr>
 nnoremap g[ :action Back<cr>
 nnoremap g] :action Forward<cr>
 nnoremap gc :action GotoClass<cr>
+nnoremap gk :action GotoClass<cr>
 nnoremap gf :action GotoFile<cr>
 nnoremap gs :action GotoSymbol<cr>
 
@@ -187,6 +189,7 @@ vnoremap <space>e :action Console.Jdbc.Execute<cr>
 nnoremap <space>ge :action Console.Jdbc.ExplainPlan.Raw<cr>
 nnoremap <space>gE :action Console.Jdbc.ExplainPlan<cr>
 nnoremap <space>gt :action Terminal.OpenInTerminal<cr>
+nnoremap <space>c :action GotoClass<cr>
 
 nnoremap <space>ob :action OpenInBrowser<cr>
 nnoremap <space>mp :action ManageRecentProjects<cr>
@@ -230,3 +233,4 @@ nnoremap <space>w :w<cr>
 nnoremap \\\ :source ~/.ideavimrc<cr>
 set ideajoin
 set ideamarks
+set keep-english-in-normal
