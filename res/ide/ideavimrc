@@ -33,9 +33,19 @@ set timeout
 set timeoutlen=500
 set matchpairs=(:),{:},[:],<:>
 
-" surround support
+" plugins
 set surround
+set easymotion
+set multiple-cursors
+set commentary
+set ReplaceWithRegister
+set argtextobj
+set exchange
+set textobj-entire
+set highlightedyank
 
+let g:highlightedyank_highlight_duration = "3000"
+let g:highlightedyank_highlight_color = "rgba(160, 160, 160, 155)"
 
 " --------------------------------------
 " Keymaps
@@ -187,23 +197,25 @@ vnoremap zem :action ExtrExtractMethod<cr>
 vnoremap zei :action ExtrExtractInterface<cr>
 vnoremap zef :action ExtrExtractFunction<cr>
 vnoremap zep :action ExtrExtractInclude<cr>
-vnoremap zesc :action ExtrExtractSuperclass<cr>
+vnoremap zes :action ExtrExtractSuperclass<cr>
 
 nnoremap zg :action Generate<cr>
-nnoremap zmo :action OverrideMethods<cr>
-nnoremap zmi :action ImplementMethods<cr>
-nnoremap zmd :action DelegateMethods<cr>
 
-nnoremap zss :action SurroundWith<cr>
 nnoremap zuw :action Unwrap<cr>
-nnoremap zsl :action SurroundWithLiveTemplate<cr>
-nnoremap zt :action InsertLiveTemplate<cr>
+nnoremap zis :action SurroundWith<cr>
+nnoremap zil :action SurroundWithLiveTemplate<cr>
+nnoremap zit :action InsertLiveTemplate<cr>
+nnoremap zio :action OverrideMethods<cr>
+nnoremap zii :action ImplementMethods<cr>
+nnoremap zid :action DelegateMethods<cr>
 
+nnoremap zs :action ShowBookmarks<cr>
+nnoremap zm :action ToggleBookmark<cr>
 nnoremap zz :action Refactorings.QuickListPopupAction<cr>
-nnoremap zr :action RenameElement<cr>
-nnoremap zv :action Move<cr>
-nnoremap zd :action SafeDelete<cr>
-nnoremap zms :action MakeStatic<cr>
+nnoremap zrr :action RenameElement<cr>
+nnoremap zrm :action Move<cr>
+nnoremap zrd :action SafeDelete<cr>
+nnoremap zrs :action MakeStatic<cr>
 nnoremap zcd :action CompileDirty<cr>
 nnoremap zcc :action Compile<cr>
 nnoremap zuu :action javaee.UpdateRunningApplication<cr>
@@ -217,3 +229,4 @@ nnoremap <space>w :w<cr>
 
 nnoremap \\\ :source ~/.ideavimrc<cr>
 set ideajoin
+set ideamarks
