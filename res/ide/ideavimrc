@@ -45,8 +45,8 @@ set exchange
 set textobj-entire
 set highlightedyank
 
-let g:highlightedyank_highlight_duration = "3000"
-let g:highlightedyank_highlight_color = "rgba(160, 160, 160, 155)"
+let g:highlightedyank_highlight_duration = "1000"
+let g:highlightedyank_highlight_color = "rgba(60, 61, 60, 80)"
 
 " --------------------------------------
 " Keymaps
