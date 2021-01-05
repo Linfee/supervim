@@ -25,7 +25,7 @@ fu! config#nerdtree#before()
   let g:nerdtree_tabs_open_on_new_tab=1
 
   if g:no_nerd_font
-    let g:NERDTreeIndicatorMapCustom = {
+    let g:NERDTreeGitStatusIndicatorMapCustom = {
           \ "Modified"  : "M",
           \ "Staged"    : "S",
           \ "Untracked" : "U",
@@ -38,7 +38,7 @@ fu! config#nerdtree#before()
           \ }
   else
     if !g:is_osx
-      let g:NERDTreeIndicatorMapCustom = {
+      let g:NERDTreeGitStatusIndicatorMapCustom = {
             \ "Modified"  : "✹",
             \ "Staged"    : "✚",
             \ "Untracked" : "✭",
@@ -50,7 +50,7 @@ fu! config#nerdtree#before()
             \ "Unknown"   : "?"
             \ }
     else
-      let g:NERDTreeIndicatorMapCustom = {
+      let g:NERDTreeGitStatusIndicatorMapCustom = {
             \ "Modified"  : emoji#for('small_orange_diamond'),
             \ "Staged"    : emoji#for('white_check_mark'),
             \ "Untracked" : emoji#for('small_blue_diamond'),

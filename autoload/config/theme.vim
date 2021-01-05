@@ -21,6 +21,7 @@ fu! config#theme#after()
       " colorscheme seoul256
 
       colorscheme gruvbox
+      " colorscheme monokai
     en
   catch
   endtry

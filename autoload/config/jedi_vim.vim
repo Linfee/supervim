@@ -4,12 +4,12 @@ fu! config#jedi_vim#before()
   " let g:jedi#auto_initialization = 1
   " jedi 补全快捷键, 有补全插件就不需要了
   let g:jedi#completions_command = '<c-n>'
-  let g:jedi#goto_command = '<leader>d'
-  let g:jedi#goto_assignments_command = '<leader>g'
+  let g:jedi#goto_command = 'gd'
+  let g:jedi#goto_assignments_command = 'gc'
   " let g:jedi#documentation_command = 'K'
   let g:jedi#max_doc_height = 15
-  let g:jedi#rename_command = '<leader>r'
-  let g:jedi#usages_command = '<leader>n'
+  let g:jedi#rename_command = 'gr'
+  let g:jedi#usages_command = 'gu'
   " 在vim中打开模块(源码) :Pyimport
   " 使用jedi的补全样式
   let g:jedi#auto_vim_configuration = 1

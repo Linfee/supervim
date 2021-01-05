@@ -19,7 +19,7 @@ set ignorecase smartcase
 set incsearch
 set hlsearch
 set history=5000
-" set iskeyword=!-~,^*,^|,^",192-255
+set iskeyword=!~,^*,^|,^",192-255
 set matchpairs=(:),{:},[:],<:>
 " set relativenumber
 
@@ -31,7 +31,6 @@ set scrolloff=5
 
 set timeout
 set timeoutlen=500
-set matchpairs=(:),{:},[:],<:>
 
 let mapleader=","
 " plugins
