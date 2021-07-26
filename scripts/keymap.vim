@@ -218,6 +218,7 @@ Noremap c <a-I> <home>
 
 " Other {{1
 Noremap c <a-p> <c-r>=substitute(@*.'', '\n', '', 'g')<cr>
+Noremap c <m-p> <c-r>=substitute(@*.'', '\n', '', 'g')<cr>
 " 1}}
 
 " term {{1

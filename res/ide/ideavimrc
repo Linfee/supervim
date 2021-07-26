@@ -84,6 +84,7 @@ vnoremap <space><space> V
 
 " use alt+. to repeat last macro
 nnoremap <a-.> @@
+nnoremap <a-.> @@
 
 " no hlsearch
 nnoremap <space><cr> :nohl<cr>
