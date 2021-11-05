@@ -177,6 +177,7 @@ nnoremap ]c :action VcsShowNextChangeMarker<cr>
 
 nnoremap ;d :action QuickImplementations<cr>
 nnoremap <a-q> :action QuickJavaDoc<cr>
+nnoremap gq :action QuickTypeDefinition<cr>
 
 nnoremap <space>t :action FileStructurePopup<cr>
 nnoremap <space>p :action ShowFilePath<cr>
