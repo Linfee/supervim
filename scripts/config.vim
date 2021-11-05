@@ -52,7 +52,7 @@ if plugex#begin()
   " deoplete
   PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-jedi', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
-  PlugEx 'fszymanski/deoplete-emoji', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
+  " PlugEx 'fszymanski/deoplete-emoji', {'lazy': 1, 'enable': get(g:, 'use_deoplete')}
   PlugEx 'zchee/deoplete-go', {'do': 'make && !go get -u github.com/mdempsky/gocode',
         \ 'for': 'go', 'enable': get(g:, 'use_deoplete')}
   PlugEx 'carlitux/deoplete-ternjs', {'do': 'npm install -g tern', 'for': 'javascript',
