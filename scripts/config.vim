@@ -258,7 +258,7 @@ if plugex#begin()
         \ 'BCommits', 'Maps', 'Filetypes', 'History', 'FZF'], 'deps': 'fzf',
         \ 'on_event': 'CursorHold'}
   PlugEx 'junegunn/fzf', {'on_event': 'CursorHold'}
-  PlugEx 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
+  " PlugEx 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
