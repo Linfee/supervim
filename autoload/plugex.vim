@@ -480,7 +480,7 @@ fu! s:load(plug) " {{{
           return s:err('When load ['.a:plug.name.'], dependency plugin '.l:plug.name.' load fail.')
         endif
       else
-        return s:err('When load ['.a:plug.name.'], can not found dependency plugin '.l:plug.name.'.')
+        return s:err('When load ['.a:plug.name.'], can not found dependency plugin '.name.'.')
       end
     endfor
   endif

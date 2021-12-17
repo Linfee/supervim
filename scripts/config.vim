@@ -21,7 +21,7 @@ if plugex#begin()
   PlugEx 'morhetz/gruvbox'
   PlugEx 'sickill/vim-monokai'
   PlugEx 'altercation/vim-colors-solarized'
-  PlugEx 'joshdick/onedark.vim'
+  PlugEx 'joshdick/onedark.vim', {'branch': 'main'}
 
   PlugEx 'mhinz/vim-startify', {'on_event': 'VimEnter'}
   PlugEx 'ryanoasis/vim-devicons', {'on_event': 'VimEnter', 'enable': !g:no_nerd_font}
@@ -255,9 +255,10 @@ if plugex#begin()
   PlugEx 'junegunn/fzf.vim', {'on': ['Files', 'GitFiles', 'GFiles', 'Buffers',
         \ 'Lines', 'BLines', 'Colors', 'Locate', 'Ag', 'Tags', 'BTags',
         \ 'Snippets', 'Commands', 'Marks', 'Helptags', 'Windows', 'Commits',
-        \ 'BCommits', 'Maps', 'Filetypes', 'History', 'FZF'], 'deps': 'fzf', 
+        \ 'BCommits', 'Maps', 'Filetypes', 'History', 'FZF'], 'deps': 'fzf',
         \ 'on_event': 'CursorHold'}
   PlugEx 'junegunn/fzf', {'on_event': 'CursorHold'}
+  PlugEx 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 
   " help focus on writing in vim
   PlugEx 'junegunn/goyo.vim',  {'on': 'Goyo'}
