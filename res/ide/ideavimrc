@@ -184,8 +184,8 @@ nnoremap <space>p :action ShowFilePath<cr>
 nnoremap <space>= :action ReformatCode<cr>
 
 
-nnoremap <space>r :action RunClass<cr>
-nnoremap <space>d :action DebugClass<cr>
+nnoremap <space>r :action Run<cr>
+nnoremap <space>d :action Debug<cr>
 nnoremap <space>gc :action RunCoverage<cr>
 nnoremap <space>gr :action RunConfiguration<cr>
 nnoremap <space>e :action Console.Jdbc.Execute<cr>
