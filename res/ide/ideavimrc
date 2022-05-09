@@ -137,6 +137,8 @@ nnoremap <tab>m :action ActivateMavenProjectsToolWindow<cr>
 nnoremap <tab>r :action ActivateRunToolWindow<cr>
 nnoremap <tab>t :action ActivateTerminalToolWindow<cr>
 nnoremap <tab>v :action ActivateVersionControlToolWindow<cr>
+nnoremap <buffer> <cr> <c-]>
+nnoremap <buffer> <bs> <c-o>
 
 " Navigate
 nnoremap <a-s> :action SearchEverywhere<cr>
