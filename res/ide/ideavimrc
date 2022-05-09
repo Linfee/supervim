@@ -192,10 +192,11 @@ nnoremap <space>e :action Console.Jdbc.Execute<cr>
 vnoremap <space>e :action Console.Jdbc.Execute<cr>
 nnoremap <space>ge :action Console.Jdbc.ExplainPlan.Raw<cr>
 nnoremap <space>gE :action Console.Jdbc.ExplainPlan<cr>
-nnoremap <space>gt :action Terminal.OpenInTerminal<cr>
+nnoremap <space>gT :action Terminal.OpenInTerminal<cr>
 nnoremap <space>c :action GotoClass<cr>
 nnoremap <space>gd :action GitShowDiffWithBranchAction<cr>
 nnoremap <space>gh :action Vcs.ShowTabbedFileHistory<cr>
+nnoremap <space>gt :action $ShowTranslationDialogAction<cr>
 
 nnoremap <space>ob :action OpenInBrowser<cr>
 nnoremap <space>mp :action ManageRecentProjects<cr>
