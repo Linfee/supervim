@@ -157,6 +157,7 @@ nnoremap go :action SelectIn<cr>
 nnoremap gd :action GotoDeclaration<cr>
 nnoremap gt :action GotoTypeDeclaration<cr>
 nnoremap gi :action GotoImplementation<cr>
+nnoremap gl :action GotoTest<cr>
 
 nnoremap gT :action TypeHierarchy<cr>
 nnoremap gM :action MethodHierarchy<cr>
