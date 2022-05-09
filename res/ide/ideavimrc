@@ -139,7 +139,8 @@ nnoremap <tab>t :action ActivateTerminalToolWindow<cr>
 nnoremap <tab>v :action ActivateVersionControlToolWindow<cr>
 nnoremap <cr> <c-]>
 nnoremap <bs> <c-o>
-nnoremap <space><cr> <c-i>
+nnoremap <space>j <c-o>
+nnoremap <space>k <c-i>
 
 " Navigate
 nnoremap <a-s> :action SearchEverywhere<cr>
