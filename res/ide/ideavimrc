@@ -155,6 +155,7 @@ nnoremap gc :action GotoClass<cr>
 nnoremap gk :action GotoClass<cr>
 nnoremap gf :action GotoFile<cr>
 nnoremap gs :action GotoSymbol<cr>
+nnoremap gj :action AceAction<cr>
 
 nnoremap gp :action SelectInProjectView<cr>
 nnoremap go :action SelectIn<cr>
