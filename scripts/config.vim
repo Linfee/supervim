@@ -124,7 +124,7 @@ if plugex#begin()
   " see content of register
   PlugEx 'junegunn/vim-peekaboo', {'on_event': 'VimEnter'}
 
-  PlugEx 'tpope/tpope-vim-abolish', {'on_event': 'VimEnter'}
+  " PlugEx 'tpope/tpope-vim-abolish', {'on_event': 'VimEnter'}
   PlugEx 'tpope/vim-endwise', {'on_event': 'InsertEnter'}
 
   " textobj
