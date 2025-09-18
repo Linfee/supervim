@@ -44,10 +44,10 @@ if plugex#begin()
   endif
 
   " PlugEx 'artur-shaik/vim-javacomplete2', {'for': ['java', 'jsp'], 'enable': 0}
-  PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets', 'on_func': 'UltiSnips#SnippetsInCurrentScope'}
-  PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
-  PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
-  PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
+  " PlugEx 'SirVer/ultisnips', {'on_event': ['InsertEnter', 'CursorHold'], 'for': 'snippets', 'on_func': 'UltiSnips#SnippetsInCurrentScope'}
+  " PlugEx 'honza/vim-snippets', {'on_event': ['InsertEnter', 'CursorHold']}
+  " PlugEx 'Linfee/ultisnips-zh-doc', {'on_event': ['InsertEnter', 'CursorHold']}
+  " PlugEx 'Shougo/context_filetype.vim', {'on_event': 'InsertEnter'}
 
   " deoplete
   PlugEx 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins', 'on_event': 'InsertEnter', 'enable': get(g:, 'use_deoplete')}

@@ -159,7 +159,14 @@ nnoremap gj :action AceAction<cr>
 
 nnoremap gp :action SelectInProjectView<cr>
 nnoremap go :action SelectIn<cr>
-nnoremap gd :action GotoDeclaration<cr>
+"nnoremap gd :action GotoDeclaration<cr>
+"nnoremap gD :action ShowUsages<cr>
+nnoremap <bs> :action Back<cr>
+nnoremap <s-bs> :action Forward<cr>
+nnoremap gd :action LSP.GotoReference<cr>
+nnoremap gD :action GotoDeclaration<cr>
+nnoremap <cr> :action GotoDeclaration<cr>
+nnoremap <s-cr> :action ShowUsages<cr>
 nnoremap gt :action GotoTypeDeclaration<cr>
 nnoremap gi :action GotoImplementation<cr>
 nnoremap gl :action GotoTest<cr>
@@ -191,7 +198,7 @@ nnoremap <space>= :action ReformatCode<cr>
 
 
 nnoremap <space>r :action RunClass<cr>
-nnoremap <space>d :action DebugClass<cr>
+nnoremap <space>d :action Debug<cr>
 nnoremap <space>gc :action RunCoverage<cr>
 nnoremap <space>gr :action RunConfiguration<cr>
 nnoremap <space>e :action Console.Jdbc.Execute<cr>
@@ -207,6 +214,11 @@ nnoremap <space>gt :action $ShowTranslationDialogAction<cr>
 nnoremap <space>ob :action OpenInBrowser<cr>
 nnoremap <space>mp :action ManageRecentProjects<cr>
 
+" Monica Code
+nnoremap <space>me :action Monica.EditorPopupMenu<cr>
+vnoremap <space>me :action Monica.EditorPopupMenu<cr>
+nnoremap <space>mi :action monicaCode.inlineEdit<cr>
+vnoremap <space>mi :action monicaCode.inlineEdit<cr>
 
 vnoremap zec :action ExtractClass<cr>
 vnoremap zem :action ExtrExtractMethod<cr>

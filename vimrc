@@ -40,3 +40,12 @@ for s:s in s:scripts
 endfor
 
 let &runtimepath .=  expand(',' . g:config_home . '/after')
+
+nnoremap <up> 10k
+nnoremap <down> 10j
+inoremap <up> 10k
+inoremap <down> 10j
+vnoremap <up> 10k
+vnoremap <down> 10j
+onoremap <up> 10k
+onoremap <down> 10j
